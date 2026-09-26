@@ -1,0 +1,7 @@
+Smart TV Emulator
+Copyright 2026 Oleg Marchik
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+The captured payloads under src/tvemu/platforms/*/evidence/ are recordings of what
+physical devices sent; they are included as test fixtures, with unit identifiers
+replaced by emulator-owned values.

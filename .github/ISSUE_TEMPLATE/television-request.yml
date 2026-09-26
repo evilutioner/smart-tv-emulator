@@ -1,0 +1,41 @@
+name: Ask about a television
+description: About one of the televisions that is emulated but not available in this build (N/A).
+title: "Television: "
+labels: ["television-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This build ships the shared core, the whole dashboard and the Roku adapter. The
+        other televisions are written and tested against physical hardware and are
+        available privately. Tell us which one you need and what you are building.
+  - type: checkboxes
+    id: platforms
+    attributes:
+      label: Which televisions do you need?
+      options:
+        # generated:platforms
+        - label: Fire TV
+        - label: webOS TV
+        - label: Android TV / Google TV
+        - label: Vizio SmartCast
+        - label: VIDAA (Hisense)
+        - label: Philips JointSpace
+        - label: Samsung Tizen
+        - label: Samsung Smart TV (2014–15)
+        - label: Sony BRAVIA
+        # /generated
+        - label: Something not listed here
+  - type: textarea
+    id: use
+    attributes:
+      label: What are you building?
+      description: The app or test suite that needs a television to talk to, and the protocols it speaks.
+      placeholder: A cross-platform remote app; we need discovery and pairing to work end to end in CI.
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: How should we reach you?
+      description: Optional. We will reply on this issue if you leave it blank.

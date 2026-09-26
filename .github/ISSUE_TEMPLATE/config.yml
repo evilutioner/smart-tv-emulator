@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Bug in the Roku adapter or the dashboard
+    url: https://github.com/evilutioner/smart-tv-emulator/issues/new
+    about: Open a normal issue, with the event-log export if you have one.
+  - name: A television you own and want modelled
+    url: https://github.com/evilutioner/smart-tv-emulator/issues/new?labels=capture
+    about: Tell us the model and what your app needs from it.

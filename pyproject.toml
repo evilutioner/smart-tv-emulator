@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smart-tv-emulator"
+version = "0.1.0"
+description = "Extensible Smart TV protocol emulator with a local tester dashboard"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.11"
+dependencies = ["aiohttp>=3.11,<4", "pyOpenSSL>=25,<27"]
+
+[project.scripts]
+tvemu = "tvemu.__main__:main"
+tvemu-mcp = "tvemu.mcp:main"
+
+[tool.setuptools.package-data]
+# Globs rather than one line per television, so neither this file nor any other
+# shared file has to enumerate the platforms a build ships.
+tvemu = [
+  "web/*",
+  "web/platforms/*",
+  "platforms/*.json",
+  "platforms/*/profiles/*/*",
+  "platforms/*/evidence/*/*",
+  "platforms/*/tls/*",
+]

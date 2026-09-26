@@ -1,0 +1,11 @@
+{
+  "description": "ecp-2: authenticate, then press Home, and nothing refused",
+  "ordered": true,
+  "expect": [
+    {"kind": "connection", "operation": "ws.authenticate", "status": 200},
+    {"kind": "command", "operation": "keypress/Home", "transport": "ws", "status": 200}
+  ],
+  "forbid": [
+    {"kind": "command", "status": 403}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "roku-streaming-stick-4k-3820eu2",
+  "device": {"display_name":"Roku Streaming Stick 4K","model_name":"3820EU2","model_number":"3820EU2","serial_number":"X02500EM0001","udn":"uuid:28002140-0000-1000-8000-020000000001","software_version":"12.0.0"},
+  "source": {"kind":"captured","captured_at":"2023-08-24T16:31:00Z","description":"Physical Roku Streaming Stick 4K capture supplied with the project. Unit identifiers were replaced with same-shape emulator-owned values; firmware, model identifiers, documents, SSDP header order and observed ports remain as captured."},
+  "platform": {
+    "protocols": [{"id":"ecp","port":8060,"primary":true},{"id":"ssdp"}],
+    "observed_open_ports": [{"port":7000,"transport":"tcp","service":"rtsp","detail":"AirTunes rtspd 377.40.00"},{"port":8060,"transport":"tcp","service":"upnp"},{"port":34895,"transport":"tcp","service":"unknown"},{"port":36767,"transport":"tcp","service":"tcpwrapped"},{"port":44215,"transport":"tcp","service":"unknown"},{"port":46427,"transport":"tcp","service":"tcpwrapped"},{"port":49273,"transport":"tcp","service":"unknown"}],
+    "ssdp": {"search_target":"roku:ecp","response_headers":[{"name":"Location","value":"{location}"},{"name":"Server","value":"Roku/12.0.0 UPnP/1.0 Roku/12.0.0"},{"name":"USN","value":"uuid:roku:ecp:X02500EM0001"},{"name":"Ext","value":""},{"name":"device-group.roku.com","value":"02000000EM0000000001"},{"name":"ST","value":"roku:ecp"},{"name":"Cache-Control","value":"max-age=3600"}]}
+  },
+  "exchanges": [
+    {"id":"http.device-description","operation_id":"roku.http.device-description","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"device-description.xml"}]},
+    {"id":"http.ecp-scpd","operation_id":"roku.http.ecp-scpd","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/ecp_SCPD.xml"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"ecp_SCPD.xml"}]},
+    {"id":"http.dial-scpd","operation_id":"roku.http.dial-scpd","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/dial_SCPD.xml"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"dial_SCPD.xml"}]}
+  ]
+}

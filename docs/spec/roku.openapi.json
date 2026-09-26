@@ -1,0 +1,2261 @@
+{
+  "openapi": "3.2.0",
+  "info": {
+    "title": "roku emulated television",
+    "version": "1",
+    "description": "Generated from the emulator's route declarations. It describes the HTTP surface only: this television also answers on transports OpenAPI cannot express, which `tvemu --api-map` lists in full."
+  },
+  "paths": {
+    "/ecp-session": {
+      "get": {
+        "operationId": "http.websocket.ecp-session",
+        "summary": "The authenticated ecp-2 WebSocket.",
+        "responses": {
+          "200": {
+            "description": "The computed answer."
+          }
+        }
+      }
+    },
+    "/{action}/{key}": {
+      "post": {
+        "operationId": "roku.http.key",
+        "summary": "One remote key over plain HTTP ECP.",
+        "responses": {
+          "403": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "202": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "action",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "key",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/launch/{app_id}": {
+      "post": {
+        "operationId": "roku.http.launch",
+        "summary": "Launch a channel by its ECP id.",
+        "responses": {
+          "401": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "Refused before the channel id, so an unknown channel is 401 and not 404 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "Refused before the channel id, so an unknown channel is 401 and not 404 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/": {
+      "get": {
+        "operationId": "roku.http.device-description",
+        "summary": "The UPnP device description.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "specVersion": {
+                      "type": "object",
+                      "properties": {
+                        "major": {
+                          "type": "string",
+                          "xml": {
+                            "name": "major",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "minor": {
+                          "type": "string",
+                          "xml": {
+                            "name": "minor",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "specVersion",
+                        "namespace": "urn:schemas-upnp-org:device-1-0"
+                      }
+                    },
+                    "device": {
+                      "type": "object",
+                      "properties": {
+                        "deviceType": {
+                          "type": "string",
+                          "xml": {
+                            "name": "deviceType",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "friendlyName": {
+                          "type": "string",
+                          "xml": {
+                            "name": "friendlyName",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "manufacturer": {
+                          "type": "string",
+                          "xml": {
+                            "name": "manufacturer",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "manufacturerURL": {
+                          "type": "string",
+                          "xml": {
+                            "name": "manufacturerURL",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "modelDescription": {
+                          "type": "string",
+                          "xml": {
+                            "name": "modelDescription",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "modelName": {
+                          "type": "string",
+                          "xml": {
+                            "name": "modelName",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "modelNumber": {
+                          "type": "string",
+                          "xml": {
+                            "name": "modelNumber",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "modelURL": {
+                          "type": "string",
+                          "xml": {
+                            "name": "modelURL",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "serialNumber": {
+                          "type": "string",
+                          "xml": {
+                            "name": "serialNumber",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "UDN": {
+                          "type": "string",
+                          "xml": {
+                            "name": "UDN",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          },
+                          "description": "The UDN is the stable identity of a UPnP device."
+                        },
+                        "iconList": {
+                          "type": "object",
+                          "properties": {
+                            "icon": {
+                              "type": "object",
+                              "properties": {
+                                "mimetype": {
+                                  "type": "string",
+                                  "xml": {
+                                    "name": "mimetype",
+                                    "namespace": "urn:schemas-upnp-org:device-1-0"
+                                  }
+                                },
+                                "width": {
+                                  "type": "string",
+                                  "xml": {
+                                    "name": "width",
+                                    "namespace": "urn:schemas-upnp-org:device-1-0"
+                                  }
+                                },
+                                "height": {
+                                  "type": "string",
+                                  "xml": {
+                                    "name": "height",
+                                    "namespace": "urn:schemas-upnp-org:device-1-0"
+                                  }
+                                },
+                                "depth": {
+                                  "type": "string",
+                                  "xml": {
+                                    "name": "depth",
+                                    "namespace": "urn:schemas-upnp-org:device-1-0"
+                                  }
+                                },
+                                "url": {
+                                  "type": "string",
+                                  "xml": {
+                                    "name": "url",
+                                    "namespace": "urn:schemas-upnp-org:device-1-0"
+                                  }
+                                }
+                              },
+                              "xml": {
+                                "name": "icon",
+                                "namespace": "urn:schemas-upnp-org:device-1-0"
+                              }
+                            }
+                          },
+                          "xml": {
+                            "name": "iconList",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        },
+                        "serviceList": {
+                          "type": "object",
+                          "properties": {
+                            "service": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "serviceType": {
+                                    "type": "string",
+                                    "xml": {
+                                      "name": "serviceType",
+                                      "namespace": "urn:schemas-upnp-org:device-1-0"
+                                    }
+                                  },
+                                  "serviceId": {
+                                    "type": "string",
+                                    "xml": {
+                                      "name": "serviceId",
+                                      "namespace": "urn:schemas-upnp-org:device-1-0"
+                                    }
+                                  },
+                                  "controlURL": {
+                                    "type": "string",
+                                    "xml": {
+                                      "name": "controlURL",
+                                      "namespace": "urn:schemas-upnp-org:device-1-0"
+                                    }
+                                  },
+                                  "eventSubURL": {
+                                    "type": "string",
+                                    "xml": {
+                                      "name": "eventSubURL",
+                                      "namespace": "urn:schemas-upnp-org:device-1-0"
+                                    }
+                                  },
+                                  "SCPDURL": {
+                                    "type": "string",
+                                    "xml": {
+                                      "name": "SCPDURL",
+                                      "namespace": "urn:schemas-upnp-org:device-1-0"
+                                    }
+                                  }
+                                },
+                                "xml": {
+                                  "name": "service",
+                                  "namespace": "urn:schemas-upnp-org:device-1-0"
+                                }
+                              },
+                              "xml": {
+                                "name": "service",
+                                "wrapped": false
+                              }
+                            }
+                          },
+                          "xml": {
+                            "name": "serviceList",
+                            "namespace": "urn:schemas-upnp-org:device-1-0"
+                          }
+                        }
+                      },
+                      "required": [
+                        "UDN"
+                      ],
+                      "xml": {
+                        "name": "device",
+                        "namespace": "urn:schemas-upnp-org:device-1-0"
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "root",
+                    "namespace": "urn:schemas-upnp-org:device-1-0"
+                  },
+                  "description": "Served in every access mode, Disabled included."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/device-info": {
+      "get": {
+        "operationId": "roku.http.device-info",
+        "summary": "The ECP device inventory.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "udn": {
+                      "type": "string",
+                      "xml": {
+                        "name": "udn"
+                      }
+                    },
+                    "serial-number": {
+                      "type": "string",
+                      "xml": {
+                        "name": "serial-number"
+                      }
+                    },
+                    "device-id": {
+                      "type": "string",
+                      "xml": {
+                        "name": "device-id"
+                      }
+                    },
+                    "advertising-id": {
+                      "type": "string",
+                      "xml": {
+                        "name": "advertising-id"
+                      }
+                    },
+                    "user-profile-type": {
+                      "type": "string",
+                      "xml": {
+                        "name": "user-profile-type"
+                      },
+                      "examples": [
+                        "none",
+                        "adult"
+                      ],
+                      "description": "Who is signed in on the set; the same TCL answered none and later adult."
+                    },
+                    "vendor-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "vendor-name"
+                      }
+                    },
+                    "model-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "model-name"
+                      }
+                    },
+                    "model-number": {
+                      "type": "string",
+                      "xml": {
+                        "name": "model-number"
+                      }
+                    },
+                    "model-region": {
+                      "type": "string",
+                      "xml": {
+                        "name": "model-region"
+                      }
+                    },
+                    "is-tv": {
+                      "type": "string",
+                      "xml": {
+                        "name": "is-tv"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "is-stick": {
+                      "type": "string",
+                      "xml": {
+                        "name": "is-stick"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "mobile-has-live-tv": {
+                      "type": "string",
+                      "xml": {
+                        "name": "mobile-has-live-tv"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "ui-resolution": {
+                      "type": "string",
+                      "xml": {
+                        "name": "ui-resolution"
+                      }
+                    },
+                    "supports-ethernet": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-ethernet"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "wifi-mac": {
+                      "type": "string",
+                      "xml": {
+                        "name": "wifi-mac"
+                      }
+                    },
+                    "wifi-driver": {
+                      "type": "string",
+                      "xml": {
+                        "name": "wifi-driver"
+                      }
+                    },
+                    "has-wifi-5G-support": {
+                      "type": "string",
+                      "xml": {
+                        "name": "has-wifi-5G-support"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "network-type": {
+                      "type": "string",
+                      "xml": {
+                        "name": "network-type"
+                      }
+                    },
+                    "network-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "network-name"
+                      }
+                    },
+                    "friendly-device-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "friendly-device-name"
+                      }
+                    },
+                    "friendly-model-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "friendly-model-name"
+                      }
+                    },
+                    "default-device-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "default-device-name"
+                      }
+                    },
+                    "user-device-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "user-device-name"
+                      }
+                    },
+                    "user-device-location": {
+                      "type": "string",
+                      "xml": {
+                        "name": "user-device-location"
+                      }
+                    },
+                    "build-number": {
+                      "type": "string",
+                      "xml": {
+                        "name": "build-number"
+                      }
+                    },
+                    "software-version": {
+                      "type": "string",
+                      "xml": {
+                        "name": "software-version"
+                      }
+                    },
+                    "software-build": {
+                      "type": "string",
+                      "xml": {
+                        "name": "software-build"
+                      }
+                    },
+                    "lightning-base-build-number": {
+                      "type": "string",
+                      "xml": {
+                        "name": "lightning-base-build-number"
+                      }
+                    },
+                    "ui-build-number": {
+                      "type": "string",
+                      "xml": {
+                        "name": "ui-build-number"
+                      }
+                    },
+                    "ui-software-version": {
+                      "type": "string",
+                      "xml": {
+                        "name": "ui-software-version"
+                      }
+                    },
+                    "ui-software-build": {
+                      "type": "string",
+                      "xml": {
+                        "name": "ui-software-build"
+                      }
+                    },
+                    "secure-device": {
+                      "type": "string",
+                      "xml": {
+                        "name": "secure-device"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "ecp-setting-mode": {
+                      "type": "string",
+                      "xml": {
+                        "name": "ecp-setting-mode"
+                      },
+                      "enum": [
+                        "limited",
+                        "enabled",
+                        "disabled",
+                        "permissive"
+                      ],
+                      "description": "Which clients the set answers; mirrors the platform's four access modes."
+                    },
+                    "language": {
+                      "type": "string",
+                      "xml": {
+                        "name": "language"
+                      }
+                    },
+                    "country": {
+                      "type": "string",
+                      "xml": {
+                        "name": "country"
+                      }
+                    },
+                    "locale": {
+                      "type": "string",
+                      "xml": {
+                        "name": "locale"
+                      }
+                    },
+                    "closed-caption-mode": {
+                      "type": "string",
+                      "xml": {
+                        "name": "closed-caption-mode"
+                      }
+                    },
+                    "time-zone-auto": {
+                      "type": "string",
+                      "xml": {
+                        "name": "time-zone-auto"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "time-zone": {
+                      "type": "string",
+                      "xml": {
+                        "name": "time-zone"
+                      }
+                    },
+                    "time-zone-name": {
+                      "type": "string",
+                      "xml": {
+                        "name": "time-zone-name"
+                      }
+                    },
+                    "time-zone-tz": {
+                      "type": "string",
+                      "xml": {
+                        "name": "time-zone-tz"
+                      }
+                    },
+                    "time-zone-offset": {
+                      "type": "string",
+                      "xml": {
+                        "name": "time-zone-offset"
+                      }
+                    },
+                    "clock-format": {
+                      "type": "string",
+                      "xml": {
+                        "name": "clock-format"
+                      }
+                    },
+                    "uptime": {
+                      "type": "string",
+                      "xml": {
+                        "name": "uptime"
+                      }
+                    },
+                    "power-mode": {
+                      "type": "string",
+                      "xml": {
+                        "name": "power-mode"
+                      },
+                      "examples": [
+                        "PowerOn",
+                        "DisplayOff",
+                        "Headless",
+                        "Ready"
+                      ],
+                      "description": "A sleeping set does not answer, so only PowerOn is captured."
+                    },
+                    "supports-suspend": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-suspend"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-find-remote": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-find-remote"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "find-remote-is-possible": {
+                      "type": "string",
+                      "xml": {
+                        "name": "find-remote-is-possible"
+                      },
+                      "description": "Stick only: absent from the television."
+                    },
+                    "supports-audio-guide": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-audio-guide"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-rva": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-rva"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "has-hands-free-voice-remote": {
+                      "type": "string",
+                      "xml": {
+                        "name": "has-hands-free-voice-remote"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "developer-enabled": {
+                      "type": "string",
+                      "xml": {
+                        "name": "developer-enabled"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "keyed-developer-id": {
+                      "type": "string",
+                      "xml": {
+                        "name": "keyed-developer-id"
+                      }
+                    },
+                    "device-automation-bridge-enabled": {
+                      "type": "string",
+                      "xml": {
+                        "name": "device-automation-bridge-enabled"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "search-enabled": {
+                      "type": "string",
+                      "xml": {
+                        "name": "search-enabled"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "search-channels-enabled": {
+                      "type": "string",
+                      "xml": {
+                        "name": "search-channels-enabled"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "voice-search-enabled": {
+                      "type": "string",
+                      "xml": {
+                        "name": "voice-search-enabled"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-private-listening": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-private-listening"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "private-listening-blocked": {
+                      "type": "string",
+                      "xml": {
+                        "name": "private-listening-blocked"
+                      }
+                    },
+                    "headphones-connected": {
+                      "type": "string",
+                      "xml": {
+                        "name": "headphones-connected"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-audio-settings": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-audio-settings"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-ecs-textedit": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-ecs-textedit"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-ecs-microphone": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-ecs-microphone"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-wake-on-wlan": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-wake-on-wlan"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "supports-airplay": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-airplay"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "has-play-on-roku": {
+                      "type": "string",
+                      "xml": {
+                        "name": "has-play-on-roku"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "has-mobile-screensaver": {
+                      "type": "string",
+                      "xml": {
+                        "name": "has-mobile-screensaver"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "support-url": {
+                      "type": "string",
+                      "xml": {
+                        "name": "support-url"
+                      }
+                    },
+                    "grandcentral-version": {
+                      "type": "string",
+                      "xml": {
+                        "name": "grandcentral-version"
+                      }
+                    },
+                    "supports-trc": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-trc"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one."
+                    },
+                    "av-sync-calibration-enabled": {
+                      "type": "string",
+                      "xml": {
+                        "name": "av-sync-calibration-enabled"
+                      }
+                    },
+                    "is-powered-by-tv": {
+                      "type": "string",
+                      "xml": {
+                        "name": "is-powered-by-tv"
+                      },
+                      "description": "Stick only: absent from the television."
+                    },
+                    "supports-cec-power-control": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-cec-power-control"
+                      },
+                      "description": "Stick only: absent from the television."
+                    },
+                    "supports-cec-audio-volume-control": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-cec-audio-volume-control"
+                      },
+                      "description": "Stick only: absent from the television."
+                    },
+                    "brightscript-debugger-version": {
+                      "type": "string",
+                      "xml": {
+                        "name": "brightscript-debugger-version"
+                      }
+                    },
+                    "screen-size": {
+                      "type": "string",
+                      "xml": {
+                        "name": "screen-size"
+                      },
+                      "description": "Television only: absent from the stick."
+                    },
+                    "panel-id": {
+                      "type": "string",
+                      "xml": {
+                        "name": "panel-id"
+                      },
+                      "description": "Television only: absent from the stick."
+                    },
+                    "tuner-type": {
+                      "type": "string",
+                      "xml": {
+                        "name": "tuner-type"
+                      },
+                      "description": "Television only: absent from the stick."
+                    },
+                    "supports-private-listening-dtv": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-private-listening-dtv"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one.\nTelevision only: absent from the stick."
+                    },
+                    "supports-warm-standby": {
+                      "type": "string",
+                      "xml": {
+                        "name": "supports-warm-standby"
+                      },
+                      "enum": [
+                        "true",
+                        "false"
+                      ],
+                      "description": "XML boolean text. A strict boolean decoder fails the whole document on an empty one.\nTelevision only: absent from the stick."
+                    },
+                    "trc-version": {
+                      "type": "string",
+                      "xml": {
+                        "name": "trc-version"
+                      },
+                      "description": "Television only: absent from the stick."
+                    },
+                    "trc-channel-version": {
+                      "type": "string",
+                      "xml": {
+                        "name": "trc-channel-version"
+                      },
+                      "description": "Television only: absent from the stick."
+                    }
+                  },
+                  "xml": {
+                    "name": "device-info"
+                  },
+                  "description": "The 12.0.0 stick capture has no device-info exchange; 15.x answers it.\nRefused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nEvery element is optional and names are case sensitive (has-wifi-5G-support). Every value is XML text: numeric-looking elements are strings, and av-sync-calibration-enabled answers \"3.0\"."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "The 12.0.0 stick capture has no device-info exchange; 15.x answers it.\nRefused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nEvery element is optional and names are case sensitive (has-wifi-5G-support). Every value is XML text: numeric-looking elements are strings, and av-sync-calibration-enabled answers \"3.0\"."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/device-image.png": {
+      "get": {
+        "operationId": "roku.http.device-image",
+        "summary": "A picture of the device.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "image/png",
+                  "description": "The one captured route that is not XML. The 15.2.4 stick answers 404 and offers /query/icon/<channel-id> as image/jpeg instead."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/ecp_SCPD.xml": {
+      "get": {
+        "operationId": "roku.http.ecp-scpd",
+        "summary": "The ECP UPnP service description.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "specVersion": {
+                      "type": "object",
+                      "properties": {
+                        "major": {
+                          "type": "string",
+                          "xml": {
+                            "name": "major",
+                            "namespace": "urn:schemas-upnp-org:service-1-0"
+                          }
+                        },
+                        "minor": {
+                          "type": "string",
+                          "xml": {
+                            "name": "minor",
+                            "namespace": "urn:schemas-upnp-org:service-1-0"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "specVersion",
+                        "namespace": "urn:schemas-upnp-org:service-1-0"
+                      }
+                    },
+                    "serviceStateTable": {
+                      "type": "object",
+                      "properties": {
+                        "stateVariable": {
+                          "type": "object",
+                          "properties": {
+                            "@sendEvents": {
+                              "type": "string",
+                              "xml": {
+                                "name": "sendEvents",
+                                "attribute": true
+                              }
+                            },
+                            "name": {
+                              "type": "string",
+                              "xml": {
+                                "name": "name",
+                                "namespace": "urn:schemas-upnp-org:service-1-0"
+                              }
+                            },
+                            "dataType": {
+                              "type": "string",
+                              "xml": {
+                                "name": "dataType",
+                                "namespace": "urn:schemas-upnp-org:service-1-0"
+                              }
+                            }
+                          },
+                          "xml": {
+                            "name": "stateVariable",
+                            "namespace": "urn:schemas-upnp-org:service-1-0"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "serviceStateTable",
+                        "namespace": "urn:schemas-upnp-org:service-1-0"
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "scpd",
+                    "namespace": "urn:schemas-upnp-org:service-1-0"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/dial_SCPD.xml": {
+      "get": {
+        "operationId": "roku.http.dial-scpd",
+        "summary": "The DIAL UPnP service description.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "specVersion": {
+                      "type": "object",
+                      "properties": {
+                        "major": {
+                          "type": "string",
+                          "xml": {
+                            "name": "major",
+                            "namespace": "urn:schemas-upnp-org:service-1-0"
+                          }
+                        },
+                        "minor": {
+                          "type": "string",
+                          "xml": {
+                            "name": "minor",
+                            "namespace": "urn:schemas-upnp-org:service-1-0"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "specVersion",
+                        "namespace": "urn:schemas-upnp-org:service-1-0"
+                      }
+                    },
+                    "serviceStateTable": {
+                      "type": "object",
+                      "properties": {
+                        "stateVariable": {
+                          "type": "object",
+                          "properties": {
+                            "@sendEvents": {
+                              "type": "string",
+                              "xml": {
+                                "name": "sendEvents",
+                                "attribute": true
+                              }
+                            },
+                            "name": {
+                              "type": "string",
+                              "xml": {
+                                "name": "name",
+                                "namespace": "urn:schemas-upnp-org:service-1-0"
+                              }
+                            },
+                            "dataType": {
+                              "type": "string",
+                              "xml": {
+                                "name": "dataType",
+                                "namespace": "urn:schemas-upnp-org:service-1-0"
+                              }
+                            }
+                          },
+                          "xml": {
+                            "name": "stateVariable",
+                            "namespace": "urn:schemas-upnp-org:service-1-0"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "serviceStateTable",
+                        "namespace": "urn:schemas-upnp-org:service-1-0"
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "scpd",
+                    "namespace": "urn:schemas-upnp-org:service-1-0"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/apps": {
+      "get": {
+        "operationId": "roku.http.apps",
+        "summary": "The captured installed-channel catalogue.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "app": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "@id": {
+                            "type": "string",
+                            "xml": {
+                              "name": "id",
+                              "attribute": true
+                            }
+                          },
+                          "@type": {
+                            "type": "string",
+                            "xml": {
+                              "name": "type",
+                              "attribute": true
+                            }
+                          },
+                          "@version": {
+                            "type": "string",
+                            "xml": {
+                              "name": "version",
+                              "attribute": true
+                            }
+                          },
+                          "#text": {
+                            "type": "string",
+                            "xml": {
+                              "name": "#text"
+                            }
+                          }
+                        },
+                        "xml": {
+                          "name": "app"
+                        }
+                      },
+                      "xml": {
+                        "name": "app",
+                        "wrapped": false
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "apps"
+                  },
+                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nNot a copy of the ecp-2 document: the envelope's gives every appl a subtype (ndka, rsga, sdka, and it moves -- Netflix answered ndka, then rsga) that the HTTP list of the same set leaves out.\nRefused before the set looks for the document, so the channel it names does not matter. The authenticated ecp-2 session is not restricted."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "text/plain",
+                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nNot a copy of the ecp-2 document: the envelope's gives every appl a subtype (ndka, rsga, sdka, and it moves -- Netflix answered ndka, then rsga) that the HTTP list of the same set leaves out.\nRefused before the set looks for the document, so the channel it names does not matter. The authenticated ecp-2 session is not restricted."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nNot a copy of the ecp-2 document: the envelope's gives every appl a subtype (ndka, rsga, sdka, and it moves -- Netflix answered ndka, then rsga) that the HTTP list of the same set leaves out.\nRefused before the set looks for the document, so the channel it names does not matter. The authenticated ecp-2 session is not restricted."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/active-app": {
+      "get": {
+        "operationId": "roku.http.active-app",
+        "summary": "The captured foreground channel.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "app": {
+                      "type": "object",
+                      "properties": {
+                        "@id": {
+                          "type": "string",
+                          "xml": {
+                            "name": "id",
+                            "attribute": true
+                          }
+                        },
+                        "@type": {
+                          "type": "string",
+                          "xml": {
+                            "name": "type",
+                            "attribute": true
+                          }
+                        },
+                        "@version": {
+                          "type": "string",
+                          "xml": {
+                            "name": "version",
+                            "attribute": true
+                          }
+                        },
+                        "@ui-location": {
+                          "type": "string",
+                          "xml": {
+                            "name": "ui-location",
+                            "attribute": true
+                          }
+                        },
+                        "#text": {
+                          "type": "string",
+                          "xml": {
+                            "name": "#text"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "app"
+                      }
+                    },
+                    "screensaver": {
+                      "type": "object",
+                      "properties": {
+                        "@id": {
+                          "type": "string",
+                          "xml": {
+                            "name": "id",
+                            "attribute": true
+                          }
+                        },
+                        "@type": {
+                          "type": "string",
+                          "xml": {
+                            "name": "type",
+                            "attribute": true
+                          }
+                        },
+                        "@version": {
+                          "type": "string",
+                          "xml": {
+                            "name": "version",
+                            "attribute": true
+                          }
+                        },
+                        "#text": {
+                          "type": "string",
+                          "xml": {
+                            "name": "#text"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "screensaver"
+                      },
+                      "description": "Present only while a screensaver runs, beside app rather than instead of it: the set answered app Roku both times."
+                    }
+                  },
+                  "xml": {
+                    "name": "active-app"
+                  },
+                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/media-player": {
+      "get": {
+        "operationId": "roku.http.media-player",
+        "summary": "The captured player state.",
+        "responses": {
+          "403": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "text/plain",
+                  "description": "Refused before the set looks for the document, so the channel it names does not matter. The authenticated ecp-2 session is not restricted."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "@state": {
+                      "type": "string",
+                      "xml": {
+                        "name": "state",
+                        "attribute": true
+                      }
+                    },
+                    "@error": {
+                      "type": "string",
+                      "xml": {
+                        "name": "error",
+                        "attribute": true
+                      }
+                    },
+                    "plugin": {
+                      "type": "object",
+                      "properties": {
+                        "@id": {
+                          "type": "string",
+                          "xml": {
+                            "name": "id",
+                            "attribute": true
+                          }
+                        },
+                        "@name": {
+                          "type": "string",
+                          "xml": {
+                            "name": "name",
+                            "attribute": true
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "plugin"
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "player"
+                  },
+                  "description": "Refused before the set looks for the document, so the channel it names does not matter. The authenticated ecp-2 session is not restricted."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/tv-channels": {
+      "get": {
+        "operationId": "roku.http.tv-channels",
+        "summary": "The captured tuner channel list.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "string",
+                  "xml": {
+                    "name": "tv-channels"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/tv-active-channel": {
+      "get": {
+        "operationId": "roku.http.tv-active-channel",
+        "summary": "The captured tuner channel on screen.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "channel": {
+                      "type": "string",
+                      "xml": {
+                        "name": "channel"
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "tv-channel"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/audio-device": {
+      "get": {
+        "operationId": "roku.http.audio-device",
+        "summary": "The captured audio destinations and volume.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "capabilities": {
+                      "type": "object",
+                      "properties": {
+                        "all-destinations": {
+                          "type": "string",
+                          "xml": {
+                            "name": "all-destinations"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "capabilities"
+                      }
+                    },
+                    "global": {
+                      "type": "object",
+                      "properties": {
+                        "muted": {
+                          "type": "string",
+                          "xml": {
+                            "name": "muted"
+                          }
+                        },
+                        "volume": {
+                          "type": "string",
+                          "xml": {
+                            "name": "volume"
+                          }
+                        },
+                        "destination-list": {
+                          "type": "string",
+                          "xml": {
+                            "name": "destination-list"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "global"
+                      }
+                    },
+                    "destinations": {
+                      "type": "object",
+                      "properties": {
+                        "destination": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "@name": {
+                                "type": "string",
+                                "xml": {
+                                  "name": "name",
+                                  "attribute": true
+                                }
+                              },
+                              "muted": {
+                                "type": "string",
+                                "xml": {
+                                  "name": "muted"
+                                }
+                              },
+                              "volume": {
+                                "type": "string",
+                                "xml": {
+                                  "name": "volume"
+                                }
+                              }
+                            },
+                            "xml": {
+                              "name": "destination"
+                            }
+                          },
+                          "xml": {
+                            "name": "destination",
+                            "wrapped": false
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "destinations"
+                      }
+                    },
+                    "mobile-sas": {
+                      "type": "object",
+                      "properties": {
+                        "min-version": {
+                          "type": "string",
+                          "xml": {
+                            "name": "min-version"
+                          }
+                        },
+                        "max-version": {
+                          "type": "string",
+                          "xml": {
+                            "name": "max-version"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "mobile-sas"
+                      }
+                    },
+                    "rtp-info": {
+                      "type": "object",
+                      "properties": {
+                        "rtp-address": {
+                          "type": "string",
+                          "xml": {
+                            "name": "rtp-address"
+                          }
+                        },
+                        "rtcp-port": {
+                          "type": "string",
+                          "xml": {
+                            "name": "rtcp-port"
+                          }
+                        },
+                        "current-buffer-delay-us": {
+                          "type": "string",
+                          "xml": {
+                            "name": "current-buffer-delay-us"
+                          }
+                        },
+                        "client-versions": {
+                          "type": "string",
+                          "xml": {
+                            "name": "client-versions"
+                          }
+                        }
+                      },
+                      "xml": {
+                        "name": "rtp-info"
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "audio-device"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      }
+    },
+    "/query/icon/{channel_id}": {
+      "get": {
+        "operationId": "roku.http.icon",
+        "summary": "A channel's icon.",
+        "responses": {
+          "403": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "text/plain",
+                  "description": "Refused before the set looks for the document, so the channel it names does not matter. The authenticated ecp-2 session is not restricted."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "no-cache"
+                ]
+              }
+            }
+          },
+          "501": {
+            "description": "The selected capture has no fixture for this route."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "channel_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/{tail}": {
+      "get": {
+        "operationId": "http.unsupported.tail-.*.get",
+        "summary": "Anything this emulator does not serve.",
+        "responses": {
+          "200": {
+            "description": "The computed answer."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "tail",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "tail",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "http.unsupported.tail-.*.post",
+        "summary": "Anything this emulator does not serve.",
+        "responses": {
+          "200": {
+            "description": "The computed answer."
+          }
+        }
+      },
+      "put": {
+        "operationId": "http.unsupported.tail-.*.put",
+        "summary": "Anything this emulator does not serve.",
+        "responses": {
+          "200": {
+            "description": "The computed answer."
+          }
+        }
+      },
+      "patch": {
+        "operationId": "http.unsupported.tail-.*.patch",
+        "summary": "Anything this emulator does not serve.",
+        "responses": {
+          "200": {
+            "description": "The computed answer."
+          }
+        }
+      },
+      "delete": {
+        "operationId": "http.unsupported.tail-.*.delete",
+        "summary": "Anything this emulator does not serve.",
+        "responses": {
+          "200": {
+            "description": "The computed answer."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "deviceAuth": {
+        "type": "http",
+        "scheme": "digest",
+        "description": "Whatever pairing this television requires."
+      }
+    }
+  }
+}

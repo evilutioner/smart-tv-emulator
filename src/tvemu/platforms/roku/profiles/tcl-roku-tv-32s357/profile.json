@@ -1,0 +1,6 @@
+{
+  "schema_version": 3,
+  "id": "tcl-roku-tv-32s357",
+  "capture": "tcl-roku-tv-32s357-enabled",
+  "replays": {"/":"http.device-description","/query/device-info":"http.device-info","/ecp_SCPD.xml":"http.ecp-scpd","/dial_SCPD.xml":"http.dial-scpd","/device-image.png":"http.device-image","/query/active-app":"http.active-app","/query/apps":"http.apps","/query/media-player":"http.media-player","/query/tv-channels":"http.tv-channels","/query/tv-active-channel":"http.tv-active-channel","/query/audio-device":"http.audio-device","query-device-info":"ws.query-device-info","query-active-app":"ws.query-active-app","query-apps":"ws.query-apps","query-media-player":"ws.query-media-player","query-textedit-state":"ws.query-textedit-state","query-audio-device":"ws.query-audio-device","query-tv-channels":"ws.query-tv-channels"}
+}

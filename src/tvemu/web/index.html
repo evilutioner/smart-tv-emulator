@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Smart TV Emulator</title><link rel="stylesheet" href="/style.css">
+  <link id="platform-style" rel="stylesheet" href="">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+<main>
+  <div class="page-heading"><div><p id="platform-label" class="eyebrow"></p><h1>Smart TV Emulator</h1></div><span id="panel-status" class="badge neutral">Connecting…</span></div>
+  <div id="message" role="status" aria-live="polite" hidden></div>
+  <div class="workspace">
+    <section class="card settings"><div class="card-title"><h2>Configuration</h2><button id="save-settings" class="primary">Save settings</button></div>
+      <div class="group">
+        <div class="group-title"><h3>Lab settings</h3><span class="section-number">01</span></div>
+        <div class="setting"><label class="label" for="platform">TV platform</label><select id="platform"></select><p class="hint">Switches the emulated platform without restarting. Sessions, counters, the captured device, and the access mode are reset.</p>
+          <p id="platform-locked" class="hint locked" hidden></p>
+          <div id="platform-upsell" class="upsell" hidden>
+            <p id="upsell-title"></p>
+            <p id="upsell-summary" class="hint"></p>
+            <p id="upsell-devices" class="hint"></p>
+            <a id="upsell-link" target="_blank" rel="noopener">Ask about it</a>
+          </div></div>
+        <div class="setting"><label class="label" for="device-profile">Captured device</label><select id="device-profile"></select><p id="profile-hint" class="hint">Switches the captured identity and wire responses. Existing device sessions are disconnected.</p></div>
+      </div>
+      <div class="group">
+        <div class="group-title"><h3 id="behaviour-title">TV behaviour</h3><span class="section-number">02</span></div>
+        <div class="setting" id="access-setting"><label class="label" for="access-mode">Control by mobile apps</label><select id="access-mode"></select><p id="access-hint" class="hint"></p></div>
+        <p id="access-static" class="hint" hidden></p>
+        <div id="platform-settings"></div>
+      </div>
+      <div class="group">
+        <div class="group-title"><h3 id="protocols-title">Protocols</h3><span class="section-number">03</span></div>
+        <div id="protocol-toggles"></div>
+        <p id="protocol-note" class="hint"></p>
+      </div>
+      <div class="group actions">
+        <div class="group-title"><h3>Device actions</h3><span class="section-number">04</span></div>
+        <button id="disconnect" class="full">Disconnect device clients</button><p class="hint">The port remains open for reconnection.</p><button id="reset-state" class="full">Reset device state</button><p class="hint">Counters, held keys, power, and volume are reset. Settings are preserved.</p>
+      </div>
+    </section>
+    <div class="stream">
+    <section class="card state"><div class="card-title"><h2>Device state</h2><span id="device-status" class="badge neutral">—</span></div>
+      <div class="device-line"><div class="tv-icon"><span id="device-icon">—</span></div><div><h3 id="device-name">—</h3><code id="device-address">—</code><p id="device-protocol" class="hint">—</p><p id="device-profile-details" class="hint">—</p></div><div class="connection-count"><strong id="connections-count">0</strong><span id="connection-count-label">Active sessions</span></div></div>
+      <div id="platform-panels"></div>
+      <div class="metrics"><div><span>Accepted presses</span><strong id="accepted">0</strong></div><div><span>Rejected commands</span><strong id="rejected">0</strong></div><div><span>Last key</span><strong id="last-key">—</strong></div><div><span>Last response</span><strong id="last-status">—</strong></div></div>
+      <div class="remote-heading"><h3>Incoming remote keys</h3><span class="hint">Indicators only · use your remote app</span></div>
+      <div id="key-grid" class="key-grid" aria-label="Remote key indicators"></div>
+      <div class="simulated-state"><span id="power-state">Power: on</span><span id="volume-state">Volume: 25</span><span id="simulated-platform" class="hint">State is simulated; the device screen is not emulated</span></div>
+      <details class="connections"><summary>Connections and additional keys</summary><div id="connections-list" class="hint">No active sessions</div><p id="connection-help" class="hint">Requests and client addresses appear in the event log.</p><p id="limitations" class="hint"></p><div id="extra-keys" class="key-grid compact"></div></details>
+    </section>
+    <section class="card applications" id="applications-card" hidden><div class="card-title"><div><h2>Application launches</h2><p id="applications-label" class="hint">—</p></div><span id="applications-status" class="badge neutral">Waiting</span></div>
+      <div class="application-metrics"><div><span>Last application</span><strong id="application-name">—</strong></div><div><span>Wire ID</span><strong id="application-id">—</strong></div><div><span>Launch API</span><strong id="application-surface">—</strong></div><div><span>Response</span><strong id="application-response">—</strong></div></div>
+      <div class="application-payload"><strong>Payload / deep link</strong><output id="application-payload" class="field-text empty">No launch received</output><p id="application-detail" class="hint">Launch an app from the remote client to see the exact request here.</p></div>
+      <div class="group">
+        <div class="group-title"><h3>Applications exposed or observed</h3><span id="application-count" class="pill">0</span></div>
+        <div id="application-grid" class="application-grid"></div>
+        <p id="application-empty" class="hint application-empty">No application IDs observed yet.</p>
+      </div>
+    </section>
+    <section class="card keyboard" id="keyboard-card" hidden><div class="card-title"><div><h2>Keyboard</h2><p id="keyboard-label" class="hint">—</p></div><span id="keyboard-status" class="badge neutral">No field</span></div>
+      <div class="group">
+        <div class="group-title"><h3>Text field on the device</h3><span id="keyboard-length" class="pill">0</span></div>
+        <div class="field-view"><output id="keyboard-text" class="field-text empty">No field focused</output><button id="keyboard-reveal" class="reveal" hidden>Show</button></div>
+        <p id="keyboard-source" class="hint">Text typed here, or pushed in by a paired app, appears above.</p>
+      </div>
+      <div class="group">
+        <div class="group-title"><h3>Simulate the device</h3></div>
+        <div class="toggle-row"><div><strong>Field focused</strong><p id="keyboard-focus-hint" class="hint">As if an app on the TV opened a text field.</p></div><label class="switch"><input type="checkbox" id="keyboard-focused"><span></span></label></div>
+        <div class="setting" id="keyboard-type-setting"><label class="label" for="keyboard-content-type">Field type</label><select id="keyboard-content-type"></select><p id="keyboard-type-hint" class="hint"></p></div>
+      </div>
+      <div class="group">
+        <div class="group-title"><h3>Type as the viewer</h3></div>
+        <div class="compose"><input type="text" id="keyboard-input" placeholder="Text to send" autocomplete="off"><button id="keyboard-send" class="primary">Type</button></div>
+        <div class="compose-keys"><button id="keyboard-backspace" title="Delete one character">&#9003;</button><button id="keyboard-enter" title="Submit">&#8629;</button><button id="keyboard-clear">Clear</button></div>
+        <p id="keyboard-note" class="hint"></p>
+      </div>
+    </section>
+    <section class="card voice" id="voice-card" hidden><div class="card-title"><div><h2>Voice input</h2><p id="voice-label" class="hint">—</p></div><span id="voice-status" class="badge neutral">Idle</span></div>
+      <div class="voice-metrics"><div><span>Session</span><strong id="voice-session">—</strong></div><div><span>Chunks</span><strong id="voice-chunks">0</strong></div><div><span>Bytes</span><strong id="voice-bytes">0 B</strong></div><div><span>Duration</span><strong id="voice-duration">0 ms</strong></div></div>
+      <div class="voice-detail"><strong id="voice-format">—</strong><p id="voice-detail" class="hint">Waiting for voice input.</p></div>
+    </section>
+    <section class="card journal"><div class="card-title"><div><h2>Event log <span id="event-count" class="pill">0</span></h2><p class="hint">Requests, responses, and condition changes · latest 500 events</p></div><div class="journal-actions"><button id="pause-log">Pause</button><a class="button" href="/api/v1/events/export" download>Export</a><button id="clear-log">Clear</button></div></div>
+      <div class="filters"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="command">Keys</button><button class="filter" data-filter="application">Applications</button><button class="filter" data-filter="errors">Errors</button><button class="filter" data-filter="connection">Connections</button><span class="log-direction">Newest events first</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Time</th><th>Channel / client</th><th>Event</th><th>Response</th><th>Details</th></tr></thead><tbody id="log-body"></tbody></table><div class="empty-state" id="log-empty"><span class="empty-icon">↳</span><h3>Ready for the first remote key</h3><p><span id="empty-device">Connect your remote app to the selected device.</span><br>The command and response history will appear here.</p></div></div>
+    </section>
+    </div>
+  </div>
+  <footer><span><i class="dot"></i> One Python process. Everything stays on the local network.</span><span id="footer-platform">Smart TV adapter · v0.1</span></footer>
+</main>
+</body></html>

@@ -1,0 +1,291 @@
+{
+  "schema_version": 2,
+  "request_url": "https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml",
+  "platforms": [
+    {
+      "id": "roku",
+      "display_name": "Roku",
+      "order": 10,
+      "summary": "ECP over HTTP · authenticated ecp-2 WebSocket · SSDP roku:ecp",
+      "docs": "docs/platforms/roku.md",
+      "remote": "ECP over HTTP **8060** + authenticated `ecp-2` WebSocket",
+      "discovery": "SSDP `roku:ecp`",
+      "pairing": "ECP-2 challenge–response",
+      "protocols": 2,
+      "captured": [
+        {
+          "name": "Roku Streaming Stick 4K",
+          "detail": "3820EU2, Roku OS 12.0.0",
+          "profiles": [
+            "roku-streaming-stick-4k-3820eu2"
+          ]
+        },
+        {
+          "name": "TCL Roku TV 32S357",
+          "detail": "hw H104X, Roku OS 15.3.4",
+          "profiles": [
+            "tcl-roku-tv-32s357"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "firetv",
+      "display_name": "Fire TV",
+      "order": 20,
+      "summary": "Turnstile over HTTPS · legacy ADB shell · DIAL and SSDP · Bonjour on Fire OS",
+      "docs": "docs/platforms/firetv.md",
+      "remote": "Turnstile over HTTPS **8080**; legacy ADB shell **5555**, off by default",
+      "discovery": "DIAL/SSDP; Bonjour `_amzn-wplay._tcp` on Fire OS",
+      "pairing": "On-screen PIN and client token; ADB public-key approval",
+      "protocols": 6,
+      "captured": [
+        {
+          "name": "Fire TV Stick (Vega)",
+          "detail": "AFTCA002, fw 2101020054720",
+          "profiles": [
+            "fire-tv-stick-vega-aftca002"
+          ]
+        },
+        {
+          "name": "Fire TV Stick (Fire OS)",
+          "detail": "AFTMA08C15, Fire OS 8.1.8.2",
+          "profiles": [
+            "fire-tv-stick-fireos-aftma08c15"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "webos",
+      "display_name": "webOS TV",
+      "order": 30,
+      "summary": "SSAP over WSS · IME keyboard · pointer socket · DLNA renderer · four SSDP stacks",
+      "docs": "docs/platforms/webos.md",
+      "remote": "SSAP over WSS **3001**, IME keyboard, pointer socket, DLNA renderer",
+      "discovery": "SSDP from **four independent stacks**, each with its own UUID and ports",
+      "pairing": "On-screen prompt, client key",
+      "protocols": 7,
+      "captured": [
+        {
+          "name": "LG 43UQ81006LB",
+          "detail": "",
+          "profiles": [
+            "lg-webos-tv-uq81006lb"
+          ]
+        },
+        {
+          "name": "LG 50UA75006LA",
+          "detail": "",
+          "profiles": [
+            "lg-webos-tv-ua75006la"
+          ]
+        },
+        {
+          "name": "Sencor SLE50Q871B",
+          "detail": "",
+          "profiles": [
+            "sencor-webos-tv-sle50q871b"
+          ]
+        },
+        {
+          "name": "Sencor SLE65Q871B",
+          "detail": "",
+          "profiles": [
+            "sencor-webos-tv-sle65q871b"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "androidtv",
+      "display_name": "Android TV / Google TV",
+      "order": 40,
+      "summary": "Remote v2 over mutual TLS · Polo pairing · Cast and DIAL launch · AirPlay identity · Bonjour",
+      "docs": "docs/platforms/androidtv.md",
+      "remote": "Remote v2 over mutual TLS **6466**; DIAL and Cast launch validation; AirPlay identity",
+      "discovery": "Bonjour `_androidtvremote2._tcp`, `_googlecast._tcp`, `_airplay._tcp`; DIAL/SSDP",
+      "pairing": "Polo pairing on **6467** — six hex characters and a client certificate",
+      "protocols": 9,
+      "captured": [
+        {
+          "name": "Xiaomi MiTV-MOEU0",
+          "detail": "fw 7.00.956317615",
+          "profiles": [
+            "xiaomi-mitv-moeu0"
+          ]
+        },
+        {
+          "name": "TCL Android TV",
+          "detail": "C06, AR2101",
+          "profiles": [
+            "tcl-android-tv-c06"
+          ]
+        },
+        {
+          "name": "KIVI Mediatek MTXXXX",
+          "detail": "",
+          "profiles": [
+            "kivi-android-tv-mtxxxx",
+            "kivi-android-tv-mtxxxx-2"
+          ]
+        },
+        {
+          "name": "Google Chromecast HD",
+          "detail": "Google TV, Android 14",
+          "profiles": [
+            "google-chromecast-hd"
+          ]
+        },
+        {
+          "name": "Nokia Streaming Stick 800",
+          "detail": "SEI Robotics, Android 11",
+          "profiles": [
+            "nokia-streaming-stick-800"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vizio",
+      "display_name": "Vizio SmartCast",
+      "order": 50,
+      "summary": "SmartCast REST over HTTPS · DIAL and SSDP",
+      "docs": "docs/platforms/vizio.md",
+      "remote": "SmartCast REST over HTTPS **7345**",
+      "discovery": "DIAL/SSDP, description on **56790**",
+      "pairing": "Four-digit PIN, then `AUTH_TOKEN`",
+      "protocols": 3,
+      "captured": [
+        {
+          "name": "Vizio D24f-J09",
+          "detail": "fw 3.3.3-2538.0001",
+          "profiles": [
+            "vizio-d24f-j09"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vidaa",
+      "display_name": "VIDAA (Hisense)",
+      "order": 60,
+      "summary": "MQTT over TLS · UPnP capability probe · Live TV channel list",
+      "docs": "docs/platforms/vidaa.md",
+      "remote": "MQTT over TLS **36669** — keys, app and source lists, Live TV channels",
+      "discovery": "**None.** The set answers no SSDP and no mDNS; a client reaches it by address after probing the UPnP description on **18400**",
+      "pairing": "On-screen PIN, then access and refresh tokens",
+      "protocols": 2,
+      "captured": [
+        {
+          "name": "Hisense 32A3HE",
+          "detail": "VIDAA U7, fw V0007.09.60U.Q0609",
+          "profiles": [
+            "hisense-vidaa-tv-32a3he"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "philips",
+      "display_name": "Philips JointSpace",
+      "order": 70,
+      "summary": "JointSpace v6 over HTTPS and HTTP · UPnP · SSDP · Bonjour",
+      "docs": "docs/platforms/philips.md",
+      "remote": "JointSpace v6 over HTTPS **1926** and HTTP **1925**",
+      "discovery": "SSDP/UPnP; Bonjour `_philipstv_rpc._tcp`",
+      "pairing": "Four-digit PIN, then HTTP Digest",
+      "protocols": 6,
+      "captured": [
+        {
+          "name": "Philips 32PHS6000/12",
+          "detail": "JointSpace 6.1",
+          "profiles": [
+            "philips-32phs6000-12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tizen",
+      "display_name": "Samsung Tizen",
+      "order": 80,
+      "summary": "samsung.remote.control over WSS · device API · DIAL description",
+      "docs": "docs/platforms/tizen.md",
+      "remote": "`samsung.remote.control` over WSS **8002**, base64 text input; device API **8001**",
+      "discovery": "**None captured.** The sets run SSDP, but the ordered headers were never saved, so a client reaches them by address",
+      "pairing": "On-screen Allow prompt, then an eight-digit token",
+      "protocols": 3,
+      "captured": [
+        {
+          "name": "Samsung UE65U8072F",
+          "detail": "25_KSUE_UB",
+          "profiles": [
+            "samsung-tizen-tv-ue65u8072f"
+          ]
+        },
+        {
+          "name": "Samsung UE55DU7172U",
+          "detail": "24_KANTSU2E_UB",
+          "profiles": [
+            "samsung-tizen-tv-ue55du7172u"
+          ]
+        },
+        {
+          "name": "Samsung UE43CU7172U",
+          "detail": "23_KSUE_UB_T09",
+          "profiles": [
+            "samsung-tizen-tv-ue43cu7172u"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "orsay",
+      "display_name": "Samsung Smart TV (2014–15)",
+      "order": 90,
+      "summary": "SPC PIN pairing · encrypted Socket.IO companion channel · multiscreen API · SSDP",
+      "docs": "docs/platforms/orsay.md",
+      "remote": "Encrypted Socket.IO 0.9 companion channel **8000**; multiscreen API **8001**",
+      "discovery": "SSDP: four captured stacks, descriptions on **7676**",
+      "pairing": "Four-digit on-screen PIN, then SPC key exchange on **8080**",
+      "protocols": 5,
+      "captured": [
+        {
+          "name": "Samsung UE48H6200",
+          "detail": "14_X14, MSF 2.0.24",
+          "profiles": [
+            "samsung-orsay-tv-ue48h6200"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bravia",
+      "display_name": "Sony BRAVIA",
+      "order": 100,
+      "summary": "ScalarWebAPI JSON-RPC · IRCC · Simple IP Control · PIN registration · Android TV Remote v1 · SSDP · Bonjour",
+      "docs": "docs/platforms/bravia.md",
+      "remote": "ScalarWebAPI JSON-RPC and IRCC over HTTP **80**; Simple IP Control **20060**; Android TV Remote **v1 only** over TLS **6466**",
+      "discovery": "SSDP: four captured stacks; Bonjour `_androidtvremote._tcp` (no `_androidtvremote2`)",
+      "pairing": "Four-digit PIN for an `auth` cookie; Polo v1 on **6467** — four hex symbols and a client certificate",
+      "protocols": 10,
+      "captured": [
+        {
+          "name": "Sony KDL-55W807C",
+          "detail": "BRAVIA 2015, Android 7.0",
+          "profiles": [
+            "sony-bravia-kdl-55w807c"
+          ]
+        },
+        {
+          "name": "Sony KDL-32WD600",
+          "detail": "BRAVIA 2016, Linux; discoverable, no remote protocol",
+          "profiles": [
+            "sony-bravia-kdl-32wd600"
+          ]
+        }
+      ]
+    }
+  ]
+}

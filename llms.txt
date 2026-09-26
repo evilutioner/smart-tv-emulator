@@ -1,0 +1,32 @@
+# Smart TV Emulator
+
+> A local test bench that answers like a real Smart TV on the LAN — discovery, pairing and the
+> wire protocols replayed from captures of physical hardware — and records exactly what a
+> client sent. Use it to write and test a TV remote-control driver without the television.
+
+This build runs one television in full (Roku); the others are catalogued and described.
+Every surface is declared in code and exported as OpenAPI 3.2 and AsyncAPI 3.1; curated claims
+say what the captures cannot. The event log is the ground truth for what a driver did.
+
+## Start here
+
+- [README](README.md): what it is, quick start, architecture, management API
+- [Writing a driver](docs/writing-a-driver.md): the contract-first loop, step by step, with checks
+- [CI](docs/ci.md): run an app's tests against the emulator and assert on the event log
+- [AGENTS.md](AGENTS.md): conventions for changing the emulator itself
+
+## Contract
+
+- [Roku guide](docs/platforms/roku.md): discovery, ECP, the authenticated ecp-2 WebSocket, access modes, firmware differences
+- [Roku OpenAPI](docs/spec/roku.openapi.json): ECP over HTTP
+- [Roku AsyncAPI](docs/spec/roku.asyncapi.json): ecp-2 messages
+- [Roku scenario](docs/spec/roku.scenario.json): an example `python -m tvemu.expect` check
+- [Other televisions](docs/platforms/): overviews of the platforms this build does not ship
+
+## Tools
+
+- `tvemu --api-map <id> [--format openapi|asyncapi]`: the declared surface of a platform
+- `tvemu --contract <id>`: its curated claims and any disagreement with the captures
+- `python -m tvemu.expect scenario.json`: assert on the event log of a running emulator
+- `tvemu-mcp`: an MCP server over stdio with state, events, expect, reset, api_map and contract tools
+- `GET http://127.0.0.1:8888/api/v1/openapi.json`: the management API

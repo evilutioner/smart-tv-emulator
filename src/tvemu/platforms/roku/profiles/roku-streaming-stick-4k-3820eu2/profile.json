@@ -1,0 +1,6 @@
+{
+  "schema_version": 3,
+  "id": "roku-streaming-stick-4k-3820eu2",
+  "capture": "roku-streaming-stick-4k-3820eu2",
+  "replays": {"/":"http.device-description","/ecp_SCPD.xml":"http.ecp-scpd","/dial_SCPD.xml":"http.dial-scpd"}
+}

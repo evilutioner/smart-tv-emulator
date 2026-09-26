@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "tcl-roku-tv-32s357-15-2-4",
+  "device": {"display_name":"TCL Roku TV 32S357","model_name":"32S357","model_number":"H104X","serial_number":"X02000EM0025","udn":"uuid:28002000-0000-1000-8000-020000000025","software_version":"15.2.4"},
+  "source": {"kind":"captured","captured_at":"2026-09-15","description":"Physical TCL Roku TV capture. Identity, device information, service documents, icon and SSDP were captured live; unit and network identifiers were replaced with same-shape emulator-owned values."},
+  "platform": {
+    "protocols": [{"id":"ecp","port":8060,"primary":true},{"id":"ssdp"}],
+    "observed_open_ports": [{"port":8060,"transport":"tcp","service":"roku-ecp","emulated":true}],
+    "ssdp": {"search_target":"roku:ecp","response_headers":[{"name":"Cache-Control","value":"max-age=3600"},{"name":"ST","value":"roku:ecp"},{"name":"USN","value":"uuid:roku:ecp:X02000EM0025"},{"name":"Ext","value":""},{"name":"Server","value":"Roku/15.2.4 UPnP/1.0 Roku/15.2.4"},{"name":"Location","value":"{location}"},{"name":"device-group.roku.com","value":"00000000000000000025"},{"name":"WAKEUP","value":"MAC=02:00:00:00:00:25;Timeout=10"}]}
+  },
+  "exchanges": [
+    {"id":"http.device-description","operation_id":"roku.http.device-description","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"device-description.xml"}]},
+    {"id":"http.device-info","operation_id":"roku.http.device-info","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/query/device-info"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"device-info.xml"}]},
+    {"id":"http.ecp-scpd","operation_id":"roku.http.ecp-scpd","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/ecp_SCPD.xml"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"ecp_SCPD.xml"}]},
+    {"id":"http.dial-scpd","operation_id":"roku.http.dial-scpd","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/dial_SCPD.xml"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"dial_SCPD.xml"}]},
+    {"id":"http.device-image","operation_id":"roku.http.device-image","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/device-image.png"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"image/png"}},"payload":"device-image.png"}]}
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "roku-ecp2-probe-15-2-4",
+  "device": {"display_name":"Roku ecp-2 live probe","model_name":"32S357","model_number":"H104X","software_version":"15.2.4"},
+  "source": {"kind":"probed","captured_at":"2026-09-15","description":"Ordered ecp-2 WebSocket frames retained from a live probe of the same sanitized television represented by the TCL Roku TV capture. Challenge, response and device content were replaced with same-shape non-secret values."},
+  "platform": {},
+  "exchanges": [
+    {"id":"ws.authenticate","operation_id":"roku.ecp2.authenticate-session","transport":"websocket","steps":[
+      {"direction":"out","operation_id":"ecp-2.param-challenge","metadata":{"channel":"ecp-2"},"payload":"challenge.json"},
+      {"direction":"in","operation_id":"ecp-2.authenticate","metadata":{"channel":"ecp-2"},"payload":"authenticate.json"},
+      {"direction":"out","operation_id":"ecp-2.response","metadata":{"channel":"ecp-2"},"payload":"authenticate-response.json"}
+    ]},
+    {"id":"ws.key-press","operation_id":"ecp-2.key-press","transport":"websocket","steps":[
+      {"direction":"in","metadata":{"channel":"ecp-2"},"payload":"key-press.json"},
+      {"direction":"out","operation_id":"ecp-2.response","metadata":{"channel":"ecp-2"},"payload":"key-press-response.json"}
+    ]},
+    {"id":"ws.key-down","operation_id":"ecp-2.key-down","transport":"websocket","steps":[
+      {"direction":"in","metadata":{"channel":"ecp-2"},"payload":"key-down.json"},
+      {"direction":"out","operation_id":"ecp-2.response","metadata":{"channel":"ecp-2"},"payload":"key-down-response.json"}
+    ]},
+    {"id":"ws.key-up","operation_id":"ecp-2.key-up","transport":"websocket","steps":[
+      {"direction":"in","metadata":{"channel":"ecp-2"},"payload":"key-up.json"},
+      {"direction":"out","operation_id":"ecp-2.response","metadata":{"channel":"ecp-2"},"payload":"key-up-response.json"}
+    ]},
+    {"id":"ws.query-device-info","operation_id":"ecp-2.query-device-info","transport":"websocket","steps":[
+      {"direction":"in","metadata":{"channel":"ecp-2"},"payload":"query-device-info.json"},
+      {"direction":"out","operation_id":"ecp-2.response","metadata":{"channel":"ecp-2"},"payload":"query-device-info-response.json"}
+    ]}
+  ]
+}

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip build
+          python -m pip install .
+      - name: Compile
+        run: python -m compileall -q src
+      - name: Tests
+        run: python -m unittest discover -s tests
+      - name: JavaScript syntax
+        run: |
+          for file in src/tvemu/web/*.js src/tvemu/web/platforms/*.js; do
+            cp "$file" "${file%.js}.mjs"
+            node --check "${file%.js}.mjs"
+            rm "${file%.js}.mjs"
+          done
+      - name: Package
+        run: python -m build

@@ -425,6 +425,6 @@ Everything in this repository — the shared core, the dashboard, the management
 server and the Roku adapter with its captures — is [Apache License 2.0](LICENSE): use it,
 change it and ship it, commercially included. See [`NOTICE`](NOTICE).
 
-The other nine televisions are not in this repository and are not covered by this licence.
+The other televisions in the table are not in this repository and are not covered by this licence.
 Access to them, a commercial agreement, or a driver built for your app:
 [ask](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).

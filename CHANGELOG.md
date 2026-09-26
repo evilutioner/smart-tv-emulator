@@ -6,33 +6,9 @@ All notable changes to the public build are recorded here. The format follows
 
 ## [Unreleased]
 
-### Changed
-
-- **Licence: Apache License 2.0**, replacing PolyForm Noncommercial 1.0.0. The shared core,
-  the dashboard, the management API, the MCP server and the Roku adapter may now be used
-  commercially. `NOTICE` added.
-- Televisions that are catalogued but not in this build are labelled **N/A** instead of
-  "soon": in the README, the platform overviews, the dashboard selector, and the management
-  API, whose 501 body and `platforms[].availability` now carry `"n/a"` instead of `"soon"`.
-  A client that matched `"soon"` has to match `"n/a"`.
-- The Roku contract describes client-side expectations generically; claims keep their
-  `client-contract` provenance kind.
-- README: a new headline, an *About the author* section, and a link to this changelog.
-
-### Removed
-
-- `platforms/common/polo.py` from the public build: no platform shipped here uses it.
-
-### Security
-
-- The TCL Roku TV channel lists (`/query/apps` and the `ecp-2` `query-apps` envelope, in
-  the Enabled, Limited and Disabled captures) no longer name three third-party channels,
-  and the sideloaded development channel carries a neutral name, as the stick capture
-  already did. Each capture's `source.description` records the change.
-
 ## [0.1.0] - 2026-09-26
 
-First public build.
+First public build, under the [Apache License 2.0](LICENSE); see [`NOTICE`](NOTICE).
 
 ### Added
 
@@ -49,7 +25,9 @@ First public build.
   AsyncAPI 3.1 exports committed under `docs/spec/`.
 - Driver tooling: `python -m tvemu.expect` scenario checks, the `tvemu-mcp` MCP server,
   `tools/ecp_client.py`, and guides for writing a driver and running it in CI.
-- Overviews of the nine televisions this build does not include.
+- Overviews of the televisions this build does not include. They are labelled **N/A** in
+  the README and the dashboard selector; the management API lists them with
+  `"availability": "n/a"` and answers a switch to one with 501 and `"reason": "n/a"`.
 
 [Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/evilutioner/smart-tv-emulator/releases/tag/v0.1.0

@@ -43,6 +43,10 @@ class ReplyStyle:
     `separators` is `None` for a device whose firmware writes JSON with the default spacing,
     and `(",", ":")` for one that writes it compactly. Two families on the same television is
     ordinary: the difference is observable on the wire, so it is declared rather than smoothed.
+
+    A `content_type` that already carries parameters (`text/xml; charset="utf-8"`) is the
+    header exactly as the firmware writes it and goes out verbatim. aiohttp rebuilds a type
+    and `charset` pair in its own spelling, which drops the quotes some servers write.
     """
 
     id: str
@@ -71,8 +75,13 @@ class ReplyStyle:
         merged.update(headers or {})
         if "Content-Type" in merged:
             raise ValueError("Content-Type is the style's to set: pass content_type instead")
-        return web.Response(body=self.encode(value), status=status,
-                            content_type=content_type or self.content_type,
+        kind = content_type or self.content_type
+        if ";" in kind:
+            if self.charset:
+                raise ValueError("A verbatim Content-Type names its own charset")
+            merged["Content-Type"] = kind
+            return web.Response(body=self.encode(value), status=status, headers=merged)
+        return web.Response(body=self.encode(value), status=status, content_type=kind,
                             charset=self.charset or None, headers=merged or None)
 
 

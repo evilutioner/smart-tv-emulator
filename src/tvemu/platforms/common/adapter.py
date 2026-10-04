@@ -13,6 +13,24 @@ from tvemu.platforms.base import DISCOVERY_KINDS, PlatformDescriptor, ProtocolLi
 from .profile import CapturedProfile
 
 
+class ListenerBinding:
+    """Where a protocol's socket is bound, given where the profile advertises it.
+
+    The advertised endpoint is what handlers render into replayed documents. Production binds
+    exactly there; a harness binds elsewhere without the served bytes noticing.
+    """
+
+    def address(self, protocol_id: str, host: str, port: int) -> tuple[str, int]:
+        return host, port
+
+
+class LoopbackBinding(ListenerBinding):
+    """Bind every listener to an ephemeral loopback port, whatever the profile advertises."""
+
+    def address(self, protocol_id: str, host: str, port: int) -> tuple[str, int]:
+        return "127.0.0.1", 0
+
+
 class BaseAdapter:
     """Profile selection, listener bookkeeping, and per-protocol lifecycle.
 
@@ -51,6 +69,10 @@ class BaseAdapter:
         self.sites: dict[str, web.TCPSite] = {}
         self.servers: dict[str, asyncio.AbstractServer] = {}
         self.listeners: dict[str, ProtocolListener] = {}
+        self.listener_binding = ListenerBinding()
+        # The socket each listening protocol actually holds, which a binding may move away
+        # from the advertised endpoint.
+        self.bound: dict[str, tuple[str, int]] = {}
         self.active: set[str] = set()
         # Protocols a device starts on demand stay closed until their trigger arrives.
         self.warmed: set[str] = set()
@@ -225,6 +247,7 @@ class BaseAdapter:
             self.sites.pop(protocol_id, None)
             if runner is not None:
                 await runner.cleanup()
+            self.bound.pop(protocol_id, None)
         self.publish_protocols()
         self.core.record("protocol", f"protocol.{protocol_id}.stopped")
 
@@ -278,6 +301,7 @@ class BaseAdapter:
 
     async def _start_app(self, name: str, app: web.Application, host: str, port: int,
                          ssl_context: ssl.SSLContext | None = None) -> None:
+        host, port = self.listener_binding.address(name, host, port)
         runner = web.AppRunner(app, shutdown_timeout=1)
         await runner.setup()
         site = web.TCPSite(runner, host, port, ssl_context=ssl_context)
@@ -288,12 +312,14 @@ class BaseAdapter:
             raise
         self.runners[name] = runner
         self.sites[name] = site
+        self.bound[name] = tuple(runner.addresses[-1][:2])
 
     async def _start_server(self, name: str, client_connected, host: str, port: int,
                             ssl_context: ssl.SSLContext | None = None) -> None:
-        self.servers[name] = await asyncio.start_server(
-            client_connected, host, port, ssl=ssl_context,
-        )
+        host, port = self.listener_binding.address(name, host, port)
+        server = await asyncio.start_server(client_connected, host, port, ssl=ssl_context)
+        self.servers[name] = server
+        self.bound[name] = tuple(server.sockets[0].getsockname()[:2])
 
     # ── clients ────────────────────────────────────────────────────────────────────────
 

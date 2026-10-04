@@ -48,6 +48,7 @@ class CapturedProfile:
     # Evidence is independent of runtime configuration: a profile names the capture whose
     # exchanges it replays. Only the test stubs, which replay nothing, leave it blank.
     capture_id: str = field(default="", kw_only=True)
+    label: str = field(default="", kw_only=True)
     runtime_substitutions: dict[str, tuple[str, ...]] = field(default_factory=dict,
                                                                kw_only=True)
 
@@ -72,10 +73,23 @@ class CapturedProfile:
         return (SSDPAdvertisement(self.search_target, self.ssdp_headers,
                                   self.ssdp_location(host, service_port)),)
 
+    @property
+    def picker_label(self) -> str:
+        """One line that tells this device from its siblings in the dashboard's device picker.
+
+        A profile's `label` is that whole line: maker, model and the operating system the set
+        actually runs, as measured. The fallback is only for a profile that has none yet; the
+        captured `display_name` is whatever its owner called the set, and tells nothing.
+        """
+        if self.label:
+            return self.label
+        return f"{self.model_name} · {self.model_number} · {self.software_version}"
+
     def summary(self) -> dict[str, Any]:
         result = {
             "id": self.id,
             "name": self.display_name,
+            "label": self.picker_label,
             "model_name": self.model_name,
             "model_number": self.model_number,
             "serial": self.serial_number,
@@ -112,6 +126,9 @@ class ProfileReference:
     replays: dict[str, str]
     substitutions: dict[str, tuple[str, ...]]
     runtime: dict[str, Any]
+    # What the device picker calls this profile. Presentation, so it lives here and not in the
+    # capture; blank means the picker falls back to the captured `display_name`.
+    label: str = ""
 
     def payload(self, name: str) -> bytes:
         return self.capture.payload(self.replays[name])
@@ -167,9 +184,12 @@ def profile_capture(directory, package: str) -> ProfileReference:
         raise ValueError(f"Profile {profile_id}: capture has no protocol evidence")
     if not has_discovery_evidence(capture):
         raise ValueError(f"Profile {profile_id}: capture has no discovery evidence")
+    label = data.get("label", "")
+    if not isinstance(label, str):
+        raise ValueError(f"Profile {profile_id}: label must be a string")
     return ProfileReference(profile_id, capture, dict(replays),
                             {name: tuple(paths) for name, paths in substitutions.items()},
-                            dict(runtime))
+                            dict(runtime), label)
 
 
 def has_discovery_evidence(capture: Capture) -> bool:
@@ -359,10 +379,20 @@ def require_port(data: dict[str, Any], name: str, profile_id: str) -> int:
     return value
 
 
+# `captured` came off a physical set. `client-contract` is a session with a vendor's official
+# client where no set was available: its `in` steps are the client's own bytes and its `out`
+# steps are what that client was shown and acted on, which its `source` must say.
+SOURCE_KINDS = ("captured", "client-contract")
+
+
 def require_captured_source(data: dict[str, Any], profile_id: str) -> dict[str, Any]:
     source = data.get("source")
-    if not isinstance(source, dict) or source.get("kind") != "captured":
-        raise ValueError(f"Profile {profile_id}: only captured profiles are accepted")
+    if not isinstance(source, dict) or source.get("kind") not in SOURCE_KINDS:
+        raise ValueError(f"Profile {profile_id}: only captured or client-contract "
+                         "profiles are accepted")
+    if source["kind"] == "client-contract" and not source.get("description"):
+        raise ValueError(f"Profile {profile_id}: a client-contract source says what was "
+                         "measured and what was not")
     return dict(source)
 
 

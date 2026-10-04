@@ -13,6 +13,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 
+from .audio import AudioSniffer
+
 if TYPE_CHECKING:
     from .platforms.base import AccessMode, PlatformDescriptor
 
@@ -60,7 +62,11 @@ class TextField:
 
 @dataclass
 class VoiceState:
-    """Protocol-neutral telemetry for one input session; audio bytes never live here."""
+    """Protocol-neutral telemetry for one input session.
+
+    The received audio is not kept here. The sniffer holds a short in-memory window of the most
+    recent bytes to work out the format, and only its description reaches a snapshot.
+    """
 
     state: str = "idle"
     active: bool = False
@@ -73,7 +79,11 @@ class VoiceState:
     detail: str = ""
     transport: str = ""
     owner: str = ""
+    # What the client said its audio is, when its protocol lets it say; it outranks the
+    # platform's static description for this one session.
+    declared_format: str = ""
     started_clock: float | None = None
+    sniffer: AudioSniffer | None = None
 
 
 @dataclass(frozen=True)
@@ -499,7 +509,7 @@ class Core:
         return {
             "label": voice.label,
             "mode": voice.mode,
-            "format": voice.audio_format,
+            "format": state.declared_format or voice.audio_format,
             "state": state.state,
             "active": state.active,
             "session_id": state.session_id,
@@ -510,6 +520,7 @@ class Core:
             "duration_ms": duration,
             "detail": state.detail,
             "transport": state.transport,
+            "detected": state.sniffer.snapshot() if state.sniffer else None,
         }
 
     # ── voice input ─────────────────────────────────────────────────────────────────
@@ -528,6 +539,7 @@ class Core:
             transport=transport,
             owner=owner,
             started_clock=time.monotonic(),
+            sniffer=AudioSniffer(),
         )
         self.record("voice", "voice.begin", transport=transport, peer=peer, status=200,
                     detail=detail or f"session={session_id}")
@@ -538,9 +550,10 @@ class Core:
         return state.active and state.session_id == str(session_id) and state.owner == owner
 
     def voice_ready(self, session_id: int | str, *, owner: str, transport: str,
-                    peer: str = "") -> bool:
+                    peer: str = "", declared_format: str = "") -> bool:
         if not self._voice_matches(session_id, owner) or self.voice_state.state != "waiting":
             return False
+        self.voice_state.declared_format = declared_format
         self.voice_state.state = "listening"
         self.voice_state.detail = "Ready for audio"
         self.record("voice", "voice.ready", transport=transport, peer=peer, status=200,
@@ -548,26 +561,39 @@ class Core:
         return True
 
     def voice_payload(self, session_id: int | str, byte_count: int, *, owner: str,
-                      transport: str, peer: str = "") -> bool:
+                      transport: str, peer: str = "", data: bytes | None = None) -> bool:
+        """Count one chunk of audio; `data`, when the protocol hands it over, is sniffed."""
         if (not self._voice_matches(session_id, owner)
                 or self.voice_state.state not in ("listening", "receiving")
                 or byte_count <= 0):
             return False
+        sniffer = self.voice_state.sniffer
+        if data and sniffer is not None and sniffer.feed(data):
+            found = sniffer.result
+            self.record("voice", "voice.format", transport=transport, peer=peer, status=200,
+                        detail=f"{found['label']} · {found['confidence']} · {found['basis']}")
         self.voice_state.state = "receiving"
         self.voice_state.chunks += 1
         self.voice_state.bytes += byte_count
         self.voice_state.detail = "Receiving audio"
-        self.record("voice", "voice.payload", transport=transport, peer=peer, status=200,
-                    detail=f"session={session_id}; {byte_count} bytes")
+        # Only the first chunk is an event: a client streaming a hundred frames a second would
+        # push everything else out of the log. The counters and voice.end carry the rest.
+        if self.voice_state.chunks == 1:
+            self.record("voice", "voice.payload", transport=transport, peer=peer, status=200,
+                        detail=f"session={session_id}; first chunk {byte_count} bytes")
+        else:
+            self.publish()
         return True
 
     def voice_end(self, session_id: int | str, *, owner: str, transport: str,
                   peer: str = "", detail: str = "") -> bool:
         if not self._voice_matches(session_id, owner):
             return False
+        state = self.voice_state
+        totals = f"{state.chunks} chunks, {state.bytes} bytes"
         self._finish_voice("completed", detail or "Voice input completed")
         self.record("voice", "voice.end", transport=transport, peer=peer, status=200,
-                    detail=detail or f"session={session_id}")
+                    detail=f"{detail or f'session={session_id}'}; {totals}")
         return True
 
     def voice_interrupt(self, *, owner: str, transport: str, peer: str = "",
@@ -836,12 +862,14 @@ class Core:
         return 200, "Accepted"
 
     async def key(self, key: str, action: str, transport: str, peer: str,
-                  owner: str, request_id: str = "") -> tuple[int, str]:
+                  owner: str, request_id: str = "", note: str = "") -> tuple[int, str]:
         # Decisions take effect at request arrival; settings do not rewrite in-flight commands.
+        # `note` is what a protocol wants the log to show about the request beyond its key,
+        # such as a body it did not otherwise act on.
         status, detail = self.result_for_key(key, transport, peer)
         epoch = self.connections.get(owner) if transport == "ws" else None
         self.record("request", f"{action}/{key}", transport=transport, peer=peer,
-                    request_id=request_id)
+                    request_id=request_id, detail=note)
         if not self.service_listening or (transport == "ws" and self.connections.get(owner) is not epoch):
             self.record("cancelled", f"{action}/{key}", transport=transport, peer=peer,
                         detail="Connection closed before command completion", request_id=request_id)

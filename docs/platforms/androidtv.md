@@ -14,7 +14,7 @@ each profile exposes only the protocols and ports its set did.
 |---|---|---|
 | Remote v2 | mutual TLS 6466 | keys, IME text, app links, voice, power, volume, pings |
 | Pairing v2 (Polo) | mutual TLS 6467 | six-character on-screen code, client certificate |
-| Wake service | TLS 6465 | the captured certificate boundary |
+| Wake service | mutual TLS 6465 | the port the Google TV app uses when it is advertised |
 | DIAL / Cast HTTP | HTTP 8008 (56790 on MediaTek sets) | description, app state and launch |
 | Google Cast | TLS 8009 | receiver status and launch |
 | Cast setup | HTTPS 8443 | setup identity |
@@ -48,6 +48,14 @@ message, pairing step and refusal, each one tied to the capture it came from.
 - [x] Power, volume and mute pushed back to every client
 - [x] Keep-alive pings and the session closing when they go unanswered
 - [x] DIAL and Cast launches recorded with their payloads
+
+## Support and validation
+
+Android TV is **supported for the official Google TV app** (iOS **3.33.00001**) on the
+Chromecast HD and Xiaomi profiles: pairing, the remote buttons and the microphone, validated by
+hand on **2026-09-30**. Text entry and application links were not exercised. The
+[manual validation ledger](../manual-validation.md) has the row; the full guide lists each
+behaviour.
 
 ## Get access
 

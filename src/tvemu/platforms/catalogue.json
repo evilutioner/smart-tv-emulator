@@ -38,7 +38,7 @@
       "remote": "Turnstile over HTTPS **8080**; legacy ADB shell **5555**, off by default",
       "discovery": "DIAL/SSDP; Bonjour `_amzn-wplay._tcp` on Fire OS",
       "pairing": "On-screen PIN and client token; ADB public-key approval",
-      "protocols": 6,
+      "protocols": 7,
       "captured": [
         {
           "name": "Fire TV Stick (Vega)",
@@ -106,7 +106,7 @@
       "remote": "Remote v2 over mutual TLS **6466**; DIAL and Cast launch validation; AirPlay identity",
       "discovery": "Bonjour `_androidtvremote2._tcp`, `_googlecast._tcp`, `_airplay._tcp`; DIAL/SSDP",
       "pairing": "Polo pairing on **6467** — six hex characters and a client certificate",
-      "protocols": 9,
+      "protocols": 11,
       "captured": [
         {
           "name": "Xiaomi MiTV-MOEU0",
@@ -283,6 +283,47 @@
           "detail": "BRAVIA 2016, Linux; discoverable, no remote protocol",
           "profiles": [
             "sony-bravia-kdl-32wd600"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "metz",
+      "display_name": "Metz Classic",
+      "order": 110,
+      "summary": "RCRService SOAP over HTTP · SSDP upnp:rootdevice · modelled from the MetzRemote app",
+      "docs": "docs/platforms/metz.md",
+      "remote": "RCRService SOAP over HTTP **49200**",
+      "discovery": "SSDP `upnp:rootdevice`, deviceType `RemoteControlReceiver:1`",
+      "pairing": "None",
+      "protocols": 2,
+      "captured": [
+        {
+          "name": "Metz Classic (modelled)",
+          "detail": "MetzRemote iOS app, no set measured",
+          "profiles": [
+            "metz-classic-rcr"
+          ],
+          "modelled": true
+        }
+      ]
+    },
+    {
+      "id": "nscreen",
+      "display_name": "TCL nScreen",
+      "order": 120,
+      "summary": "nScreen XML remote over TCP · DLNA renderer · DIAL · SSDP, two stacks",
+      "docs": "docs/platforms/nscreen.md",
+      "remote": "nScreen XML actions over TCP **4123**; no pairing",
+      "discovery": "SSDP: two captured stacks (MediaRenderer on **49152**, DIAL description on **56790**)",
+      "pairing": "None",
+      "protocols": 5,
+      "captured": [
+        {
+          "name": "TCL H32S5916",
+          "detail": "Linux 3.10, MediaTek MT5655 (not Roku, not Android TV)",
+          "profiles": [
+            "tcl-h32s5916"
           ]
         }
       ]

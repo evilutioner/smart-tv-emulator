@@ -13,6 +13,7 @@ say what the captures cannot. The event log is the ground truth for what a drive
 - [README](README.md): what it is, quick start, architecture, management API
 - [Writing a driver](docs/writing-a-driver.md): the contract-first loop, step by step, with checks
 - [CI](docs/ci.md): run an app's tests against the emulator and assert on the event log
+- [Manual validation](docs/manual-validation.md): the ledger of real apps driven against the emulator, and the method
 - [AGENTS.md](AGENTS.md): conventions for changing the emulator itself
 
 ## Contract

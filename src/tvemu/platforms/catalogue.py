@@ -31,6 +31,9 @@ class CapturedDevice:
     name: str
     detail: str = ""
     profiles: tuple[str, ...] = ()
+    # Modelled from a vendor's client rather than measured on a set: it is a selectable
+    # profile, but no published count may call it a captured device.
+    modelled: bool = False
 
     @property
     def label(self) -> str:
@@ -92,7 +95,8 @@ def catalogue_entries() -> tuple[CatalogueEntry, ...]:
 
 def _device(row: dict) -> CapturedDevice:
     return CapturedDevice(name=row["name"], detail=row.get("detail", ""),
-                          profiles=tuple(row.get("profiles") or ()))
+                          profiles=tuple(row.get("profiles") or ()),
+                          modelled=row.get("modelled") is True)
 
 
 def catalogue_ids() -> tuple[str, ...]:

@@ -16,7 +16,11 @@ class RokuProfile(common.CapturedProfile):
     inside its envelope, kept apart because the two wires do not always carry the same bytes.
     """
 
+    # Per route, the Content-Type the set wrote (parameters and quoting included) and the
+    # other headers it sent with the document. `Server` is not among them: the set puts it
+    # on every reply, so the ECP surface writes it once for all of them.
     http_content_types: dict[str, str]
+    http_headers: dict[str, tuple[tuple[str, str], ...]]
     ecp2_documents: dict[str, tuple[bytes, str]]
 
     @property
@@ -31,6 +35,9 @@ class RokuProfile(common.CapturedProfile):
 
     def document_content_type(self, route: str) -> str:
         return self.http_content_types.get(route, "text/xml")
+
+    def document_headers(self, route: str) -> dict[str, str]:
+        return dict(self.http_headers.get(route, ()))
 
 
 def _envelope_document(capture, exchange_id: str, profile_id: str) -> tuple[bytes, str]:
@@ -64,18 +71,28 @@ def _load_profile(directory) -> RokuProfile:
             ecp2_documents[name] = _envelope_document(capture, exchange_id, profile_id)
         else:
             raise ValueError(f"Profile {profile_id}: {name} cannot replay {exchange_id}")
-    content_types = {route: capture.content_type(exchange_id)
-                     for route, exchange_id in replay.items()
-                     if route in documents and capture.content_type(exchange_id)}
+    content_types: dict[str, str] = {}
+    http_headers: dict[str, tuple[tuple[str, str], ...]] = {}
+    for route, exchange_id in replay.items():
+        if route not in documents:
+            continue
+        kept = []
+        for name, value in capture.exchange(exchange_id).response().metadata["headers"].items():
+            if name.lower() == "content-type":
+                content_types[route] = value
+            elif name.lower() != "server":
+                kept.append((name, value))
+        http_headers[route] = tuple(kept)
 
     return RokuProfile(
         **common.capture_identity_fields(capture, profile_id),
         search_target=common.require_string(ssdp, "search_target", profile_id),
         ssdp_headers=headers,
         documents=documents,
-        capture_id=capture.id,
+        capture_id=capture.id, label=reference.label,
         runtime_substitutions=reference.substitutions,
-        http_content_types=dict(content_types),
+        http_content_types=content_types,
+        http_headers=http_headers,
         ecp2_documents=ecp2_documents,
     )
 

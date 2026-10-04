@@ -42,6 +42,13 @@ message, pairing step and refusal, each one tied to the capture it came from.
 - [x] The long-poll state bundle with live values
 - [x] Wake, an incorrect PIN and revoked credentials
 
+## Support and validation
+
+The official **Philips TV Remote** app (iOS build 20979) was validated against the emulator
+by hand on 2026-09-30: discovery, PIN pairing, the remote buttons and the state long poll.
+The [manual validation ledger](../manual-validation.md) has the row; the full guide lists each
+behaviour.
+
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:

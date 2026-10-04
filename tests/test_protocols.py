@@ -137,5 +137,27 @@ class ProtocolAPITests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(saved["settings"]["protocols"][self.control], False)
 
 
+class ReplyStyleTest(unittest.TestCase):
+    """How a declared style writes Content-Type onto the wire."""
+
+    def test_a_type_with_parameters_goes_out_verbatim_quotes_included(self):
+        from tvemu.platforms.common.reply import ReplyStyle
+
+        response = ReplyStyle("x", 'text/xml; charset="utf-8"').ok(b"<a/>")
+        self.assertEqual(response.headers["Content-Type"], 'text/xml; charset="utf-8"')
+
+    def test_a_bare_type_and_charset_keep_aiohttp_spelling(self):
+        from tvemu.platforms.common.reply import ReplyStyle
+
+        response = ReplyStyle("x", "text/xml", charset="utf-8").ok(b"<a/>")
+        self.assertEqual(response.headers["Content-Type"], "text/xml; charset=utf-8")
+
+    def test_a_verbatim_type_cannot_also_name_a_charset(self):
+        from tvemu.platforms.common.reply import ReplyStyle
+
+        with self.assertRaises(ValueError):
+            ReplyStyle("x", "text/xml; charset=utf-8", charset="utf-8").ok(b"")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -33,6 +33,7 @@ class VoiceStateTests(unittest.TestCase):
             "duration_ms": 0,
             "detail": "",
             "transport": "",
+            "detected": None,
         })
 
         self.assertTrue(core.voice_begin(7, owner="client-1", transport="test"))

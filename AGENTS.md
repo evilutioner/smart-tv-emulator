@@ -148,7 +148,17 @@ include.
   request form's checkboxes — are generated from `catalogue.json` by `tools/render_docs.py`
   between `generated:` markers. Edit the catalogue, never the output, and do not write such
   a number in prose.
+- A television is not called supported on the strength of tests we wrote. `docs/manual-validation.md`
+  is the ledger of sessions with a real app; a session moves a behaviour to validated, observed
+  or not exercised in that platform's guide, and a value that names a person or a session is
+  never copied out of a log.
 - Adding a platform: `README.md#adding-a-television`; one page per TV in `docs/platforms/`.
 - Gates: `python -m compileall -q src`, `python -m unittest discover -s tests`,
-  `node --check` on changed JS (as `.mjs`), `python -m build`. Before committing a new
-  capture, also `tvemu --contract <id> --check`.
+  `node --check` on changed JS (as `.mjs`), `python -m build`,
+  `python -m tvemu.conformance --all --gate`. Before committing a new capture, also
+  `tvemu --contract <id> --check`.
+- `python -m tvemu.conformance` replays each profile's captured client traffic through the
+  real listeners and compares the answers byte for byte. A replay it cannot run is listed
+  as uncovered with its reason, never skipped. What a television needs for it -- WebSocket
+  channels, client-owned values recomputed per session, exchanges declared `stateful` or
+  `transcribed`, `COVERAGE = "complete"` -- lives in `platforms/<id>/conformance/`.

@@ -215,6 +215,19 @@ function duration(value) {
   if (value < 1000) return `${value} ms`;
   return `${(value / 1000).toFixed(1)} s`;
 }
+// What the emulator worked out about the audio stream, live. The bar is the signal level:
+// -60 dBFS is empty and 0 is full, and it is only meaningful while audio is arriving.
+function drawDetected(voice) {
+  const found = voice.detected;
+  const streaming = ["listening", "receiving"].includes(voice.state);
+  $("voice-detected").textContent = found ? found.label : "—";
+  const facts = found ? [`${found.confidence}`, found.basis] : [];
+  if (found && streaming && found.bytes_per_second) facts.push(`${(found.bytes_per_second / 1000).toFixed(1)} kB/s`);
+  if (found && found.level_db != null) facts.push(`level ${found.level_db} dBFS`);
+  $("voice-detected-detail").textContent = found ? facts.join(" · ") : "Speak into the remote app to identify the stream.";
+  const level = found && streaming && found.level_db != null ? Math.max(0, Math.min(1, (found.level_db + 60) / 60)) : 0;
+  $("voice-level").style.width = `${Math.round(level * 100)}%`;
+}
 function drawVoice(data) {
   const voice = data.voice;
   $("voice-card").hidden = !voice;
@@ -227,6 +240,7 @@ function drawVoice(data) {
   $("voice-chunks").textContent = voice.chunks;
   $("voice-bytes").textContent = byteSize(voice.bytes);
   $("voice-duration").textContent = duration(voice.duration_ms);
+  drawDetected(voice);
   $("voice-format").textContent = voice.format || "Control signal only · no audio transport";
   $("voice-detail").textContent = voice.detail || (voice.mode === "stream"
     ? "Waiting for an incoming audio stream. Audio is counted but never stored."
@@ -304,7 +318,9 @@ function draw(data) {
   $("device-name").textContent = data.device.name;
   $("device-icon").textContent = data.device.platform_name.slice(0, 1).toUpperCase();
   $("device-protocol").textContent = `${data.device.platform_name} · IPv4 · ${data.device.protocol}`;
-  $("device-profile-details").textContent = `${data.device.model_number} · OS ${data.device.software_version} · S/N ${data.device.serial} · captured`;
+  // `software_version` is whatever version string a set reports; on several it is an API or
+  // a service version, so it is not called the OS here. The picker label says which OS.
+  $("device-profile-details").textContent = `${data.device.model_number} · software ${data.device.software_version} · S/N ${data.device.serial} · captured`;
   $("profile-hint").textContent = `Switches the ${data.device.platform_name} identity and captured wire responses. Existing device sessions are disconnected.`;
   // A platform this build does not include is still listed, marked with the word the API
   // supplies. Disabling the option would hide the explanation behind an unclickable row.
@@ -313,7 +329,7 @@ function draw(data) {
                                                   : item.display_name);
   drawLocked(data.platforms);
   syncOptions("device-profile", data.device_profiles, settings.device_profile,
-              item => `${item.name} · ${item.model_number} · OS ${item.software_version}`);
+              item => item.label);
   // A platform with a single access mode has no restriction setting to offer, so the group
   // states the one mode in force instead of presenting a selector that cannot change anything.
   const choose = data.access_modes.length > 1;

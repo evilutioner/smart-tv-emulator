@@ -24,6 +24,8 @@ STUBTV = PlatformDescriptor(
     protocol_label="Stub HTTP",
     default_port=0,          # an ephemeral port, so the stub never fights a real listener
     keys=STUB_KEYS,
+    # No keyboard, but a wire whose own keys spell text: the refusal must say out of scope.
+    text_key_prefixes=("Lit_",),
     transports=("http",),
     limitations="A test fixture. It answers nothing a real television would.",
     protocols=(

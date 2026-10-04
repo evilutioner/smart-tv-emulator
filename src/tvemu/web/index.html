@@ -79,6 +79,7 @@
     </section>
     <section class="card voice" id="voice-card" hidden><div class="card-title"><div><h2>Voice input</h2><p id="voice-label" class="hint">—</p></div><span id="voice-status" class="badge neutral">Idle</span></div>
       <div class="voice-metrics"><div><span>Session</span><strong id="voice-session">—</strong></div><div><span>Chunks</span><strong id="voice-chunks">0</strong></div><div><span>Bytes</span><strong id="voice-bytes">0 B</strong></div><div><span>Duration</span><strong id="voice-duration">0 ms</strong></div></div>
+      <div class="voice-detected"><span>Detected format</span><strong id="voice-detected">—</strong><p id="voice-detected-detail" class="hint">Speak into the remote app to identify the stream.</p><div class="voice-meter" aria-label="Signal level"><i id="voice-level"></i></div></div>
       <div class="voice-detail"><strong id="voice-format">—</strong><p id="voice-detail" class="hint">Waiting for voice input.</p></div>
     </section>
     <section class="card journal"><div class="card-title"><div><h2>Event log <span id="event-count" class="pill">0</span></h2><p class="hint">Requests, responses, and condition changes · latest 500 events</p></div><div class="journal-actions"><button id="pause-log">Pause</button><a class="button" href="/api/v1/events/export" download>Export</a><button id="clear-log">Clear</button></div></div>

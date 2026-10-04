@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import plistlib
 from dataclasses import dataclass, field
 from typing import Any, Iterable
 from xml.etree import ElementTree
@@ -109,6 +110,12 @@ def build_ir(captures: Iterable[Capture]) -> ContractIR:
 def parse_payload(payload: bytes, media_type: str, evidence: EvidenceRef) -> WireNode:
     text = payload.decode("utf-8", "replace").lstrip()
     marker = {(evidence.capture, evidence.exchange)}
+    # A binary plist holds the same scalar and container types JSON does.
+    if "plist" in media_type or payload.startswith(b"bplist"):
+        try:
+            return _json_node(plistlib.loads(payload), marker)
+        except (plistlib.InvalidFileException, ValueError):
+            pass
     if "json" in media_type or text[:1] in ("{", "["):
         try:
             return _json_node(json.loads(text), marker)

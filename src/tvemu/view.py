@@ -39,8 +39,9 @@ FIELDS: dict[str, tuple[str, str]] = {
     "last_key": ("object|null", "The most recent remote key event; typed text is not one."),
     "keyboard": ("object|null", "Null when the platform declares no keyboard, which hides "
                                 "the tile without anything naming a television."),
-    "voice": ("object|null", "Null when the platform exposes no voice input. Counters and "
-                             "status only: received audio never reaches this document."),
+    "voice": ("object|null", "Null when the platform exposes no voice input. Counters, status "
+                             "and `detected`, a description of the stream's format worked out "
+                             "from it: received audio never reaches this document."),
     "applications": ("object|null", "Null when the platform has no app-launch surface."),
     "power": ("boolean", "Simulated device state."),
     "volume": ("integer", "Simulated device state, on the platform's own scale."),

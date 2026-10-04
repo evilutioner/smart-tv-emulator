@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Callable
 
 from OpenSSL import SSL, crypto
+from OpenSSL._util import ffi, lib
 
 
 def certificate_der(certificate) -> bytes:
@@ -20,14 +21,26 @@ def certificate_fingerprint(certificate_or_der) -> str:
     return ":".join(digest[index:index + 2] for index in range(0, len(digest), 2))
 
 
+# OpenSSL has no call that chooses the alert a failed verification sends; it derives the alert
+# from the X509 error left on the store. Each value here is an error its table maps to that alert.
+_REJECTION_ERRORS = {
+    "certificate_unknown": lib.X509_V_ERR_SUBJECT_ISSUER_MISMATCH,
+}
+
+
 def server_context(root: Path, authorize: Callable[[bytes], bool],
                    *, require_client_certificate: bool = True,
+                   rejection_alert: str | None = None,
                    names: tuple[str, str] = ("cert.pem", "key.pem")) -> SSL.Context:
     """A server context that asks the platform whether one client certificate is acceptable.
 
     `require_client_certificate` is a wire fact, not a policy knob: a device whose firmware
     demands a certificate refuses the handshake outright, while one that merely offers the
     request lets an unauthenticated client through and decides later.
+
+    `rejection_alert` is a wire fact too: the TLS alert the device sends a certificate it
+    refuses. Clients branch on it, so a set measured to send one must not get OpenSSL's own
+    choice (`unknown_ca` for a self-signed client). None keeps OpenSSL's.
     """
     context = SSL.Context(SSL.TLS_SERVER_METHOD)
     context.set_min_proto_version(SSL.TLS1_2_VERSION)
@@ -41,7 +54,26 @@ def server_context(root: Path, authorize: Callable[[bytes], bool],
     mode = SSL.VERIFY_PEER
     if require_client_certificate:
         mode |= SSL.VERIFY_FAIL_IF_NO_PEER_CERT
-    context.set_verify(mode, verify)
+    if rejection_alert is None:
+        context.set_verify(mode, verify)
+        return context
+    error = _REJECTION_ERRORS[rejection_alert]
+
+    # pyOpenSSL's own wrapper hides the store, so the error cannot be set through it.
+    @ffi.callback("int (*)(int, X509_STORE_CTX *)")
+    def verify_store(_preverified, store):
+        if lib.X509_STORE_CTX_get_error_depth(store):
+            return 1
+        der = certificate_der(crypto.X509._from_raw_x509_ptr(
+            lib.X509_dup(lib.X509_STORE_CTX_get_current_cert(store))))
+        if authorize(der):
+            lib.X509_STORE_CTX_set_error(store, lib.X509_V_OK)
+            return 1
+        lib.X509_STORE_CTX_set_error(store, error)
+        return 0
+
+    lib.SSL_CTX_set_verify(context._context, mode, verify_store)
+    context._rejection_verify = verify_store     # the callback lives as long as the context
     return context
 
 

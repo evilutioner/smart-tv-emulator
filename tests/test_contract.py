@@ -201,6 +201,17 @@ class EvidenceTests(unittest.TestCase):
                                             for step in exchange.outputs()])
         self.assertGreater(found, 0, "no evidence-backed profile is installed")
 
+    def test_every_profile_names_its_maker_model_and_operating_system(self):
+        """The picker line is the profile's label, never the name an owner gave the set."""
+        for platform_id in platform_ids():
+            if platform_id in STUB_IDS:
+                continue
+            for profile in profiles_of(platform_id).values():
+                with self.subTest(platform=platform_id, profile=profile.id):
+                    maker_and_model, _, system = profile.label.partition(" · ")
+                    self.assertTrue(maker_and_model and system, profile.label)
+                    self.assertEqual(profile.picker_label, profile.label)
+
     def test_a_profile_directory_holds_only_its_reference(self):
         """Raw bytes live in evidence; a profile that kept one would replay it unchecked."""
         for platform_id in platform_ids():

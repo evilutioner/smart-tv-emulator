@@ -1,6 +1,7 @@
 {
   "schema_version": 3,
   "id": "roku-streaming-stick-4k-3820eu2",
+  "label": "Roku Streaming Stick 4K 3820EU2 · Roku OS 12.0.0",
   "capture": "roku-streaming-stick-4k-3820eu2",
   "replays": {"/":"http.device-description","/ecp_SCPD.xml":"http.ecp-scpd","/dial_SCPD.xml":"http.dial-scpd"}
 }

@@ -50,12 +50,13 @@ class ContractTests(unittest.TestCase):
                          (501, "Text input is out of scope"))
         self.assertEqual(core.result_for_key("Nonsense", "http"), (400, "Unknown key"))
 
-    def test_a_text_api_platform_declares_no_remote_text_keys(self):
-        keyboard = platform_descriptor(needs(TEXT_API, "a text API")).keyboard
-        self.assertTrue(keyboard.text_api)
-        # Such a platform deletes over the wire, so naming a delete key would invent a button.
-        self.assertEqual((keyboard.literal_prefix, keyboard.delete_key, keyboard.enter_key),
-                         ("", "", ""))
+    def test_a_text_api_platform_names_only_keys_it_actually_has(self):
+        descriptor = platform_descriptor(needs(TEXT_API, "a text API"))
+        self.assertTrue(descriptor.keyboard.text_api)
+        # Such a platform writes over the wire, so a delete or submit key is named only when
+        # its remote has one; naming it otherwise would invent a button.
+        for key in (descriptor.keyboard.delete_key, descriptor.keyboard.enter_key):
+            self.assertTrue(key == "" or key in descriptor.keys, key)
 
     def test_a_literal_key_platform_names_keys_it_actually_has(self):
         descriptor = platform_descriptor(needs(LITERAL_KEYS, "literal keypresses"))

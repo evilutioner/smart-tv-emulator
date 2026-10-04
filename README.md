@@ -9,9 +9,9 @@
   <a href="LICENSE"><img alt="Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-187960"></a>
   <img alt="aiohttp only" src="https://img.shields.io/badge/deps-aiohttp%20%2B%20pyOpenSSL-187960">
   <!-- generated:badges -->
-  <img alt="1 included, 9 N/A" src="https://img.shields.io/badge/televisions-1%20included%20%C2%B7%209%20N%2FA-6c7a7e">
-  <img alt="23 captured devices" src="https://img.shields.io/badge/captured%20devices-23-6c7a7e">
-  <img alt="53 protocol listeners" src="https://img.shields.io/badge/protocol%20listeners-53-6c7a7e">
+  <img alt="1 included, 11 N/A" src="https://img.shields.io/badge/televisions-1%20included%20%C2%B7%2011%20N%2FA-6c7a7e">
+  <img alt="24 captured devices" src="https://img.shields.io/badge/captured%20devices-24-6c7a7e">
+  <img alt="63 protocol listeners" src="https://img.shields.io/badge/protocol%20listeners-63-6c7a7e">
 <!-- /generated -->
 </p>
 
@@ -90,11 +90,14 @@ product — one complete television:
 | **[Samsung Tizen](docs/platforms/tizen.md)** | N/A | `samsung.remote.control` over WSS **8002**, base64 text input; device API **8001** | **None captured.** The sets run SSDP, but the ordered headers were never saved, so a client reaches them by address | On-screen Allow prompt, then an eight-digit token | **Samsung UE65U8072F** — 25_KSUE_UB<br>**Samsung UE55DU7172U** — 24_KANTSU2E_UB<br>**Samsung UE43CU7172U** — 23_KSUE_UB_T09 |
 | **[Samsung Smart TV (2014–15)](docs/platforms/orsay.md)** | N/A | Encrypted Socket.IO 0.9 companion channel **8000**; multiscreen API **8001** | SSDP: four captured stacks, descriptions on **7676** | Four-digit on-screen PIN, then SPC key exchange on **8080** | **Samsung UE48H6200** — 14_X14, MSF 2.0.24 |
 | **[Sony BRAVIA](docs/platforms/bravia.md)** | N/A | ScalarWebAPI JSON-RPC and IRCC over HTTP **80**; Simple IP Control **20060**; Android TV Remote **v1 only** over TLS **6466** | SSDP: four captured stacks; Bonjour `_androidtvremote._tcp` (no `_androidtvremote2`) | Four-digit PIN for an `auth` cookie; Polo v1 on **6467** — four hex symbols and a client certificate | **Sony KDL-55W807C** — BRAVIA 2015, Android 7.0<br>**Sony KDL-32WD600** — BRAVIA 2016, Linux; discoverable, no remote protocol |
+| **[Metz Classic](docs/platforms/metz.md)** | N/A | RCRService SOAP over HTTP **49200** | SSDP `upnp:rootdevice`, deviceType `RemoteControlReceiver:1` | None | **Metz Classic (modelled)** — MetzRemote iOS app, no set measured |
+| **[TCL nScreen](docs/platforms/nscreen.md)** | N/A | nScreen XML actions over TCP **4123**; no pairing | SSDP: two captured stacks (MediaRenderer on **49152**, DIAL description on **56790**) | None | **TCL H32S5916** — Linux 3.10, MediaTek MT5655 (not Roku, not Android TV) |
 <!-- /generated -->
 
 **N/A** = written and tested against physical hardware, **not available in this build**. See
 [The other televisions](#the-other-televisions). Version strings are the values
-the captured firmware itself reports.
+the captured firmware itself reports. A device marked *no set measured* is the exception: it
+is modelled from the vendor's own remote app, and no television of that make was captured.
 
 <details>
 <summary><b>Protocol index</b> — every wire protocol the emulator speaks, and which television speaks it</summary>
@@ -275,6 +278,32 @@ tvemu --contract roku                   # the curated claims and any disagreemen
 tvemu --contract roku --check           # merge gate: a claim the evidence contradicts fails
 ```
 
+### Replay conformance
+
+The contract check proves the claims agree with the captures; it does not prove the emulator
+actually serves those bytes. The replay conformance harness does. It starts the real adapter
+of each captured profile, binds its listeners on loopback while the profile keeps advertising
+its captured address and ports, sends the captured client request over a real socket, and
+compares the answer with the capture byte for byte: status, every captured header, and the
+body. A difference passes only inside a runtime substitution the profile declares, and every
+case must leave no listener, socket or task behind.
+
+```sh
+python -m tvemu.conformance --all --list     # the cases, and every replay not yet covered
+python -m tvemu.conformance --platform <id>  # run one television's cases
+python -m tvemu.conformance --all --json-report conformance.json
+```
+
+A replay nothing verifies is never skipped: it is listed as uncovered with its reason — a
+transport with no driver yet, or a request that needs pairing or earlier steps first — and
+the run stays red until it is covered. HTTP, HTTPS and WebSocket run today; raw TCP/TLS and
+MQTT come next. A television describes how to reach its WebSocket channels, and which values
+in a captured client frame it recomputes per session, in `platforms/<id>/conformance/`.
+
+CI runs one conformance job per television with `--gate`: a failed case always fails the
+build, and an uncovered replay fails it only for a television whose conformance package
+declares `COVERAGE = "complete"`, so full coverage, once reached, cannot quietly erode.
+
 
 ## The dashboard
 
@@ -339,7 +368,8 @@ coding agent:
   log as an artifact.
 
 Start with [Writing a driver](docs/writing-a-driver.md) and [CI](docs/ci.md);
-[`llms.txt`](llms.txt) indexes the repository for a model.
+[Manual validation](docs/manual-validation.md) records which real apps have been driven
+against which television, and how to add one; [`llms.txt`](llms.txt) indexes the repository for a model.
 
 ## Settings and captured profiles
 
@@ -358,7 +388,8 @@ A captured profile owns no raw response. Its `profile.json` references one compl
 under `evidence/`, maps each replayed answer to an exchange in it, and lists the only runtime
 substitutions a handler may make. Anything emulator-owned rather than measured — a token, a
 representative list, a block inherited from a sibling set — sits in its `runtime` object with
-its own provenance. An incomplete capture stays as evidence but is never selectable. No
+its own provenance. An optional `label` names the profile in the dashboard's device picker,
+so two devices of one product line read differently. An incomplete capture stays as evidence but is never selectable. No
 capture in this repository carries a real device serial, UDN or hardware address.
 
 ## Adding a television
@@ -401,6 +432,7 @@ televisions in one process, and IPv6.
 python -m compileall -q src              # compiles
 python -m unittest discover -s tests     # tests
 tvemu --contract roku --check            # claims agree with every capture
+python -m tvemu.conformance --all --gate  # the emulator serves those captures, byte for byte
 python -m build                          # packages
 ```
 

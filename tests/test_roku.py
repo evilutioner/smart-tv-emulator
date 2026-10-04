@@ -238,6 +238,14 @@ class TclProfileTests(RokuCase):
         self.assertEqual((response.status, response.content_type), (200, "image/png"))
         self.assertEqual((await response.read())[:8], b"\x89PNG\r\n\x1a\n")
 
+    async def test_a_document_carries_the_headers_the_set_sent_with_it(self):
+        response = await self.client.get("/query/device-info")
+        self.assertEqual(response.headers["Content-Type"], 'text/xml; charset="utf-8"')
+        self.assertEqual(response.headers["Cache-Control"], "no-cache")
+        response = await self.client.get("/device-image.png")
+        self.assertEqual(response.headers["Content-Type"], "image/png")
+        self.assertEqual(response.headers["Cache-Control"], "no-cache")
+
     async def test_the_envelope_carries_its_own_copy_of_device_info(self):
         http = await (await self.client.get("/query/device-info")).read()
         websocket, _ = await self.session()

@@ -17,6 +17,12 @@ button.reveal{padding:8px 12px;font-size:12px}
 .voice-metrics>div:last-child{border:0}
 .voice-metrics span{display:block;font-size:10px;color:var(--muted);margin-bottom:4px}
 .voice-metrics strong{font-size:18px;font-weight:550;overflow-wrap:anywhere}
+.voice-detected{padding:16px 22px 4px}
+.voice-detected>span{display:block;font-size:10px;color:var(--muted);margin-bottom:4px}
+.voice-detected>strong{font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.voice-detected>p{margin:4px 0 8px}
+.voice-meter{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.voice-meter i{display:block;height:100%;width:0;background:#187960;transition:width .15s linear}
 .voice-detail{padding:16px 22px 18px}
 .voice-detail>strong{font-size:12px;font-weight:550}
 .application-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fafcfb;padding:16px 0}

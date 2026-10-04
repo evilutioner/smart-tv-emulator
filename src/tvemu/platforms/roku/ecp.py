@@ -236,7 +236,8 @@ class ECP:
         self.core.record("query", operation, transport="http", peer=request.remote or "", status=200,
                          detail=f"captured profile: {profile.id}")
         return CAPTURED.ok(content,
-                           content_type=profile.document_content_type(request.path))
+                           content_type=profile.document_content_type(request.path),
+                           headers=profile.document_headers(request.path))
 
     @route.any_method("/{tail:.*}", summary="Anything this emulator does not serve.")
     async def unsupported(self, request):

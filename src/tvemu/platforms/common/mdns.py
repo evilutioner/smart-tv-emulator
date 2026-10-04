@@ -98,8 +98,10 @@ def _records(advertisement: MDNSAdvertisement, host: str, ttl: int | None = None
         "ptr": _record(service, PTR, IN, shared_ttl, encode_name(instance)),
         "srv": _record(instance, SRV, 0x8001, shared_ttl,
                        struct.pack("!HHH", 0, 0, advertisement.port) + encode_name(target)),
+        # RFC 6763 §6.1: a TXT record with no keys is one empty string, never empty rdata.
         "txt": _record(instance, TXT, 0x8001, shared_ttl,
-                       b"".join(bytes((len(item),)) + item for item in advertisement.txt)),
+                       b"".join(bytes((len(item),)) + item for item in advertisement.txt)
+                       or b"\x00"),
         "a": _record(target, A, 0x8001, address_ttl, socket.inet_aton(host)),
         "enum": _record(ENUMERATION, PTR, IN, shared_ttl, encode_name(service)),
     }

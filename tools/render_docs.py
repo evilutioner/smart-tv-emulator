@@ -86,7 +86,8 @@ def badges() -> str:
     shipped = published()
     included = sum(entry.id in shipped for entry in entries)
     unavailable = len(entries) - included
-    devices = sum(len(entry.profile_ids) for entry in entries)
+    devices = sum(len(device.profiles) for entry in entries for device in entry.captured
+                  if not device.modelled)
     listeners = sum(entry.protocols for entry in entries)
     return "\n".join([
         _badge("televisions", f"{included} included · {unavailable} N/A",

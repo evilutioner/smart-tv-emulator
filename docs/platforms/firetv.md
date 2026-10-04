@@ -13,6 +13,7 @@ physical sticks are modelled; every difference between them is capture data.
 | Protocol | Transport · port | What is emulated |
 |---|---|---|
 | Turnstile — control API, PIN pairing | HTTPS 8080 | pairing, keys, media, text, voice start/stop, app launch |
+| Voice audio — WebSocket | WSS 9090, both sticks | frames counted and logged, format detected; client half only |
 | ADB — legacy shell | TCP 5555, off by default | public-key authorization, key events, launches |
 | DIAL | HTTP 8009 | app state and launch |
 | UPnP `dd.xml` | HTTP 60000 | device description |
@@ -43,6 +44,15 @@ message, pairing step and refusal, each one tied to the capture it came from.
 - [x] Keys, media keys, text, voice start/stop and application launch
 - [x] ADB key approval and refusal, shell key events and launch commands
 - [x] Each protocol switched off on its own, and a bind error on one port only
+
+## Support and validation
+
+Fire TV is **fully supported** on both sticks for everything the official app does
+(Amazon Fire TV for iOS **4.8.0**), validated by hand on **2026-09-29**: discovery, pairing,
+remote and media keys, text, the microphone, and application and title launches. The channel
+up and down buttons were never told apart from a swipe. The
+[manual validation ledger](../manual-validation.md) has the row; the full guide lists each
+behaviour.
 
 ## Get access
 

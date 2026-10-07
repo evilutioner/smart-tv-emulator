@@ -26,13 +26,15 @@ from tvemu.platforms.roku.ecp import auth_response
 from tvemu.runtime import Runtime
 
 TCL_PROFILE = "tcl-roku-tv-32s357"
+STICK_PROFILE = "roku-streaming-stick-4k-3820eu2"
 TCL_CAPTURE = load_capture("tvemu.platforms.roku", "tcl-roku-tv-32s357-enabled")
 LIMITED_CAPTURE = load_capture("tvemu.platforms.roku", "tcl-roku-tv-32s357-15-3-4")
 CLOSED = ("CLOSE", "CLOSED", "CLOSING")
 
 
 class RokuCase(unittest.IsolatedAsyncioTestCase):
-    profile = ""
+    # Written against the 12.0.0 stick, which is no longer the default; named so it stays put.
+    profile = STICK_PROFILE
 
     async def asyncSetUp(self):
         self.core = Core(ROKU, Settings(device_profile=self.profile))
@@ -360,6 +362,15 @@ class TclLimitedModeTests(RokuCase):
 class StickProfileTests(RokuCase):
     async def test_a_route_the_capture_lacks_is_501_not_a_fabricated_body(self):
         self.assertEqual((await self.client.get("/query/device-info")).status, 501)
+
+
+class DefaultProfileTests(RokuCase):
+    profile = ""
+
+    async def test_the_default_device_answers_device_info(self):
+        """Every open-source Roku client reads device-info first; the default must answer it."""
+        self.assertEqual(self.core.settings.device_profile or self.adapter.profile.id, TCL_PROFILE)
+        self.assertEqual((await self.client.get("/query/device-info")).status, 200)
 
 
 class DashboardTests(unittest.IsolatedAsyncioTestCase):

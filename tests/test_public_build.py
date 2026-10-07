@@ -19,7 +19,7 @@ from pathlib import Path
 from tests.support import STUB_IDS
 from tvemu.core import Core
 from tvemu.platforms import create_platform, platform_descriptor, platform_ids
-from tvemu.platforms.catalogue import catalogue_entry, catalogue_ids
+from tvemu.platforms.catalogue import catalogue_entries, catalogue_entry, catalogue_ids
 
 ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
@@ -158,6 +158,40 @@ class BuildContentsTests(unittest.TestCase):
                 self.assertEqual(entry.display_name, descriptor.display_name)
                 self.assertEqual(entry.protocols, len(descriptor.protocols))
                 self.assertEqual(sorted(entry.profile_ids), sorted(adapter.profile_ids()))
+
+    def test_a_validated_device_is_one_the_ledger_records(self):
+        """The README marks a device validated from the catalogue; only a session can earn it.
+
+        Both directions: a flag with no ledger row is a claim nobody made, and a ledger row
+        whose device is not flagged is a session the published table does not show.
+        """
+        ledger = (ROOT / "docs" / "manual-validation.md").read_text(encoding="utf-8")
+        section = ledger.split("## Ledger", 1)[1].split("\n## ", 1)[0]
+        recorded = {profile for row in section.splitlines() if row.startswith("|")
+                    for profile in re.findall(r"`([a-z0-9-]+)`", row.split("|")[4])}
+        flagged = {profile for entry in catalogue_entries() for device in entry.captured
+                   if device.validated for profile in device.profiles}
+        self.assertEqual(flagged, recorded)
+
+    def test_the_apps_a_television_was_tested_with_are_the_ledger_s(self):
+        """The README's "Tested with" names a vendor app only when a ledger row records it."""
+        ledger = (ROOT / "docs" / "manual-validation.md").read_text(encoding="utf-8")
+        section = ledger.split("## Ledger", 1)[1].split("\n## ", 1)[0]
+        rows = [[cell.strip() for cell in row.split("|")[1:3]] for row in section.splitlines()
+                if row.startswith("|") and not row.startswith(("| Television", "|---"))]
+        for entry in catalogue_entries():
+            sessions = [app for television, app in rows
+                        if television == entry.display_name and app != "the same app"]
+            with self.subTest(platform=entry.id):
+                apps = [app.name for app in entry.apps]
+                for app in entry.apps:
+                    self.assertTrue(app.url.startswith("https://"), f"{app.name} needs its store page")
+                for app in apps:
+                    self.assertTrue(any(app in session for session in sessions),
+                                    f"{app!r} has no ledger row for {entry.display_name}")
+                for session in sessions:
+                    self.assertTrue(any(app in session for app in apps),
+                                    f"the ledger's {session!r} is not in the catalogue's apps")
 
     def test_the_manifest_names_only_paths_that_exist(self):
         if public_manifest is None:

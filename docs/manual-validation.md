@@ -9,6 +9,10 @@ This page is the ledger of those sessions and the method for adding one. A test 
 here means a real client worked against the emulator on that date. It is not a claim about
 every firmware or every app version.
 
+Open-source client libraries are run against the emulator too, automatically and with a record
+per run; that is a different kind of fact, *exercised* rather than validated, and it lives in
+[Open-source clients](open-source-clients.md), never in this ledger.
+
 ## Ledger
 
 One row per platform and app. A newer session on the same app replaces its row; the older one
@@ -21,6 +25,9 @@ stays in the platform's own guide.
 | Android TV / Google TV | Google TV for iOS **3.33.00001**, iPhone | 2026-09-30 | `google-chromecast-hd` | **Supported**: pairing, remote buttons and voice; text and app links not validated, listed in the [Android TV guide](platforms/androidtv.md#support-and-validation) |
 | Android TV / Google TV | the same app | 2026-09-30 | `xiaomi-mitv-moeu0` | **Supported** too: the app opens the advertised wake port 6465 before its 6466 session |
 | Philips JointSpace | Philips TV Remote for iOS, build **20979** (`com.tpvison.pst`), iPhone | 2026-09-30 | `philips-32phs6000-12` | **Supported**: discovery, PIN pairing, remote buttons and the state long poll, listed in the [Philips guide](platforms/philips.md#support-and-validation) |
+| Panasonic VIERA | Panasonic TV Remote 3 for iOS **1.01 (1.02.05)**, iPhone | 2026-10-05 | `panasonic-viera-nrc` | **Supported**: cold-start discovery, remote buttons and the App Launcher list; launching an app not confirmed, cast photo needs a DLNA renderer, listed in the [VIERA guide](platforms/viera.md#support-and-validation) |
+| Panasonic VIERA | the same app | 2026-10-05 | `panasonic-viera-pin-nrc` | **Supported**: the PIN dialog, pairing, the encrypted session and remote buttons; the pairing outlives an emulator restart |
+| Panasonic VIERA | Panasonic TV Remote 2 for iOS **2.73 (2.73.01)**, iPhone | 2026-10-05 | `panasonic-viera-nrc` | **Supported**: discovery and remote buttons; touchpad and gamepad not validated |
 
 Platforms with no row have not been recorded here yet, which says nothing about whether they
 work.

@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against the official MetzRemote app; the
 > emulator, its session and the full driver guide are available on request —
-> [ask about Metz Classic](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about Metz Classic](https://marchik.dev).
 
 The Remote Control Receiver that Metz Classic sets expose to the MetzRemote app: SSDP
 discovery, a UPnP description and a SOAP control URL for keys and text. Unlike every other
@@ -38,4 +38,4 @@ was seen to need, cross-checked against the protocol library it ships.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

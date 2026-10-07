@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about webOS TV](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about webOS TV](https://marchik.dev).
 
 A 2022 LG set running webOS: the SSAP control socket over TLS, the IME keyboard, the pointer
 socket, a DLNA renderer, and the four independent SSDP stacks the set publishes. Four sets are
@@ -49,4 +49,4 @@ message, pairing step and refusal, each one tied to the capture it came from.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

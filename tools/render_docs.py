@@ -10,9 +10,10 @@ television whose ports answer the same request gets one `<id>.<application>.open
 per application instead.
 
 It also fills the blocks that state counts and lists across televisions — the README's
-badges and television table, and the request form's checkboxes — from `catalogue.json`, so
-a number is written in one place. "In this build" means the build the README describes: the
-platforms `PUBLIC.toml` names where that manifest exists, else the ones this tree runs.
+badges and television table, and the detailed table in `docs/televisions.md` — from
+`catalogue.json`, so a number is written in one place. "In this build" means the build the
+README describes: the platforms `PUBLIC.toml` names where that manifest exists, else the ones
+this tree runs.
 
 Run with no arguments to rewrite every guide, or with platform ids to rewrite some. `--check`
 rewrites nothing and reports which files have fallen behind, which is what the test runs.
@@ -42,9 +43,7 @@ DOCS = ROOT / "docs"
 BLOCK = re.compile(r"<!-- generated:(\w+) -->.*?<!-- /generated -->", re.S)
 SPEC = DOCS / "spec"
 README = ROOT / "README.md"
-REQUEST_FORM = ROOT / ".github" / "ISSUE_TEMPLATE" / "television-request.yml"
-# The same idea in YAML, where a block is a pair of comment lines.
-YAML_BLOCK = re.compile(r"^( *)# generated:(\w+)\n.*?^ *# /generated$", re.S | re.M)
+TELEVISIONS = DOCS / "televisions.md"
 
 
 def rendered(platform_id: str, name: str) -> str:
@@ -88,51 +87,92 @@ def badges() -> str:
     unavailable = len(entries) - included
     devices = sum(len(device.profiles) for entry in entries for device in entry.captured
                   if not device.modelled)
+    validated = sum(len(device.profiles) for entry in entries for device in entry.captured
+                    if device.validated)
     listeners = sum(entry.protocols for entry in entries)
+    clients = sum(len(entry.clients) for entry in entries)
     return "\n".join([
         _badge("televisions", f"{included} included · {unavailable} N/A",
                f"{included} included, {unavailable} N/A"),
         _badge("captured devices", str(devices), f"{devices} captured devices"),
+        _badge("validated with real apps", str(validated),
+               f"{validated} devices validated with real apps"),
+        _badge("tested with open-source clients", str(clients),
+               f"tested with {clients} open-source clients"),
         _badge("protocol listeners", str(listeners), f"{listeners} protocol listeners"),
     ])
 
 
+def _evidence(device) -> str:
+    """How a device is known, as the icons the README's legend explains."""
+    return ("📱" if device.modelled else "📡") + ("✅" if device.validated else "")
+
+
+def _device_name(device) -> str:
+    count = len(device.profiles)
+    return f"**{device.name}**" + (f" ({count} captures)" if count > 1 else "")
+
+
+def _tested_with(entry, docs: str) -> str:
+    """What a television was tested with, each linked, with the report that says so.
+
+    A vendor's app was driven by hand and its report is a ledger row; an open-source client
+    runs every week and its report is the platform's page of recorded runs. Those pages ship
+    for every television, included or not, so the link is there whenever the page is.
+    """
+    shipped = (ROOT / "docs" / "clients" / f"{entry.id}.md").is_file()
+    tested = [f"✅ [{app.name}]({app.url}) · [report]({docs}manual-validation.md#ledger)"
+              for app in entry.apps]
+    tested += [f"🧪 [{client.name}]({client.url})"
+               + (f" · [report]({docs}clients/{entry.id}.md#{client.name})" if shipped else "")
+               for client in entry.clients]
+    if (ROOT / "docs" / "tests" / f"{entry.id}.md").is_file():
+        tested.append(f"🔬 [unit and replay tests]({docs}tests/{entry.id}.md)")
+    return "<br>".join(tested) or "—"
+
+
 def televisions() -> str:
+    """The README's table: one line per television, devices marked by how they are known."""
     shipped = published()
-    lines = ["| Television | In this build | Remote control | Discovery | Pairing | Captured devices |",
-             "|---|---|---|---|---|---|"]
+    lines = ["| Television | What it speaks | Devices | Tested with |",
+             "|---|---|---|---|"]
     for entry in catalogue_entries():
-        devices = "<br>".join(
-            f"**{device.name}** — {device.detail}" if device.detail and len(device.profiles) < 2
-            else f"**{device.name}**" + (f" ({len(device.profiles)} captures)"
-                                         if len(device.profiles) > 1 else "")
-            for device in entry.captured)
-        state = "✅ **Included**" if entry.id in shipped else "N/A"
-        lines.append(f"| **[{entry.display_name}]({entry.docs})** | {state} | {entry.remote} | "
-                     f"{entry.discovery} | {entry.pairing} | {devices} |")
+        devices = "<br>".join(f"{_evidence(device)} {_device_name(device)}"
+                              for device in entry.captured)
+        state = "**Included**" if entry.id in shipped else "N/A"
+        lines.append(f"| **[{entry.display_name}]({entry.docs})**<br>{state} | "
+                     f"{entry.summary} | {devices} | {_tested_with(entry, 'docs/')} |")
     return "\n".join(lines)
 
 
-def request_options(indent: str) -> str:
+def television_details() -> str:
+    """The full table in docs/televisions.md: ports, discovery, pairing and firmware."""
     shipped = published()
-    return "\n".join(f"{indent}- label: {entry.display_name}"
-                     for entry in catalogue_entries() if entry.id not in shipped)
+    lines = ["| Television | In this build | Remote control | Discovery | Pairing | Devices | "
+             "Tested with |",
+             "|---|---|---|---|---|---|---|"]
+    for entry in catalogue_entries():
+        devices = "<br>".join(
+            f"{_evidence(device)} {_device_name(device)}"
+            + (f" — {device.detail}" if device.detail and len(device.profiles) < 2 else "")
+            for device in entry.captured)
+        state = "**Included**" if entry.id in shipped else "N/A"
+        docs = entry.docs.removeprefix("docs/")
+        lines.append(f"| **[{entry.display_name}]({docs})** | {state} | {entry.remote} | "
+                     f"{entry.discovery} | {entry.pairing} | {devices} | {_tested_with(entry, '')} |")
+    return "\n".join(lines)
 
 
 def shared() -> dict[Path, str]:
     """The files whose generated blocks come from the catalogue rather than one platform."""
     out: dict[Path, str] = {}
-    if README.is_file():
-        text = README.read_text(encoding="utf-8")
-        renderers = {"badges": badges, "televisions": televisions}
-        out[README] = BLOCK.sub(
-            lambda m: (f"<!-- generated:{m.group(1)} -->\n{renderers[m.group(1)]()}\n"
-                       "<!-- /generated -->"), text)
-    if REQUEST_FORM.is_file():
-        text = REQUEST_FORM.read_text(encoding="utf-8")
-        out[REQUEST_FORM] = YAML_BLOCK.sub(
-            lambda m: (f"{m.group(1)}# generated:{m.group(2)}\n{request_options(m.group(1))}\n"
-                       f"{m.group(1)}# /generated"), text)
+    renderers = {"badges": badges, "televisions": televisions,
+                 "television_details": television_details}
+    for path in (README, TELEVISIONS):
+        if path.is_file():
+            out[path] = BLOCK.sub(
+                lambda m: (f"<!-- generated:{m.group(1)} -->\n{renderers[m.group(1)]()}\n"
+                           "<!-- /generated -->"), path.read_text(encoding="utf-8"))
     return out
 
 

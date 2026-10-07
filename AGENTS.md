@@ -1,7 +1,8 @@
 # Smart TV Emulator — agent notes
 
 A local test bench that emulates Smart TV network protocols behind one dashboard.
-One Python process, aiohttp only, no build step. See `README.md` for the full picture.
+One Python process, aiohttp only, no build step. `README.md` is for people driving it;
+`docs/architecture.md` is how it works inside.
 
 ## Layout
 
@@ -12,6 +13,7 @@ src/tvemu/
   control.py         local /api/v1 and dashboard server               (no platform names)
   expect.py          scenario check over the event log (python -m tvemu.expect)
   mcp.py             stdio MCP server over /api/v1 (tvemu-mcp)       (no platform names)
+  clients/           open-source clients run against the emulator    (no platform names)
   platforms/
     __init__.py      registry, discovered from the packages in this directory
     base.py          PlatformDescriptor + PlatformAdapter contract
@@ -26,6 +28,7 @@ src/tvemu/
       report.py      contract check, OpenAPI 3.2 and AsyncAPI 3.1 projections
     <id>/            wire protocol, descriptor and evidence; exports PLATFORM + ADAPTER
       contract.py    this platform's curated claims
+      clients/       open-source clients that drive it, one directory each
       evidence/      every capture, complete or partial
       profiles/      selectable devices; references complete captures
   web/
@@ -145,20 +148,37 @@ include.
   the committed specs in `docs/spec/`, `python -m tvemu.expect` and `tvemu-mcp`.
   `tools/render_docs.py` writes `docs/spec/`; never edit those files by hand.
 - Counts and lists across televisions — the README's badges and television table, the
-  request form's checkboxes — are generated from `catalogue.json` by `tools/render_docs.py`
-  between `generated:` markers. Edit the catalogue, never the output, and do not write such
-  a number in prose.
+  detailed table in `docs/televisions.md` — are generated from `catalogue.json` by
+  `tools/render_docs.py` between `generated:` markers. Edit the catalogue, never the output,
+  and do not write such a number in prose. Requests for a television the build does not
+  include go to the catalogue's `request_url`, never to a GitHub issue form.
+- How each device is known is catalogue data too: `"modelled": true` for a device built from a
+  vendor app with no set measured, `"validated": true` for one with a row in the
+  `docs/manual-validation.md` ledger. `tests/test_public_build.py` holds the flag and the
+  ledger to each other.
 - A television is not called supported on the strength of tests we wrote. `docs/manual-validation.md`
   is the ledger of sessions with a real app; a session moves a behaviour to validated, observed
   or not exercised in that platform's guide, and a value that names a person or a session is
   never copied out of a log.
-- Adding a platform: `README.md#adding-a-television`; one page per TV in `docs/platforms/`.
+- Open-source client libraries are run against the emulator by `python -m tvemu.clients`, each
+  declared in `platforms/<id>/clients/<name>/` (`client.toml`, a `binding.py` — `binding.mjs`
+  for npm — that uses the client's public API and observes the emulator only through
+  `/api/v1`, an optional `expect.json`). `.github/workflows/clients.yml` runs each one weekly
+  at its last green version and at the latest. A run installs the client in its own venv and starts `tvemu` as its own
+  process. What it establishes is *exercised*, never *validated*. An `unsupported` request is
+  a gap: declare it with its reason or capture it, never answer it by invention; a declared
+  gap or known failure that stops happening is stale and fails the run. `--record` writes
+  `docs/clients/<id>/<name>/<run id>.json` from a clean `src/` only and re-renders
+  `docs/clients/<id>.md`, which is never edited by hand. Method: `docs/open-source-clients.md`.
+- Adding a platform: `docs/architecture.md#adding-a-television`; one page per TV in `docs/platforms/`.
 - Gates: `python -m compileall -q src`, `python -m unittest discover -s tests`,
   `node --check` on changed JS (as `.mjs`), `python -m build`,
   `python -m tvemu.conformance --all --gate`. Before committing a new capture, also
-  `tvemu --contract <id> --check`.
+  `tvemu --contract <id> --check`. After changing a platform with declared clients, also
+  `python -m tvemu.clients run <id>/<name>` (it downloads, so it is not an offline gate).
 - `python -m tvemu.conformance` replays each profile's captured client traffic through the
   real listeners and compares the answers byte for byte. A replay it cannot run is listed
-  as uncovered with its reason, never skipped. What a television needs for it -- WebSocket
-  channels, client-owned values recomputed per session, exchanges declared `stateful` or
+  as uncovered with its reason, never skipped. What a television needs for it -- setup
+  hooks that pair over the real listeners, MQTT scripts, WebSocket channels, client-owned
+  values recomputed per session, embedded documents, exchanges declared `stateful` or
   `transcribed`, `COVERAGE = "complete"` -- lives in `platforms/<id>/conformance/`.

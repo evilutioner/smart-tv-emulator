@@ -12,7 +12,7 @@ import json
 import time
 
 import aiohttp
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from importlib.resources import files
 
 from tvemu.core import Core, Settings
@@ -22,7 +22,7 @@ from tvemu.platforms.common.adapter import LoopbackBinding
 from tvemu.platforms.common.evidence import Exchange, Step
 from tvemu.platforms.common.profile import ProfileReference, profile_capture
 
-from . import compare, http, websocket
+from . import compare, http, mqtt, setup, websocket
 from .model import CaseResult, ConformanceCase, CoverageGap, Plan, Report
 
 # A documentation address (RFC 5737): what the emulated set advertises during a run. It is
@@ -145,11 +145,8 @@ DECLARATIONS = {"stateful": "needs a stateful recipe",
                 "transcribed": "the capture holds a transcription, not wire bytes"}
 
 
-def declared_exchanges(platform_id: str, reference: ProfileReference) -> dict[str, str]:
-    """Exchanges a profile's conformance data declares uncoverable for now, with the reason.
-
-    Platform data in `platforms/<id>/conformance/<profile>.json`.
-    """
+def _conformance_data(platform_id: str, reference: ProfileReference) -> dict:
+    """A profile's conformance data, `platforms/<id>/conformance/<profile>.json`, or {}."""
     source = files(f"tvemu.platforms.{platform_id}").joinpath("conformance",
                                                                f"{reference.id}.json")
     if not source.is_file():
@@ -159,19 +156,32 @@ def declared_exchanges(platform_id: str, reference: ProfileReference) -> dict[st
     if (not isinstance(data, dict) or data.get("schema_version") != 1
             or data.get("profile") != reference.id):
         raise PlanError(f"{owner}: needs schema_version 1 and its own profile id")
-    unexpected = set(data) - {"schema_version", "profile", *DECLARATIONS}
+    unexpected = set(data) - {"schema_version", "profile", "setup", "embedded",
+                              *DECLARATIONS}
     if unexpected:
         raise PlanError(f"{owner}: unknown keys {', '.join(sorted(unexpected))}")
-    found: dict[str, str] = {}
-    for key, prefix in DECLARATIONS.items():
+    for key in ("setup", "embedded", *DECLARATIONS):
         rows = data.get(key, {})
+        if key == "embedded":
+            continue
         if not isinstance(rows, dict) or not all(
-                isinstance(reason, str) and reason for reason in rows.values()):
-            raise PlanError(f"{owner}: {key} maps exchange ids to reasons")
+                isinstance(value, str) and value for value in rows.values()):
+            kind = "hook names" if key == "setup" else "reasons"
+            raise PlanError(f"{owner}: {key} maps exchange ids to {kind}")
         unknown = set(rows) - set(reference.replays.values())
         if unknown:
             raise PlanError(f"{owner}: {', '.join(sorted(unknown))} is not replayed by the "
                             f"profile")
+    return data
+
+
+def declared_exchanges(platform_id: str, reference: ProfileReference) -> dict[str, str]:
+    """Exchanges a profile's conformance data declares uncoverable for now, with the reason."""
+    data = _conformance_data(platform_id, reference)
+    owner = f"conformance data for {platform_id}/{reference.id}"
+    found: dict[str, str] = {}
+    for key, prefix in DECLARATIONS.items():
+        rows = data.get(key, {})
         twice = set(rows) & set(found)
         if twice:
             raise PlanError(f"{owner}: {', '.join(sorted(twice))} is declared twice")
@@ -179,17 +189,56 @@ def declared_exchanges(platform_id: str, reference: ProfileReference) -> dict[st
     return found
 
 
+def declared_embedded(platform_id: str, reference: ProfileReference
+                      ) -> dict[str, tuple[str, str]]:
+    """Exchanges a profile's conformance data says the set carried inside another answer.
+
+    `"embedded": {"<exchange>": {"in": "<parent exchange>", "field": "<json path>"}}`
+    """
+    rows = _conformance_data(platform_id, reference).get("embedded", {})
+    owner = f"conformance data for {platform_id}/{reference.id}"
+    replayed = set(reference.replays.values())
+    found = {}
+    for exchange, row in rows.items():
+        if (not isinstance(row, dict) or set(row) != {"in", "field"}
+                or not all(isinstance(value, str) and value for value in row.values())):
+            raise PlanError(f"{owner}: embedded {exchange} needs 'in' and 'field'")
+        if exchange not in replayed or row["in"] not in replayed:
+            raise PlanError(f"{owner}: embedded {exchange} and its parent must both be "
+                            f"replayed by the profile")
+        found[exchange] = (row["in"], row["field"])
+    return found
+
+
+def declared_setups(platform_id: str, reference: ProfileReference,
+                    known: dict[str, setup.Hook]) -> dict[str, str]:
+    """The setup hook a profile's conformance data names for an exchange, by exchange id."""
+    rows = _conformance_data(platform_id, reference).get("setup", {})
+    unknown = sorted(set(rows.values()) - set(known))
+    if unknown:
+        raise PlanError(f"conformance data for {platform_id}/{reference.id}: setup "
+                        f"{', '.join(unknown)} is not declared by the platform")
+    return dict(rows)
+
+
 async def _plan_profile(plan: Plan, platform_id: str, reference: ProfileReference,
                         selection: Selection) -> None:
     routes, paths = await _routes(platform_id, reference.id)
     declared = declared_exchanges(platform_id, reference)
+    known, default = setup.hooks(websocket.platform_package(platform_id))
+    named = declared_setups(platform_id, reference, known)
+    inside = declared_embedded(platform_id, reference)
     sockets = websocket.channels(platform_id)
+    broker = mqtt.description(websocket.platform_package(platform_id))
+    first = len(plan.cases)
     adapter = fresh_adapter(platform_id, reference.id)
     by_exchange: dict[str, list[str]] = {}
     for name, exchange_id in reference.replays.items():
         by_exchange.setdefault(exchange_id, []).append(name)
     for exchange_id, names in by_exchange.items():
         exchange = reference.capture.exchange(exchange_id)
+        if exchange_id in inside:
+            continue  # planned with its parent, below
         case_id = f"{platform_id}/{reference.id}/{exchange_id}"
         if selection.case and case_id != selection.case:
             continue
@@ -197,6 +246,7 @@ async def _plan_profile(plan: Plan, platform_id: str, reference: ProfileReferenc
         reason = ""
         route = None
         exchanges = (exchange_id,)
+        hook = ""
         if exchange_id in declared:
             reason = declared[exchange_id]
         elif exchange.transport == "websocket":
@@ -215,20 +265,26 @@ async def _plan_profile(plan: Plan, platform_id: str, reference: ProfileReferenc
                 route = rows[0]
                 if route.auth:
                     reason = "the upgrade requires pairing, so it needs a stateful recipe"
+        elif exchange.transport == "mqtt" and broker is not None:
+            script = broker.script(exchange_id)
+            missing = [item for _, item in script if item not in reference.capture.exchanges]
+            if missing:
+                raise PlanError(f"{exchange_id}: its MQTT script names {', '.join(missing)}, "
+                                f"which the capture does not hold")
+            exchanges = tuple(item for _, item in script)
+            route = _Route(broker.protocol, False, broker.tls)
         elif exchange.transport not in HTTP_TRANSPORTS:
             reason = f"no conformance driver for {exchange.transport} yet"
         elif [step.direction for step in exchange.steps] != ["in", "out"]:
             reason = "a multi-step HTTP exchange needs a stateful recipe"
-        elif owned := _client_placeholders(exchange.steps[0]):
-            reason = (f"the captured request carries client-owned {', '.join(owned)}, so it "
-                      f"needs a recipe to materialise them")
         else:
             route = _choose(exchange, routes.get(exchange.operation_id, []), adapter)
             if route is None:
                 reason = (f"no {exchange.transport} listener of this profile serves "
                           f"{exchange.operation_id}")
-            elif route.auth:
-                reason = "the route requires pairing, so it needs a stateful recipe"
+            else:
+                hook, reason = _setup_for(exchange, route, named.get(exchange_id, ""),
+                                          known, default)
         if reason:
             plan.gaps.extend(CoverageGap(platform_id, reference.id, name, exchange_id,
                                          exchange.transport, reason) for name in names)
@@ -236,7 +292,55 @@ async def _plan_profile(plan: Plan, platform_id: str, reference: ProfileReferenc
         plan.cases.append(ConformanceCase(
             id=case_id, platform=platform_id, profile=reference.id,
             exchanges=exchanges, protocol=route.protocol, driver=exchange.transport,
-            replays=tuple(names)))
+            replays=tuple(names), setup=hook))
+    _attach_embedded(plan, first, platform_id, reference, inside, by_exchange, selection)
+
+
+def _attach_embedded(plan: Plan, first: int, platform_id: str, reference: ProfileReference,
+                     inside: dict[str, tuple[str, str]], by_exchange: dict[str, list[str]],
+                     selection: Selection) -> None:
+    """Give each embedded capture to its parent's case, or name the gap its parent leaves."""
+    for exchange_id, (parent, field) in inside.items():
+        names = by_exchange[exchange_id]
+        index = next((number for number in range(first, len(plan.cases))
+                      if plan.cases[number].exchanges[-1] == parent), None)
+        if index is None:
+            if selection.case and not selection.case.endswith(f"/{parent}"):
+                continue
+            plan.replays += len(names)
+            plan.gaps.extend(CoverageGap(
+                platform_id, reference.id, name, exchange_id,
+                reference.capture.exchange(exchange_id).transport,
+                f"carried inside {parent}, which no case covers") for name in names)
+            continue
+        case = plan.cases[index]
+        plan.replays += len(names)
+        plan.cases[index] = replace(case, replays=(*case.replays, *names),
+                                    embedded=(*case.embedded, (exchange_id, parent, field)))
+
+
+def _setup_for(exchange: Exchange, route: _Route, named: str, known: dict[str, setup.Hook],
+               default: str) -> tuple[str, str]:
+    """(hook, gap reason): the setup a captured request needs, or why none can serve it.
+
+    A request presumes earlier state when its route needs pairing or when it carries a
+    client-owned placeholder; the exchange's own named hook serves it, else the platform's
+    default one, and only if that hook fills every placeholder the request carries.
+    """
+    owned = _client_placeholders(exchange.steps[0])
+    if not (named or route.auth or owned):
+        return "", ""
+    hook = named or default
+    if not hook:
+        if owned:
+            return "", (f"the captured request carries client-owned {', '.join(owned)}, so "
+                        f"it needs a recipe to materialise them")
+        return "", "the route requires pairing, so it needs a stateful recipe"
+    missing = [token for token in owned if token[1:-1] not in known[hook].provides]
+    if missing:
+        return "", (f"setup {hook} does not provide client-owned {', '.join(missing)} "
+                    f"the captured request carries")
+    return hook, ""
 
 
 def _client_placeholders(step: Step) -> list[str]:
@@ -261,14 +365,41 @@ async def run_case(case: ConformanceCase, reference: ProfileReference) -> CaseRe
         await adapter.start_protocol(case.protocol)
         bound = adapter.bound[case.protocol]
         authority = f"{ADVERTISED_HOST}:{adapter.protocol_port(case.protocol)}"
+        carried = {exchange for exchange, _, _ in case.embedded}
         substitutions = tuple(path for name in case.replays
+                              if reference.replays[name] not in carried
                               for path in reference.substitutions.get(name, ()))
+        prepared = setup.Prepared()
+        if case.setup:
+            client = setup.Client(adapter, reference.capture, case.protocol, authority,
+                                  case.timeout)
+            hook = websocket.platform_package(case.platform).setup
+            prepared = setup.prepared(await hook(case.setup, client), case.setup)
         if case.driver == "websocket":
             await _websocket(case, reference, adapter, bound, authority, substitutions, result)
+        elif case.driver == "mqtt":
+            broker = mqtt.description(websocket.platform_package(case.platform))
+            target = reference.replays[case.replays[0]]
+            by_exchange: dict[str, tuple[str, ...]] = {}
+            for name, exchange in reference.replays.items():
+                by_exchange[exchange] = (*by_exchange.get(exchange, ()),
+                                         *reference.substitutions.get(name, ()))
+            problems, notes = await mqtt.run(
+                bound[0], bound[1], broker.tls, reference.capture, broker.script(target),
+                by_exchange, broker, lambda: dict(adapter.core.pairing or {}),
+                {"host": ADVERTISED_HOST}, case.timeout)
+            result.problems += problems
+            result.notes += notes
         else:
             for exchange_id in case.exchanges:
-                _check(await _exchange(case, reference, exchange_id, bound, authority),
-                       reference.capture.exchange(exchange_id), substitutions, result)
+                response = await _exchange(case, reference, exchange_id, bound, authority,
+                                           prepared)
+                _check(response, reference.capture.exchange(exchange_id), substitutions,
+                       result, prepared.values)
+                for embedded, parent, field in case.embedded:
+                    if parent == exchange_id:
+                        _check_embedded(response.body, reference, embedded, field, result,
+                                        prepared.values)
     except (OSError, asyncio.TimeoutError, asyncio.IncompleteReadError, ValueError,
             aiohttp.ClientError) as exc:
         result.problems.append(f"{type(exc).__name__}: {exc}")
@@ -298,23 +429,28 @@ async def _websocket(case: ConformanceCase, reference: ProfileReference, adapter
 
 
 async def _exchange(case: ConformanceCase, reference: ProfileReference, exchange_id: str,
-                    bound: tuple[str, int], authority: str) -> http.HTTPResponse:
+                    bound: tuple[str, int], authority: str,
+                    prepared: setup.Prepared) -> http.HTTPResponse:
     exchange = reference.capture.exchange(exchange_id)
     request = exchange.steps[0]
-    return await http.send(bound[0], bound[1], http.request_bytes(request, authority),
-                           tls=exchange.transport == "https", timeout=case.timeout,
-                           head=request.metadata["method"] == "HEAD")
+    method = request.metadata["method"]
+    path = http.fill(request.metadata["path"], prepared.values)
+    payload = http.request_bytes(request, authority, prepared.values,
+                                 prepared.headers_for(method, path))
+    return await http.send(bound[0], bound[1], payload, tls=exchange.transport == "https",
+                           timeout=case.timeout, head=method == "HEAD")
 
 
 def _check(response: http.HTTPResponse, exchange: Exchange, substitutions: tuple[str, ...],
-           result: CaseResult) -> None:
+           result: CaseResult, known: dict[str, str] | None = None) -> None:
     expected = exchange.response()
     outcome = compare.Outcome()
     status = expected.metadata["status"]
     if response.status != status:
         outcome.problems.append(f"status: expected {status}, observed {response.status}")
     headers = expected.metadata.get("headers", {})
-    values = {"host": ADVERTISED_HOST}
+    # What a setup hook established renders in the answer as the advertised host does.
+    values = {**(known or {}), "host": ADVERTISED_HOST}
     compare.compare_headers(headers, list(response.headers), substitutions, values, outcome)
     compare.compare_body(expected.payload, response.body, substitutions, values, outcome,
                          frozenset(name.lower() for name in headers))
@@ -323,6 +459,30 @@ def _check(response: http.HTTPResponse, exchange: Exchange, substitutions: tuple
     result.notes += [f"{exchange.id}: substitution {path!r} was not exercised"
                      for path in compare.unaccounted(substitutions, outcome)
                      if not any(repr(path) in note for note in outcome.notes)]
+
+
+def _check_embedded(body: bytes, reference: ProfileReference, exchange_id: str, field: str,
+                    result: CaseResult, known: dict[str, str]) -> None:
+    """Compare a document the set carried as a JSON string inside its parent's answer."""
+    try:
+        value = json.loads(body)
+        for segment in compare.json_path(field):
+            value = value[segment]
+    except (ValueError, KeyError, IndexError, TypeError) as exc:
+        result.problems.append(f"{exchange_id}: no {field!r} in the observed answer ({exc})")
+        return
+    if not isinstance(value, str):
+        result.problems.append(f"{exchange_id}: {field!r} is not a string")
+        return
+    substitutions = tuple(path for name, exchange in reference.replays.items()
+                          if exchange == exchange_id
+                          for path in reference.substitutions.get(name, ()))
+    outcome = compare.Outcome()
+    compare.compare_body(reference.capture.exchange(exchange_id).outputs()[-1].payload,
+                         value.encode(), substitutions,
+                         {**known, "host": ADVERTISED_HOST}, outcome)
+    result.problems += [f"{exchange_id}: {problem}" for problem in outcome.problems]
+    result.notes += [f"{exchange_id}: {note}" for note in outcome.notes]
 
 
 async def _leaks(adapter, before: set[asyncio.Task], bound: tuple[str, int] | None

@@ -6,7 +6,7 @@ and point at its guide. Which entries are locked is never stored: the registry d
 from the packages actually present, so a build that ships everything locks nothing.
 
 It is also the one source of every count and list the published text states — the README's
-television table and badges and the request form's checkboxes are generated from it by
+television table and badges and the table in `docs/televisions.md` are generated from it by
 `tools/render_docs.py`. Each captured device names the profile ids it stands for, and a
 build that runs a platform checks those ids and the protocol count against the code, so the
 catalogue cannot drift from what it describes.
@@ -22,8 +22,7 @@ CATALOGUE = Path(__file__).with_name("catalogue.json")
 
 # Where a reader is sent to ask about a television this build does not include. Overridden
 # by the catalogue file so the address lives with the rest of the published text.
-DEFAULT_REQUEST_URL = (
-    "https://github.com/evilutioner/smart-tv-emulator#the-other-televisions")
+DEFAULT_REQUEST_URL = "https://marchik.dev"
 
 
 @dataclass(frozen=True)
@@ -34,12 +33,24 @@ class CapturedDevice:
     # Modelled from a vendor's client rather than measured on a set: it is a selectable
     # profile, but no published count may call it a captured device.
     modelled: bool = False
+    # A real remote app was driven against it and recorded in docs/manual-validation.md.
+    validated: bool = False
 
     @property
     def label(self) -> str:
-        """The device as one line: several captures of one model say so."""
+        """The device as one line: several captures of one model, or none, say so."""
         count = len(self.profiles)
+        if self.modelled:
+            return f"{self.name} (modelled)"
         return self.name if count < 2 else f"{self.name} ({count} captures)"
+
+
+@dataclass(frozen=True)
+class Link:
+    """Something named in the published text, and where a reader finds it."""
+
+    name: str
+    url: str = ""
 
 
 @dataclass(frozen=True)
@@ -54,6 +65,12 @@ class CatalogueEntry:
     pairing: str = ""
     protocols: int = 0
     captured: tuple[CapturedDevice, ...] = ()
+    # Open-source client libraries that drive it, each with a passing recorded run under
+    # docs/clients/; the open-source counterpart of a device's `validated`.
+    clients: tuple[Link, ...] = ()
+    # The vendors' own remote apps driven against it by hand, named as the
+    # docs/manual-validation.md ledger names them, each with its store page.
+    apps: tuple[Link, ...] = ()
 
     @property
     def devices(self) -> str:
@@ -87,16 +104,24 @@ def catalogue_entries() -> tuple[CatalogueEntry, ...]:
                               discovery=row.get("discovery", ""),
                               pairing=row.get("pairing", ""),
                               protocols=int(row.get("protocols", 0)),
+                              clients=_links(row.get("clients")),
+                              apps=_links(row.get("apps")),
                               captured=tuple(_device(item) for item in row.get("captured") or []
                                              if isinstance(item, dict) and item.get("name")))
                for row in rows if isinstance(row, dict) and row.get("id")]
     return tuple(sorted(entries, key=lambda entry: (entry.order, entry.id)))
 
 
+def _links(rows) -> tuple[Link, ...]:
+    return tuple(Link(name=str(row["name"]), url=str(row.get("url") or ""))
+                 for row in rows or () if isinstance(row, dict) and row.get("name"))
+
+
 def _device(row: dict) -> CapturedDevice:
     return CapturedDevice(name=row["name"], detail=row.get("detail", ""),
                           profiles=tuple(row.get("profiles") or ()),
-                          modelled=row.get("modelled") is True)
+                          modelled=row.get("modelled") is True,
+                          validated=row.get("validated") is True)
 
 
 def catalogue_ids() -> tuple[str, ...]:
@@ -111,5 +136,5 @@ def request_url() -> str:
     return str(_document().get("request_url") or DEFAULT_REQUEST_URL)
 
 
-__all__ = ["CapturedDevice", "CatalogueEntry", "catalogue_entries", "catalogue_entry", "catalogue_ids",
+__all__ = ["CapturedDevice", "CatalogueEntry", "Link", "catalogue_entries", "catalogue_entry", "catalogue_ids",
            "request_url"]

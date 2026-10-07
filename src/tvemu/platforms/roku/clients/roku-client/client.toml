@@ -1,0 +1,31 @@
+schema_version = 1
+summary = "Node.js ECP client with key holds, a chained command builder and SSDP discovery"
+upstream = "https://github.com/bschlenk/node-roku-client"
+license = "Apache-2.0"
+
+[install]
+kind = "npm"
+package = "roku-client"
+last_green = "6.0.0"
+
+[run]
+profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
+timeout = 120
+
+[[gaps]]
+operation = "query/device-info"
+profiles = ["roku-streaming-stick-4k-3820eu2"]
+reason = "The 12.0.0 stick capture holds no device-info exchange, and the contract answers 501 for it. `info()` is the first thing this client reads, so on this profile it stops there."
+
+[[gaps]]
+operation = "POST /search/browse"
+reason = "`search()` opens the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+
+[[gaps]]
+operation = "query/icon/*"
+reason = "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
+
+[[known_failures]]
+step = "standby reported by device-info"
+profiles = ["tcl-roku-tv-32s357"]
+reason = "After PowerOff the emulator keeps replaying the captured device-info, whose power-mode is PowerOn, so `info().powerMode` stays PowerOn. Only PowerOn is captured; a capture of the set in DisplayOff closes this."

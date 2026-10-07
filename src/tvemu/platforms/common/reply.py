@@ -44,6 +44,9 @@ class ReplyStyle:
     and `(",", ":")` for one that writes it compactly. Two families on the same television is
     ordinary: the difference is observable on the wire, so it is declared rather than smoothed.
 
+    `terminator` is what the firmware writes after a JSON document it serialises -- a newline,
+    on a set whose JSON writer ends every body with one. Raw captured bytes keep their own.
+
     A `content_type` that already carries parameters (`text/xml; charset="utf-8"`) is the
     header exactly as the firmware writes it and goes out verbatim. aiohttp rebuilds a type
     and `charset` pair in its own spelling, which drops the quotes some servers write.
@@ -54,13 +57,14 @@ class ReplyStyle:
     separators: tuple[str, str] | None = None
     charset: str = ""
     headers: tuple[tuple[str, str], ...] = ()
+    terminator: bytes = b""
 
     def encode(self, value: Any) -> bytes:
         if isinstance(value, bytes):
             return value
         if isinstance(value, str):
             return value.encode()
-        return json.dumps(value, separators=self.separators).encode()
+        return json.dumps(value, separators=self.separators).encode() + self.terminator
 
     def ok(self, value: Any = b"", status: int = 200, content_type: str = "",
            headers: dict[str, str] | None = None) -> web.Response:

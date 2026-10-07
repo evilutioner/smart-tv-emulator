@@ -12,6 +12,8 @@ from dataclasses import dataclass
 
 from tvemu.platforms.common.evidence import Step
 
+from .compare import PLACEHOLDER
+
 # Request headers the harness writes itself, because their captured values name the
 # physical set's socket rather than the one under test.
 OWNED_REQUEST_HEADERS = frozenset({"host", "content-length", "connection"})
@@ -25,16 +27,44 @@ class HTTPResponse:
     body: bytes
 
 
-def request_bytes(step: Step, authority: str) -> bytes:
-    """The captured request as it goes on the wire, addressed to the advertised endpoint."""
-    method = step.metadata["method"]
-    path = step.metadata["path"]
-    body = step.payload or b""
-    lines = [f"{method} {path} HTTP/1.1", f"Host: {authority}"]
+def request_bytes(step: Step, authority: str, values: dict[str, str] | None = None,
+                  extra: dict[str, str] | None = None) -> bytes:
+    """The captured request as it goes on the wire, addressed to the advertised endpoint.
+
+    `values` fill the client-owned placeholders the capture wrote in place of a token or a
+    PIN, wherever they stand; `extra` adds the headers a setup hook established, except where
+    the capture kept a header of that name. A placeholder left unfilled is refused, since the
+    literal text would never have left a real client.
+    """
+    values = values or {}
     captured = step.metadata.get("headers", {})
-    if isinstance(captured, dict):
-        lines += [f"{name}: {value}" for name, value in captured.items()
-                  if name.lower() not in OWNED_REQUEST_HEADERS]
+    headers = {name: fill(value, values) for name, value in
+               (captured.items() if isinstance(captured, dict) else ())}
+    kept = {name.lower() for name in headers}
+    headers.update({name: value for name, value in (extra or {}).items()
+                    if name.lower() not in kept})
+    body = step.payload or b""
+    if values:
+        body = fill(body.decode("latin-1"), values).encode("latin-1")
+    path = fill(step.metadata["path"], values)
+    left = sorted({token for text in (path, *headers.values())
+                   for token in PLACEHOLDER.findall(text)})
+    if left:
+        raise ValueError(f"the request still carries client-owned {', '.join(left)}")
+    return raw_request(step.metadata["method"], path, authority, headers, body)
+
+
+def fill(text: str, values: dict[str, str]) -> str:
+    for name, value in values.items():
+        text = text.replace(f"{{{name}}}", value)
+    return text
+
+
+def raw_request(method: str, path: str, authority: str, headers: dict[str, str],
+                body: bytes) -> bytes:
+    lines = [f"{method} {path} HTTP/1.1", f"Host: {authority}"]
+    lines += [f"{name}: {value}" for name, value in headers.items()
+              if name.lower() not in OWNED_REQUEST_HEADERS]
     if body or method in ("POST", "PUT", "PATCH"):
         lines.append(f"Content-Length: {len(body)}")
     lines.append("Connection: close")

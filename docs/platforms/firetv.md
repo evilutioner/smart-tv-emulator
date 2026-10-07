@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about Fire TV](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about Fire TV](https://marchik.dev).
 
 Everything a Fire TV remote app speaks: DIAL discovery and launch, the Turnstile control API over
 TLS with on-screen PIN pairing, and — on Fire OS — Bonjour and the legacy ADB shell. Two
@@ -57,4 +57,4 @@ behaviour.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

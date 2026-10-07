@@ -1,0 +1,35 @@
+schema_version = 1
+summary = "Synchronous ECP client built on requests, one of the oldest Roku libraries"
+upstream = "https://github.com/jcarbaugh/python-roku"
+license = "BSD-3-Clause"
+
+[install]
+kind = "pypi"
+package = "roku"
+last_green = "4.1.0"
+
+[run]
+profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
+timeout = 120
+
+[[gaps]]
+operation = "query/device-info"
+profiles = ["roku-streaming-stick-4k-3820eu2"]
+reason = "The 12.0.0 stick capture holds no device-info exchange, and the contract answers 501 for it. `device_info` is the first thing this client reads, so on this profile it stops there."
+
+[[gaps]]
+operation = "POST /search/browse"
+reason = "`search()` opens the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+
+[[gaps]]
+operation = "query/icon/*"
+reason = "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
+
+[[gaps]]
+operation = "POST /input"
+reason = "`touch()` and the motion-sensor methods post to /input. No capture holds the request or its answer, and the emulator models no pointer or sensors for this television."
+
+[[known_failures]]
+step = "standby reported by device-info"
+profiles = ["tcl-roku-tv-32s357"]
+reason = "After PowerOff the emulator keeps replaying the captured device-info, whose power-mode is PowerOn, so `power_state` stays On. Only PowerOn is captured; a capture of the set in DisplayOff closes this."

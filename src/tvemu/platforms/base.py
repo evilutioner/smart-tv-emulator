@@ -226,7 +226,7 @@ class KeyEffect:
 
     field: str                 # "power" | "volume" | "muted"
     operation: str             # "toggle" | "set" | "step"
-    amount: int = 0
+    amount: int = 0                # a step, or the target of an absolute volume `set`
     value: bool = False
 
     def __post_init__(self) -> None:

@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about Sony BRAVIA](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about Sony BRAVIA](https://marchik.dev).
 
 Sony sets a client may drive in two unrelated ways: **Sony IP control** (ScalarWebAPI JSON-RPC,
 IRCC and Simple IP Control) and **Android TV Remote v1**. Two sets were captured at the two ends
@@ -46,4 +46,4 @@ message, pairing step and refusal, each one tied to the capture it came from.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

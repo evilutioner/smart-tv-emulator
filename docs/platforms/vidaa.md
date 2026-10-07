@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about VIDAA (Hisense)](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about VIDAA (Hisense)](https://marchik.dev).
 
 On a VIDAA set **the television is an MQTT broker**, behind TLS, and a remote app is just
 another MQTT client. Captured end to end from one physical Hisense set, including a live TV
@@ -42,4 +42,4 @@ message, pairing step and refusal, each one tied to the capture it came from.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

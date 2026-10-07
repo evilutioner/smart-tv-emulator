@@ -6,6 +6,64 @@ All notable changes to the public build are recorded here. The format follows
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-07
+
+The first release whose shape is meant to hold. From here on the version follows Semantic
+Versioning across the management API (`/api/v1`), the event log, the `tvemu`, `tvemu.expect`
+and `tvemu.clients` command lines, and the run-record format under `docs/clients/`.
+
+### Added
+
+- Overview of one more television this build does not include: **Panasonic VIERA**, with two
+  modelled devices, an older one that takes plain commands (NRC-2) and a newer one that pairs
+  a remote with a four-digit PIN and encrypts its commands (NRC-4). It serves the remote
+  service, the media renderer's volume and mute, the PAC channel for inputs and picture modes,
+  UPnP events and a touchpad and gamepad socket. The official **Panasonic TV Remote 2** (iOS
+  2.73) and **TV Remote 3** (iOS 1.01) were validated against it by hand; see the
+  [ledger](docs/manual-validation.md).
+- The dashboard's pairing panel is shared by every platform that publishes `Core.pairing`.
+- Open-source clients: `python -m tvemu.clients` installs an upstream client library in its
+  own virtual environment, drives the emulator with it through the library's public API, and
+  judges the run from the client's steps, the event log and every request no capture answers.
+  Known gaps and failures are declared with their reasons and go stale when they stop
+  happening. `--record` keeps each run under `docs/clients/` with the exact client,
+  environment and emulator version, and renders one page per television. The first client is
+  **rokuecp**, the library behind Home Assistant's Roku integration:
+  [Open-source clients](docs/open-source-clients.md).
+- Two more Roku clients, **python-roku** and the npm package **roku-client**. Clients can now
+  come from npm, with a JavaScript binding beside a harness of the same shape, and a gap can
+  name a prefix (`query/icon/*`). A weekly workflow runs every client at its last green
+  version and at the latest, so a failure says whether the emulator or the client changed.
+  All three Roku clients meet the same gaps: search, application icons and, on the 12.0.0
+  stick, device-info; python-roku also meets touch and sensor input.
+
+### Changed
+
+- `KeyEffect("volume", "set", amount=N)` sets the simulated volume outright, for protocols
+  that write a level rather than step it.
+- The README is shorter and aimed at people driving the emulator. How it works, the contract
+  and adding a television moved to [Architecture](docs/architecture.md); the dashboard and the
+  management API to [Dashboard and API](docs/dashboard-and-api.md); ports, pairing and every
+  wire protocol to [Televisions and protocols](docs/televisions.md).
+- Every device in the television table says how it is known: captured from a set, modelled
+  from the vendor's app, and validated with a real app. The catalogue carries `validated`,
+  held to the [manual validation ledger](docs/manual-validation.md) by a test.
+- The README's television table ends with what each television was tested with, in place of
+  the *In this build* column: ✅ the vendors' own remote apps, driven by hand, linked to their
+  store pages, and 🧪 the open-source client libraries run against it every week, linked to
+  their repositories; and 🔬 our own unit tests and the byte-for-byte replay of its captures.
+  Each one links to its report. A test report per television, `docs/tests/<id>.md`, is
+  written by `tools/test_reports.py` from a clean tree and ships for every television. Whether a television is in this build
+  now sits under its name. A badge counts the open-source clients. The catalogue
+  carries `apps` and `clients`, held by tests to the manual validation ledger and to the
+  clients whose latest recorded run passes.
+- The default Roku device is the **TCL Roku TV 32S357** on Roku OS 15.3.4. The 12.0.0 stick
+  capture has no `/query/device-info`, which every open-source Roku client reads first, so a
+  first launch now answers what Home Assistant and the other clients need. The stick stays
+  selectable.
+- Asking about a television this build does not include, from the docs or the dashboard, now
+  leads to [marchik.dev](https://marchik.dev). The GitHub request form is gone.
+
 ## [0.2.0] - 2026-10-04
 
 ### Added
@@ -64,6 +122,7 @@ First public build, under the [Apache License 2.0](LICENSE); see [`NOTICE`](NOTI
   the README and the dashboard selector; the management API lists them with
   `"availability": "n/a"` and answers a switch to one with 501 and `"reason": "n/a"`.
 
-[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/evilutioner/smart-tv-emulator/releases/tag/v0.1.0

@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about Vizio SmartCast](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about Vizio SmartCast](https://marchik.dev).
 
 The local SmartCast REST API over HTTPS and its DIAL/SSDP discovery, captured from one physical
 set. Every answer, error shapes included, was captured or probed live rather than taken from
@@ -42,4 +42,4 @@ message, pairing step and refusal, each one tied to the capture it came from.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

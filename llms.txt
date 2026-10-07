@@ -10,10 +10,14 @@ say what the captures cannot. The event log is the ground truth for what a drive
 
 ## Start here
 
-- [README](README.md): what it is, quick start, architecture, management API
+- [README](README.md): what it is, quick start, the televisions and how each device is known
+- [Architecture](docs/architecture.md): how it works, the evidence-first contract, replay conformance, adding a television
+- [Dashboard and API](docs/dashboard-and-api.md): the dashboard and the local `/api/v1` management API
+- [Televisions and protocols](docs/televisions.md): every television, its ports, discovery and pairing, and every wire protocol
 - [Writing a driver](docs/writing-a-driver.md): the contract-first loop, step by step, with checks
 - [CI](docs/ci.md): run an app's tests against the emulator and assert on the event log
 - [Manual validation](docs/manual-validation.md): the ledger of real apps driven against the emulator, and the method
+- [Open-source clients](docs/open-source-clients.md): upstream client libraries run against the emulator, with every run kept as a record
 - [AGENTS.md](AGENTS.md): conventions for changing the emulator itself
 
 ## Contract

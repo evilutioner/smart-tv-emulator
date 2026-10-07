@@ -215,6 +215,7 @@ def _mask_json(expected: bytes, observed: bytes, paths: list[str], outcome: Outc
         outcome.problems.append(f"JSON substitutions {paths} need JSON on both sides: {exc}")
         return expected, observed
     cuts: dict[str, list[tuple[int, int, bytes]]] = {"expected": [], "observed": []}
+    drops: dict[str, list[tuple[int, int]]] = {"expected": [], "observed": []}
     for path in paths:
         segments = json_path(path)
         found_expected = _locate(expected_root, segments)
@@ -230,8 +231,7 @@ def _mask_json(expected: bytes, observed: bytes, paths: list[str], outcome: Outc
             other = found_observed if side == "expected" else found_expected
             if member and other is None:
                 # Only this side carries the key: drop the whole member.
-                start, end = _member_with_comma(data, start, end)
-                cuts[side].append((start, end, b""))
+                drops[side].append((start, end))
             elif member:
                 # Both sides carry the key: mask its value, keeping the key bytes compared.
                 node = _value_node(expected_root if side == "expected" else observed_root,
@@ -248,7 +248,20 @@ def _mask_json(expected: bytes, observed: bytes, paths: list[str], outcome: Outc
                 outcome.notes.append(f"substitution {path!r} served the captured value")
         else:
             outcome.used.add(path)
+    for side, data in (("expected", expected), ("observed", observed)):
+        cuts[side] += [(start, end, b"") for start, end in _dropped(data, drops[side])]
     return _cut(expected, cuts["expected"]), _cut(observed, cuts["observed"])
+
+
+def _dropped(data: bytes, members: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    """Member spans to delete, neighbours joined first so each run gives up one comma."""
+    runs: list[list[int]] = []
+    for start, end in sorted(members):
+        if runs and not data[runs[-1][1]:start].strip(b" \t\r\n,"):
+            runs[-1][1] = max(runs[-1][1], end)
+        else:
+            runs.append([start, end])
+    return [_member_with_comma(data, start, end) for start, end in runs]
 
 
 def _value_node(root: _Node, segments: tuple[str | int, ...]) -> _Node:

@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about Philips JointSpace](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about Philips JointSpace](https://marchik.dev).
 
 JointSpace 6.1 on a Linux-based Philips set: PIN pairing, Digest authentication, the control
 API, a UPnP MediaRenderer description and the Cast wake endpoint. The interesting thing about
@@ -52,4 +52,4 @@ behaviour.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

@@ -24,6 +24,9 @@ class ConformanceCase:
     replays: tuple[str, ...]
     timeout: float = DEFAULT_TIMEOUT
     setup: str = ""
+    # (exchange, parent exchange, JSON path): a capture of a document the set carried inside
+    # a field of another answer, compared out of that field of the parent's observed output.
+    embedded: tuple[tuple[str, str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if not self.exchanges:

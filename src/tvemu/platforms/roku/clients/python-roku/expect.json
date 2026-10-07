@@ -1,0 +1,13 @@
+{
+  "description": "python-roku: identity over HTTP, keys, literal text and a launch, and no command refused",
+  "ordered": true,
+  "expect": [
+    {"kind": "query", "operation": "query/device-info", "transport": "http", "status": 200},
+    {"kind": "command", "operation": "keypress/Home", "transport": "http", "status": 200},
+    {"kind": "command", "operation": "keypress/Lit_t", "transport": "http", "status": 200},
+    {"kind": "application", "operation": "app.launch/ecp", "status": 200}
+  ],
+  "forbid": [
+    {"kind": "command", "status": 403}
+  ]
+}

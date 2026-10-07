@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "request_url": "https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml",
+  "request_url": "https://marchik.dev",
   "platforms": [
     {
       "id": "roku",
@@ -12,6 +12,11 @@
       "discovery": "SSDP `roku:ecp`",
       "pairing": "ECP-2 challenge–response",
       "protocols": 2,
+      "clients": [
+        {"name": "rokuecp", "url": "https://github.com/ctalkington/python-rokuecp"},
+        {"name": "python-roku", "url": "https://github.com/jcarbaugh/python-roku"},
+        {"name": "roku-client", "url": "https://github.com/bschlenk/node-roku-client"}
+      ],
       "captured": [
         {
           "name": "Roku Streaming Stick 4K",
@@ -39,20 +44,25 @@
       "discovery": "DIAL/SSDP; Bonjour `_amzn-wplay._tcp` on Fire OS",
       "pairing": "On-screen PIN and client token; ADB public-key approval",
       "protocols": 7,
+      "apps": [
+        {"name": "Amazon Fire TV for iOS", "url": "https://apps.apple.com/app/id947984433"}
+      ],
       "captured": [
         {
           "name": "Fire TV Stick (Vega)",
           "detail": "AFTCA002, fw 2101020054720",
           "profiles": [
             "fire-tv-stick-vega-aftca002"
-          ]
+          ],
+          "validated": true
         },
         {
           "name": "Fire TV Stick (Fire OS)",
           "detail": "AFTMA08C15, Fire OS 8.1.8.2",
           "profiles": [
             "fire-tv-stick-fireos-aftma08c15"
-          ]
+          ],
+          "validated": true
         }
       ]
     },
@@ -107,13 +117,20 @@
       "discovery": "Bonjour `_androidtvremote2._tcp`, `_googlecast._tcp`, `_airplay._tcp`; DIAL/SSDP",
       "pairing": "Polo pairing on **6467** — six hex characters and a client certificate",
       "protocols": 11,
+      "apps": [
+        {"name": "Google TV for iOS", "url": "https://apps.apple.com/app/id746894884"}
+      ],
+      "clients": [
+        {"name": "androidtvremote2", "url": "https://github.com/tronikos/androidtvremote2"}
+      ],
       "captured": [
         {
           "name": "Xiaomi MiTV-MOEU0",
           "detail": "fw 7.00.956317615",
           "profiles": [
             "xiaomi-mitv-moeu0"
-          ]
+          ],
+          "validated": true
         },
         {
           "name": "TCL Android TV",
@@ -135,7 +152,8 @@
           "detail": "Google TV, Android 14",
           "profiles": [
             "google-chromecast-hd"
-          ]
+          ],
+          "validated": true
         },
         {
           "name": "Nokia Streaming Stick 800",
@@ -196,13 +214,17 @@
       "discovery": "SSDP/UPnP; Bonjour `_philipstv_rpc._tcp`",
       "pairing": "Four-digit PIN, then HTTP Digest",
       "protocols": 6,
+      "apps": [
+        {"name": "Philips TV Remote for iOS", "url": "https://apps.apple.com/gb/app/philips-smart-tv/id1479155903"}
+      ],
       "captured": [
         {
           "name": "Philips 32PHS6000/12",
           "detail": "JointSpace 6.1",
           "profiles": [
             "philips-32phs6000-12"
-          ]
+          ],
+          "validated": true
         }
       ]
     },
@@ -299,7 +321,7 @@
       "protocols": 2,
       "captured": [
         {
-          "name": "Metz Classic (modelled)",
+          "name": "Metz Classic",
           "detail": "MetzRemote iOS app, no set measured",
           "profiles": [
             "metz-classic-rcr"
@@ -325,6 +347,41 @@
           "profiles": [
             "tcl-h32s5916"
           ]
+        }
+      ]
+    },
+    {
+      "id": "viera",
+      "display_name": "Panasonic VIERA",
+      "order": 120,
+      "summary": "NRC SOAP over HTTP, plain or PIN-paired and encrypted · volume, inputs and events · pointer and gamepad socket · driven by Panasonic TV Remote 2 and 3",
+      "docs": "docs/platforms/viera.md",
+      "remote": "NRC, renderer volume and PAC over HTTP **55000**; pointer and gamepad frames on TCP **55010**",
+      "discovery": "SSDP `urn:panasonic-com:service:p00NetworkControl:1`, `p00RemoteController:1`, or a search by UDN",
+      "pairing": "None on the older device; a four-digit PIN with AES-encrypted sessions on the newer one",
+      "protocols": 3,
+      "apps": [
+        {"name": "Panasonic TV Remote 3 for iOS", "url": "https://apps.apple.com/app/id1435893441"},
+        {"name": "Panasonic TV Remote 2 for iOS", "url": "https://apps.apple.com/app/id590335696"}
+      ],
+      "captured": [
+        {
+          "name": "Panasonic VIERA, no PIN",
+          "detail": "NRC-2 firmware; Panasonic TV Remote 2 (2.73) and 3 (1.01) for iOS, no set measured",
+          "profiles": [
+            "panasonic-viera-nrc"
+          ],
+          "modelled": true,
+          "validated": true
+        },
+        {
+          "name": "Panasonic VIERA, PIN",
+          "detail": "NRC-4 firmware with a PIN and encrypted sessions; Panasonic TV Remote 3 for iOS, no set measured",
+          "profiles": [
+            "panasonic-viera-pin-nrc"
+          ],
+          "modelled": true,
+          "validated": true
         }
       ]
     }

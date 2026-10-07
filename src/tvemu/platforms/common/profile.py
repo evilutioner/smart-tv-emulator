@@ -134,9 +134,17 @@ class ProfileReference:
         return self.capture.payload(self.replays[name])
 
     def documents(self) -> dict[str, bytes]:
-        """Every replay that carries a body, keyed by the name its handler asks for."""
-        return {name: step.payload for name, exchange_id in self.replays.items()
-                if (step := self.capture.exchange(exchange_id).response()).payload is not None}
+        """Every replay that answers with one body, keyed by the name its handler asks for.
+
+        A replay whose exchange answers with several messages, or with none, is behaviour the
+        conformance harness checks rather than a document a handler serves.
+        """
+        found = {}
+        for name, exchange_id in self.replays.items():
+            outputs = self.capture.exchange(exchange_id).outputs()
+            if len(outputs) == 1 and outputs[0].payload is not None:
+                found[name] = outputs[0].payload
+        return found
 
     def expect_substitutions(self, expected: dict[str, tuple[str, ...]]) -> None:
         """Refuse a profile whose declared live writes differ from what the handlers do."""
@@ -165,7 +173,9 @@ def profile_capture(directory, package: str) -> ProfileReference:
         raise ValueError(f"Profile {profile_id}: replays must map names to exchanges")
     capture = load_capture(package, capture_id)
     for exchange_id in replays.values():
-        capture.exchange(exchange_id).response()
+        # A replay answers with something, even if what it answers is silence.
+        if not capture.exchange(exchange_id).outputs():
+            raise ValueError(f"Profile {profile_id}: replay {exchange_id} has no output step")
     substitutions = data.get("substitutions", {})
     if (not isinstance(substitutions, dict)
             or not all(name in replays and isinstance(paths, list) and paths

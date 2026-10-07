@@ -352,6 +352,15 @@ class GuideTests(unittest.TestCase):
                                 capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
 
+    def test_every_television_has_a_test_report_for_this_version(self):
+        """The README links each television to its test report; a stale one is a broken claim."""
+        tools = Path(__file__).parents[1] / "tools"
+        if not (tools / "test_reports.py").is_file():
+            raise unittest.SkipTest("this repository ships no test report writer")
+        result = subprocess.run([sys.executable, str(tools / "test_reports.py"), "--check"],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

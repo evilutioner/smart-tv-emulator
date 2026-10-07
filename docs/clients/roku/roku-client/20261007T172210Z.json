@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "run_id": "20261007T172210Z",
+  "started_at": "2026-10-07T17:22:10+00:00",
+  "duration_s": 3.1,
+  "platform": "roku",
+  "client": {
+    "name": "roku-client",
+    "install": "npm",
+    "requested": "6.0.0",
+    "upstream": "https://github.com/bschlenk/node-roku-client",
+    "license": "Apache-2.0",
+    "version": "6.0.0",
+    "commit": "",
+    "environment": [
+      "async@2.6.4",
+      "bluebird@3.7.2",
+      "debug@3.2.7",
+      "debug@4.4.3",
+      "extend@3.0.2",
+      "ip@1.1.9",
+      "lodash@4.18.1",
+      "ms@2.1.3",
+      "node-ssdp@4.0.1",
+      "roku-client@6.0.0",
+      "sax@1.6.1",
+      "xml2js@0.6.2",
+      "xmlbuilder@11.0.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.0.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Node 25.8.0",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "roku-streaming-stick-4k-3820eu2",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info and the app list",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "Error: Failed to GET http://127.0.0.1:50439/query/device-info: Not Implemented",
+          "events": [
+            3,
+            4
+          ],
+          "duration_ms": 2,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "query/device-info",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "The 12.0.0 stick capture holds no device-info exchange, and the contract answers 501 for it. `info()` is the first thing this client reads, so on this profile it stops there."
+        }
+      ],
+      "expect": null
+    },
+    {
+      "profile": "tcl-roku-tv-32s357",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info and the app list",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            3,
+            5
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "active app and media player state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            5,
+            7
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            7,
+            35
+          ],
+          "duration_ms": 15
+        },
+        {
+          "name": "long key press, held then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            35,
+            39
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "text \"tvemu42\"",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            39,
+            53
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "volume up, down and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            53,
+            59
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "chained commands",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            59,
+            65
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            65,
+            69
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "standby reported by device-info",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: powerMode PowerOn",
+          "events": [
+            69,
+            74
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "launch an application",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            74,
+            75
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "tune a broadcast channel",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            75,
+            76
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "an application's icon",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "Error: Failed to GET http://127.0.0.1:50448/query/icon/12: Not Implemented",
+          "events": [
+            76,
+            77
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "search for a keyword",
+          "action": "search",
+          "status": "known-gap",
+          "detail": "Error: Failed to POST http://127.0.0.1:50448/search/browse?keyword=tvemu: Not Implemented",
+          "events": [
+            77,
+            78
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "POST /search/browse",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`search()` opens the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+        },
+        {
+          "operation": "query/icon/12",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
+        }
+      ],
+      "expect": {
+        "description": "roku-client: identity over HTTP, keys held and released, text and a launch, and no command refused",
+        "problems": []
+      }
+    }
+  ]
+}

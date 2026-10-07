@@ -2,9 +2,10 @@
 
 Emulates the network contract a Roku remote application speaks: SSDP discovery, the captured
 device documents, HTTP ECP commands, and the authenticated `ecp-2` WebSocket. Two physical
-devices are modelled — a Roku Streaming Stick 4K on Roku OS 12.0.0 and a TCL Roku TV 32S357 on
-15.3.4, captured in each of its network-access modes — and they differ in ways a driver has to
-handle.
+devices are modelled — a TCL Roku TV 32S357 on 15.3.4, captured in each of its network-access
+modes, and a Roku Streaming Stick 4K on Roku OS 12.0.0 — and they differ in ways a driver has
+to handle. The TCL is the default: every open-source Roku client reads `/query/device-info`
+first, and the 12.0.0 stick capture has none.
 
 For project-wide setup, architecture and the management API, see the
 [main README](../../README.md).
@@ -239,7 +240,7 @@ profile live and closes existing sessions; `--device-profile <id>` overrides it 
   "schema_version": 2,
   "platform": "roku",
   "settings": {
-    "device_profile": "roku-streaming-stick-4k-3820eu2",
+    "device_profile": "tcl-roku-tv-32s357",
     "access_mode": "enabled",
     "protocols": {"ecp": true, "ssdp": true}
   }
@@ -279,6 +280,11 @@ Where the TCL set on 15.3.4 answers differently and the emulator does not follow
       limited and disabled usable only by an authenticated session, disabled refusing even
       device-info over plain HTTP.
 - [ ] Switching to the other captured device changes which routes answer, as the contract says.
+
+## Open-source clients
+
+Upstream Roku libraries run against this emulator, with the known gaps each one meets:
+[Open-source clients: Roku](../clients/roku.md).
 
 ## Writing a Roku driver
 

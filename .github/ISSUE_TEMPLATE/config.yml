@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Other televisions, licensing or a custom driver
+    url: https://marchik.dev
+    about: Contact details are at marchik.dev. Say which television you need and what you are building.
   - name: Bug in the Roku adapter or the dashboard
     url: https://github.com/evilutioner/smart-tv-emulator/issues/new
     about: Open a normal issue, with the event-log export if you have one.

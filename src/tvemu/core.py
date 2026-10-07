@@ -924,7 +924,9 @@ class Core:
         if effect.operation == "toggle":
             value = not current
         elif effect.operation == "set":
-            value = effect.value
+            # Volume is a number, so an absolute set carries it in `amount`; the others are flags.
+            value = (self.platform.volume.clamp(effect.amount) if effect.field == "volume"
+                     else effect.value)
         else:
             value = self.platform.volume.clamp(current + effect.amount)
         setattr(self, effect.field, value)

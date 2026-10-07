@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about Android TV / Google TV](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about Android TV / Google TV](https://marchik.dev).
 
 Android TV Remote Service v2 over mutual TLS with Polo pairing, plus DIAL, Google Cast launch
 validation and AirPlay identity. Six sets are captured, from a Xiaomi TV to HDMI dongles, and
@@ -60,4 +60,4 @@ behaviour.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

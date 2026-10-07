@@ -10,7 +10,7 @@ import unittest
 from dataclasses import replace
 
 import support  # noqa: F401  (registers the stub platforms)
-from tvemu.conformance import compare, websocket
+from tvemu.conformance import compare, http, mqtt, setup, websocket
 from tvemu.conformance.model import ConformanceCase, Report
 from tvemu.conformance.runner import (ADVERTISED_HOST, build_plan, coverage_complete,
                                       fresh_adapter, profiles, run_case)
@@ -117,10 +117,81 @@ class ComparatorTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             compare.replace_json_value(data, "absent", b"1")
 
+    def test_neighbouring_members_only_one_side_carries_give_up_one_comma(self):
+        expected = b'{"a":1,"b":{"c":2}}'
+        for observed in (b'{"a":1,"b":{"c":2},"x":1,"y":[2]}',
+                         b'{"x":1,"y":[2],"a":1,"b":{"c":2}}',
+                         b'{"a":1,"x":1,"y":[2],"b":{"c":2}}'):
+            self.assertTrue(body(expected, observed, "x", "y").ok, observed)
+        self.assertFalse(body(expected, b'{"a":1,"b":{"c":2},"x":1,"z":3}', "x").ok)
+
     def test_a_header_named_substitution_never_masks_a_body_field(self):
         outcome = body(b'{"Set-Cookie":1}', b'{"Set-Cookie":2}', "Set-Cookie",
                        headers=frozenset({"set-cookie"}))
         self.assertFalse(outcome.ok)
+
+
+class RequestTest(unittest.TestCase):
+    def test_a_setup_fills_placeholders_and_adds_only_the_headers_the_capture_lacks(self):
+        step = Step("in", {"method": "POST", "path": "/x/{id}",
+                           "headers": {"Cookie": "auth={token}", "Accept": "a/b"}},
+                    payload=b'{"pin":"{pin}"}')
+        raw = http.request_bytes(step, "192.0.2.10:80", {"id": "7", "token": "T", "pin": "1"},
+                                 {"accept": "c/d", "X-Key": "k"})
+        head, _, payload = raw.partition(b"\r\n\r\n")
+        self.assertIn(b"POST /x/7 HTTP/1.1", head)
+        self.assertIn(b"Cookie: auth=T", head)
+        self.assertIn(b"Accept: a/b", head)
+        self.assertNotIn(b"c/d", head)
+        self.assertIn(b"X-Key: k", head)
+        self.assertEqual(payload, b'{"pin":"1"}')
+
+    def test_a_placeholder_left_unfilled_is_never_sent(self):
+        step = Step("in", {"method": "GET", "path": "/x", "headers": {"Cookie": "{token}"}})
+        with self.assertRaises(ValueError):
+            http.request_bytes(step, "192.0.2.10:80")
+
+
+class DescriptionTest(unittest.TestCase):
+    def module(self, **attributes):
+        return type("conformance", (), attributes)
+
+    def test_setup_hooks_are_validated(self):
+        async def hook(name, client):
+            return {}
+        found, default = setup.hooks(self.module(SETUPS={"pair": {"provides": ["token"]}},
+                                                 DEFAULT_SETUP="pair", setup=hook))
+        self.assertEqual((found["pair"].provides, default), (frozenset({"token"}), "pair"))
+        for bad in ({"SETUPS": {"pair": {}}},
+                    {"SETUPS": {"pair": {"provides": "token"}}, "setup": hook},
+                    {"SETUPS": {"pair": {"provides": []}}, "DEFAULT_SETUP": "x",
+                     "setup": hook}):
+            with self.assertRaises(ValueError, msg=bad):
+                setup.hooks(self.module(**bad))
+        with self.assertRaises(ValueError):
+            setup.prepared({"values": {"token": 1}}, "pair")
+
+    def test_an_mqtt_script_names_its_replay_exactly_once(self):
+        def values(*_):
+            return {}
+        spec = mqtt.description(self.module(MQTT={
+            "protocol": "p", "default": [["a", "x"], ["a", "*"]],
+            "scripts": {"y": [["b", "*"]]}}, mqtt_values=values))
+        self.assertEqual(spec.script("z"), (("a", "x"), ("a", "z")))
+        self.assertEqual(spec.script("y"), (("b", "y"),))
+        for script in ([["a", "x"]], [["a", "*"], ["b", "*"]], []):
+            with self.assertRaises(ValueError):
+                mqtt.description(self.module(MQTT={"protocol": "p", "default": script},
+                                             mqtt_values=values))
+        self.assertIsNone(mqtt.description(self.module()))
+
+    def test_the_mqtt_codec_reads_back_what_it_writes(self):
+        packet, rest = mqtt._decode(mqtt.publish_packet("t/x", b"\xe2\x96\xb6" * 50) + b"\x30")
+        self.assertEqual((packet.kind, packet.publish(), rest),
+                         (mqtt.PUBLISH, ("t/x", b"\xe2\x96\xb6" * 50), b"\x30"))
+        self.assertEqual(mqtt._decode(b"\x30\x05ab"), (None, b"\x30\x05ab"))
+        packet, _ = mqtt._decode(mqtt.connect_packet("id", None, None))
+        self.assertEqual(packet.kind, mqtt.CONNECT)
 
 
 def _profiles():
@@ -179,6 +250,12 @@ class RunTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(covered) + len(gaps), plan.replays)
         self.assertEqual(len(set(covered) | set(gaps)), plan.replays)
         self.assertTrue(all(gap.reason for gap in plan.gaps))
+
+    def test_every_case_that_needs_a_setup_names_one_its_platform_declares(self):
+        for case in self.report.plan.cases:
+            if case.setup:
+                known, _ = setup.hooks(websocket.platform_package(case.platform))
+                self.assertIn(case.setup, known, case.id)
 
     def test_a_platform_declaring_complete_coverage_leaves_no_replay_uncovered(self):
         owed = [f"{gap.platform}/{gap.profile}/{gap.exchange}: {gap.reason}"

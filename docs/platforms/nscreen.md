@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator, its
 > captures and the full driver guide are available on request —
-> [ask about TCL nScreen](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about TCL nScreen](https://marchik.dev).
 
 The remote that TCL's MediaTek **Linux** sets answer, which is neither the Roku ECP of a TCL
 Roku TV nor the Android TV Remote of a TCL Google TV. A client opens one TCP port, writes XML,
@@ -47,4 +47,4 @@ message and refusal, each one tied to the capture it came from.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

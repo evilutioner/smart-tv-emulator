@@ -2,7 +2,7 @@
 
 > **N/A in this build.** Written and tested against physical hardware; the emulator,
 > its captures and the full driver guide are available on request —
-> [ask about Samsung Tizen](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml).
+> [ask about Samsung Tizen](https://marchik.dev).
 
 A Samsung Smart TV running Tizen: the `samsung.remote.control` WebSocket over TLS, the
 unauthenticated device API a client polls for power, and the DIAL receiver description. Three
@@ -44,4 +44,4 @@ message, pairing step and refusal, each one tied to the capture it came from.
 ## Get access
 
 Commercial licence, private access to the emulator, or a driver built for your app:
-[open a request](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television-request.yml) and say what you are building.
+[get in touch](https://marchik.dev) and say what you are building.

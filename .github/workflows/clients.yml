@@ -1,0 +1,73 @@
+name: Open-source clients
+
+# Every declared client, weekly, at the version it last passed and at whatever upstream ships
+# today. The pair tells the two kinds of failure apart: when last-green fails, the emulator
+# changed; when only latest fails, the client did. A run downloads the client, so it is never
+# part of the offline gates in ci.yml. Records are kept by a person with --record, from a
+# clean checkout; this workflow keeps each run as an artifact.
+
+on:
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+jobs:
+  clients:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.list.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install .
+      - id: list
+        env:
+          PYTHONPATH: src
+        run: echo "matrix=$(python -m tvemu.clients list --json)" >> "$GITHUB_OUTPUT"
+
+  run:
+    needs: clients
+    if: needs.clients.outputs.matrix != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        client: ${{ fromJSON(needs.clients.outputs.matrix) }}
+        version: [last-green, latest]
+    name: ${{ matrix.client.client }} (${{ matrix.version }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: python -m pip install .
+      # From the checkout, so the record names the commit that ran.
+      - name: Run the client
+        env:
+          PYTHONPATH: src
+        run: |
+          set -o pipefail
+          version=""
+          if [ "${{ matrix.version }}" = "latest" ]; then version="--version latest"; fi
+          {
+            echo '### ${{ matrix.client.client }} (${{ matrix.version }})'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          status=0
+          python -m tvemu.clients run "${{ matrix.client.client }}" $version \
+            --json record.json --events events | tee -a "$GITHUB_STEP_SUMMARY" || status=$?
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          exit $status
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: client-${{ matrix.client.id }}-${{ matrix.version }}
+          path: |
+            record.json
+            events/
+          if-no-files-found: ignore

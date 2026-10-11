@@ -1,0 +1,32 @@
+schema_version = 1
+summary = "Asynchronous ECP client, the library behind Home Assistant's Roku integration"
+upstream = "https://github.com/ctalkington/python-rokuecp"
+license = "MIT"
+
+[install]
+kind = "pypi"
+package = "rokuecp"
+last_green = "0.19.5"
+
+[run]
+profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
+timeout = 120
+
+[[gaps]]
+operation = "POST /search/browse"
+reason = "`search()` and the `search` remote key open the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+
+[[gaps]]
+operation = "POST /input/15985"
+reason = "`play_on_roku()` hands a URL to the Play on Roku channel. No capture holds it, and the emulator plays no media."
+
+[[known_failures]]
+step = "standby reported by device-info"
+profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
+reason = "After PowerOff the emulator keeps replaying the captured device-info, whose power-mode is PowerOn, so the client never sees standby. Only PowerOn is captured on either device; a capture of a set in DisplayOff closes this."
+
+[not_offered]
+discovery = "rokuecp has no SSDP or mDNS API; Home Assistant passes it the host."
+session = "Plain ECP is stateless HTTP; rokuecp does not speak the authenticated ecp-2 session."
+pointer = "rokuecp has no touch or sensor input."
+voice = "rokuecp has no voice API."

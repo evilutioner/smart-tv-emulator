@@ -1,0 +1,637 @@
+{
+  "schema_version": 2,
+  "run_id": "20261011T051328Z",
+  "started_at": "2026-10-11T05:13:28+00:00",
+  "duration_s": 6.8,
+  "platform": "roku",
+  "client": {
+    "name": "rokuecp",
+    "install": "pypi",
+    "requested": "0.19.5",
+    "upstream": "https://github.com/ctalkington/python-rokuecp",
+    "license": "MIT",
+    "version": "0.19.5",
+    "commit": "",
+    "environment": [
+      "aiohappyeyeballs==2.7.1",
+      "aiohttp==3.14.5",
+      "aiosignal==1.4.0",
+      "attrs==26.1.0",
+      "awesomeversion==25.8.0",
+      "backoff==2.2.1",
+      "frozenlist==1.8.0",
+      "idna==3.20",
+      "multidict==7.1.0",
+      "propcache==0.5.4",
+      "rokuecp==0.19.5",
+      "xmltodict==1.0.4",
+      "yarl==1.25.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.1.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "roku-streaming-stick-4k-3820eu2",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info, apps and channels",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model_number",
+            "version"
+          ],
+          "events": [
+            3,
+            7
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "active app, media and channel state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app",
+            "media"
+          ],
+          "events": [
+            7,
+            11
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "Home",
+            "Up",
+            "Down",
+            "Left",
+            "Right",
+            "Select",
+            "Back",
+            "Play",
+            "Rev",
+            "Fwd",
+            "InstantReplay",
+            "Info",
+            "Backspace",
+            "Enter"
+          ],
+          "events": [
+            11,
+            39
+          ],
+          "duration_ms": 21
+        },
+        {
+          "name": "find remote",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "FindRemote"
+          ],
+          "events": [
+            39,
+            41
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "literal text 'tvemu42'",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits"
+          ],
+          "events": [
+            41,
+            55
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "volume up, down and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VolumeUp",
+            "VolumeDown",
+            "VolumeMute"
+          ],
+          "events": [
+            55,
+            61
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "power off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PowerOff",
+            "PowerOn"
+          ],
+          "events": [
+            61,
+            65
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "standby reported by device-info",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: standby not parsed",
+          "covers": [
+            "state"
+          ],
+          "events": [
+            65,
+            72
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "launch an application with a deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "launch"
+          ],
+          "events": [
+            72,
+            73
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "search for a keyword",
+          "action": "search",
+          "status": "known-gap",
+          "detail": "RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})",
+          "covers": [
+            "search"
+          ],
+          "events": [
+            73,
+            74
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "play a URL on the device",
+          "action": "cast",
+          "status": "known-gap",
+          "detail": "RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})",
+          "covers": [
+            "play_on_roku"
+          ],
+          "events": [
+            74,
+            75
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "POST /input/15985",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`play_on_roku()` hands a URL to the Play on Roku channel. No capture holds it, and the emulator plays no media."
+        },
+        {
+          "operation": "POST /search/browse",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`search()` and the `search` remote key open the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+        }
+      ],
+      "expect": {
+        "description": "rokuecp: identity over HTTP, keys, literal text and a launch, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "Back",
+          "Backspace",
+          "ChannelDown",
+          "ChannelUp",
+          "Down",
+          "Enter",
+          "FindRemote",
+          "Fwd",
+          "Home",
+          "Info",
+          "InputAV1",
+          "InputHDMI1",
+          "InputHDMI2",
+          "InputHDMI3",
+          "InputHDMI4",
+          "InputTuner",
+          "InstantReplay",
+          "Left",
+          "Play",
+          "Rev",
+          "Right",
+          "Search",
+          "Select",
+          "Up"
+        ],
+        "volume": [
+          "VolumeDown",
+          "VolumeMute",
+          "VolumeUp"
+        ],
+        "power": [
+          "Power",
+          "PowerOff",
+          "PowerOn",
+          "Sleep"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "auth": [
+          "refused in Disabled mode",
+          "refused in Limited mode"
+        ],
+        "apps": [
+          "launch",
+          "play_on_roku",
+          "search",
+          "tune"
+        ],
+        "identity": [
+          "brand",
+          "device_location",
+          "device_type",
+          "ethernet_mac",
+          "ethernet_support",
+          "headphones_connected",
+          "model_name",
+          "model_number",
+          "name",
+          "network_name",
+          "network_type",
+          "serial_number",
+          "supports_airplay",
+          "supports_find_remote",
+          "supports_private_listening",
+          "supports_wake_on_wlan",
+          "version",
+          "wifi_mac"
+        ],
+        "state": [
+          "app",
+          "channel",
+          "channels",
+          "media",
+          "state"
+        ]
+      },
+      "answers": [
+        {
+          "status": 501,
+          "operation": "POST /input/15985",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "POST /search/browse",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "tcl-roku-tv-32s357",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info, apps and channels",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model_number",
+            "version"
+          ],
+          "events": [
+            3,
+            7
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "active app, media and channel state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app",
+            "media",
+            "channels"
+          ],
+          "events": [
+            7,
+            11
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "Home",
+            "Up",
+            "Down",
+            "Left",
+            "Right",
+            "Select",
+            "Back",
+            "Play",
+            "Rev",
+            "Fwd",
+            "InstantReplay",
+            "Info",
+            "Backspace",
+            "Enter"
+          ],
+          "events": [
+            11,
+            39
+          ],
+          "duration_ms": 20
+        },
+        {
+          "name": "literal text 'tvemu42'",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits"
+          ],
+          "events": [
+            39,
+            53
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "volume up, down and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VolumeUp",
+            "VolumeDown",
+            "VolumeMute"
+          ],
+          "events": [
+            53,
+            59
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "power off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PowerOff",
+            "PowerOn"
+          ],
+          "events": [
+            59,
+            63
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "standby reported by device-info",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: standby not parsed",
+          "covers": [
+            "state"
+          ],
+          "events": [
+            63,
+            69
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "launch an application with a deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "launch"
+          ],
+          "events": [
+            69,
+            70
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "tune a broadcast channel",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "tune"
+          ],
+          "events": [
+            70,
+            71
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "search for a keyword",
+          "action": "search",
+          "status": "known-gap",
+          "detail": "RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})",
+          "covers": [
+            "search"
+          ],
+          "events": [
+            71,
+            72
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "play a URL on the device",
+          "action": "cast",
+          "status": "known-gap",
+          "detail": "RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})",
+          "covers": [
+            "play_on_roku"
+          ],
+          "events": [
+            72,
+            73
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "POST /input/15985",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`play_on_roku()` hands a URL to the Play on Roku channel. No capture holds it, and the emulator plays no media."
+        },
+        {
+          "operation": "POST /search/browse",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`search()` and the `search` remote key open the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+        }
+      ],
+      "expect": {
+        "description": "rokuecp: identity over HTTP, keys, literal text and a launch, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "Back",
+          "Backspace",
+          "ChannelDown",
+          "ChannelUp",
+          "Down",
+          "Enter",
+          "FindRemote",
+          "Fwd",
+          "Home",
+          "Info",
+          "InputAV1",
+          "InputHDMI1",
+          "InputHDMI2",
+          "InputHDMI3",
+          "InputHDMI4",
+          "InputTuner",
+          "InstantReplay",
+          "Left",
+          "Play",
+          "Rev",
+          "Right",
+          "Search",
+          "Select",
+          "Up"
+        ],
+        "volume": [
+          "VolumeDown",
+          "VolumeMute",
+          "VolumeUp"
+        ],
+        "power": [
+          "Power",
+          "PowerOff",
+          "PowerOn",
+          "Sleep"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "auth": [
+          "refused in Disabled mode",
+          "refused in Limited mode"
+        ],
+        "apps": [
+          "launch",
+          "play_on_roku",
+          "search",
+          "tune"
+        ],
+        "identity": [
+          "brand",
+          "device_location",
+          "device_type",
+          "ethernet_mac",
+          "ethernet_support",
+          "headphones_connected",
+          "model_name",
+          "model_number",
+          "name",
+          "network_name",
+          "network_type",
+          "serial_number",
+          "supports_airplay",
+          "supports_find_remote",
+          "supports_private_listening",
+          "supports_wake_on_wlan",
+          "version",
+          "wifi_mac"
+        ],
+        "state": [
+          "app",
+          "channel",
+          "channels",
+          "media",
+          "state"
+        ]
+      },
+      "answers": [
+        {
+          "status": 501,
+          "operation": "POST /input/15985",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "POST /search/browse",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

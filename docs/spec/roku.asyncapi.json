@@ -1,0 +1,506 @@
+{
+  "asyncapi": "3.1.0",
+  "info": {
+    "title": "roku emulated television messages",
+    "version": "1",
+    "description": "Generated from executable message declarations and evidence."
+  },
+  "channels": {
+    "ecp-2": {
+      "address": "ecp-2",
+      "messages": {
+        "ecp-2.param-challenge": {
+          "$ref": "#/components/messages/ecp-2.param-challenge"
+        },
+        "ecp-2.authenticate": {
+          "$ref": "#/components/messages/ecp-2.authenticate"
+        },
+        "ecp-2.response": {
+          "$ref": "#/components/messages/ecp-2.response"
+        },
+        "ecp-2.key-press": {
+          "$ref": "#/components/messages/ecp-2.key-press"
+        },
+        "ecp-2.key-down": {
+          "$ref": "#/components/messages/ecp-2.key-down"
+        },
+        "ecp-2.key-up": {
+          "$ref": "#/components/messages/ecp-2.key-up"
+        },
+        "ecp-2.query-device-info": {
+          "$ref": "#/components/messages/ecp-2.query-device-info"
+        },
+        "ecp-2.query-active-app": {
+          "$ref": "#/components/messages/ecp-2.query-active-app"
+        },
+        "ecp-2.query-apps": {
+          "$ref": "#/components/messages/ecp-2.query-apps"
+        },
+        "ecp-2.query-media-player": {
+          "$ref": "#/components/messages/ecp-2.query-media-player"
+        },
+        "ecp-2.query-textedit-state": {
+          "$ref": "#/components/messages/ecp-2.query-textedit-state"
+        },
+        "ecp-2.query-audio-device": {
+          "$ref": "#/components/messages/ecp-2.query-audio-device"
+        },
+        "ecp-2.query-tv-channels": {
+          "$ref": "#/components/messages/ecp-2.query-tv-channels"
+        }
+      }
+    }
+  },
+  "operations": {
+    "ecp-2.param-challenge": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.param-challenge"
+        }
+      ]
+    },
+    "ecp-2.authenticate": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.authenticate"
+        }
+      ]
+    },
+    "ecp-2.response": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.response"
+        }
+      ]
+    },
+    "ecp-2.key-press": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.key-press"
+        }
+      ]
+    },
+    "ecp-2.key-down": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.key-down"
+        }
+      ]
+    },
+    "ecp-2.key-up": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.key-up"
+        }
+      ]
+    },
+    "ecp-2.query-device-info": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-device-info"
+        }
+      ]
+    },
+    "ecp-2.query-active-app": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-active-app"
+        }
+      ]
+    },
+    "ecp-2.query-apps": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-apps"
+        }
+      ]
+    },
+    "ecp-2.query-media-player": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-media-player"
+        }
+      ]
+    },
+    "ecp-2.query-textedit-state": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-textedit-state"
+        }
+      ]
+    },
+    "ecp-2.query-audio-device": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-audio-device"
+        }
+      ]
+    },
+    "ecp-2.query-tv-channels": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-tv-channels"
+        }
+      ]
+    }
+  },
+  "components": {
+    "messages": {
+      "ecp-2.param-challenge": {
+        "name": "param-challenge",
+        "title": "The authentication challenge, sent unprompted as the socket opens.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "notify": {
+              "type": "string",
+              "enum": [
+                "authenticate"
+              ],
+              "description": "A notification, not a reply: no response or status."
+            },
+            "param-challenge": {
+              "type": "string"
+            },
+            "param-methods": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "examples": [
+                  "client-id",
+                  "jwt"
+                ],
+                "description": "The only param that is not a string. Older firmware sent none, so a client must not depend on it."
+              }
+            },
+            "timestamp": {
+              "type": "string",
+              "pattern": "[0-9]+\\.[0-9]{3}",
+              "description": "Device uptime in seconds as a decimal string; it resets on reboot."
+            }
+          }
+        }
+      },
+      "ecp-2.authenticate": {
+        "name": "authenticate",
+        "title": "The only request that may carry request-id 1.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string",
+              "enum": [
+                "1"
+              ],
+              "description": "The one request id the set prescribes."
+            },
+            "param-response": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.response": {
+        "name": "response",
+        "title": "The envelope every reply arrives in.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "response": {
+              "type": "string",
+              "enum": [
+                "authenticate",
+                "key-press",
+                "key-down",
+                "key-up",
+                "query-device-info",
+                "query-active-app",
+                "query-apps",
+                "query-media-player",
+                "query-textedit-state",
+                "query-audio-device",
+                "query-tv-channels",
+                "query-icon",
+                "set-textedit-text",
+                "query-info-for-voice-service",
+                "send-voice-events",
+                "request-events",
+                "set-audio-output",
+                "launch"
+              ],
+              "description": "Echoes the request name."
+            },
+            "response-id": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "200",
+                "202",
+                "400",
+                "404"
+              ],
+              "description": "A decimal string about the request, not the transport: a refusal arrives in a successful frame. 400 is an unusable parameter, 404 an unknown request name, 202 the release of a key not held."
+            },
+            "status-msg": {
+              "type": "string",
+              "enum": [
+                "OK",
+                "Accepted",
+                "Bad Request",
+                "Not Found"
+              ],
+              "description": "The status phrase only; the set never explains."
+            },
+            "content-type": {
+              "type": "string",
+              "description": "Present only with content-data. Hardware spells it with a quoted charset (text/xml; charset=\"utf-8\", application/json for textedit-state) and the emulator replays what the capture recorded; the 15.2.4 probe kept none."
+            },
+            "content-data": {
+              "type": "string"
+            }
+          },
+          "description": "No space after either JSON separator, reproduced for drivers that compare or hash frames.\nKeys in sorted order, so content-data comes first in a frame that has one."
+        }
+      },
+      "ecp-2.key-press": {
+        "name": "key-press",
+        "title": "A remote key, pressed and released.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string",
+              "description": "Any string, echoed as response-id and never validated -- a reused \"1\" included."
+            },
+            "param-key": {
+              "type": "string",
+              "examples": [
+                "Home",
+                "home",
+                "Lit_a",
+                "LIT_a"
+              ],
+              "description": "A button name, or Lit_ and exactly one raw UTF-8 character. Case is ignored, so a client that sends LIT_ works. Nothing is percent-decoded on this wire: Lit_%20 is 400 while a literal space is 200, although over HTTP /keypress/%48ome presses Home. Anything else, or a field spelled key, is 400."
+            }
+          }
+        }
+      },
+      "ecp-2.key-down": {
+        "name": "key-down",
+        "title": "A remote key, held.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            },
+            "param-key": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.key-up": {
+        "name": "key-up",
+        "title": "A held remote key, released.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            },
+            "param-key": {
+              "type": "string"
+            }
+          },
+          "description": "The set tracks what is held, character keys included: releasing a key that went down answers 200."
+        }
+      },
+      "ecp-2.query-device-info": {
+        "name": "query-device-info",
+        "title": "The device inventory, answered as base64 inside the envelope.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          },
+          "description": "Not a copy of the HTTP document: the envelope's adds virtual-device-id after udn, which HTTP /query/device-info of the same set leaves out."
+        }
+      },
+      "ecp-2.query-active-app": {
+        "name": "query-active-app",
+        "title": "The foreground channel, answered inside the envelope.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-apps": {
+        "name": "query-apps",
+        "title": "The installed channels, answered inside the envelope.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-media-player": {
+        "name": "query-media-player",
+        "title": "The player state, answered inside the envelope.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-textedit-state": {
+        "name": "query-textedit-state",
+        "title": "The focused text field, answered as JSON inside the envelope.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-audio-device": {
+        "name": "query-audio-device",
+        "title": "Audio destinations and volume, answered inside the envelope.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-tv-channels": {
+        "name": "query-tv-channels",
+        "title": "The tuner's channel list, answered inside the envelope.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

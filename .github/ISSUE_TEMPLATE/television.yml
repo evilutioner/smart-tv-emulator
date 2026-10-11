@@ -1,0 +1,51 @@
+name: A television you own
+description: A model or firmware the emulator does not have yet, on a television this build includes.
+labels: [capture]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a television this build does not include, use the contact link instead.
+        [Adding your television](https://github.com/evilutioner/smart-tv-emulator/blob/main/docs/adding-your-television.md)
+        says what a capture is and what to strip before sending one.
+  - type: input
+    id: model
+    attributes:
+      label: Brand and model number
+      description: As the set's own settings screen shows it.
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmware version
+    validations:
+      required: true
+  - type: input
+    id: app
+    attributes:
+      label: Remote app and version
+      description: The app or library you drive the set with.
+  - type: dropdown
+    id: access
+    attributes:
+      label: Can you run commands on the same network as the set?
+      options:
+        - "Yes, and I can record a capture myself"
+        - "Yes, with guidance"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: What you need it for
+      description: A driver you are writing, an app you are testing, a library you maintain, and what differs from the devices already captured.
+    validations:
+      required: true
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Before attaching anything
+      options:
+        - label: I replaced LAN addresses, MAC addresses, serial numbers, device ids and tokens, and attached no key or certificate from the set.

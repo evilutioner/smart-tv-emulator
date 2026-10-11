@@ -1,0 +1,471 @@
+{
+  "schema_version": 1,
+  "run_id": "20261007T195438Z",
+  "started_at": "2026-10-07T19:54:38+00:00",
+  "duration_s": 167.9,
+  "platform": "webos",
+  "client": {
+    "name": "aiowebostv",
+    "install": "pypi",
+    "requested": "0.10.0",
+    "upstream": "https://github.com/home-assistant-libs/aiowebostv",
+    "license": "Apache-2.0",
+    "version": "0.10.0",
+    "commit": "",
+    "environment": [
+      "aiohappyeyeballs==2.7.1",
+      "aiohttp==3.14.4",
+      "aiosignal==1.4.0",
+      "aiowebostv==0.10.0",
+      "attrs==26.1.0",
+      "frozenlist==1.8.0",
+      "idna==3.20",
+      "multidict==6.9.1",
+      "propcache==0.5.4",
+      "yarl==1.25.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.0.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "lg-webos-tv-uq81006lb",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 60
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            6,
+            23
+          ],
+          "duration_ms": 20071
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "known-gap",
+          "detail": "WebOsTvCommandTimeoutError: Response timed out for com.webos.applicationManager/listLaunchPoints with uid 6",
+          "events": [
+            23,
+            39
+          ],
+          "duration_ms": 20016,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the foreground application, its power fallback for sets without getPowerState. No capture holds it, and applicationManager is out of scope in the emulator; a subscription recorded off a paired set while an app is switched closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the launch points, Home Assistant's source list. No capture holds the set's launch points; recording the subscription's first answer off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the media pipeline's foreground app, Home Assistant's play and pause state. No capture holds it; recording the subscription off a paired set, with media playing and paused, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the sound output, which decides whether volume steps are paced. The captured getVolume carries soundOutput inside volumeStatus, but no capture holds this apiadapter subscription; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the network connection information, Home Assistant's MAC address. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the power state, which is what Home Assistant reads on and off from. No capture holds this subscription or its pushes; subscribing on a paired set, then turning its screen off and putting it to standby, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the software information, Home Assistant's firmware version. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getChannelList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "The foreground-app callback, given the error above, subscribes to the channel list. No capture holds the set's channel list; recording it off a paired set with tuned channels closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getExternalInputList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the external inputs, the rest of Home Assistant's source list. No capture holds the set's input list; recording it off a paired set closes the gap."
+        }
+      ],
+      "expect": null
+    },
+    {
+      "profile": "lg-webos-tv-ua75006la",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 57
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            6,
+            23
+          ],
+          "duration_ms": 20070
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "known-gap",
+          "detail": "WebOsTvCommandTimeoutError: Response timed out for com.webos.applicationManager/listLaunchPoints with uid 7",
+          "events": [
+            23,
+            39
+          ],
+          "duration_ms": 20023,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the foreground application, its power fallback for sets without getPowerState. No capture holds it, and applicationManager is out of scope in the emulator; a subscription recorded off a paired set while an app is switched closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the launch points, Home Assistant's source list. No capture holds the set's launch points; recording the subscription's first answer off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the media pipeline's foreground app, Home Assistant's play and pause state. No capture holds it; recording the subscription off a paired set, with media playing and paused, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the sound output, which decides whether volume steps are paced. The captured getVolume carries soundOutput inside volumeStatus, but no capture holds this apiadapter subscription; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the network connection information, Home Assistant's MAC address. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the power state, which is what Home Assistant reads on and off from. No capture holds this subscription or its pushes; subscribing on a paired set, then turning its screen off and putting it to standby, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the software information, Home Assistant's firmware version. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getChannelList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "The foreground-app callback, given the error above, subscribes to the channel list. No capture holds the set's channel list; recording it off a paired set with tuned channels closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getExternalInputList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the external inputs, the rest of Home Assistant's source list. No capture holds the set's input list; recording it off a paired set closes the gap."
+        }
+      ],
+      "expect": null
+    },
+    {
+      "profile": "sencor-webos-tv-sle50q871b",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 57
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            6,
+            23
+          ],
+          "duration_ms": 20069
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "known-gap",
+          "detail": "WebOsTvCommandTimeoutError: Response timed out for tv/getExternalInputList with uid 9",
+          "events": [
+            23,
+            39
+          ],
+          "duration_ms": 20021,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the foreground application, its power fallback for sets without getPowerState. No capture holds it, and applicationManager is out of scope in the emulator; a subscription recorded off a paired set while an app is switched closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the launch points, Home Assistant's source list. No capture holds the set's launch points; recording the subscription's first answer off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the media pipeline's foreground app, Home Assistant's play and pause state. No capture holds it; recording the subscription off a paired set, with media playing and paused, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the sound output, which decides whether volume steps are paced. The captured getVolume carries soundOutput inside volumeStatus, but no capture holds this apiadapter subscription; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the network connection information, Home Assistant's MAC address. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the power state, which is what Home Assistant reads on and off from. No capture holds this subscription or its pushes; subscribing on a paired set, then turning its screen off and putting it to standby, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the software information, Home Assistant's firmware version. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getChannelList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "The foreground-app callback, given the error above, subscribes to the channel list. No capture holds the set's channel list; recording it off a paired set with tuned channels closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getExternalInputList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the external inputs, the rest of Home Assistant's source list. No capture holds the set's input list; recording it off a paired set closes the gap."
+        }
+      ],
+      "expect": null
+    },
+    {
+      "profile": "sencor-webos-tv-sle65q871b",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 57
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            6,
+            23
+          ],
+          "duration_ms": 20070
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "known-gap",
+          "detail": "WebOsTvCommandTimeoutError: Response timed out for tv/getExternalInputList with uid 9",
+          "events": [
+            23,
+            39
+          ],
+          "duration_ms": 20021,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the foreground application, its power fallback for sets without getPowerState. No capture holds it, and applicationManager is out of scope in the emulator; a subscription recorded off a paired set while an app is switched closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the launch points, Home Assistant's source list. No capture holds the set's launch points; recording the subscription's first answer off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the media pipeline's foreground app, Home Assistant's play and pause state. No capture holds it; recording the subscription off a paired set, with media playing and paused, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the sound output, which decides whether volume steps are paced. The captured getVolume carries soundOutput inside volumeStatus, but no capture holds this apiadapter subscription; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the network connection information, Home Assistant's MAC address. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the power state, which is what Home Assistant reads on and off from. No capture holds this subscription or its pushes; subscribing on a paired set, then turning its screen off and putting it to standby, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() reads the software information, Home Assistant's firmware version. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getChannelList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "The foreground-app callback, given the error above, subscribes to the channel list. No capture holds the set's channel list; recording it off a paired set with tuned channels closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getExternalInputList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "connect() subscribes to the external inputs, the rest of Home Assistant's source list. No capture holds the set's input list; recording it off a paired set closes the gap."
+        }
+      ],
+      "expect": null
+    }
+  ]
+}

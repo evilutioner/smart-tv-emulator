@@ -1,0 +1,1721 @@
+{
+  "schema_version": 2,
+  "run_id": "20261009T111211Z",
+  "started_at": "2026-10-09T11:12:11+00:00",
+  "duration_s": 139.2,
+  "platform": "webos",
+  "client": {
+    "name": "aiowebostv",
+    "install": "pypi",
+    "requested": "0.10.0",
+    "upstream": "https://github.com/home-assistant-libs/aiowebostv",
+    "license": "Apache-2.0",
+    "version": "0.10.0",
+    "commit": "",
+    "environment": [
+      "aiohappyeyeballs==2.7.1",
+      "aiohttp==3.14.4",
+      "aiosignal==1.4.0",
+      "aiowebostv==0.10.0",
+      "attrs==26.1.0",
+      "frozenlist==1.8.0",
+      "idna==3.20",
+      "multidict==6.9.1",
+      "propcache==0.5.4",
+      "yarl==1.25.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.0.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "lg-webos-tv-uq81006lb",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "PIN and COMBINED pairing",
+          "action": "pair",
+          "status": "not-offered",
+          "detail": "aiowebostv always registers with pairingType PROMPT",
+          "events": [
+            0,
+            0
+          ],
+          "duration_ms": 0
+        },
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT rejected"
+          ],
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 60
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT accepted"
+          ],
+          "events": [
+            6,
+            15
+          ],
+          "duration_ms": 67
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "connect"
+          ],
+          "events": [
+            15,
+            21
+          ],
+          "duration_ms": 13
+        },
+        {
+          "name": "hello, system and connection info from the set",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "hello",
+            "system",
+            "connection"
+          ],
+          "events": [
+            21,
+            21
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "software information refused, as the set refuses it",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "software"
+          ],
+          "events": [
+            21,
+            21
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "service list",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "get_services"
+          ],
+          "events": [
+            21,
+            21
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "volume and mute read on connect",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "get_volume",
+            "get_muted",
+            "get_audio_status"
+          ],
+          "events": [
+            21,
+            21
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "power and foreground app read on connect",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "get_power_state",
+            "get_current_app",
+            "get_input"
+          ],
+          "events": [
+            21,
+            21
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "sound output and media foreground app",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "get_sound_output",
+            "get_media_foreground_app"
+          ],
+          "events": [
+            21,
+            21
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "D-pad, OK, Back and Home over the pointer socket",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "UP",
+            "DOWN",
+            "LEFT",
+            "RIGHT",
+            "ENTER",
+            "BACK",
+            "HOME"
+          ],
+          "events": [
+            21,
+            35
+          ],
+          "duration_ms": 12
+        },
+        {
+          "name": "other remote buttons over the pointer socket",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: ['button/INFO', 'button/RED', 'button/1', 'button/EXIT']",
+          "covers": [
+            "INFO",
+            "RED",
+            "1",
+            "EXIT"
+          ],
+          "events": [
+            35,
+            39
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "media and channel keys over SSAP",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "play",
+            "pause",
+            "stop",
+            "rewind",
+            "fast_forward",
+            "channel_up",
+            "channel_down"
+          ],
+          "events": [
+            39,
+            53
+          ],
+          "duration_ms": 12
+        },
+        {
+          "name": "pointer move and scroll",
+          "action": "pointer",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "move",
+            "scroll"
+          ],
+          "events": [
+            53,
+            55
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "pointer click",
+          "action": "pointer",
+          "status": "known-gap",
+          "detail": "AssertionError: [{'id': 56, 'time': '2026-10-09T11:12:17.223402+00:00', 'kind': 'unsupported', 'operation': 'pointer/click', 'transport': 'ws', 'peer': '127.0.0.1', 'status': 400, 'detail': 'Unknown pointer record', 'log_start_id': 0}]",
+          "covers": [
+            "click"
+          ],
+          "events": [
+            55,
+            56
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "volume up, down, set and mute, seen by the client",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "volume_up",
+            "volume_down",
+            "set_volume",
+            "set_mute"
+          ],
+          "events": [
+            56,
+            65
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "MUTE button over the pointer socket",
+          "action": "volume",
+          "status": "known-gap",
+          "detail": "AssertionError: ['button/MUTE']",
+          "covers": [
+            "MUTE"
+          ],
+          "events": [
+            65,
+            66
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "IME insert 'tvemu42' via request()",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits"
+          ],
+          "events": [
+            66,
+            69
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "IME delete two characters via request()",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "com.webos.service.ime/deleteCharacters"
+          ],
+          "events": [
+            69,
+            71
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "IME Enter via request()",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "com.webos.service.ime/sendEnterKey"
+          ],
+          "events": [
+            71,
+            73
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "launch an app, with params and with a content id",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "launch_app",
+            "launch_app_with_params",
+            "launch_app_with_content_id"
+          ],
+          "events": [
+            73,
+            76
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "list apps, inputs and channels",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "get_apps",
+            "get_inputs",
+            "get_channels"
+          ],
+          "events": [
+            76,
+            76
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "close the running app",
+          "action": "launch",
+          "status": "known-gap",
+          "detail": "WebOsTvServiceNotFoundError: 404 no such service or method",
+          "covers": [
+            "close_app"
+          ],
+          "events": [
+            76,
+            77
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "screen off and on, seen by the client",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "set_screen_state"
+          ],
+          "events": [
+            77,
+            79
+          ],
+          "duration_ms": 24
+        },
+        {
+          "name": "power off",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "power_off"
+          ],
+          "events": [
+            79,
+            81
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power on",
+          "action": "power",
+          "status": "known-gap",
+          "detail": "WebOsTvServiceNotFoundError: 404 no such service or method",
+          "covers": [
+            "power_on"
+          ],
+          "events": [
+            81,
+            82
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "heartbeat keeps the session open",
+          "action": "keepalive",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "heartbeat"
+          ],
+          "events": [
+            82,
+            82
+          ],
+          "duration_ms": 11012
+        },
+        {
+          "name": "disconnect",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            82,
+            84
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "reconnect with the stored client key, no prompt",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "client_key"
+          ],
+          "events": [
+            84,
+            90
+          ],
+          "duration_ms": 17
+        },
+        {
+          "name": "a forced disconnect clears the client key",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "client_key"
+          ],
+          "events": [
+            90,
+            98
+          ],
+          "duration_ms": 60
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "button/1",
+          "status": 400,
+          "count": 1,
+          "known": true,
+          "reason": "A pointer-socket digit no capture holds. Pressing it on a paired set closes the gap."
+        },
+        {
+          "operation": "button/EXIT",
+          "status": 400,
+          "count": 1,
+          "known": true,
+          "reason": "A pointer-socket button name no capture holds. Pressing it on a paired set closes the gap."
+        },
+        {
+          "operation": "button/INFO",
+          "status": 400,
+          "count": 1,
+          "known": true,
+          "reason": "A pointer-socket button name no capture holds. Pressing it on a paired set closes the gap."
+        },
+        {
+          "operation": "button/MUTE",
+          "status": 400,
+          "count": 1,
+          "known": true,
+          "reason": "aiowebostv sends remote buttons over the pointer socket. The capture holds the socket and the D-pad, OK, Back and Home names, not MUTE; the emulator refuses a name no capture shows. Pressing it on a paired set and reading getVolume before and after closes the gap."
+        },
+        {
+          "operation": "button/RED",
+          "status": 400,
+          "count": 1,
+          "known": true,
+          "reason": "A pointer-socket button name no capture holds. Pressing it on a paired set closes the gap."
+        },
+        {
+          "operation": "pointer/click",
+          "status": 400,
+          "count": 1,
+          "known": true,
+          "reason": "`click()` sends a type:click record over the pointer socket. The capture holds move and scroll records only, so the emulator answers it as an unknown record. A click recorded off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://system.launcher/close",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`close_app()` asks the launcher to close an app. system.launcher is out of the emulator's captured scope beyond launch and open; a close recorded off a paired set, with an app in front, closes the gap."
+        },
+        {
+          "operation": "ssap://system/turnOn",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`power_on()` sends system/turnOn, which a set only answers while its socket is up, so a capture needs the screen-off state rather than standby. Not recorded; doing so off a paired set closes the gap."
+        }
+      ],
+      "expect": {
+        "description": "aiowebostv: a rejected PROMPT, then an accepted one, over SSAP on TLS",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "AD",
+          "AMAZON",
+          "ASPECT_RATIO",
+          "ASTERISK",
+          "BACK",
+          "BLUE",
+          "CC",
+          "CHANNELDOWN",
+          "CHANNELUP",
+          "DASH",
+          "DOWN",
+          "ENTER",
+          "EXIT",
+          "FASTFORWARD",
+          "GREEN",
+          "GUIDE",
+          "HOME",
+          "INFO",
+          "INPUT_HUB",
+          "LEFT",
+          "LIST",
+          "LIVE_ZOOM",
+          "MAGNIFIER_ZOOM",
+          "MENU",
+          "MYAPPS",
+          "NETFLIX",
+          "PAUSE",
+          "PLAY",
+          "PROGRAM",
+          "QMENU",
+          "RECENT",
+          "RECORD",
+          "RED",
+          "REWIND",
+          "RIGHT",
+          "SAP",
+          "SCREEN_REMOTE",
+          "STOP",
+          "TELETEXT",
+          "TEXTOPTION",
+          "UP",
+          "YELLOW",
+          "channel_down",
+          "channel_up",
+          "fast_forward",
+          "pause",
+          "play",
+          "rewind",
+          "stop"
+        ],
+        "volume": [
+          "MUTE",
+          "VOLUMEDOWN",
+          "VOLUMEUP",
+          "change_sound_output",
+          "set_mute",
+          "set_volume",
+          "volume_down",
+          "volume_up"
+        ],
+        "power": [
+          "POWER",
+          "power_off",
+          "power_on",
+          "set_screen_state"
+        ],
+        "identity": [
+          "connection",
+          "hello",
+          "software",
+          "system"
+        ],
+        "state": [
+          "get_apps",
+          "get_apps_all",
+          "get_audio_status",
+          "get_channel_info",
+          "get_channels",
+          "get_current_app",
+          "get_current_channel",
+          "get_input",
+          "get_inputs",
+          "get_media_foreground_app",
+          "get_muted",
+          "get_power_state",
+          "get_services",
+          "get_sound_output",
+          "get_volume"
+        ],
+        "text": [
+          "com.webos.service.ime/deleteCharacters",
+          "com.webos.service.ime/sendEnterKey",
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "pointer": [
+          "click",
+          "drag",
+          "move",
+          "scroll"
+        ],
+        "auth": [
+          "PROMPT accepted",
+          "PROMPT rejected"
+        ],
+        "session": [
+          "client_key",
+          "connect",
+          "disconnect",
+          "heartbeat"
+        ],
+        "apps": [
+          "close",
+          "close_app",
+          "launch_app",
+          "launch_app_with_content_id",
+          "launch_app_with_params",
+          "send_message",
+          "set_channel",
+          "set_input"
+        ]
+      },
+      "answers": [
+        {
+          "status": 400,
+          "operation": "button/1",
+          "count": 1
+        },
+        {
+          "status": 400,
+          "operation": "button/EXIT",
+          "count": 1
+        },
+        {
+          "status": 400,
+          "operation": "button/INFO",
+          "count": 1
+        },
+        {
+          "status": 400,
+          "operation": "button/MUTE",
+          "count": 1
+        },
+        {
+          "status": 400,
+          "operation": "button/RED",
+          "count": 1
+        },
+        {
+          "status": 400,
+          "operation": "pointer/click",
+          "count": 1
+        },
+        {
+          "status": 401,
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "count": 3
+        },
+        {
+          "status": 401,
+          "operation": "ssap://system/getSystemInfo",
+          "count": 5
+        },
+        {
+          "status": 403,
+          "operation": "pairing.rejected",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://system.launcher/close",
+          "count": 1
+        },
+        {
+          "status": 404,
+          "operation": "ssap://system/turnOn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "lg-webos-tv-ua75006la",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "PIN and COMBINED pairing",
+          "action": "pair",
+          "status": "not-offered",
+          "detail": "aiowebostv always registers with pairingType PROMPT",
+          "events": [
+            0,
+            0
+          ],
+          "duration_ms": 0
+        },
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT rejected"
+          ],
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 57
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT accepted"
+          ],
+          "events": [
+            6,
+            23
+          ],
+          "duration_ms": 20073
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "known-gap",
+          "detail": "WebOsTvCommandTimeoutError: Response timed out for tv/getExternalInputList with uid 7",
+          "covers": [
+            "connect"
+          ],
+          "events": [
+            23,
+            39
+          ],
+          "duration_ms": 20015,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the foreground application, its power fallback for sets without getPowerState. No capture holds it, and applicationManager is out of scope in the emulator; a subscription recorded off a paired set while an app is switched closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the launch points, Home Assistant's source list. No capture holds the set's launch points; recording the subscription's first answer off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the media pipeline's foreground app, Home Assistant's play and pause state. No capture holds it; recording the subscription off a paired set, with media playing and paused, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the sound output, which decides whether volume steps are paced. The captured getVolume carries soundOutput inside volumeStatus, but no capture holds this apiadapter subscription; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() reads the network connection information, Home Assistant's MAC address. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the power state, which is what Home Assistant reads on and off from. No capture holds this subscription or its pushes; subscribing on a paired set, then turning its screen off and putting it to standby, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() reads the software information, Home Assistant's firmware version. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getChannelList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. The foreground-app callback, given the error above, subscribes to the channel list. No capture holds the set's channel list; recording it off a paired set with tuned channels closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getExternalInputList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the external inputs, the rest of Home Assistant's source list. No capture holds the set's input list; recording it off a paired set closes the gap."
+        }
+      ],
+      "expect": null,
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "AD",
+          "AMAZON",
+          "ASPECT_RATIO",
+          "ASTERISK",
+          "BACK",
+          "BLUE",
+          "CC",
+          "CHANNELDOWN",
+          "CHANNELUP",
+          "DASH",
+          "DOWN",
+          "ENTER",
+          "EXIT",
+          "FASTFORWARD",
+          "GREEN",
+          "GUIDE",
+          "HOME",
+          "INFO",
+          "INPUT_HUB",
+          "LEFT",
+          "LIST",
+          "LIVE_ZOOM",
+          "MAGNIFIER_ZOOM",
+          "MENU",
+          "MYAPPS",
+          "NETFLIX",
+          "PAUSE",
+          "PLAY",
+          "PROGRAM",
+          "QMENU",
+          "RECENT",
+          "RECORD",
+          "RED",
+          "REWIND",
+          "RIGHT",
+          "SAP",
+          "SCREEN_REMOTE",
+          "STOP",
+          "TELETEXT",
+          "TEXTOPTION",
+          "UP",
+          "YELLOW",
+          "channel_down",
+          "channel_up",
+          "fast_forward",
+          "pause",
+          "play",
+          "rewind",
+          "stop"
+        ],
+        "volume": [
+          "MUTE",
+          "VOLUMEDOWN",
+          "VOLUMEUP",
+          "change_sound_output",
+          "set_mute",
+          "set_volume",
+          "volume_down",
+          "volume_up"
+        ],
+        "power": [
+          "POWER",
+          "power_off",
+          "power_on",
+          "set_screen_state"
+        ],
+        "identity": [
+          "connection",
+          "hello",
+          "software",
+          "system"
+        ],
+        "state": [
+          "get_apps",
+          "get_apps_all",
+          "get_audio_status",
+          "get_channel_info",
+          "get_channels",
+          "get_current_app",
+          "get_current_channel",
+          "get_input",
+          "get_inputs",
+          "get_media_foreground_app",
+          "get_muted",
+          "get_power_state",
+          "get_services",
+          "get_sound_output",
+          "get_volume"
+        ],
+        "text": [
+          "com.webos.service.ime/deleteCharacters",
+          "com.webos.service.ime/sendEnterKey",
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "pointer": [
+          "click",
+          "drag",
+          "move",
+          "scroll"
+        ],
+        "auth": [
+          "PROMPT accepted",
+          "PROMPT rejected"
+        ],
+        "session": [
+          "client_key",
+          "connect",
+          "disconnect",
+          "heartbeat"
+        ],
+        "apps": [
+          "close",
+          "close_app",
+          "launch_app",
+          "launch_app_with_content_id",
+          "launch_app_with_params",
+          "send_message",
+          "set_channel",
+          "set_input"
+        ]
+      },
+      "answers": [
+        {
+          "status": 401,
+          "operation": "ssap://system/getSystemInfo",
+          "count": 3
+        },
+        {
+          "status": 403,
+          "operation": "pairing.rejected",
+          "count": 1
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://tv/getChannelList",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://tv/getExternalInputList",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "profile": "sencor-webos-tv-sle50q871b",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "PIN and COMBINED pairing",
+          "action": "pair",
+          "status": "not-offered",
+          "detail": "aiowebostv always registers with pairingType PROMPT",
+          "events": [
+            0,
+            0
+          ],
+          "duration_ms": 0
+        },
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT rejected"
+          ],
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 57
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT accepted"
+          ],
+          "events": [
+            6,
+            23
+          ],
+          "duration_ms": 20062
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "known-gap",
+          "detail": "WebOsTvCommandTimeoutError: Response timed out for com.webos.applicationManager/listLaunchPoints with uid 7",
+          "covers": [
+            "connect"
+          ],
+          "events": [
+            23,
+            39
+          ],
+          "duration_ms": 20015,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the foreground application, its power fallback for sets without getPowerState. No capture holds it, and applicationManager is out of scope in the emulator; a subscription recorded off a paired set while an app is switched closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the launch points, Home Assistant's source list. No capture holds the set's launch points; recording the subscription's first answer off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the media pipeline's foreground app, Home Assistant's play and pause state. No capture holds it; recording the subscription off a paired set, with media playing and paused, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the sound output, which decides whether volume steps are paced. The captured getVolume carries soundOutput inside volumeStatus, but no capture holds this apiadapter subscription; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() reads the network connection information, Home Assistant's MAC address. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the power state, which is what Home Assistant reads on and off from. No capture holds this subscription or its pushes; subscribing on a paired set, then turning its screen off and putting it to standby, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() reads the software information, Home Assistant's firmware version. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getChannelList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. The foreground-app callback, given the error above, subscribes to the channel list. No capture holds the set's channel list; recording it off a paired set with tuned channels closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getExternalInputList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the external inputs, the rest of Home Assistant's source list. No capture holds the set's input list; recording it off a paired set closes the gap."
+        }
+      ],
+      "expect": null,
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "AD",
+          "AMAZON",
+          "ASPECT_RATIO",
+          "ASTERISK",
+          "BACK",
+          "BLUE",
+          "CC",
+          "CHANNELDOWN",
+          "CHANNELUP",
+          "DASH",
+          "DOWN",
+          "ENTER",
+          "EXIT",
+          "FASTFORWARD",
+          "GREEN",
+          "GUIDE",
+          "HOME",
+          "INFO",
+          "INPUT_HUB",
+          "LEFT",
+          "LIST",
+          "LIVE_ZOOM",
+          "MAGNIFIER_ZOOM",
+          "MENU",
+          "MYAPPS",
+          "NETFLIX",
+          "PAUSE",
+          "PLAY",
+          "PROGRAM",
+          "QMENU",
+          "RECENT",
+          "RECORD",
+          "RED",
+          "REWIND",
+          "RIGHT",
+          "SAP",
+          "SCREEN_REMOTE",
+          "STOP",
+          "TELETEXT",
+          "TEXTOPTION",
+          "UP",
+          "YELLOW",
+          "channel_down",
+          "channel_up",
+          "fast_forward",
+          "pause",
+          "play",
+          "rewind",
+          "stop"
+        ],
+        "volume": [
+          "MUTE",
+          "VOLUMEDOWN",
+          "VOLUMEUP",
+          "change_sound_output",
+          "set_mute",
+          "set_volume",
+          "volume_down",
+          "volume_up"
+        ],
+        "power": [
+          "POWER",
+          "power_off",
+          "power_on",
+          "set_screen_state"
+        ],
+        "identity": [
+          "connection",
+          "hello",
+          "software",
+          "system"
+        ],
+        "state": [
+          "get_apps",
+          "get_apps_all",
+          "get_audio_status",
+          "get_channel_info",
+          "get_channels",
+          "get_current_app",
+          "get_current_channel",
+          "get_input",
+          "get_inputs",
+          "get_media_foreground_app",
+          "get_muted",
+          "get_power_state",
+          "get_services",
+          "get_sound_output",
+          "get_volume"
+        ],
+        "text": [
+          "com.webos.service.ime/deleteCharacters",
+          "com.webos.service.ime/sendEnterKey",
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "pointer": [
+          "click",
+          "drag",
+          "move",
+          "scroll"
+        ],
+        "auth": [
+          "PROMPT accepted",
+          "PROMPT rejected"
+        ],
+        "session": [
+          "client_key",
+          "connect",
+          "disconnect",
+          "heartbeat"
+        ],
+        "apps": [
+          "close",
+          "close_app",
+          "launch_app",
+          "launch_app_with_content_id",
+          "launch_app_with_params",
+          "send_message",
+          "set_channel",
+          "set_input"
+        ]
+      },
+      "answers": [
+        {
+          "status": 401,
+          "operation": "ssap://system/getSystemInfo",
+          "count": 3
+        },
+        {
+          "status": 403,
+          "operation": "pairing.rejected",
+          "count": 1
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://tv/getChannelList",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://tv/getExternalInputList",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "profile": "sencor-webos-tv-sle65q871b",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "PIN and COMBINED pairing",
+          "action": "pair",
+          "status": "not-offered",
+          "detail": "aiowebostv always registers with pairingType PROMPT",
+          "events": [
+            0,
+            0
+          ],
+          "duration_ms": 0
+        },
+        {
+          "name": "a rejected prompt refuses the pairing",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT rejected"
+          ],
+          "events": [
+            1,
+            6
+          ],
+          "duration_ms": 57
+        },
+        {
+          "name": "PROMPT pairing accepted on the set",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PROMPT accepted"
+          ],
+          "events": [
+            6,
+            23
+          ],
+          "duration_ms": 20078
+        },
+        {
+          "name": "connect with the client key, reading and subscribing to state",
+          "action": "connect",
+          "status": "known-gap",
+          "detail": "WebOsTvCommandTimeoutError: Response timed out for tv/getExternalInputList with uid 9",
+          "covers": [
+            "connect"
+          ],
+          "events": [
+            23,
+            39
+          ],
+          "duration_ms": 20025,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the foreground application, its power fallback for sets without getPowerState. No capture holds it, and applicationManager is out of scope in the emulator; a subscription recorded off a paired set while an app is switched closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the launch points, Home Assistant's source list. No capture holds the set's launch points; recording the subscription's first answer off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the media pipeline's foreground app, Home Assistant's play and pause state. No capture holds it; recording the subscription off a paired set, with media playing and paused, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the sound output, which decides whether volume steps are paced. The captured getVolume carries soundOutput inside volumeStatus, but no capture holds this apiadapter subscription; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() reads the network connection information, Home Assistant's MAC address. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the power state, which is what Home Assistant reads on and off from. No capture holds this subscription or its pushes; subscribing on a paired set, then turning its screen off and putting it to standby, closes the gap."
+        },
+        {
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() reads the software information, Home Assistant's firmware version. The client tolerates its absence, but no capture holds the answer; recording it off a paired set closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getChannelList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. The foreground-app callback, given the error above, subscribes to the channel list. No capture holds the set's channel list; recording it off a paired set with tuned channels closes the gap."
+        },
+        {
+          "operation": "ssap://tv/getExternalInputList",
+          "status": 404,
+          "count": 2,
+          "known": true,
+          "reason": "Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. connect() subscribes to the external inputs, the rest of Home Assistant's source list. No capture holds the set's input list; recording it off a paired set closes the gap."
+        }
+      ],
+      "expect": null,
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "AD",
+          "AMAZON",
+          "ASPECT_RATIO",
+          "ASTERISK",
+          "BACK",
+          "BLUE",
+          "CC",
+          "CHANNELDOWN",
+          "CHANNELUP",
+          "DASH",
+          "DOWN",
+          "ENTER",
+          "EXIT",
+          "FASTFORWARD",
+          "GREEN",
+          "GUIDE",
+          "HOME",
+          "INFO",
+          "INPUT_HUB",
+          "LEFT",
+          "LIST",
+          "LIVE_ZOOM",
+          "MAGNIFIER_ZOOM",
+          "MENU",
+          "MYAPPS",
+          "NETFLIX",
+          "PAUSE",
+          "PLAY",
+          "PROGRAM",
+          "QMENU",
+          "RECENT",
+          "RECORD",
+          "RED",
+          "REWIND",
+          "RIGHT",
+          "SAP",
+          "SCREEN_REMOTE",
+          "STOP",
+          "TELETEXT",
+          "TEXTOPTION",
+          "UP",
+          "YELLOW",
+          "channel_down",
+          "channel_up",
+          "fast_forward",
+          "pause",
+          "play",
+          "rewind",
+          "stop"
+        ],
+        "volume": [
+          "MUTE",
+          "VOLUMEDOWN",
+          "VOLUMEUP",
+          "change_sound_output",
+          "set_mute",
+          "set_volume",
+          "volume_down",
+          "volume_up"
+        ],
+        "power": [
+          "POWER",
+          "power_off",
+          "power_on",
+          "set_screen_state"
+        ],
+        "identity": [
+          "connection",
+          "hello",
+          "software",
+          "system"
+        ],
+        "state": [
+          "get_apps",
+          "get_apps_all",
+          "get_audio_status",
+          "get_channel_info",
+          "get_channels",
+          "get_current_app",
+          "get_current_channel",
+          "get_input",
+          "get_inputs",
+          "get_media_foreground_app",
+          "get_muted",
+          "get_power_state",
+          "get_services",
+          "get_sound_output",
+          "get_volume"
+        ],
+        "text": [
+          "com.webos.service.ime/deleteCharacters",
+          "com.webos.service.ime/sendEnterKey",
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "pointer": [
+          "click",
+          "drag",
+          "move",
+          "scroll"
+        ],
+        "auth": [
+          "PROMPT accepted",
+          "PROMPT rejected"
+        ],
+        "session": [
+          "client_key",
+          "connect",
+          "disconnect",
+          "heartbeat"
+        ],
+        "apps": [
+          "close",
+          "close_app",
+          "launch_app",
+          "launch_app_with_content_id",
+          "launch_app_with_params",
+          "send_message",
+          "set_channel",
+          "set_input"
+        ]
+      },
+      "answers": [
+        {
+          "status": 401,
+          "operation": "ssap://system/getSystemInfo",
+          "count": 3
+        },
+        {
+          "status": 403,
+          "operation": "pairing.rejected",
+          "count": 1
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.applicationManager/getForegroundAppInfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.applicationManager/listLaunchPoints",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.media/getForegroundAppInfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.apiadapter/audio/getSoundOutput",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.connectionmanager/getinfo",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.tvpower/power/getPowerState",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://com.webos.service.update/getCurrentSWInformation",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://tv/getChannelList",
+          "count": 2
+        },
+        {
+          "status": 404,
+          "operation": "ssap://tv/getExternalInputList",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

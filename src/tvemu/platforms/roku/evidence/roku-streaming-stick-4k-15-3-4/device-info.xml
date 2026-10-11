@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<device-info>
+	<udn>28002140-0000-1000-8000-020000000030</udn>
+	<serial-number>X02500EM0030</serial-number>
+	<device-id>E0MU00000030</device-id>
+	<advertising-id>00000000-0000-4000-8000-000000000030</advertising-id>
+	<user-profile-type>none</user-profile-type>
+	<vendor-name>Roku</vendor-name>
+	<model-name>Streaming Stick 4K</model-name>
+	<model-number>3820EU2</model-number>
+	<model-region>US</model-region>
+	<is-tv>false</is-tv>
+	<is-stick>true</is-stick>
+	<mobile-has-live-tv>false</mobile-has-live-tv>
+	<ui-resolution>1080p</ui-resolution>
+	<supports-ethernet>false</supports-ethernet>
+	<wifi-mac>02:00:00:00:00:30</wifi-mac>
+	<wifi-driver>realtek</wifi-driver>
+	<has-wifi-5G-support>true</has-wifi-5G-support>
+	<network-type>wifi</network-type>
+	<network-name>Emulator Wi-Fi</network-name>
+	<friendly-device-name>Roku Streaming Stick 4K</friendly-device-name>
+	<friendly-model-name>Streaming Stick 4K</friendly-model-name>
+	<default-device-name>Streaming Stick 4K - X02500EM0030</default-device-name>
+	<user-device-name>Roku Streaming Stick 4K</user-device-name>
+	<user-device-location>Emulator Lab</user-device-location>
+	<build-number>E6G.34E02402A</build-number>
+	<software-version>15.3.4</software-version>
+	<software-build>2402</software-build>
+	<lightning-base-build-number />
+	<ui-build-number>E6G.34E02402A</ui-build-number>
+	<ui-software-version>15.3.4</ui-software-version>
+	<ui-software-build>2402</ui-software-build>
+	<secure-device>true</secure-device>
+	<ecp-setting-mode>enabled</ecp-setting-mode>
+	<language>en</language>
+	<country>OT</country>
+	<locale>en_US</locale>
+	<closed-caption-mode>Instant replay</closed-caption-mode>
+	<time-zone-auto>true</time-zone-auto>
+	<time-zone>Asia/Nicosia</time-zone>
+	<time-zone-name>Asia/Nicosia</time-zone-name>
+	<time-zone-tz>Asia/Nicosia</time-zone-tz>
+	<time-zone-offset>180</time-zone-offset>
+	<clock-format>12-hour</clock-format>
+	<uptime>628</uptime>
+	<power-mode>PowerOn</power-mode>
+	<supports-suspend>true</supports-suspend>
+	<supports-find-remote>true</supports-find-remote>
+	<find-remote-is-possible>false</find-remote-is-possible>
+	<supports-audio-guide>true</supports-audio-guide>
+	<supports-rva>true</supports-rva>
+	<has-hands-free-voice-remote>false</has-hands-free-voice-remote>
+	<developer-enabled>true</developer-enabled>
+	<keyed-developer-id>0000000000000000000000000000000000000030</keyed-developer-id>
+	<device-automation-bridge-enabled>false</device-automation-bridge-enabled>
+	<search-enabled>false</search-enabled>
+	<search-channels-enabled>false</search-channels-enabled>
+	<voice-search-enabled>false</voice-search-enabled>
+	<supports-private-listening>true</supports-private-listening>
+	<private-listening-blocked>false</private-listening-blocked>
+	<headphones-connected>false</headphones-connected>
+	<supports-audio-settings>false</supports-audio-settings>
+	<supports-ecs-textedit>true</supports-ecs-textedit>
+	<supports-ecs-microphone>true</supports-ecs-microphone>
+	<supports-wake-on-wlan>false</supports-wake-on-wlan>
+	<supports-airplay>true</supports-airplay>
+	<has-play-on-roku>false</has-play-on-roku>
+	<has-mobile-screensaver>false</has-mobile-screensaver>
+	<support-url>roku.com/support</support-url>
+	<grandcentral-version>26.38.10</grandcentral-version>
+	<supports-trc>false</supports-trc>
+	<av-sync-calibration-enabled>3.0</av-sync-calibration-enabled>
+	<is-powered-by-tv>false</is-powered-by-tv>
+	<supports-cec-power-control>true</supports-cec-power-control>
+	<supports-cec-audio-volume-control>false</supports-cec-audio-volume-control>
+	<brightscript-debugger-version>3.5.0</brightscript-debugger-version>
+</device-info>

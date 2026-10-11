@@ -1,0 +1,8 @@
+.venv*/
+.tvemu/
+.DS_Store
+__pycache__/
+*.egg-info/
+build/
+dist/
+uv.lock

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "id": "roku-streaming-stick-4k-15-3-4",
+  "device": {"display_name":"Roku Streaming Stick 4K (15.3.4)","model_name":"3820EU2","model_number":"3820EU2","software_version":"15.3.4"},
+  "source": {"kind":"captured","captured_at":"2026-09-23","description":"Partial ECP query capture from a physical Streaming Stick 4K. Unit, network and private application identifiers were replaced with same-shape emulator-owned values. The capture has no discovery or port evidence and therefore cannot back an emulated profile."},
+  "platform": {},
+  "exchanges": [
+    {"id":"http.device-description","operation_id":"roku.http.device-description","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"device-description.xml"}]},
+    {"id":"http.device-info","operation_id":"roku.http.device-info","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/query/device-info"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"device-info.xml"}]},
+    {"id":"http.apps","operation_id":"roku.http.apps","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/query/apps"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"apps.xml"}]},
+    {"id":"http.active-app","operation_id":"roku.http.active-app","transport":"http","steps":[{"direction":"in","metadata":{"method":"GET","path":"/query/active-app"}},{"direction":"out","metadata":{"status":200,"headers":{"Content-Type":"text/xml"}},"payload":"active-app.xml"}]}
+  ]
+}

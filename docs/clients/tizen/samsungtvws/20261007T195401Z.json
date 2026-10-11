@@ -1,0 +1,913 @@
+{
+  "schema_version": 1,
+  "run_id": "20261007T195401Z",
+  "started_at": "2026-10-07T19:54:01+00:00",
+  "duration_s": 36.6,
+  "platform": "tizen",
+  "client": {
+    "name": "samsungtvws",
+    "install": "pypi",
+    "requested": "3.0.6",
+    "upstream": "https://github.com/xchwarze/samsung-tv-ws-api",
+    "license": "LGPL-3.0",
+    "version": "3.0.6",
+    "commit": "",
+    "environment": [
+      "certifi==2026.7.22",
+      "charset-normalizer==3.5.2",
+      "idna==3.20",
+      "multidict==7.0.0",
+      "propcache==0.5.4",
+      "requests==2.34.2",
+      "samsungtvws==3.0.6",
+      "urllib3==2.8.0",
+      "websocket-client==1.9.2",
+      "yarl==1.25.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.0.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "samsung-tizen-tv-ue65u8072f",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "REST device info on 8001",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            2,
+            3
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "art mode reported unsupported",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            3,
+            4
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "an unknown token is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            4,
+            6
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "a denied prompt is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            6,
+            8
+          ],
+          "duration_ms": 56
+        },
+        {
+          "name": "the Allow prompt issues a token",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            8,
+            11
+          ],
+          "duration_ms": 59
+        },
+        {
+          "name": "connected over TLS",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            11
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            13
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "key held for a second, then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            13,
+            17
+          ],
+          "duration_ms": 1512
+        },
+        {
+          "name": "volume up and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            17,
+            21
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "text into a focused field, then end",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            21,
+            27
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "text through the REST IME on 8001",
+          "action": "text",
+          "status": "known-gap",
+          "detail": "AssertionError: the set refused it",
+          "events": [
+            27,
+            28
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "installed applications",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            28,
+            29
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch by deep link and the browser by URL",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            29,
+            33
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch over REST on 8001",
+          "action": "launch",
+          "status": "known-failure",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            33,
+            35
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "application status over REST on 8001",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            35,
+            36
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "REST device info over TLS on 8002, as Home Assistant reads it",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            36,
+            37
+          ],
+          "duration_ms": 12
+        },
+        {
+          "name": "pointer movement",
+          "action": "pointer",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for a pointer command",
+          "events": [
+            37,
+            38
+          ],
+          "duration_ms": 5024
+        },
+        {
+          "name": "power off and on, seen over REST",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            38,
+            44
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "close the channel",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            44,
+            45
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "reconnect with the saved token, no prompt",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            45,
+            49
+          ],
+          "duration_ms": 10
+        },
+        {
+          "name": "a forced disconnect revokes the token",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            49,
+            55
+          ],
+          "duration_ms": 3342
+        },
+        {
+          "name": "the plaintext channel on 8001, which sends no token",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            55,
+            61
+          ],
+          "duration_ms": 60
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "GET /api/v2/",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "Home Assistant reads /api/v2/ on the port its remote uses, which is https on 8002. The identity document was captured only over plain HTTP on 8001, where it is served; a capture of GET https://<set>:8002/api/v2/ closes the gap."
+        },
+        {
+          "operation": "GET /api/v2/applications/111299001912",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`rest_app_status()` asks for one application's status document. No capture holds it; recording it off a set closes the gap."
+        },
+        {
+          "operation": "POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=65000001",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port. No capture holds that request; a capture of it against a set, with a valid token, closes the gap."
+        },
+        {
+          "operation": "ms.channel.emit/custom.remote.textReceived",
+          "status": null,
+          "count": 1,
+          "known": true,
+          "reason": "After text entry the client emits custom.remote.textReceived on the channel. No capture holds this event or any answer to it; the emulator stays silent, as the client expects none. A recording off a set closes the gap."
+        },
+        {
+          "operation": "ms.remote.control/ProcessMouseDevice",
+          "status": null,
+          "count": 1,
+          "known": true,
+          "reason": "`move_cursor()` sends ms.remote.control with TypeOfRemote ProcessMouseDevice. The channel is built to the reference client's contract, which has no pointer; a recording of the frame and of what the set does with it (the UE65U8072F reports mouseWheelSupport) closes the gap."
+        }
+      ],
+      "expect": {
+        "description": "samsungtvws: identity over REST, a refused token, the Allow prompt and its token, then keys, text, the app list and launches over the TLS channel, and a reconnect with the token",
+        "problems": []
+      }
+    },
+    {
+      "profile": "samsung-tizen-tv-ue55du7172u",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "REST device info on 8001",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            2,
+            3
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "art mode reported unsupported",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            3,
+            4
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "an unknown token is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            4,
+            6
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "a denied prompt is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            6,
+            8
+          ],
+          "duration_ms": 55
+        },
+        {
+          "name": "the Allow prompt issues a token",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            8,
+            11
+          ],
+          "duration_ms": 57
+        },
+        {
+          "name": "connected over TLS",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            11
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            13
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key held for a second, then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            13,
+            17
+          ],
+          "duration_ms": 1506
+        },
+        {
+          "name": "volume up and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            17,
+            21
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "text into a focused field, then end",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            21,
+            27
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "text through the REST IME on 8001",
+          "action": "text",
+          "status": "known-gap",
+          "detail": "AssertionError: the set refused it",
+          "events": [
+            27,
+            28
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "installed applications",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            28,
+            29
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch by deep link and the browser by URL",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            29,
+            33
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch over REST on 8001",
+          "action": "launch",
+          "status": "known-failure",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            33,
+            35
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "application status over REST on 8001",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            35,
+            36
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "REST device info over TLS on 8002, as Home Assistant reads it",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            36,
+            37
+          ],
+          "duration_ms": 12
+        },
+        {
+          "name": "pointer movement",
+          "action": "pointer",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for a pointer command",
+          "events": [
+            37,
+            38
+          ],
+          "duration_ms": 5010
+        },
+        {
+          "name": "power off and on, seen over REST",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            38,
+            44
+          ],
+          "duration_ms": 10
+        },
+        {
+          "name": "close the channel",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            44,
+            45
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "reconnect with the saved token, no prompt",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            45,
+            49
+          ],
+          "duration_ms": 10
+        },
+        {
+          "name": "a forced disconnect revokes the token",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            49,
+            55
+          ],
+          "duration_ms": 3381
+        },
+        {
+          "name": "the plaintext channel on 8001, which sends no token",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            55,
+            60
+          ],
+          "duration_ms": 60
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "GET /api/v2/",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "Home Assistant reads /api/v2/ on the port its remote uses, which is https on 8002. The identity document was captured only over plain HTTP on 8001, where it is served; a capture of GET https://<set>:8002/api/v2/ closes the gap."
+        },
+        {
+          "operation": "GET /api/v2/applications/111299001912",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`rest_app_status()` asks for one application's status document. No capture holds it; recording it off a set closes the gap."
+        },
+        {
+          "operation": "POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=55000002",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port. No capture holds that request; a capture of it against a set, with a valid token, closes the gap."
+        },
+        {
+          "operation": "ms.channel.emit/custom.remote.textReceived",
+          "status": null,
+          "count": 1,
+          "known": true,
+          "reason": "After text entry the client emits custom.remote.textReceived on the channel. No capture holds this event or any answer to it; the emulator stays silent, as the client expects none. A recording off a set closes the gap."
+        },
+        {
+          "operation": "ms.remote.control/ProcessMouseDevice",
+          "status": null,
+          "count": 1,
+          "known": true,
+          "reason": "`move_cursor()` sends ms.remote.control with TypeOfRemote ProcessMouseDevice. The channel is built to the reference client's contract, which has no pointer; a recording of the frame and of what the set does with it (the UE65U8072F reports mouseWheelSupport) closes the gap."
+        }
+      ],
+      "expect": {
+        "description": "samsungtvws: identity over REST, a refused token, the Allow prompt and its token, then keys, text, the app list and launches over the TLS channel, and a reconnect with the token",
+        "problems": []
+      }
+    },
+    {
+      "profile": "samsung-tizen-tv-ue43cu7172u",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "REST device info on 8001",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            2,
+            3
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "art mode reported unsupported",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            3,
+            4
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "an unknown token is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            4,
+            6
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "a denied prompt is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            6,
+            8
+          ],
+          "duration_ms": 55
+        },
+        {
+          "name": "the Allow prompt issues a token",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            8,
+            11
+          ],
+          "duration_ms": 56
+        },
+        {
+          "name": "connected over TLS",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            11
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            13
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key held for a second, then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            13,
+            17
+          ],
+          "duration_ms": 1510
+        },
+        {
+          "name": "volume up and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            17,
+            21
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "text into a focused field, then end",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            21,
+            27
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "text through the REST IME on 8001",
+          "action": "text",
+          "status": "known-gap",
+          "detail": "AssertionError: the set refused it",
+          "events": [
+            27,
+            28
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "installed applications",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            28,
+            29
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch by deep link and the browser by URL",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            29,
+            33
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch over REST on 8001",
+          "action": "launch",
+          "status": "known-failure",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            33,
+            35
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "application status over REST on 8001",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            35,
+            36
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "REST device info over TLS on 8002, as Home Assistant reads it",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "ResponseError: Failed to parse response from TV. Maybe feature not supported on this model",
+          "events": [
+            36,
+            37
+          ],
+          "duration_ms": 12
+        },
+        {
+          "name": "pointer movement",
+          "action": "pointer",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for a pointer command",
+          "events": [
+            37,
+            38
+          ],
+          "duration_ms": 5016
+        },
+        {
+          "name": "power off and on, seen over REST",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            38,
+            44
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "close the channel",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            44,
+            45
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "reconnect with the saved token, no prompt",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            45,
+            49
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "a forced disconnect revokes the token",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            49,
+            55
+          ],
+          "duration_ms": 3371
+        },
+        {
+          "name": "the plaintext channel on 8001, which sends no token",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            55,
+            60
+          ],
+          "duration_ms": 63
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "GET /api/v2/",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "Home Assistant reads /api/v2/ on the port its remote uses, which is https on 8002. The identity document was captured only over plain HTTP on 8001, where it is served; a capture of GET https://<set>:8002/api/v2/ closes the gap."
+        },
+        {
+          "operation": "GET /api/v2/applications/111299001912",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`rest_app_status()` asks for one application's status document. No capture holds it; recording it off a set closes the gap."
+        },
+        {
+          "operation": "POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=43000003",
+          "status": 404,
+          "count": 1,
+          "known": true,
+          "reason": "`send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port. No capture holds that request; a capture of it against a set, with a valid token, closes the gap."
+        },
+        {
+          "operation": "ms.channel.emit/custom.remote.textReceived",
+          "status": null,
+          "count": 1,
+          "known": true,
+          "reason": "After text entry the client emits custom.remote.textReceived on the channel. No capture holds this event or any answer to it; the emulator stays silent, as the client expects none. A recording off a set closes the gap."
+        },
+        {
+          "operation": "ms.remote.control/ProcessMouseDevice",
+          "status": null,
+          "count": 1,
+          "known": true,
+          "reason": "`move_cursor()` sends ms.remote.control with TypeOfRemote ProcessMouseDevice. The channel is built to the reference client's contract, which has no pointer; a recording of the frame and of what the set does with it (the UE65U8072F reports mouseWheelSupport) closes the gap."
+        }
+      ],
+      "expect": {
+        "description": "samsungtvws: identity over REST, a refused token, the Allow prompt and its token, then keys, text, the app list and launches over the TLS channel, and a reconnect with the token",
+        "problems": []
+      }
+    }
+  ]
+}

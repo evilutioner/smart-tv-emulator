@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "run_id": "20261008T070753Z",
+  "started_at": "2026-10-08T07:07:53+00:00",
+  "duration_s": 4.7,
+  "platform": "philips",
+  "client": {
+    "name": "ha-philipsjs",
+    "install": "pypi",
+    "requested": "3.2.5",
+    "upstream": "https://github.com/danielperna84/ha-philipsjs",
+    "license": "MIT",
+    "version": "3.2.5",
+    "commit": "",
+    "environment": [
+      "anyio==4.15.1",
+      "certifi==2026.7.22",
+      "cffi==2.1.1",
+      "cryptography==50.0.2",
+      "h11==0.16.0",
+      "ha-philipsjs==3.2.5",
+      "httpcore==1.0.9",
+      "httpx==0.28.1",
+      "idna==3.20",
+      "pycparser==3.0",
+      "typing_extensions==4.16.0"
+    ]
+  },
+  "emulator": {
+    "version": "1.0.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "philips-32phs6000-12",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "system probe, transport and API version",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            4,
+            5
+          ],
+          "duration_ms": 17
+        },
+        {
+          "name": "unpaired credentials are refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            5,
+            7
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "a wrong PIN is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            7,
+            11
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "PIN pairing and Digest credentials",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            16
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "connect with the stored credentials",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            16,
+            29
+          ],
+          "duration_ms": 11
+        },
+        {
+          "name": "volume, channels and Ambilight read by update()",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            29,
+            29
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            29,
+            65
+          ],
+          "duration_ms": 26
+        },
+        {
+          "name": "a character over the unicode key form",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            65,
+            68
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "absolute volume, mute and volume keys",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            68,
+            82
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "tune a channel, then step to the next",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            82,
+            93
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "Ambilight off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            93,
+            96
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "open a URL in the browser activity",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            96,
+            98
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "launch an application intent",
+          "action": "launch",
+          "status": "not-offered",
+          "detail": "setApplication() posts activities/launch only when /system lists the `intent` activity; this Linux set lists `browser` alone, so the client sends nothing.",
+          "events": [
+            0,
+            0
+          ],
+          "duration_ms": 0
+        },
+        {
+          "name": "notifychange long poll",
+          "action": "keepalive",
+          "status": "not-offered",
+          "detail": "notifyChange() long-polls only when /system carries a `notifyChange` key, which this set's captured /system does not; the client sends nothing, and Home Assistant falls back to polling update().",
+          "events": [
+            0,
+            0
+          ],
+          "duration_ms": 0
+        },
+        {
+          "name": "the Standby key puts the set in standby",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            98,
+            101
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "setPowerState is refused, as the set refuses it",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            101,
+            102
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "wake the set from standby",
+          "action": "power",
+          "status": "not-offered",
+          "detail": "The client powers on only with POST /6/powerstate, which this set answers 404; it has no Cast wake, so Home Assistant needs a Wake-on-LAN or a turn-on automation.",
+          "events": [
+            0,
+            0
+          ],
+          "duration_ms": 0
+        },
+        {
+          "name": "a forced disconnect revokes the credentials",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            102,
+            105
+          ],
+          "duration_ms": 5
+        }
+      ],
+      "gaps": [],
+      "expect": {
+        "description": "ha-philipsjs: /system over HTTP, refused unpaired and with a wrong PIN, paired with the PIN, then keys, volume, a channel and standby over Digest-authenticated HTTPS, and revoked credentials refused",
+        "problems": []
+      }
+    }
+  ]
+}

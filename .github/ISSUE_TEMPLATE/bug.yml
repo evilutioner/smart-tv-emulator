@@ -1,0 +1,47 @@
+name: Bug in the emulator
+description: An answer that differs from the real set, a dashboard or API problem, or a crash.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A bug in your own app found with the emulator belongs in your tracker, not here.
+        [Testing a remote app by hand](https://github.com/evilutioner/smart-tv-emulator/blob/main/docs/testing-an-app.md#reading-the-log-and-filing-a-bug)
+        says what to collect.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What the client sent, what the emulator answered, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: real-set
+    attributes:
+      label: What a real set does
+      description: If you have one, what it answers to the same request. Strip addresses, serials and tokens.
+  - type: input
+    id: device
+    attributes:
+      label: TV platform and captured device
+      description: From the Configuration card, e.g. "Roku / tcl-roku-tv-32s357".
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: Client and version
+      description: The app or library that sent the request.
+  - type: input
+    id: version
+    attributes:
+      label: Emulator version
+      description: Output of `pip show smart-tv-emulator`, or the commit you run from.
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Event log
+      description: Attach the JSONL export (Export in the dashboard, or GET /api/v1/events/export), or paste the relevant lines.
+      render: json

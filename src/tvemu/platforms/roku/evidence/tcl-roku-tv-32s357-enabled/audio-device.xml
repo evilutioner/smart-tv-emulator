@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<audio-device>
+	<capabilities>
+		<all-destinations>datagram,headphones,peripheral-speakers,arc,speakers,spdif,lineout,wifi-remote-sas,mobile-sas</all-destinations>
+	</capabilities>
+	<global>
+		<muted>false</muted>
+		<volume>9</volume>
+		<destination-list>speakers,spdif,lineout</destination-list>
+	</global>
+	<destinations>
+		<destination name="speakers">
+			<muted>false</muted>
+			<volume>9</volume>
+		</destination>
+		<destination name="spdif">
+			<muted>false</muted>
+			<volume>100</volume>
+		</destination>
+		<destination name="lineout">
+			<muted>false</muted>
+			<volume>100</volume>
+		</destination>
+	</destinations>
+	<mobile-sas>
+		<min-version>43</min-version>
+		<max-version>45</max-version>
+	</mobile-sas>
+	<rtp-info>
+		<rtp-address />
+		<rtcp-port>5150</rtcp-port>
+		<current-buffer-delay-us>0</current-buffer-delay-us>
+		<client-versions />
+	</rtp-info>
+</audio-device>

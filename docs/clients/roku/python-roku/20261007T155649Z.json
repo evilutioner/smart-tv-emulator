@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "run_id": "20261007T155649Z",
+  "started_at": "2026-10-07T15:56:49+00:00",
+  "duration_s": 4.4,
+  "platform": "roku",
+  "client": {
+    "name": "python-roku",
+    "install": "pypi",
+    "requested": "4.1.0",
+    "upstream": "https://github.com/jcarbaugh/python-roku",
+    "license": "BSD-3-Clause",
+    "version": "4.1.0",
+    "commit": "",
+    "environment": [
+      "certifi==2026.7.22",
+      "charset-normalizer==3.5.2",
+      "idna==3.20",
+      "requests==2.34.2",
+      "roku==4.1.0",
+      "urllib3==2.8.0"
+    ]
+  },
+  "emulator": {
+    "version": "0.2.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "roku-streaming-stick-4k-3820eu2",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info and the app list",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "RokuException: b'No captured response is available in the selected device profile'",
+          "events": [
+            3,
+            4
+          ],
+          "duration_ms": 2,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "query/device-info",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "The 12.0.0 stick capture holds no device-info exchange, and the contract answers 501 for it. `device_info` is the first thing this client reads, so on this profile it stops there."
+        }
+      ],
+      "expect": null
+    },
+    {
+      "profile": "tcl-roku-tv-32s357",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info and the app list",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            3,
+            5
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "active app, power state and channels",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            5,
+            9
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            9,
+            37
+          ],
+          "duration_ms": 22
+        },
+        {
+          "name": "literal text 'tvemu42'",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            37,
+            51
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "volume up, down and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            51,
+            57
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "power off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            57,
+            61
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "standby reported by device-info",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: On",
+          "events": [
+            61,
+            67
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch an installed application",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            67,
+            68
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "open an application's store page",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            68,
+            69
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "an application's icon",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "RokuException: b'No captured response is available in the selected device profile'",
+          "events": [
+            69,
+            70
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "search for a keyword",
+          "action": "search",
+          "status": "known-gap",
+          "detail": "RokuException: b'Remote-only emulator: this endpoint is not implemented'",
+          "events": [
+            70,
+            71
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "a touch at a point",
+          "action": "pointer",
+          "status": "known-gap",
+          "detail": "RokuException: b'Remote-only emulator: this endpoint is not implemented'",
+          "events": [
+            71,
+            72
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "motion-sensor input",
+          "action": "pointer",
+          "status": "known-gap",
+          "detail": "RokuException: b'Remote-only emulator: this endpoint is not implemented'",
+          "events": [
+            72,
+            73
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "POST /input",
+          "status": 501,
+          "count": 2,
+          "known": true,
+          "reason": "`touch()` and the motion-sensor methods post to /input. No capture holds the request or its answer, and the emulator models no pointer or sensors for this television."
+        },
+        {
+          "operation": "POST /search/browse",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`search()` opens the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+        },
+        {
+          "operation": "query/icon/12",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
+        }
+      ],
+      "expect": {
+        "description": "python-roku: identity over HTTP, keys, literal text and a launch, and no command refused",
+        "problems": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+schema_version = 1
+summary = "Node.js ECP client with key holds, a chained command builder and SSDP discovery"
+upstream = "https://github.com/bschlenk/node-roku-client"
+license = "Apache-2.0"
+
+[install]
+kind = "npm"
+package = "roku-client"
+last_green = "6.0.0"
+
+[run]
+profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
+timeout = 120
+
+[[gaps]]
+operation = "POST /search/browse"
+reason = "`search()` opens the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+
+[[gaps]]
+operation = "query/icon/*"
+reason = "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
+
+[[known_failures]]
+step = "standby reported by device-info"
+profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
+reason = "After PowerOff the emulator keeps replaying the captured device-info, whose power-mode is PowerOn, so `info().powerMode` stays PowerOn. Only PowerOn is captured on either device; a capture of a set in DisplayOff closes this."
+
+[not_offered]
+session = "Plain ECP is stateless HTTP; roku-client does not speak the authenticated ecp-2 session."
+pointer = "roku-client has no touch or sensor input."
+voice = "roku-client has no voice API."

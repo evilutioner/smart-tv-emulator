@@ -1,0 +1,2444 @@
+{
+  "schema_version": 2,
+  "run_id": "20261011T050940Z",
+  "started_at": "2026-10-11T05:09:40+00:00",
+  "duration_s": 193.5,
+  "platform": "firetv",
+  "client": {
+    "name": "androidtv",
+    "install": "pypi",
+    "requested": "0.0.75",
+    "upstream": "https://github.com/JeffLIrion/python-androidtv",
+    "license": "MIT",
+    "version": "0.0.75",
+    "commit": "",
+    "environment": [
+      "adb_shell==0.4.4",
+      "androidtv==0.0.75",
+      "cffi==2.1.1",
+      "cryptography==50.0.2",
+      "pure-python-adb==0.3.0.dev0",
+      "pyasn1==0.6.4",
+      "pycparser==3.11",
+      "rsa==4.9.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.1.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "fire-tv-stick-fireos-aftma08c15",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "a declined key gets no answer",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "RSA public key declined"
+          ],
+          "events": [
+            8,
+            8
+          ],
+          "duration_ms": 2039
+        },
+        {
+          "name": "an approved key connects",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "RSA public key approved"
+          ],
+          "events": [
+            8,
+            8
+          ],
+          "duration_ms": 105
+        },
+        {
+          "name": "the session is up",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "adb_connect",
+            "available"
+          ],
+          "events": [
+            8,
+            8
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "ethmac from ip addr",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "AssertionError: {'ethmac': None, 'wifimac': None}",
+          "covers": [
+            "ethmac"
+          ],
+          "events": [
+            8,
+            10
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "wifimac from ip addr",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "AssertionError: {'ethmac': None, 'wifimac': None}",
+          "covers": [
+            "wifimac"
+          ],
+          "events": [
+            10,
+            12
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "device properties in one getprop chain",
+          "action": "identify",
+          "status": "known-failure",
+          "detail": "AssertionError: {'ethmac': None, 'wifimac': None}",
+          "covers": [
+            "manufacturer",
+            "model",
+            "serialno",
+            "sw_version",
+            "product_id"
+          ],
+          "events": [
+            12,
+            12
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "screen_on",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "screen_on"
+          ],
+          "events": [
+            12,
+            12
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "awake",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "awake"
+          ],
+          "events": [
+            12,
+            12
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "wake_lock_size",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "wake_lock_size"
+          ],
+          "events": [
+            12,
+            12
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "screen_on_awake_wake_lock_size",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: (True, None, None)",
+          "covers": [
+            "screen_on_awake_wake_lock_size"
+          ],
+          "events": [
+            12,
+            12
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "update: the Home Assistant poll",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: ('standby', None)",
+          "covers": [
+            "update"
+          ],
+          "events": [
+            12,
+            12
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "get_properties",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: {'screen_on': True, 'awake': None, 'wake_lock_size': None, 'current_app': None}",
+          "covers": [
+            "get_properties"
+          ],
+          "events": [
+            12,
+            15
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "get_properties_dict",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: {'screen_on': True, 'awake': None, 'wake_lock_size': None, 'current_app': None, 'media_session_state': None, 'running_apps': ['found'], 'hdmi_input': \"/system/bin/sh: dumpsys activity starter | grep -E -o '(ExternalTv|HDMI)InputService/HW[0-9]' -m 1 | grep -o 'HW[0-9]': inaccessible or not found\"}",
+          "covers": [
+            "get_properties_dict"
+          ],
+          "events": [
+            15,
+            18
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "current_app",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: ",
+          "covers": [
+            "current_app"
+          ],
+          "events": [
+            18,
+            19
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "current_app_media_session_state",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: (None, None)",
+          "covers": [
+            "current_app_media_session_state"
+          ],
+          "events": [
+            19,
+            20
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "media_session_state",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: None",
+          "covers": [
+            "media_session_state"
+          ],
+          "events": [
+            20,
+            21
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "running_apps",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: ['found']",
+          "covers": [
+            "running_apps"
+          ],
+          "events": [
+            21,
+            22
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "get_installed_apps",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: ['/system/bin/sh: pm list packages: inaccessible or not found']",
+          "covers": [
+            "get_installed_apps"
+          ],
+          "events": [
+            22,
+            23
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "get_hdmi_input",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: ",
+          "covers": [
+            "get_hdmi_input"
+          ],
+          "events": [
+            23,
+            24
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "audio_state",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: idle",
+          "covers": [
+            "audio_state"
+          ],
+          "events": [
+            24,
+            25
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "stream_music_properties",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: (None, None, None, None)",
+          "covers": [
+            "stream_music_properties"
+          ],
+          "events": [
+            25,
+            26
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "audio_output_device",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: None",
+          "covers": [
+            "audio_output_device"
+          ],
+          "events": [
+            26,
+            27
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "volume",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: None",
+          "covers": [
+            "volume"
+          ],
+          "events": [
+            27,
+            28
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "volume_level",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: None",
+          "covers": [
+            "volume_level"
+          ],
+          "events": [
+            28,
+            29
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "is_volume_muted",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: None",
+          "covers": [
+            "is_volume_muted"
+          ],
+          "events": [
+            29,
+            30
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "adb_screencap",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "AssertionError: b'/system/bin/sh: screencap -p: inaccessib'",
+          "covers": [
+            "adb_screencap"
+          ],
+          "events": [
+            30,
+            31
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "key 0",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "0"
+          ],
+          "events": [
+            32,
+            34
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 1",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "1"
+          ],
+          "events": [
+            34,
+            36
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 2",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "2"
+          ],
+          "events": [
+            36,
+            38
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 3",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "3"
+          ],
+          "events": [
+            38,
+            40
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 4",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "4"
+          ],
+          "events": [
+            40,
+            42
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 5",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "5"
+          ],
+          "events": [
+            42,
+            44
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 6",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "6"
+          ],
+          "events": [
+            44,
+            46
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 7",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "7"
+          ],
+          "events": [
+            46,
+            48
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 8",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "8"
+          ],
+          "events": [
+            48,
+            50
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key 9",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "9"
+          ],
+          "events": [
+            50,
+            52
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key A",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "A"
+          ],
+          "events": [
+            52,
+            54
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key B",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "B"
+          ],
+          "events": [
+            54,
+            56
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key BACK",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "BACK"
+          ],
+          "events": [
+            56,
+            58
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "key BLUE",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for BLUE accepted",
+          "covers": [
+            "BLUE"
+          ],
+          "events": [
+            58,
+            59
+          ],
+          "duration_ms": 5013
+        },
+        {
+          "name": "key C",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "C"
+          ],
+          "events": [
+            59,
+            61
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "key CENTER",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "CENTER"
+          ],
+          "events": [
+            61,
+            63
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key COMPONENT1",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for COMPONENT1 accepted",
+          "covers": [
+            "COMPONENT1"
+          ],
+          "events": [
+            63,
+            64
+          ],
+          "duration_ms": 5009
+        },
+        {
+          "name": "key COMPONENT2",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for COMPONENT2 accepted",
+          "covers": [
+            "COMPONENT2"
+          ],
+          "events": [
+            64,
+            65
+          ],
+          "duration_ms": 5044
+        },
+        {
+          "name": "key COMPOSITE1",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for COMPOSITE1 accepted",
+          "covers": [
+            "COMPOSITE1"
+          ],
+          "events": [
+            65,
+            66
+          ],
+          "duration_ms": 5010
+        },
+        {
+          "name": "key COMPOSITE2",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for COMPOSITE2 accepted",
+          "covers": [
+            "COMPOSITE2"
+          ],
+          "events": [
+            66,
+            67
+          ],
+          "duration_ms": 5015
+        },
+        {
+          "name": "key D",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "D"
+          ],
+          "events": [
+            67,
+            69
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "key DOWN",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DOWN"
+          ],
+          "events": [
+            69,
+            71
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "key E",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "E"
+          ],
+          "events": [
+            71,
+            73
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key END",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for END accepted",
+          "covers": [
+            "END"
+          ],
+          "events": [
+            73,
+            74
+          ],
+          "duration_ms": 5052
+        },
+        {
+          "name": "key ENTER",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "ENTER"
+          ],
+          "events": [
+            74,
+            76
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "key ESCAPE",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for ESCAPE accepted",
+          "covers": [
+            "ESCAPE"
+          ],
+          "events": [
+            76,
+            77
+          ],
+          "duration_ms": 5051
+        },
+        {
+          "name": "key F",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "F"
+          ],
+          "events": [
+            77,
+            79
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "key FAST_FORWARD",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for FAST_FORWARD accepted",
+          "covers": [
+            "FAST_FORWARD"
+          ],
+          "events": [
+            79,
+            80
+          ],
+          "duration_ms": 5006
+        },
+        {
+          "name": "key G",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "G"
+          ],
+          "events": [
+            80,
+            82
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key GREEN",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for GREEN accepted",
+          "covers": [
+            "GREEN"
+          ],
+          "events": [
+            82,
+            83
+          ],
+          "duration_ms": 5007
+        },
+        {
+          "name": "key H",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "H"
+          ],
+          "events": [
+            83,
+            85
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "key HDMI1",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for HDMI1 accepted",
+          "covers": [
+            "HDMI1"
+          ],
+          "events": [
+            85,
+            86
+          ],
+          "duration_ms": 5052
+        },
+        {
+          "name": "key HDMI2",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for HDMI2 accepted",
+          "covers": [
+            "HDMI2"
+          ],
+          "events": [
+            86,
+            87
+          ],
+          "duration_ms": 5023
+        },
+        {
+          "name": "key HDMI3",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for HDMI3 accepted",
+          "covers": [
+            "HDMI3"
+          ],
+          "events": [
+            87,
+            88
+          ],
+          "duration_ms": 5024
+        },
+        {
+          "name": "key HDMI4",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for HDMI4 accepted",
+          "covers": [
+            "HDMI4"
+          ],
+          "events": [
+            88,
+            89
+          ],
+          "duration_ms": 5051
+        },
+        {
+          "name": "key HOME",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "HOME"
+          ],
+          "events": [
+            89,
+            91
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "key I",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "I"
+          ],
+          "events": [
+            91,
+            93
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key INPUT",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for INPUT accepted",
+          "covers": [
+            "INPUT"
+          ],
+          "events": [
+            93,
+            94
+          ],
+          "duration_ms": 5013
+        },
+        {
+          "name": "key J",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "J"
+          ],
+          "events": [
+            94,
+            96
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "key K",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "K"
+          ],
+          "events": [
+            96,
+            98
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key L",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "L"
+          ],
+          "events": [
+            98,
+            100
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key LEFT",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "LEFT"
+          ],
+          "events": [
+            100,
+            102
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key M",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "M"
+          ],
+          "events": [
+            102,
+            104
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key MENU",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for MENU accepted",
+          "covers": [
+            "MENU"
+          ],
+          "events": [
+            104,
+            105
+          ],
+          "duration_ms": 5012
+        },
+        {
+          "name": "key MOVE_HOME",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for MOVE_HOME accepted",
+          "covers": [
+            "MOVE_HOME"
+          ],
+          "events": [
+            105,
+            106
+          ],
+          "duration_ms": 5049
+        },
+        {
+          "name": "key N",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "N"
+          ],
+          "events": [
+            106,
+            108
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key NEXT",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "NEXT"
+          ],
+          "events": [
+            108,
+            110
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key O",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "O"
+          ],
+          "events": [
+            110,
+            112
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key P",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "P"
+          ],
+          "events": [
+            112,
+            114
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "key PAIRING",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for PAIRING accepted",
+          "covers": [
+            "PAIRING"
+          ],
+          "events": [
+            114,
+            115
+          ],
+          "duration_ms": 5062
+        },
+        {
+          "name": "key PAUSE",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PAUSE"
+          ],
+          "events": [
+            115,
+            117
+          ],
+          "duration_ms": 10
+        },
+        {
+          "name": "key PLAY",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PLAY"
+          ],
+          "events": [
+            117,
+            119
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "key PLAY_PAUSE",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PLAY_PAUSE"
+          ],
+          "events": [
+            119,
+            121
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key PREVIOUS",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PREVIOUS"
+          ],
+          "events": [
+            121,
+            123
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key Q",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "Q"
+          ],
+          "events": [
+            123,
+            125
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "key R",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "R"
+          ],
+          "events": [
+            125,
+            127
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "key RED",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for RED accepted",
+          "covers": [
+            "RED"
+          ],
+          "events": [
+            127,
+            128
+          ],
+          "duration_ms": 5049
+        },
+        {
+          "name": "key RESUME",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for RESUME accepted",
+          "covers": [
+            "RESUME"
+          ],
+          "events": [
+            128,
+            129
+          ],
+          "duration_ms": 5030
+        },
+        {
+          "name": "key REWIND",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for REWIND accepted",
+          "covers": [
+            "REWIND"
+          ],
+          "events": [
+            129,
+            130
+          ],
+          "duration_ms": 5033
+        },
+        {
+          "name": "key RIGHT",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "RIGHT"
+          ],
+          "events": [
+            130,
+            132
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "key S",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "S"
+          ],
+          "events": [
+            132,
+            134
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key SAT",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SAT accepted",
+          "covers": [
+            "SAT"
+          ],
+          "events": [
+            134,
+            135
+          ],
+          "duration_ms": 5027
+        },
+        {
+          "name": "key SEARCH",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SEARCH accepted",
+          "covers": [
+            "SEARCH"
+          ],
+          "events": [
+            135,
+            136
+          ],
+          "duration_ms": 5047
+        },
+        {
+          "name": "key SETTINGS",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SETTINGS accepted",
+          "covers": [
+            "SETTINGS"
+          ],
+          "events": [
+            136,
+            137
+          ],
+          "duration_ms": 5026
+        },
+        {
+          "name": "key SPACE",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "SPACE"
+          ],
+          "events": [
+            137,
+            139
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "key STOP",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for STOP accepted",
+          "covers": [
+            "STOP"
+          ],
+          "events": [
+            139,
+            140
+          ],
+          "duration_ms": 5043
+        },
+        {
+          "name": "key SYSDOWN",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SYSDOWN accepted",
+          "covers": [
+            "SYSDOWN"
+          ],
+          "events": [
+            140,
+            141
+          ],
+          "duration_ms": 5062
+        },
+        {
+          "name": "key SYSLEFT",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SYSLEFT accepted",
+          "covers": [
+            "SYSLEFT"
+          ],
+          "events": [
+            141,
+            142
+          ],
+          "duration_ms": 5026
+        },
+        {
+          "name": "key SYSRIGHT",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SYSRIGHT accepted",
+          "covers": [
+            "SYSRIGHT"
+          ],
+          "events": [
+            142,
+            143
+          ],
+          "duration_ms": 5008
+        },
+        {
+          "name": "key SYSUP",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SYSUP accepted",
+          "covers": [
+            "SYSUP"
+          ],
+          "events": [
+            143,
+            144
+          ],
+          "duration_ms": 5029
+        },
+        {
+          "name": "key T",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "T"
+          ],
+          "events": [
+            144,
+            146
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key TEXT",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for TEXT accepted",
+          "covers": [
+            "TEXT"
+          ],
+          "events": [
+            146,
+            147
+          ],
+          "duration_ms": 5014
+        },
+        {
+          "name": "key TOP",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for TOP accepted",
+          "covers": [
+            "TOP"
+          ],
+          "events": [
+            147,
+            148
+          ],
+          "duration_ms": 5034
+        },
+        {
+          "name": "key U",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "U"
+          ],
+          "events": [
+            148,
+            150
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "key UP",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "UP"
+          ],
+          "events": [
+            150,
+            152
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "key V",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "V"
+          ],
+          "events": [
+            152,
+            154
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key VGA",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for VGA accepted",
+          "covers": [
+            "VGA"
+          ],
+          "events": [
+            154,
+            155
+          ],
+          "duration_ms": 5030
+        },
+        {
+          "name": "key W",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "W"
+          ],
+          "events": [
+            155,
+            157
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "key X",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "X"
+          ],
+          "events": [
+            157,
+            159
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "key Y",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "Y"
+          ],
+          "events": [
+            159,
+            161
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "key YELLOW",
+          "action": "key",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for YELLOW accepted",
+          "covers": [
+            "YELLOW"
+          ],
+          "events": [
+            161,
+            162
+          ],
+          "duration_ms": 5034
+        },
+        {
+          "name": "key Z",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "Z"
+          ],
+          "events": [
+            162,
+            164
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "launch_app",
+          "action": "launch",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for an application event",
+          "covers": [
+            "launch_app"
+          ],
+          "events": [
+            165,
+            166
+          ],
+          "duration_ms": 5030
+        },
+        {
+          "name": "start_intent",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "start_intent"
+          ],
+          "events": [
+            166,
+            167
+          ],
+          "duration_ms": 11
+        },
+        {
+          "name": "stop_app",
+          "action": "launch",
+          "status": "known-gap",
+          "detail": "AssertionError: /system/bin/sh: am force-stop org.xbmc.kodi: inaccessible or not found\n",
+          "covers": [
+            "stop_app"
+          ],
+          "events": [
+            167,
+            168
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "volume_up",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_UP"
+          ],
+          "events": [
+            168,
+            171
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "volume_down",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_DOWN"
+          ],
+          "events": [
+            171,
+            174
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "mute_volume",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "MUTE"
+          ],
+          "events": [
+            174,
+            176
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "set_volume_level",
+          "action": "volume",
+          "status": "known-gap",
+          "detail": "AssertionError: ",
+          "covers": [
+            "set_volume_level"
+          ],
+          "events": [
+            176,
+            177
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "turn_off",
+          "action": "power",
+          "status": "known-failure",
+          "detail": "AssertionError: timed out waiting for power off",
+          "covers": [
+            "turn_off"
+          ],
+          "events": [
+            177,
+            177
+          ],
+          "duration_ms": 5024
+        },
+        {
+          "name": "SLEEP puts the set to sleep",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "SLEEP"
+          ],
+          "events": [
+            177,
+            179
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "turn_on",
+          "action": "power",
+          "status": "known-failure",
+          "detail": "AssertionError: timed out waiting for power on",
+          "covers": [
+            "turn_on"
+          ],
+          "events": [
+            179,
+            179
+          ],
+          "duration_ms": 5043
+        },
+        {
+          "name": "POWER toggles the set",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "POWER"
+          ],
+          "events": [
+            179,
+            183
+          ],
+          "duration_ms": 12
+        },
+        {
+          "name": "WAKEUP key",
+          "action": "power",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for WAKEUP accepted",
+          "covers": [
+            "WAKEUP"
+          ],
+          "events": [
+            183,
+            184
+          ],
+          "duration_ms": 5027
+        },
+        {
+          "name": "SUSPEND key",
+          "action": "power",
+          "status": "known-gap",
+          "detail": "AssertionError: timed out waiting for SUSPEND accepted",
+          "covers": [
+            "SUSPEND"
+          ],
+          "events": [
+            184,
+            185
+          ],
+          "duration_ms": 5049
+        },
+        {
+          "name": "adb_close ends the session",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "adb_close"
+          ],
+          "events": [
+            187,
+            187
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "a trusted key signs in without a prompt",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "signature with a trusted key"
+          ],
+          "events": [
+            187,
+            187
+          ],
+          "duration_ms": 47
+        },
+        {
+          "name": "reconnect after adb_close",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "adb_connect"
+          ],
+          "events": [
+            187,
+            187
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "CURRENT_APP=$(dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp') && CURRENT_APP=${CURRENT_APP#*ActivityRecord{* * } && CURRENT_APP=${CURRENT_APP#*{* ",
+          "status": 501,
+          "count": 6,
+          "known": true,
+          "reason": "current_app(), current_app_media_session_state(), media_session_state(), get_properties(lazy=False) and launch_app() all start with this shell script: `CURRENT_APP=$(dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp') && CURRENT_APP=${CURRENT_APP#*ActivityRecord{* * } && CURRENT_APP=${CURRENT_APP#*{* * } && CURRENT_APP=${CURRENT_APP%%/*} && CURRENT_APP=${CURRENT_APP%\\\\}*}`, followed by ` && echo $CURRENT_APP`, by that and ` && dumpsys media_session | grep -A 100 'Sessions Stack' | grep -A 100 $CURRENT_APP | grep -m 1 'state=PlaybackState {'`, or by ` && if [ $CURRENT_APP != '<app>' ]; then monkey -p <app> -c android.intent.category.LAUNCHER --pct-syskeys 0 1; fi`. The emulator serves only `dumpsys window | grep mCurrentFocus`; the three scripts' output on the AFTMA08C15 (on the launcher, and with an app open and playing) is what to record. The event log cuts the operation at 160 characters, so one prefix covers all three."
+        },
+        {
+          "operation": "am force-stop org.xbmc.kodi",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "stop_app() sends `am force-stop <app>`; the emulator serves only the `am start` and `monkey -p` forms, and the stick's (normally empty) answer is not recorded."
+        },
+        {
+          "operation": "dumpsys activity starter | grep -E -o '(ExternalTv|HDMI)InputService/HW[0-9]' -m 1 | grep -o 'HW[0-9]'",
+          "status": 501,
+          "count": 3,
+          "known": true,
+          "reason": "get_hdmi_input() asks `dumpsys activity starter | grep -E -o '(ExternalTv|HDMI)InputService/HW[0-9]' -m 1 | grep -o 'HW[0-9]'`; no capture holds its output (on a stick with no HDMI input it is presumably empty, which is still an answer to record)."
+        },
+        {
+          "operation": "dumpsys audio | grep '\\- STREAM_MUSIC:' -A 11",
+          "status": 501,
+          "count": 8,
+          "known": true,
+          "reason": "volume(), volume_level(), is_volume_muted(), audio_output_device(), stream_music_properties(), and with them volume_up(), volume_down() and set_volume_level(), read `dumpsys audio | grep '\\- STREAM_MUSIC:' -A 11`; no capture holds it. Without it set_volume_level() never learns max_volume and sends nothing."
+        },
+        {
+          "operation": "dumpsys audio | grep paused | grep -qv 'Buffer Queue' && echo -e '1\\c' || (dumpsys audio | grep started | grep -qv 'Buffer Queue' && echo '2\\c' || echo '0\\c')",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "audio_state() runs `dumpsys audio | grep paused | grep -qv 'Buffer Queue' && echo -e '1\\c' || (dumpsys audio | grep started | grep -qv 'Buffer Queue' && echo '2\\c' || echo '0\\c')`; no capture holds it."
+        },
+        {
+          "operation": "input keyevent 111",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "ESCAPE: `input keyevent 111` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 122",
+          "status": 501,
+          "count": 2,
+          "known": true,
+          "reason": "MOVE_HOME and TOP: `input keyevent 122` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 123",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "END: `input keyevent 123` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 176",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SETTINGS: `input keyevent 176` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 178",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "INPUT: `input keyevent 178` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 183",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "RED: `input keyevent 183` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 184",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "GREEN: `input keyevent 184` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 185",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "YELLOW: `input keyevent 185` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 186",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "BLUE: `input keyevent 186` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 224",
+          "status": 501,
+          "count": 2,
+          "known": true,
+          "reason": "WAKEUP and RESUME: `input keyevent 224` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 225",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "PAIRING: `input keyevent 225` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 233",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "TEXT: `input keyevent 233` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 237",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SAT: `input keyevent 237` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 243",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "HDMI1: `input keyevent 243` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 244",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "HDMI2: `input keyevent 244` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 245",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "HDMI3: `input keyevent 245` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 246",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "HDMI4: `input keyevent 246` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 247",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "COMPOSITE1: `input keyevent 247` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 248",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "COMPOSITE2: `input keyevent 248` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 249",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "COMPONENT1: `input keyevent 249` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 250",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "COMPONENT2: `input keyevent 250` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 251",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "VGA: `input keyevent 251` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 276",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SUSPEND: `input keyevent 276` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 280",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SYSUP: `input keyevent 280` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 281",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SYSDOWN: `input keyevent 281` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 282",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SYSLEFT: `input keyevent 282` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 283",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SYSRIGHT: `input keyevent 283` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 82",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "MENU: `input keyevent 82` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 84",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "SEARCH: `input keyevent 84` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 86",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "STOP: `input keyevent 86` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 89",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "REWIND: `input keyevent 89` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "input keyevent 90",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "FAST_FORWARD: `input keyevent 90` is not in the emulator's ADB key table, which holds only the keycodes the stick was seen to act on. What the AFTMA08C15 does with it is unrecorded."
+        },
+        {
+          "operation": "ip addr show eth0 | grep -m 1 ether",
+          "status": 501,
+          "count": 2,
+          "known": true,
+          "reason": "get_device_properties() reads the Ethernet MAC with `ip addr show eth0 | grep -m 1 ether`; no capture holds it (the stick has no Ethernet port, so the stick's own refusal or empty answer is what to record)."
+        },
+        {
+          "operation": "ip addr show wlan0 | grep -m 1 ether",
+          "status": 501,
+          "count": 2,
+          "known": true,
+          "reason": "get_device_properties() reads the Wi-Fi MAC with `ip addr show wlan0 | grep -m 1 ether`, which Home Assistant uses as the device's unique id; no capture holds it."
+        },
+        {
+          "operation": "pm list packages",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "get_installed_apps(), which setup() and Home Assistant call once on connect, asks `pm list packages`; no capture holds its output."
+        },
+        {
+          "operation": "ps -A | grep u0_a",
+          "status": 501,
+          "count": 3,
+          "known": true,
+          "reason": "running_apps() asks `ps -A | grep u0_a`; the capture holds only `ps | grep u0_a`. Recording `ps -A | grep u0_a` off the AFTMA08C15 closes this."
+        },
+        {
+          "operation": "screencap -p",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "adb_screencap() runs `screencap -p` and expects PNG bytes; no capture holds a screenshot, and the emulator draws no screen."
+        }
+      ],
+      "expect": null,
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "B",
+          "BACK",
+          "BLUE",
+          "C",
+          "CENTER",
+          "COMPONENT1",
+          "COMPONENT2",
+          "COMPOSITE1",
+          "COMPOSITE2",
+          "D",
+          "DOWN",
+          "E",
+          "END",
+          "ENTER",
+          "ESCAPE",
+          "F",
+          "FAST_FORWARD",
+          "G",
+          "GREEN",
+          "H",
+          "HDMI1",
+          "HDMI2",
+          "HDMI3",
+          "HDMI4",
+          "HOME",
+          "I",
+          "INPUT",
+          "J",
+          "K",
+          "L",
+          "LEFT",
+          "M",
+          "MENU",
+          "MOVE_HOME",
+          "N",
+          "NEXT",
+          "O",
+          "P",
+          "PAIRING",
+          "PAUSE",
+          "PLAY",
+          "PLAY_PAUSE",
+          "PREVIOUS",
+          "Q",
+          "R",
+          "RED",
+          "RESUME",
+          "REWIND",
+          "RIGHT",
+          "S",
+          "SAT",
+          "SEARCH",
+          "SETTINGS",
+          "SPACE",
+          "STOP",
+          "SYSDOWN",
+          "SYSLEFT",
+          "SYSRIGHT",
+          "SYSUP",
+          "T",
+          "TEXT",
+          "TOP",
+          "U",
+          "UP",
+          "V",
+          "VGA",
+          "W",
+          "X",
+          "Y",
+          "YELLOW",
+          "Z"
+        ],
+        "volume": [
+          "MUTE",
+          "VOLUME_DOWN",
+          "VOLUME_UP",
+          "set_volume_level"
+        ],
+        "power": [
+          "POWER",
+          "SLEEP",
+          "SUSPEND",
+          "WAKEUP",
+          "turn_off",
+          "turn_on"
+        ],
+        "identity": [
+          "ethmac",
+          "manufacturer",
+          "model",
+          "product_id",
+          "serialno",
+          "sw_version",
+          "wifimac"
+        ],
+        "session": [
+          "adb_close",
+          "adb_connect",
+          "available"
+        ],
+        "auth": [
+          "RSA public key approved",
+          "RSA public key declined",
+          "signature with a trusted key"
+        ],
+        "state": [
+          "adb_screencap",
+          "audio_output_device",
+          "audio_state",
+          "awake",
+          "current_app",
+          "current_app_media_session_state",
+          "get_hdmi_input",
+          "get_installed_apps",
+          "get_properties",
+          "get_properties_dict",
+          "is_volume_muted",
+          "media_session_state",
+          "running_apps",
+          "screen_on",
+          "screen_on_awake_wake_lock_size",
+          "stream_music_properties",
+          "update",
+          "volume",
+          "volume_level",
+          "wake_lock_size"
+        ],
+        "apps": [
+          "launch_app",
+          "start_intent",
+          "stop_app"
+        ]
+      },
+      "answers": [
+        {
+          "status": 501,
+          "operation": "CURRENT_APP=$(dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp') && CURRENT_APP=${CURRENT_APP#*ActivityRecord{* * } && CURRENT_APP=${CURRENT_APP#*{* ",
+          "count": 6
+        },
+        {
+          "status": 501,
+          "operation": "am force-stop org.xbmc.kodi",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "dumpsys activity starter | grep -E -o '(ExternalTv|HDMI)InputService/HW[0-9]' -m 1 | grep -o 'HW[0-9]'",
+          "count": 3
+        },
+        {
+          "status": 501,
+          "operation": "dumpsys audio | grep '\\- STREAM_MUSIC:' -A 11",
+          "count": 8
+        },
+        {
+          "status": 501,
+          "operation": "dumpsys audio | grep paused | grep -qv 'Buffer Queue' && echo -e '1\\c' || (dumpsys audio | grep started | grep -qv 'Buffer Queue' && echo '2\\c' || echo '0\\c')",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 111",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 122",
+          "count": 2
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 123",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 176",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 178",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 183",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 184",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 185",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 186",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 224",
+          "count": 2
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 225",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 233",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 237",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 243",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 244",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 245",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 246",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 247",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 248",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 249",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 250",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 251",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 276",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 280",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 281",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 282",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 283",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 82",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 84",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 86",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 89",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "input keyevent 90",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "ip addr show eth0 | grep -m 1 ether",
+          "count": 2
+        },
+        {
+          "status": 501,
+          "operation": "ip addr show wlan0 | grep -m 1 ether",
+          "count": 2
+        },
+        {
+          "status": 501,
+          "operation": "pm list packages",
+          "count": 1
+        },
+        {
+          "status": 501,
+          "operation": "ps -A | grep u0_a",
+          "count": 3
+        },
+        {
+          "status": 501,
+          "operation": "screencap -p",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

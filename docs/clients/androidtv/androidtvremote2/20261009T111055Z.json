@@ -1,0 +1,4023 @@
+{
+  "schema_version": 2,
+  "run_id": "20261009T111055Z",
+  "started_at": "2026-10-09T11:10:55+00:00",
+  "duration_s": 75.1,
+  "platform": "androidtv",
+  "client": {
+    "name": "androidtvremote2",
+    "install": "git",
+    "requested": "e664a8e1f14ee458b14c646bfb3ea46f10367051",
+    "upstream": "https://github.com/tronikos/androidtvremote2",
+    "license": "Apache-2.0",
+    "version": "0.3.2",
+    "commit": "e664a8e1f14ee458b14c646bfb3ea46f10367051",
+    "environment": [
+      "aiofiles==25.1.0",
+      "androidtvremote2 @ git+https://github.com/tronikos/androidtvremote2@e664a8e1f14ee458b14c646bfb3ea46f10367051",
+      "cffi==2.1.1",
+      "cryptography==50.0.2",
+      "protobuf==7.36.2",
+      "pycparser==3.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.0.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "google-chromecast-hd",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "client certificate and the set's MAC",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "mac"
+          ],
+          "events": [
+            7,
+            8
+          ],
+          "duration_ms": 63
+        },
+        {
+          "name": "the set's name in its certificate",
+          "action": "identify",
+          "status": "known-failure",
+          "detail": "AssertionError: MiTV-MOEU0",
+          "covers": [
+            "name"
+          ],
+          "events": [
+            8,
+            8
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "an unpaired certificate is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "InvalidAuth on connect"
+          ],
+          "events": [
+            8,
+            9
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "Polo pairing with the on-screen code",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_start_pairing",
+            "async_finish_pairing"
+          ],
+          "events": [
+            9,
+            13
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "connect, and the initial Remote v2 state arrives",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            13,
+            22
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "device info over Remote v2",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model",
+            "sw_version"
+          ],
+          "events": [
+            22,
+            22
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "initial power, app, volume and voice state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "is_on",
+            "current_app",
+            "volume_info",
+            "is_voice_enabled"
+          ],
+          "events": [
+            22,
+            22
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_UP",
+            "SHORT"
+          ],
+          "events": [
+            22,
+            25
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "long key press, held then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_LEFT",
+            "START_LONG",
+            "END_LONG"
+          ],
+          "events": [
+            25,
+            31
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power off and on, seen by the client",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "POWER"
+          ],
+          "events": [
+            31,
+            39
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "volume up and mute, seen by the client",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_UP",
+            "VOLUME_MUTE"
+          ],
+          "events": [
+            39,
+            45
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "IME text into a focused field",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits",
+            "space"
+          ],
+          "events": [
+            45,
+            52
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "app id and deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app id",
+            "app link"
+          ],
+          "events": [
+            52,
+            56
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "voice: negotiate, stream two chunks, end",
+          "action": "voice",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "start_voice",
+            "send_chunk",
+            "end"
+          ],
+          "events": [
+            56,
+            69
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "two keepalive pings answered",
+          "action": "keepalive",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "ping"
+          ],
+          "events": [
+            69,
+            69
+          ],
+          "duration_ms": 11015
+        },
+        {
+          "name": "a disconnect interrupts an open voice stream",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            69,
+            78
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "reconnect with the paired certificate",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            78,
+            88
+          ],
+          "duration_ms": 10
+        },
+        {
+          "name": "Remote v2 switched off and on keeps the pairing",
+          "action": "protocol-switch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect",
+            "async_connect"
+          ],
+          "events": [
+            88,
+            103
+          ],
+          "duration_ms": 13
+        },
+        {
+          "name": "a forced disconnect clears the pairing",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            103,
+            106
+          ],
+          "duration_ms": 7
+        }
+      ],
+      "gaps": [],
+      "expect": {
+        "description": "androidtvremote2: refused unpaired, paired with the code, then keys, text, an app link and a voice stream over TLS, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "11",
+          "12",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "ALL_APPS",
+          "ALT_LEFT",
+          "ALT_RIGHT",
+          "APOSTROPHE",
+          "APP_SWITCH",
+          "ASSIST",
+          "AT",
+          "AVR_INPUT",
+          "AVR_POWER",
+          "B",
+          "BACK",
+          "BACKSLASH",
+          "BOOKMARK",
+          "BREAK",
+          "BRIGHTNESS_DOWN",
+          "BRIGHTNESS_UP",
+          "BUTTON_1",
+          "BUTTON_10",
+          "BUTTON_11",
+          "BUTTON_12",
+          "BUTTON_13",
+          "BUTTON_14",
+          "BUTTON_15",
+          "BUTTON_16",
+          "BUTTON_2",
+          "BUTTON_3",
+          "BUTTON_4",
+          "BUTTON_5",
+          "BUTTON_6",
+          "BUTTON_7",
+          "BUTTON_8",
+          "BUTTON_9",
+          "BUTTON_A",
+          "BUTTON_B",
+          "BUTTON_C",
+          "BUTTON_L1",
+          "BUTTON_L2",
+          "BUTTON_MODE",
+          "BUTTON_R1",
+          "BUTTON_R2",
+          "BUTTON_SELECT",
+          "BUTTON_START",
+          "BUTTON_THUMBL",
+          "BUTTON_THUMBR",
+          "BUTTON_X",
+          "BUTTON_Y",
+          "BUTTON_Z",
+          "C",
+          "CALCULATOR",
+          "CALENDAR",
+          "CALL",
+          "CAMERA",
+          "CAPS_LOCK",
+          "CAPTIONS",
+          "CHANNEL_DOWN",
+          "CHANNEL_UP",
+          "CLEAR",
+          "COMMA",
+          "CONTACTS",
+          "COPY",
+          "CTRL_LEFT",
+          "CTRL_RIGHT",
+          "CUT",
+          "D",
+          "DEL",
+          "DEMO_APP_1",
+          "DEMO_APP_2",
+          "DEMO_APP_3",
+          "DEMO_APP_4",
+          "DPAD_CENTER",
+          "DPAD_DOWN",
+          "DPAD_DOWN_LEFT",
+          "DPAD_DOWN_RIGHT",
+          "DPAD_LEFT",
+          "DPAD_RIGHT",
+          "DPAD_UP",
+          "DPAD_UP_LEFT",
+          "DPAD_UP_RIGHT",
+          "DVR",
+          "E",
+          "EISU",
+          "ENDCALL",
+          "END_LONG",
+          "ENTER",
+          "ENVELOPE",
+          "EQUALS",
+          "ESCAPE",
+          "EXPLORER",
+          "F",
+          "F1",
+          "F10",
+          "F11",
+          "F12",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "FEATURED_APP_1",
+          "FEATURED_APP_2",
+          "FEATURED_APP_3",
+          "FEATURED_APP_4",
+          "FOCUS",
+          "FORWARD",
+          "FORWARD_DEL",
+          "FUNCTION",
+          "G",
+          "GRAVE",
+          "GUIDE",
+          "H",
+          "HEADSETHOOK",
+          "HELP",
+          "HENKAN",
+          "HOME",
+          "I",
+          "INFO",
+          "INSERT",
+          "J",
+          "K",
+          "KANA",
+          "KATAKANA_HIRAGANA",
+          "L",
+          "LANGUAGE_SWITCH",
+          "LAST_CHANNEL",
+          "LEFT_BRACKET",
+          "M",
+          "MANNER_MODE",
+          "MEDIA_AUDIO_TRACK",
+          "MEDIA_CLOSE",
+          "MEDIA_EJECT",
+          "MEDIA_FAST_FORWARD",
+          "MEDIA_NEXT",
+          "MEDIA_PAUSE",
+          "MEDIA_PLAY",
+          "MEDIA_PLAY_PAUSE",
+          "MEDIA_PREVIOUS",
+          "MEDIA_RECORD",
+          "MEDIA_REWIND",
+          "MEDIA_SKIP_BACKWARD",
+          "MEDIA_SKIP_FORWARD",
+          "MEDIA_STEP_BACKWARD",
+          "MEDIA_STEP_FORWARD",
+          "MEDIA_STOP",
+          "MEDIA_TOP_MENU",
+          "MENU",
+          "META_LEFT",
+          "META_RIGHT",
+          "MINUS",
+          "MOVE_END",
+          "MOVE_HOME",
+          "MUHENKAN",
+          "MUSIC",
+          "MUTE",
+          "N",
+          "NAVIGATE_IN",
+          "NAVIGATE_NEXT",
+          "NAVIGATE_OUT",
+          "NAVIGATE_PREVIOUS",
+          "NOTIFICATION",
+          "NUM",
+          "NUMPAD_0",
+          "NUMPAD_1",
+          "NUMPAD_2",
+          "NUMPAD_3",
+          "NUMPAD_4",
+          "NUMPAD_5",
+          "NUMPAD_6",
+          "NUMPAD_7",
+          "NUMPAD_8",
+          "NUMPAD_9",
+          "NUMPAD_ADD",
+          "NUMPAD_COMMA",
+          "NUMPAD_DIVIDE",
+          "NUMPAD_DOT",
+          "NUMPAD_ENTER",
+          "NUMPAD_EQUALS",
+          "NUMPAD_LEFT_PAREN",
+          "NUMPAD_MULTIPLY",
+          "NUMPAD_RIGHT_PAREN",
+          "NUMPAD_SUBTRACT",
+          "NUM_LOCK",
+          "O",
+          "P",
+          "PAGE_DOWN",
+          "PAGE_UP",
+          "PAIRING",
+          "PASTE",
+          "PERIOD",
+          "PICTSYMBOLS",
+          "PLUS",
+          "POUND",
+          "PROFILE_SWITCH",
+          "PROG_BLUE",
+          "PROG_GREEN",
+          "PROG_RED",
+          "PROG_YELLOW",
+          "Q",
+          "R",
+          "REFRESH",
+          "RIGHT_BRACKET",
+          "RO",
+          "S",
+          "SCROLL_LOCK",
+          "SEARCH",
+          "SEMICOLON",
+          "SETTINGS",
+          "SHIFT_LEFT",
+          "SHIFT_RIGHT",
+          "SHORT",
+          "SLASH",
+          "SOFT_LEFT",
+          "SOFT_RIGHT",
+          "SPACE",
+          "STAR",
+          "START_LONG",
+          "STB_INPUT",
+          "STB_POWER",
+          "STEM_1",
+          "STEM_2",
+          "STEM_3",
+          "STEM_PRIMARY",
+          "SWITCH_CHARSET",
+          "SYM",
+          "SYSRQ",
+          "SYSTEM_NAVIGATION_DOWN",
+          "SYSTEM_NAVIGATION_LEFT",
+          "SYSTEM_NAVIGATION_RIGHT",
+          "SYSTEM_NAVIGATION_UP",
+          "T",
+          "TAB",
+          "THUMBS_DOWN",
+          "THUMBS_UP",
+          "TV",
+          "TV_ANTENNA_CABLE",
+          "TV_AUDIO_DESCRIPTION",
+          "TV_AUDIO_DESCRIPTION_MIX_DOWN",
+          "TV_AUDIO_DESCRIPTION_MIX_UP",
+          "TV_CONTENTS_MENU",
+          "TV_DATA_SERVICE",
+          "TV_INPUT",
+          "TV_INPUT_COMPONENT_1",
+          "TV_INPUT_COMPONENT_2",
+          "TV_INPUT_COMPOSITE_1",
+          "TV_INPUT_COMPOSITE_2",
+          "TV_INPUT_HDMI_1",
+          "TV_INPUT_HDMI_2",
+          "TV_INPUT_HDMI_3",
+          "TV_INPUT_HDMI_4",
+          "TV_INPUT_VGA_1",
+          "TV_MEDIA_CONTEXT_MENU",
+          "TV_NETWORK",
+          "TV_NUMBER_ENTRY",
+          "TV_RADIO_SERVICE",
+          "TV_SATELLITE",
+          "TV_SATELLITE_BS",
+          "TV_SATELLITE_CS",
+          "TV_SATELLITE_SERVICE",
+          "TV_TELETEXT",
+          "TV_TERRESTRIAL_ANALOG",
+          "TV_TERRESTRIAL_DIGITAL",
+          "TV_TIMER_PROGRAMMING",
+          "TV_ZOOM_MODE",
+          "U",
+          "V",
+          "VIDEO_APP_1",
+          "VIDEO_APP_2",
+          "VIDEO_APP_3",
+          "VIDEO_APP_4",
+          "VIDEO_APP_5",
+          "VIDEO_APP_6",
+          "VIDEO_APP_7",
+          "VIDEO_APP_8",
+          "VOICE_ASSIST",
+          "W",
+          "WINDOW",
+          "X",
+          "Y",
+          "YEN",
+          "Z",
+          "ZENKAKU_HANKAKU",
+          "ZOOM_IN",
+          "ZOOM_OUT"
+        ],
+        "volume": [
+          "VOLUME_DOWN",
+          "VOLUME_MUTE",
+          "VOLUME_UP"
+        ],
+        "power": [
+          "POWER",
+          "SLEEP",
+          "SOFT_SLEEP",
+          "TV_POWER",
+          "WAKEUP"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "identity": [
+          "mac",
+          "manufacturer",
+          "model",
+          "name",
+          "sw_version"
+        ],
+        "auth": [
+          "InvalidAuth on a wrong code",
+          "InvalidAuth on connect",
+          "async_finish_pairing",
+          "async_start_pairing"
+        ],
+        "session": [
+          "async_connect",
+          "disconnect",
+          "is_available callback",
+          "keep_reconnecting",
+          "ping"
+        ],
+        "state": [
+          "current_app",
+          "is_on",
+          "is_voice_enabled",
+          "volume_info"
+        ],
+        "voice": [
+          "VoiceSessionInProgress",
+          "async with",
+          "end",
+          "send_chunk",
+          "start_voice"
+        ],
+        "apps": [
+          "app id",
+          "app link"
+        ]
+      },
+      "answers": [
+        {
+          "status": 403,
+          "operation": "androidtv.remote",
+          "count": 2
+        },
+        {
+          "status": 499,
+          "operation": "voice.interrupted",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "kivi-android-tv-mtxxxx",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "client certificate and the set's MAC",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "mac"
+          ],
+          "events": [
+            5,
+            6
+          ],
+          "duration_ms": 34
+        },
+        {
+          "name": "the set's name in its certificate",
+          "action": "identify",
+          "status": "known-failure",
+          "detail": "AssertionError: MiTV-MOEU0",
+          "covers": [
+            "name"
+          ],
+          "events": [
+            6,
+            6
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "an unpaired certificate is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "InvalidAuth on connect"
+          ],
+          "events": [
+            6,
+            7
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "Polo pairing with the on-screen code",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_start_pairing",
+            "async_finish_pairing"
+          ],
+          "events": [
+            7,
+            11
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "connect, and the initial Remote v2 state arrives",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            11,
+            20
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "device info over Remote v2",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model",
+            "sw_version"
+          ],
+          "events": [
+            20,
+            20
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "initial power, app, volume and voice state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "is_on",
+            "current_app",
+            "volume_info",
+            "is_voice_enabled"
+          ],
+          "events": [
+            20,
+            20
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_UP",
+            "SHORT"
+          ],
+          "events": [
+            20,
+            23
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "long key press, held then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_LEFT",
+            "START_LONG",
+            "END_LONG"
+          ],
+          "events": [
+            23,
+            29
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power off and on, seen by the client",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "POWER"
+          ],
+          "events": [
+            29,
+            37
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "volume up and mute, seen by the client",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_UP",
+            "VOLUME_MUTE"
+          ],
+          "events": [
+            37,
+            45
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "IME text into a focused field",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits",
+            "space"
+          ],
+          "events": [
+            45,
+            52
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "app id and deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app id",
+            "app link"
+          ],
+          "events": [
+            52,
+            56
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "voice: negotiate, stream two chunks, end",
+          "action": "voice",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "start_voice",
+            "send_chunk",
+            "end"
+          ],
+          "events": [
+            56,
+            69
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "two keepalive pings answered",
+          "action": "keepalive",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "ping"
+          ],
+          "events": [
+            69,
+            69
+          ],
+          "duration_ms": 11016
+        },
+        {
+          "name": "a disconnect interrupts an open voice stream",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            69,
+            78
+          ],
+          "duration_ms": 11
+        },
+        {
+          "name": "reconnect with the paired certificate",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            78,
+            88
+          ],
+          "duration_ms": 10
+        },
+        {
+          "name": "Remote v2 switched off and on keeps the pairing",
+          "action": "protocol-switch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect",
+            "async_connect"
+          ],
+          "events": [
+            88,
+            103
+          ],
+          "duration_ms": 14
+        },
+        {
+          "name": "a forced disconnect clears the pairing",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            103,
+            106
+          ],
+          "duration_ms": 7
+        }
+      ],
+      "gaps": [],
+      "expect": {
+        "description": "androidtvremote2: refused unpaired, paired with the code, then keys, text, an app link and a voice stream over TLS, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "11",
+          "12",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "ALL_APPS",
+          "ALT_LEFT",
+          "ALT_RIGHT",
+          "APOSTROPHE",
+          "APP_SWITCH",
+          "ASSIST",
+          "AT",
+          "AVR_INPUT",
+          "AVR_POWER",
+          "B",
+          "BACK",
+          "BACKSLASH",
+          "BOOKMARK",
+          "BREAK",
+          "BRIGHTNESS_DOWN",
+          "BRIGHTNESS_UP",
+          "BUTTON_1",
+          "BUTTON_10",
+          "BUTTON_11",
+          "BUTTON_12",
+          "BUTTON_13",
+          "BUTTON_14",
+          "BUTTON_15",
+          "BUTTON_16",
+          "BUTTON_2",
+          "BUTTON_3",
+          "BUTTON_4",
+          "BUTTON_5",
+          "BUTTON_6",
+          "BUTTON_7",
+          "BUTTON_8",
+          "BUTTON_9",
+          "BUTTON_A",
+          "BUTTON_B",
+          "BUTTON_C",
+          "BUTTON_L1",
+          "BUTTON_L2",
+          "BUTTON_MODE",
+          "BUTTON_R1",
+          "BUTTON_R2",
+          "BUTTON_SELECT",
+          "BUTTON_START",
+          "BUTTON_THUMBL",
+          "BUTTON_THUMBR",
+          "BUTTON_X",
+          "BUTTON_Y",
+          "BUTTON_Z",
+          "C",
+          "CALCULATOR",
+          "CALENDAR",
+          "CALL",
+          "CAMERA",
+          "CAPS_LOCK",
+          "CAPTIONS",
+          "CHANNEL_DOWN",
+          "CHANNEL_UP",
+          "CLEAR",
+          "COMMA",
+          "CONTACTS",
+          "COPY",
+          "CTRL_LEFT",
+          "CTRL_RIGHT",
+          "CUT",
+          "D",
+          "DEL",
+          "DEMO_APP_1",
+          "DEMO_APP_2",
+          "DEMO_APP_3",
+          "DEMO_APP_4",
+          "DPAD_CENTER",
+          "DPAD_DOWN",
+          "DPAD_DOWN_LEFT",
+          "DPAD_DOWN_RIGHT",
+          "DPAD_LEFT",
+          "DPAD_RIGHT",
+          "DPAD_UP",
+          "DPAD_UP_LEFT",
+          "DPAD_UP_RIGHT",
+          "DVR",
+          "E",
+          "EISU",
+          "ENDCALL",
+          "END_LONG",
+          "ENTER",
+          "ENVELOPE",
+          "EQUALS",
+          "ESCAPE",
+          "EXPLORER",
+          "F",
+          "F1",
+          "F10",
+          "F11",
+          "F12",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "FEATURED_APP_1",
+          "FEATURED_APP_2",
+          "FEATURED_APP_3",
+          "FEATURED_APP_4",
+          "FOCUS",
+          "FORWARD",
+          "FORWARD_DEL",
+          "FUNCTION",
+          "G",
+          "GRAVE",
+          "GUIDE",
+          "H",
+          "HEADSETHOOK",
+          "HELP",
+          "HENKAN",
+          "HOME",
+          "I",
+          "INFO",
+          "INSERT",
+          "J",
+          "K",
+          "KANA",
+          "KATAKANA_HIRAGANA",
+          "L",
+          "LANGUAGE_SWITCH",
+          "LAST_CHANNEL",
+          "LEFT_BRACKET",
+          "M",
+          "MANNER_MODE",
+          "MEDIA_AUDIO_TRACK",
+          "MEDIA_CLOSE",
+          "MEDIA_EJECT",
+          "MEDIA_FAST_FORWARD",
+          "MEDIA_NEXT",
+          "MEDIA_PAUSE",
+          "MEDIA_PLAY",
+          "MEDIA_PLAY_PAUSE",
+          "MEDIA_PREVIOUS",
+          "MEDIA_RECORD",
+          "MEDIA_REWIND",
+          "MEDIA_SKIP_BACKWARD",
+          "MEDIA_SKIP_FORWARD",
+          "MEDIA_STEP_BACKWARD",
+          "MEDIA_STEP_FORWARD",
+          "MEDIA_STOP",
+          "MEDIA_TOP_MENU",
+          "MENU",
+          "META_LEFT",
+          "META_RIGHT",
+          "MINUS",
+          "MOVE_END",
+          "MOVE_HOME",
+          "MUHENKAN",
+          "MUSIC",
+          "MUTE",
+          "N",
+          "NAVIGATE_IN",
+          "NAVIGATE_NEXT",
+          "NAVIGATE_OUT",
+          "NAVIGATE_PREVIOUS",
+          "NOTIFICATION",
+          "NUM",
+          "NUMPAD_0",
+          "NUMPAD_1",
+          "NUMPAD_2",
+          "NUMPAD_3",
+          "NUMPAD_4",
+          "NUMPAD_5",
+          "NUMPAD_6",
+          "NUMPAD_7",
+          "NUMPAD_8",
+          "NUMPAD_9",
+          "NUMPAD_ADD",
+          "NUMPAD_COMMA",
+          "NUMPAD_DIVIDE",
+          "NUMPAD_DOT",
+          "NUMPAD_ENTER",
+          "NUMPAD_EQUALS",
+          "NUMPAD_LEFT_PAREN",
+          "NUMPAD_MULTIPLY",
+          "NUMPAD_RIGHT_PAREN",
+          "NUMPAD_SUBTRACT",
+          "NUM_LOCK",
+          "O",
+          "P",
+          "PAGE_DOWN",
+          "PAGE_UP",
+          "PAIRING",
+          "PASTE",
+          "PERIOD",
+          "PICTSYMBOLS",
+          "PLUS",
+          "POUND",
+          "PROFILE_SWITCH",
+          "PROG_BLUE",
+          "PROG_GREEN",
+          "PROG_RED",
+          "PROG_YELLOW",
+          "Q",
+          "R",
+          "REFRESH",
+          "RIGHT_BRACKET",
+          "RO",
+          "S",
+          "SCROLL_LOCK",
+          "SEARCH",
+          "SEMICOLON",
+          "SETTINGS",
+          "SHIFT_LEFT",
+          "SHIFT_RIGHT",
+          "SHORT",
+          "SLASH",
+          "SOFT_LEFT",
+          "SOFT_RIGHT",
+          "SPACE",
+          "STAR",
+          "START_LONG",
+          "STB_INPUT",
+          "STB_POWER",
+          "STEM_1",
+          "STEM_2",
+          "STEM_3",
+          "STEM_PRIMARY",
+          "SWITCH_CHARSET",
+          "SYM",
+          "SYSRQ",
+          "SYSTEM_NAVIGATION_DOWN",
+          "SYSTEM_NAVIGATION_LEFT",
+          "SYSTEM_NAVIGATION_RIGHT",
+          "SYSTEM_NAVIGATION_UP",
+          "T",
+          "TAB",
+          "THUMBS_DOWN",
+          "THUMBS_UP",
+          "TV",
+          "TV_ANTENNA_CABLE",
+          "TV_AUDIO_DESCRIPTION",
+          "TV_AUDIO_DESCRIPTION_MIX_DOWN",
+          "TV_AUDIO_DESCRIPTION_MIX_UP",
+          "TV_CONTENTS_MENU",
+          "TV_DATA_SERVICE",
+          "TV_INPUT",
+          "TV_INPUT_COMPONENT_1",
+          "TV_INPUT_COMPONENT_2",
+          "TV_INPUT_COMPOSITE_1",
+          "TV_INPUT_COMPOSITE_2",
+          "TV_INPUT_HDMI_1",
+          "TV_INPUT_HDMI_2",
+          "TV_INPUT_HDMI_3",
+          "TV_INPUT_HDMI_4",
+          "TV_INPUT_VGA_1",
+          "TV_MEDIA_CONTEXT_MENU",
+          "TV_NETWORK",
+          "TV_NUMBER_ENTRY",
+          "TV_RADIO_SERVICE",
+          "TV_SATELLITE",
+          "TV_SATELLITE_BS",
+          "TV_SATELLITE_CS",
+          "TV_SATELLITE_SERVICE",
+          "TV_TELETEXT",
+          "TV_TERRESTRIAL_ANALOG",
+          "TV_TERRESTRIAL_DIGITAL",
+          "TV_TIMER_PROGRAMMING",
+          "TV_ZOOM_MODE",
+          "U",
+          "V",
+          "VIDEO_APP_1",
+          "VIDEO_APP_2",
+          "VIDEO_APP_3",
+          "VIDEO_APP_4",
+          "VIDEO_APP_5",
+          "VIDEO_APP_6",
+          "VIDEO_APP_7",
+          "VIDEO_APP_8",
+          "VOICE_ASSIST",
+          "W",
+          "WINDOW",
+          "X",
+          "Y",
+          "YEN",
+          "Z",
+          "ZENKAKU_HANKAKU",
+          "ZOOM_IN",
+          "ZOOM_OUT"
+        ],
+        "volume": [
+          "VOLUME_DOWN",
+          "VOLUME_MUTE",
+          "VOLUME_UP"
+        ],
+        "power": [
+          "POWER",
+          "SLEEP",
+          "SOFT_SLEEP",
+          "TV_POWER",
+          "WAKEUP"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "identity": [
+          "mac",
+          "manufacturer",
+          "model",
+          "name",
+          "sw_version"
+        ],
+        "auth": [
+          "InvalidAuth on a wrong code",
+          "InvalidAuth on connect",
+          "async_finish_pairing",
+          "async_start_pairing"
+        ],
+        "session": [
+          "async_connect",
+          "disconnect",
+          "is_available callback",
+          "keep_reconnecting",
+          "ping"
+        ],
+        "state": [
+          "current_app",
+          "is_on",
+          "is_voice_enabled",
+          "volume_info"
+        ],
+        "voice": [
+          "VoiceSessionInProgress",
+          "async with",
+          "end",
+          "send_chunk",
+          "start_voice"
+        ],
+        "apps": [
+          "app id",
+          "app link"
+        ]
+      },
+      "answers": [
+        {
+          "status": 403,
+          "operation": "androidtv.remote",
+          "count": 2
+        },
+        {
+          "status": 499,
+          "operation": "voice.interrupted",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "kivi-android-tv-mtxxxx-2",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "client certificate and the set's MAC",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "mac"
+          ],
+          "events": [
+            5,
+            6
+          ],
+          "duration_ms": 17
+        },
+        {
+          "name": "the set's name in its certificate",
+          "action": "identify",
+          "status": "known-failure",
+          "detail": "AssertionError: MiTV-MOEU0",
+          "covers": [
+            "name"
+          ],
+          "events": [
+            6,
+            6
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "an unpaired certificate is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "InvalidAuth on connect"
+          ],
+          "events": [
+            6,
+            7
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "Polo pairing with the on-screen code",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_start_pairing",
+            "async_finish_pairing"
+          ],
+          "events": [
+            7,
+            11
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "connect, and the initial Remote v2 state arrives",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            11,
+            20
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "device info over Remote v2",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model",
+            "sw_version"
+          ],
+          "events": [
+            20,
+            20
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "initial power, app, volume and voice state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "is_on",
+            "current_app",
+            "volume_info",
+            "is_voice_enabled"
+          ],
+          "events": [
+            20,
+            20
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_UP",
+            "SHORT"
+          ],
+          "events": [
+            20,
+            23
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "long key press, held then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_LEFT",
+            "START_LONG",
+            "END_LONG"
+          ],
+          "events": [
+            23,
+            29
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power off and on, seen by the client",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "POWER"
+          ],
+          "events": [
+            29,
+            37
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "volume up and mute, seen by the client",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_UP",
+            "VOLUME_MUTE"
+          ],
+          "events": [
+            37,
+            45
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "IME text into a focused field",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits",
+            "space"
+          ],
+          "events": [
+            45,
+            52
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "app id and deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app id",
+            "app link"
+          ],
+          "events": [
+            52,
+            56
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "voice: negotiate, stream two chunks, end",
+          "action": "voice",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "start_voice",
+            "send_chunk",
+            "end"
+          ],
+          "events": [
+            56,
+            69
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "two keepalive pings answered",
+          "action": "keepalive",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "ping"
+          ],
+          "events": [
+            69,
+            69
+          ],
+          "duration_ms": 11016
+        },
+        {
+          "name": "a disconnect interrupts an open voice stream",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            69,
+            78
+          ],
+          "duration_ms": 13
+        },
+        {
+          "name": "reconnect with the paired certificate",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            78,
+            88
+          ],
+          "duration_ms": 12
+        },
+        {
+          "name": "Remote v2 switched off and on keeps the pairing",
+          "action": "protocol-switch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect",
+            "async_connect"
+          ],
+          "events": [
+            88,
+            103
+          ],
+          "duration_ms": 14
+        },
+        {
+          "name": "a forced disconnect clears the pairing",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            103,
+            106
+          ],
+          "duration_ms": 8
+        }
+      ],
+      "gaps": [],
+      "expect": {
+        "description": "androidtvremote2: refused unpaired, paired with the code, then keys, text, an app link and a voice stream over TLS, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "11",
+          "12",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "ALL_APPS",
+          "ALT_LEFT",
+          "ALT_RIGHT",
+          "APOSTROPHE",
+          "APP_SWITCH",
+          "ASSIST",
+          "AT",
+          "AVR_INPUT",
+          "AVR_POWER",
+          "B",
+          "BACK",
+          "BACKSLASH",
+          "BOOKMARK",
+          "BREAK",
+          "BRIGHTNESS_DOWN",
+          "BRIGHTNESS_UP",
+          "BUTTON_1",
+          "BUTTON_10",
+          "BUTTON_11",
+          "BUTTON_12",
+          "BUTTON_13",
+          "BUTTON_14",
+          "BUTTON_15",
+          "BUTTON_16",
+          "BUTTON_2",
+          "BUTTON_3",
+          "BUTTON_4",
+          "BUTTON_5",
+          "BUTTON_6",
+          "BUTTON_7",
+          "BUTTON_8",
+          "BUTTON_9",
+          "BUTTON_A",
+          "BUTTON_B",
+          "BUTTON_C",
+          "BUTTON_L1",
+          "BUTTON_L2",
+          "BUTTON_MODE",
+          "BUTTON_R1",
+          "BUTTON_R2",
+          "BUTTON_SELECT",
+          "BUTTON_START",
+          "BUTTON_THUMBL",
+          "BUTTON_THUMBR",
+          "BUTTON_X",
+          "BUTTON_Y",
+          "BUTTON_Z",
+          "C",
+          "CALCULATOR",
+          "CALENDAR",
+          "CALL",
+          "CAMERA",
+          "CAPS_LOCK",
+          "CAPTIONS",
+          "CHANNEL_DOWN",
+          "CHANNEL_UP",
+          "CLEAR",
+          "COMMA",
+          "CONTACTS",
+          "COPY",
+          "CTRL_LEFT",
+          "CTRL_RIGHT",
+          "CUT",
+          "D",
+          "DEL",
+          "DEMO_APP_1",
+          "DEMO_APP_2",
+          "DEMO_APP_3",
+          "DEMO_APP_4",
+          "DPAD_CENTER",
+          "DPAD_DOWN",
+          "DPAD_DOWN_LEFT",
+          "DPAD_DOWN_RIGHT",
+          "DPAD_LEFT",
+          "DPAD_RIGHT",
+          "DPAD_UP",
+          "DPAD_UP_LEFT",
+          "DPAD_UP_RIGHT",
+          "DVR",
+          "E",
+          "EISU",
+          "ENDCALL",
+          "END_LONG",
+          "ENTER",
+          "ENVELOPE",
+          "EQUALS",
+          "ESCAPE",
+          "EXPLORER",
+          "F",
+          "F1",
+          "F10",
+          "F11",
+          "F12",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "FEATURED_APP_1",
+          "FEATURED_APP_2",
+          "FEATURED_APP_3",
+          "FEATURED_APP_4",
+          "FOCUS",
+          "FORWARD",
+          "FORWARD_DEL",
+          "FUNCTION",
+          "G",
+          "GRAVE",
+          "GUIDE",
+          "H",
+          "HEADSETHOOK",
+          "HELP",
+          "HENKAN",
+          "HOME",
+          "I",
+          "INFO",
+          "INSERT",
+          "J",
+          "K",
+          "KANA",
+          "KATAKANA_HIRAGANA",
+          "L",
+          "LANGUAGE_SWITCH",
+          "LAST_CHANNEL",
+          "LEFT_BRACKET",
+          "M",
+          "MANNER_MODE",
+          "MEDIA_AUDIO_TRACK",
+          "MEDIA_CLOSE",
+          "MEDIA_EJECT",
+          "MEDIA_FAST_FORWARD",
+          "MEDIA_NEXT",
+          "MEDIA_PAUSE",
+          "MEDIA_PLAY",
+          "MEDIA_PLAY_PAUSE",
+          "MEDIA_PREVIOUS",
+          "MEDIA_RECORD",
+          "MEDIA_REWIND",
+          "MEDIA_SKIP_BACKWARD",
+          "MEDIA_SKIP_FORWARD",
+          "MEDIA_STEP_BACKWARD",
+          "MEDIA_STEP_FORWARD",
+          "MEDIA_STOP",
+          "MEDIA_TOP_MENU",
+          "MENU",
+          "META_LEFT",
+          "META_RIGHT",
+          "MINUS",
+          "MOVE_END",
+          "MOVE_HOME",
+          "MUHENKAN",
+          "MUSIC",
+          "MUTE",
+          "N",
+          "NAVIGATE_IN",
+          "NAVIGATE_NEXT",
+          "NAVIGATE_OUT",
+          "NAVIGATE_PREVIOUS",
+          "NOTIFICATION",
+          "NUM",
+          "NUMPAD_0",
+          "NUMPAD_1",
+          "NUMPAD_2",
+          "NUMPAD_3",
+          "NUMPAD_4",
+          "NUMPAD_5",
+          "NUMPAD_6",
+          "NUMPAD_7",
+          "NUMPAD_8",
+          "NUMPAD_9",
+          "NUMPAD_ADD",
+          "NUMPAD_COMMA",
+          "NUMPAD_DIVIDE",
+          "NUMPAD_DOT",
+          "NUMPAD_ENTER",
+          "NUMPAD_EQUALS",
+          "NUMPAD_LEFT_PAREN",
+          "NUMPAD_MULTIPLY",
+          "NUMPAD_RIGHT_PAREN",
+          "NUMPAD_SUBTRACT",
+          "NUM_LOCK",
+          "O",
+          "P",
+          "PAGE_DOWN",
+          "PAGE_UP",
+          "PAIRING",
+          "PASTE",
+          "PERIOD",
+          "PICTSYMBOLS",
+          "PLUS",
+          "POUND",
+          "PROFILE_SWITCH",
+          "PROG_BLUE",
+          "PROG_GREEN",
+          "PROG_RED",
+          "PROG_YELLOW",
+          "Q",
+          "R",
+          "REFRESH",
+          "RIGHT_BRACKET",
+          "RO",
+          "S",
+          "SCROLL_LOCK",
+          "SEARCH",
+          "SEMICOLON",
+          "SETTINGS",
+          "SHIFT_LEFT",
+          "SHIFT_RIGHT",
+          "SHORT",
+          "SLASH",
+          "SOFT_LEFT",
+          "SOFT_RIGHT",
+          "SPACE",
+          "STAR",
+          "START_LONG",
+          "STB_INPUT",
+          "STB_POWER",
+          "STEM_1",
+          "STEM_2",
+          "STEM_3",
+          "STEM_PRIMARY",
+          "SWITCH_CHARSET",
+          "SYM",
+          "SYSRQ",
+          "SYSTEM_NAVIGATION_DOWN",
+          "SYSTEM_NAVIGATION_LEFT",
+          "SYSTEM_NAVIGATION_RIGHT",
+          "SYSTEM_NAVIGATION_UP",
+          "T",
+          "TAB",
+          "THUMBS_DOWN",
+          "THUMBS_UP",
+          "TV",
+          "TV_ANTENNA_CABLE",
+          "TV_AUDIO_DESCRIPTION",
+          "TV_AUDIO_DESCRIPTION_MIX_DOWN",
+          "TV_AUDIO_DESCRIPTION_MIX_UP",
+          "TV_CONTENTS_MENU",
+          "TV_DATA_SERVICE",
+          "TV_INPUT",
+          "TV_INPUT_COMPONENT_1",
+          "TV_INPUT_COMPONENT_2",
+          "TV_INPUT_COMPOSITE_1",
+          "TV_INPUT_COMPOSITE_2",
+          "TV_INPUT_HDMI_1",
+          "TV_INPUT_HDMI_2",
+          "TV_INPUT_HDMI_3",
+          "TV_INPUT_HDMI_4",
+          "TV_INPUT_VGA_1",
+          "TV_MEDIA_CONTEXT_MENU",
+          "TV_NETWORK",
+          "TV_NUMBER_ENTRY",
+          "TV_RADIO_SERVICE",
+          "TV_SATELLITE",
+          "TV_SATELLITE_BS",
+          "TV_SATELLITE_CS",
+          "TV_SATELLITE_SERVICE",
+          "TV_TELETEXT",
+          "TV_TERRESTRIAL_ANALOG",
+          "TV_TERRESTRIAL_DIGITAL",
+          "TV_TIMER_PROGRAMMING",
+          "TV_ZOOM_MODE",
+          "U",
+          "V",
+          "VIDEO_APP_1",
+          "VIDEO_APP_2",
+          "VIDEO_APP_3",
+          "VIDEO_APP_4",
+          "VIDEO_APP_5",
+          "VIDEO_APP_6",
+          "VIDEO_APP_7",
+          "VIDEO_APP_8",
+          "VOICE_ASSIST",
+          "W",
+          "WINDOW",
+          "X",
+          "Y",
+          "YEN",
+          "Z",
+          "ZENKAKU_HANKAKU",
+          "ZOOM_IN",
+          "ZOOM_OUT"
+        ],
+        "volume": [
+          "VOLUME_DOWN",
+          "VOLUME_MUTE",
+          "VOLUME_UP"
+        ],
+        "power": [
+          "POWER",
+          "SLEEP",
+          "SOFT_SLEEP",
+          "TV_POWER",
+          "WAKEUP"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "identity": [
+          "mac",
+          "manufacturer",
+          "model",
+          "name",
+          "sw_version"
+        ],
+        "auth": [
+          "InvalidAuth on a wrong code",
+          "InvalidAuth on connect",
+          "async_finish_pairing",
+          "async_start_pairing"
+        ],
+        "session": [
+          "async_connect",
+          "disconnect",
+          "is_available callback",
+          "keep_reconnecting",
+          "ping"
+        ],
+        "state": [
+          "current_app",
+          "is_on",
+          "is_voice_enabled",
+          "volume_info"
+        ],
+        "voice": [
+          "VoiceSessionInProgress",
+          "async with",
+          "end",
+          "send_chunk",
+          "start_voice"
+        ],
+        "apps": [
+          "app id",
+          "app link"
+        ]
+      },
+      "answers": [
+        {
+          "status": 403,
+          "operation": "androidtv.remote",
+          "count": 2
+        },
+        {
+          "status": 499,
+          "operation": "voice.interrupted",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "nokia-streaming-stick-800",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "client certificate and the set's MAC",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "mac"
+          ],
+          "events": [
+            7,
+            8
+          ],
+          "duration_ms": 21
+        },
+        {
+          "name": "the set's name in its certificate",
+          "action": "identify",
+          "status": "known-failure",
+          "detail": "AssertionError: MiTV-MOEU0",
+          "covers": [
+            "name"
+          ],
+          "events": [
+            8,
+            8
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "an unpaired certificate is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "InvalidAuth on connect"
+          ],
+          "events": [
+            8,
+            9
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "Polo pairing with the on-screen code",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_start_pairing",
+            "async_finish_pairing"
+          ],
+          "events": [
+            9,
+            13
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "connect, and the initial Remote v2 state arrives",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            13,
+            22
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "device info over Remote v2",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model",
+            "sw_version"
+          ],
+          "events": [
+            22,
+            22
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "initial power, app, volume and voice state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "is_on",
+            "current_app",
+            "volume_info",
+            "is_voice_enabled"
+          ],
+          "events": [
+            22,
+            22
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_UP",
+            "SHORT"
+          ],
+          "events": [
+            22,
+            25
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "long key press, held then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_LEFT",
+            "START_LONG",
+            "END_LONG"
+          ],
+          "events": [
+            25,
+            31
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power off and on, seen by the client",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "POWER"
+          ],
+          "events": [
+            31,
+            39
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "volume up and mute, seen by the client",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_UP",
+            "VOLUME_MUTE"
+          ],
+          "events": [
+            39,
+            45
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "IME text into a focused field",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits",
+            "space"
+          ],
+          "events": [
+            45,
+            52
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "app id and deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app id",
+            "app link"
+          ],
+          "events": [
+            52,
+            56
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "voice: negotiate, stream two chunks, end",
+          "action": "voice",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "start_voice",
+            "send_chunk",
+            "end"
+          ],
+          "events": [
+            56,
+            69
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "two keepalive pings answered",
+          "action": "keepalive",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "ping"
+          ],
+          "events": [
+            69,
+            69
+          ],
+          "duration_ms": 11006
+        },
+        {
+          "name": "a disconnect interrupts an open voice stream",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            69,
+            78
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "reconnect with the paired certificate",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            78,
+            88
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "Remote v2 switched off and on keeps the pairing",
+          "action": "protocol-switch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect",
+            "async_connect"
+          ],
+          "events": [
+            88,
+            103
+          ],
+          "duration_ms": 11
+        },
+        {
+          "name": "a forced disconnect clears the pairing",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            103,
+            106
+          ],
+          "duration_ms": 6
+        }
+      ],
+      "gaps": [],
+      "expect": {
+        "description": "androidtvremote2: refused unpaired, paired with the code, then keys, text, an app link and a voice stream over TLS, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "11",
+          "12",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "ALL_APPS",
+          "ALT_LEFT",
+          "ALT_RIGHT",
+          "APOSTROPHE",
+          "APP_SWITCH",
+          "ASSIST",
+          "AT",
+          "AVR_INPUT",
+          "AVR_POWER",
+          "B",
+          "BACK",
+          "BACKSLASH",
+          "BOOKMARK",
+          "BREAK",
+          "BRIGHTNESS_DOWN",
+          "BRIGHTNESS_UP",
+          "BUTTON_1",
+          "BUTTON_10",
+          "BUTTON_11",
+          "BUTTON_12",
+          "BUTTON_13",
+          "BUTTON_14",
+          "BUTTON_15",
+          "BUTTON_16",
+          "BUTTON_2",
+          "BUTTON_3",
+          "BUTTON_4",
+          "BUTTON_5",
+          "BUTTON_6",
+          "BUTTON_7",
+          "BUTTON_8",
+          "BUTTON_9",
+          "BUTTON_A",
+          "BUTTON_B",
+          "BUTTON_C",
+          "BUTTON_L1",
+          "BUTTON_L2",
+          "BUTTON_MODE",
+          "BUTTON_R1",
+          "BUTTON_R2",
+          "BUTTON_SELECT",
+          "BUTTON_START",
+          "BUTTON_THUMBL",
+          "BUTTON_THUMBR",
+          "BUTTON_X",
+          "BUTTON_Y",
+          "BUTTON_Z",
+          "C",
+          "CALCULATOR",
+          "CALENDAR",
+          "CALL",
+          "CAMERA",
+          "CAPS_LOCK",
+          "CAPTIONS",
+          "CHANNEL_DOWN",
+          "CHANNEL_UP",
+          "CLEAR",
+          "COMMA",
+          "CONTACTS",
+          "COPY",
+          "CTRL_LEFT",
+          "CTRL_RIGHT",
+          "CUT",
+          "D",
+          "DEL",
+          "DEMO_APP_1",
+          "DEMO_APP_2",
+          "DEMO_APP_3",
+          "DEMO_APP_4",
+          "DPAD_CENTER",
+          "DPAD_DOWN",
+          "DPAD_DOWN_LEFT",
+          "DPAD_DOWN_RIGHT",
+          "DPAD_LEFT",
+          "DPAD_RIGHT",
+          "DPAD_UP",
+          "DPAD_UP_LEFT",
+          "DPAD_UP_RIGHT",
+          "DVR",
+          "E",
+          "EISU",
+          "ENDCALL",
+          "END_LONG",
+          "ENTER",
+          "ENVELOPE",
+          "EQUALS",
+          "ESCAPE",
+          "EXPLORER",
+          "F",
+          "F1",
+          "F10",
+          "F11",
+          "F12",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "FEATURED_APP_1",
+          "FEATURED_APP_2",
+          "FEATURED_APP_3",
+          "FEATURED_APP_4",
+          "FOCUS",
+          "FORWARD",
+          "FORWARD_DEL",
+          "FUNCTION",
+          "G",
+          "GRAVE",
+          "GUIDE",
+          "H",
+          "HEADSETHOOK",
+          "HELP",
+          "HENKAN",
+          "HOME",
+          "I",
+          "INFO",
+          "INSERT",
+          "J",
+          "K",
+          "KANA",
+          "KATAKANA_HIRAGANA",
+          "L",
+          "LANGUAGE_SWITCH",
+          "LAST_CHANNEL",
+          "LEFT_BRACKET",
+          "M",
+          "MANNER_MODE",
+          "MEDIA_AUDIO_TRACK",
+          "MEDIA_CLOSE",
+          "MEDIA_EJECT",
+          "MEDIA_FAST_FORWARD",
+          "MEDIA_NEXT",
+          "MEDIA_PAUSE",
+          "MEDIA_PLAY",
+          "MEDIA_PLAY_PAUSE",
+          "MEDIA_PREVIOUS",
+          "MEDIA_RECORD",
+          "MEDIA_REWIND",
+          "MEDIA_SKIP_BACKWARD",
+          "MEDIA_SKIP_FORWARD",
+          "MEDIA_STEP_BACKWARD",
+          "MEDIA_STEP_FORWARD",
+          "MEDIA_STOP",
+          "MEDIA_TOP_MENU",
+          "MENU",
+          "META_LEFT",
+          "META_RIGHT",
+          "MINUS",
+          "MOVE_END",
+          "MOVE_HOME",
+          "MUHENKAN",
+          "MUSIC",
+          "MUTE",
+          "N",
+          "NAVIGATE_IN",
+          "NAVIGATE_NEXT",
+          "NAVIGATE_OUT",
+          "NAVIGATE_PREVIOUS",
+          "NOTIFICATION",
+          "NUM",
+          "NUMPAD_0",
+          "NUMPAD_1",
+          "NUMPAD_2",
+          "NUMPAD_3",
+          "NUMPAD_4",
+          "NUMPAD_5",
+          "NUMPAD_6",
+          "NUMPAD_7",
+          "NUMPAD_8",
+          "NUMPAD_9",
+          "NUMPAD_ADD",
+          "NUMPAD_COMMA",
+          "NUMPAD_DIVIDE",
+          "NUMPAD_DOT",
+          "NUMPAD_ENTER",
+          "NUMPAD_EQUALS",
+          "NUMPAD_LEFT_PAREN",
+          "NUMPAD_MULTIPLY",
+          "NUMPAD_RIGHT_PAREN",
+          "NUMPAD_SUBTRACT",
+          "NUM_LOCK",
+          "O",
+          "P",
+          "PAGE_DOWN",
+          "PAGE_UP",
+          "PAIRING",
+          "PASTE",
+          "PERIOD",
+          "PICTSYMBOLS",
+          "PLUS",
+          "POUND",
+          "PROFILE_SWITCH",
+          "PROG_BLUE",
+          "PROG_GREEN",
+          "PROG_RED",
+          "PROG_YELLOW",
+          "Q",
+          "R",
+          "REFRESH",
+          "RIGHT_BRACKET",
+          "RO",
+          "S",
+          "SCROLL_LOCK",
+          "SEARCH",
+          "SEMICOLON",
+          "SETTINGS",
+          "SHIFT_LEFT",
+          "SHIFT_RIGHT",
+          "SHORT",
+          "SLASH",
+          "SOFT_LEFT",
+          "SOFT_RIGHT",
+          "SPACE",
+          "STAR",
+          "START_LONG",
+          "STB_INPUT",
+          "STB_POWER",
+          "STEM_1",
+          "STEM_2",
+          "STEM_3",
+          "STEM_PRIMARY",
+          "SWITCH_CHARSET",
+          "SYM",
+          "SYSRQ",
+          "SYSTEM_NAVIGATION_DOWN",
+          "SYSTEM_NAVIGATION_LEFT",
+          "SYSTEM_NAVIGATION_RIGHT",
+          "SYSTEM_NAVIGATION_UP",
+          "T",
+          "TAB",
+          "THUMBS_DOWN",
+          "THUMBS_UP",
+          "TV",
+          "TV_ANTENNA_CABLE",
+          "TV_AUDIO_DESCRIPTION",
+          "TV_AUDIO_DESCRIPTION_MIX_DOWN",
+          "TV_AUDIO_DESCRIPTION_MIX_UP",
+          "TV_CONTENTS_MENU",
+          "TV_DATA_SERVICE",
+          "TV_INPUT",
+          "TV_INPUT_COMPONENT_1",
+          "TV_INPUT_COMPONENT_2",
+          "TV_INPUT_COMPOSITE_1",
+          "TV_INPUT_COMPOSITE_2",
+          "TV_INPUT_HDMI_1",
+          "TV_INPUT_HDMI_2",
+          "TV_INPUT_HDMI_3",
+          "TV_INPUT_HDMI_4",
+          "TV_INPUT_VGA_1",
+          "TV_MEDIA_CONTEXT_MENU",
+          "TV_NETWORK",
+          "TV_NUMBER_ENTRY",
+          "TV_RADIO_SERVICE",
+          "TV_SATELLITE",
+          "TV_SATELLITE_BS",
+          "TV_SATELLITE_CS",
+          "TV_SATELLITE_SERVICE",
+          "TV_TELETEXT",
+          "TV_TERRESTRIAL_ANALOG",
+          "TV_TERRESTRIAL_DIGITAL",
+          "TV_TIMER_PROGRAMMING",
+          "TV_ZOOM_MODE",
+          "U",
+          "V",
+          "VIDEO_APP_1",
+          "VIDEO_APP_2",
+          "VIDEO_APP_3",
+          "VIDEO_APP_4",
+          "VIDEO_APP_5",
+          "VIDEO_APP_6",
+          "VIDEO_APP_7",
+          "VIDEO_APP_8",
+          "VOICE_ASSIST",
+          "W",
+          "WINDOW",
+          "X",
+          "Y",
+          "YEN",
+          "Z",
+          "ZENKAKU_HANKAKU",
+          "ZOOM_IN",
+          "ZOOM_OUT"
+        ],
+        "volume": [
+          "VOLUME_DOWN",
+          "VOLUME_MUTE",
+          "VOLUME_UP"
+        ],
+        "power": [
+          "POWER",
+          "SLEEP",
+          "SOFT_SLEEP",
+          "TV_POWER",
+          "WAKEUP"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "identity": [
+          "mac",
+          "manufacturer",
+          "model",
+          "name",
+          "sw_version"
+        ],
+        "auth": [
+          "InvalidAuth on a wrong code",
+          "InvalidAuth on connect",
+          "async_finish_pairing",
+          "async_start_pairing"
+        ],
+        "session": [
+          "async_connect",
+          "disconnect",
+          "is_available callback",
+          "keep_reconnecting",
+          "ping"
+        ],
+        "state": [
+          "current_app",
+          "is_on",
+          "is_voice_enabled",
+          "volume_info"
+        ],
+        "voice": [
+          "VoiceSessionInProgress",
+          "async with",
+          "end",
+          "send_chunk",
+          "start_voice"
+        ],
+        "apps": [
+          "app id",
+          "app link"
+        ]
+      },
+      "answers": [
+        {
+          "status": 403,
+          "operation": "androidtv.remote",
+          "count": 2
+        },
+        {
+          "status": 499,
+          "operation": "voice.interrupted",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "tcl-android-tv-c06",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "client certificate and the set's MAC",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "mac"
+          ],
+          "events": [
+            7,
+            8
+          ],
+          "duration_ms": 39
+        },
+        {
+          "name": "the set's name in its certificate",
+          "action": "identify",
+          "status": "known-failure",
+          "detail": "AssertionError: MiTV-MOEU0",
+          "covers": [
+            "name"
+          ],
+          "events": [
+            8,
+            8
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "an unpaired certificate is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "InvalidAuth on connect"
+          ],
+          "events": [
+            8,
+            9
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "Polo pairing with the on-screen code",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_start_pairing",
+            "async_finish_pairing"
+          ],
+          "events": [
+            9,
+            13
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "connect, and the initial Remote v2 state arrives",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            13,
+            22
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "device info over Remote v2",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model",
+            "sw_version"
+          ],
+          "events": [
+            22,
+            22
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "initial power, app, volume and voice state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "is_on",
+            "current_app",
+            "volume_info",
+            "is_voice_enabled"
+          ],
+          "events": [
+            22,
+            22
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_UP",
+            "SHORT"
+          ],
+          "events": [
+            22,
+            25
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "long key press, held then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_LEFT",
+            "START_LONG",
+            "END_LONG"
+          ],
+          "events": [
+            25,
+            31
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power off and on, seen by the client",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "POWER"
+          ],
+          "events": [
+            31,
+            39
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "volume up and mute, seen by the client",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_UP",
+            "VOLUME_MUTE"
+          ],
+          "events": [
+            39,
+            47
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "IME text into a focused field",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits",
+            "space"
+          ],
+          "events": [
+            47,
+            54
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "app id and deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app id",
+            "app link"
+          ],
+          "events": [
+            54,
+            58
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "voice: negotiate, stream two chunks, end",
+          "action": "voice",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "start_voice",
+            "send_chunk",
+            "end"
+          ],
+          "events": [
+            58,
+            71
+          ],
+          "duration_ms": 9
+        },
+        {
+          "name": "two keepalive pings answered",
+          "action": "keepalive",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "ping"
+          ],
+          "events": [
+            71,
+            71
+          ],
+          "duration_ms": 11013
+        },
+        {
+          "name": "a disconnect interrupts an open voice stream",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            71,
+            80
+          ],
+          "duration_ms": 10
+        },
+        {
+          "name": "reconnect with the paired certificate",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            80,
+            90
+          ],
+          "duration_ms": 11
+        },
+        {
+          "name": "Remote v2 switched off and on keeps the pairing",
+          "action": "protocol-switch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect",
+            "async_connect"
+          ],
+          "events": [
+            90,
+            105
+          ],
+          "duration_ms": 14
+        },
+        {
+          "name": "a forced disconnect clears the pairing",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            105,
+            108
+          ],
+          "duration_ms": 8
+        }
+      ],
+      "gaps": [],
+      "expect": {
+        "description": "androidtvremote2: refused unpaired, paired with the code, then keys, text, an app link and a voice stream over TLS, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "11",
+          "12",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "ALL_APPS",
+          "ALT_LEFT",
+          "ALT_RIGHT",
+          "APOSTROPHE",
+          "APP_SWITCH",
+          "ASSIST",
+          "AT",
+          "AVR_INPUT",
+          "AVR_POWER",
+          "B",
+          "BACK",
+          "BACKSLASH",
+          "BOOKMARK",
+          "BREAK",
+          "BRIGHTNESS_DOWN",
+          "BRIGHTNESS_UP",
+          "BUTTON_1",
+          "BUTTON_10",
+          "BUTTON_11",
+          "BUTTON_12",
+          "BUTTON_13",
+          "BUTTON_14",
+          "BUTTON_15",
+          "BUTTON_16",
+          "BUTTON_2",
+          "BUTTON_3",
+          "BUTTON_4",
+          "BUTTON_5",
+          "BUTTON_6",
+          "BUTTON_7",
+          "BUTTON_8",
+          "BUTTON_9",
+          "BUTTON_A",
+          "BUTTON_B",
+          "BUTTON_C",
+          "BUTTON_L1",
+          "BUTTON_L2",
+          "BUTTON_MODE",
+          "BUTTON_R1",
+          "BUTTON_R2",
+          "BUTTON_SELECT",
+          "BUTTON_START",
+          "BUTTON_THUMBL",
+          "BUTTON_THUMBR",
+          "BUTTON_X",
+          "BUTTON_Y",
+          "BUTTON_Z",
+          "C",
+          "CALCULATOR",
+          "CALENDAR",
+          "CALL",
+          "CAMERA",
+          "CAPS_LOCK",
+          "CAPTIONS",
+          "CHANNEL_DOWN",
+          "CHANNEL_UP",
+          "CLEAR",
+          "COMMA",
+          "CONTACTS",
+          "COPY",
+          "CTRL_LEFT",
+          "CTRL_RIGHT",
+          "CUT",
+          "D",
+          "DEL",
+          "DEMO_APP_1",
+          "DEMO_APP_2",
+          "DEMO_APP_3",
+          "DEMO_APP_4",
+          "DPAD_CENTER",
+          "DPAD_DOWN",
+          "DPAD_DOWN_LEFT",
+          "DPAD_DOWN_RIGHT",
+          "DPAD_LEFT",
+          "DPAD_RIGHT",
+          "DPAD_UP",
+          "DPAD_UP_LEFT",
+          "DPAD_UP_RIGHT",
+          "DVR",
+          "E",
+          "EISU",
+          "ENDCALL",
+          "END_LONG",
+          "ENTER",
+          "ENVELOPE",
+          "EQUALS",
+          "ESCAPE",
+          "EXPLORER",
+          "F",
+          "F1",
+          "F10",
+          "F11",
+          "F12",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "FEATURED_APP_1",
+          "FEATURED_APP_2",
+          "FEATURED_APP_3",
+          "FEATURED_APP_4",
+          "FOCUS",
+          "FORWARD",
+          "FORWARD_DEL",
+          "FUNCTION",
+          "G",
+          "GRAVE",
+          "GUIDE",
+          "H",
+          "HEADSETHOOK",
+          "HELP",
+          "HENKAN",
+          "HOME",
+          "I",
+          "INFO",
+          "INSERT",
+          "J",
+          "K",
+          "KANA",
+          "KATAKANA_HIRAGANA",
+          "L",
+          "LANGUAGE_SWITCH",
+          "LAST_CHANNEL",
+          "LEFT_BRACKET",
+          "M",
+          "MANNER_MODE",
+          "MEDIA_AUDIO_TRACK",
+          "MEDIA_CLOSE",
+          "MEDIA_EJECT",
+          "MEDIA_FAST_FORWARD",
+          "MEDIA_NEXT",
+          "MEDIA_PAUSE",
+          "MEDIA_PLAY",
+          "MEDIA_PLAY_PAUSE",
+          "MEDIA_PREVIOUS",
+          "MEDIA_RECORD",
+          "MEDIA_REWIND",
+          "MEDIA_SKIP_BACKWARD",
+          "MEDIA_SKIP_FORWARD",
+          "MEDIA_STEP_BACKWARD",
+          "MEDIA_STEP_FORWARD",
+          "MEDIA_STOP",
+          "MEDIA_TOP_MENU",
+          "MENU",
+          "META_LEFT",
+          "META_RIGHT",
+          "MINUS",
+          "MOVE_END",
+          "MOVE_HOME",
+          "MUHENKAN",
+          "MUSIC",
+          "MUTE",
+          "N",
+          "NAVIGATE_IN",
+          "NAVIGATE_NEXT",
+          "NAVIGATE_OUT",
+          "NAVIGATE_PREVIOUS",
+          "NOTIFICATION",
+          "NUM",
+          "NUMPAD_0",
+          "NUMPAD_1",
+          "NUMPAD_2",
+          "NUMPAD_3",
+          "NUMPAD_4",
+          "NUMPAD_5",
+          "NUMPAD_6",
+          "NUMPAD_7",
+          "NUMPAD_8",
+          "NUMPAD_9",
+          "NUMPAD_ADD",
+          "NUMPAD_COMMA",
+          "NUMPAD_DIVIDE",
+          "NUMPAD_DOT",
+          "NUMPAD_ENTER",
+          "NUMPAD_EQUALS",
+          "NUMPAD_LEFT_PAREN",
+          "NUMPAD_MULTIPLY",
+          "NUMPAD_RIGHT_PAREN",
+          "NUMPAD_SUBTRACT",
+          "NUM_LOCK",
+          "O",
+          "P",
+          "PAGE_DOWN",
+          "PAGE_UP",
+          "PAIRING",
+          "PASTE",
+          "PERIOD",
+          "PICTSYMBOLS",
+          "PLUS",
+          "POUND",
+          "PROFILE_SWITCH",
+          "PROG_BLUE",
+          "PROG_GREEN",
+          "PROG_RED",
+          "PROG_YELLOW",
+          "Q",
+          "R",
+          "REFRESH",
+          "RIGHT_BRACKET",
+          "RO",
+          "S",
+          "SCROLL_LOCK",
+          "SEARCH",
+          "SEMICOLON",
+          "SETTINGS",
+          "SHIFT_LEFT",
+          "SHIFT_RIGHT",
+          "SHORT",
+          "SLASH",
+          "SOFT_LEFT",
+          "SOFT_RIGHT",
+          "SPACE",
+          "STAR",
+          "START_LONG",
+          "STB_INPUT",
+          "STB_POWER",
+          "STEM_1",
+          "STEM_2",
+          "STEM_3",
+          "STEM_PRIMARY",
+          "SWITCH_CHARSET",
+          "SYM",
+          "SYSRQ",
+          "SYSTEM_NAVIGATION_DOWN",
+          "SYSTEM_NAVIGATION_LEFT",
+          "SYSTEM_NAVIGATION_RIGHT",
+          "SYSTEM_NAVIGATION_UP",
+          "T",
+          "TAB",
+          "THUMBS_DOWN",
+          "THUMBS_UP",
+          "TV",
+          "TV_ANTENNA_CABLE",
+          "TV_AUDIO_DESCRIPTION",
+          "TV_AUDIO_DESCRIPTION_MIX_DOWN",
+          "TV_AUDIO_DESCRIPTION_MIX_UP",
+          "TV_CONTENTS_MENU",
+          "TV_DATA_SERVICE",
+          "TV_INPUT",
+          "TV_INPUT_COMPONENT_1",
+          "TV_INPUT_COMPONENT_2",
+          "TV_INPUT_COMPOSITE_1",
+          "TV_INPUT_COMPOSITE_2",
+          "TV_INPUT_HDMI_1",
+          "TV_INPUT_HDMI_2",
+          "TV_INPUT_HDMI_3",
+          "TV_INPUT_HDMI_4",
+          "TV_INPUT_VGA_1",
+          "TV_MEDIA_CONTEXT_MENU",
+          "TV_NETWORK",
+          "TV_NUMBER_ENTRY",
+          "TV_RADIO_SERVICE",
+          "TV_SATELLITE",
+          "TV_SATELLITE_BS",
+          "TV_SATELLITE_CS",
+          "TV_SATELLITE_SERVICE",
+          "TV_TELETEXT",
+          "TV_TERRESTRIAL_ANALOG",
+          "TV_TERRESTRIAL_DIGITAL",
+          "TV_TIMER_PROGRAMMING",
+          "TV_ZOOM_MODE",
+          "U",
+          "V",
+          "VIDEO_APP_1",
+          "VIDEO_APP_2",
+          "VIDEO_APP_3",
+          "VIDEO_APP_4",
+          "VIDEO_APP_5",
+          "VIDEO_APP_6",
+          "VIDEO_APP_7",
+          "VIDEO_APP_8",
+          "VOICE_ASSIST",
+          "W",
+          "WINDOW",
+          "X",
+          "Y",
+          "YEN",
+          "Z",
+          "ZENKAKU_HANKAKU",
+          "ZOOM_IN",
+          "ZOOM_OUT"
+        ],
+        "volume": [
+          "VOLUME_DOWN",
+          "VOLUME_MUTE",
+          "VOLUME_UP"
+        ],
+        "power": [
+          "POWER",
+          "SLEEP",
+          "SOFT_SLEEP",
+          "TV_POWER",
+          "WAKEUP"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "identity": [
+          "mac",
+          "manufacturer",
+          "model",
+          "name",
+          "sw_version"
+        ],
+        "auth": [
+          "InvalidAuth on a wrong code",
+          "InvalidAuth on connect",
+          "async_finish_pairing",
+          "async_start_pairing"
+        ],
+        "session": [
+          "async_connect",
+          "disconnect",
+          "is_available callback",
+          "keep_reconnecting",
+          "ping"
+        ],
+        "state": [
+          "current_app",
+          "is_on",
+          "is_voice_enabled",
+          "volume_info"
+        ],
+        "voice": [
+          "VoiceSessionInProgress",
+          "async with",
+          "end",
+          "send_chunk",
+          "start_voice"
+        ],
+        "apps": [
+          "app id",
+          "app link"
+        ]
+      },
+      "answers": [
+        {
+          "status": 403,
+          "operation": "androidtv.remote",
+          "count": 2
+        },
+        {
+          "status": 499,
+          "operation": "voice.interrupted",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "xiaomi-mitv-moeu0",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "client certificate and the set's MAC",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "mac"
+          ],
+          "events": [
+            11,
+            12
+          ],
+          "duration_ms": 60
+        },
+        {
+          "name": "the set's name in its certificate",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "name"
+          ],
+          "events": [
+            12,
+            12
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "an unpaired certificate is refused",
+          "action": "reject",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "InvalidAuth on connect"
+          ],
+          "events": [
+            12,
+            13
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "Polo pairing with the on-screen code",
+          "action": "pair",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_start_pairing",
+            "async_finish_pairing"
+          ],
+          "events": [
+            13,
+            17
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "connect, and the initial Remote v2 state arrives",
+          "action": "connect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            17,
+            26
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "device info over Remote v2",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model",
+            "sw_version"
+          ],
+          "events": [
+            26,
+            26
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "initial power, app, volume and voice state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "is_on",
+            "current_app",
+            "volume_info",
+            "is_voice_enabled"
+          ],
+          "events": [
+            26,
+            26
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "short key press",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_UP",
+            "SHORT"
+          ],
+          "events": [
+            26,
+            29
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "long key press, held then released",
+          "action": "key-long",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "DPAD_LEFT",
+            "START_LONG",
+            "END_LONG"
+          ],
+          "events": [
+            29,
+            35
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "power off and on, seen by the client",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "POWER"
+          ],
+          "events": [
+            35,
+            43
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "volume up and mute, seen by the client",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VOLUME_UP",
+            "VOLUME_MUTE"
+          ],
+          "events": [
+            43,
+            51
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "IME text into a focused field",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits",
+            "space"
+          ],
+          "events": [
+            51,
+            58
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "app id and deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "app id",
+            "app link"
+          ],
+          "events": [
+            58,
+            62
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "voice: negotiate, stream two chunks, end",
+          "action": "voice",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "start_voice",
+            "send_chunk",
+            "end"
+          ],
+          "events": [
+            62,
+            75
+          ],
+          "duration_ms": 8
+        },
+        {
+          "name": "two keepalive pings answered",
+          "action": "keepalive",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "ping"
+          ],
+          "events": [
+            75,
+            75
+          ],
+          "duration_ms": 11006
+        },
+        {
+          "name": "a disconnect interrupts an open voice stream",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            75,
+            84
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "reconnect with the paired certificate",
+          "action": "reconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "async_connect"
+          ],
+          "events": [
+            84,
+            94
+          ],
+          "duration_ms": 7
+        },
+        {
+          "name": "Remote v2 switched off and on keeps the pairing",
+          "action": "protocol-switch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect",
+            "async_connect"
+          ],
+          "events": [
+            94,
+            109
+          ],
+          "duration_ms": 11
+        },
+        {
+          "name": "a forced disconnect clears the pairing",
+          "action": "disconnect",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "disconnect"
+          ],
+          "events": [
+            109,
+            112
+          ],
+          "duration_ms": 6
+        }
+      ],
+      "gaps": [],
+      "expect": {
+        "description": "androidtvremote2: refused unpaired, paired with the code, then keys, text, an app link and a voice stream over TLS, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "0",
+          "1",
+          "11",
+          "12",
+          "2",
+          "3",
+          "3D_MODE",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "A",
+          "ALL_APPS",
+          "ALT_LEFT",
+          "ALT_RIGHT",
+          "APOSTROPHE",
+          "APP_SWITCH",
+          "ASSIST",
+          "AT",
+          "AVR_INPUT",
+          "AVR_POWER",
+          "B",
+          "BACK",
+          "BACKSLASH",
+          "BOOKMARK",
+          "BREAK",
+          "BRIGHTNESS_DOWN",
+          "BRIGHTNESS_UP",
+          "BUTTON_1",
+          "BUTTON_10",
+          "BUTTON_11",
+          "BUTTON_12",
+          "BUTTON_13",
+          "BUTTON_14",
+          "BUTTON_15",
+          "BUTTON_16",
+          "BUTTON_2",
+          "BUTTON_3",
+          "BUTTON_4",
+          "BUTTON_5",
+          "BUTTON_6",
+          "BUTTON_7",
+          "BUTTON_8",
+          "BUTTON_9",
+          "BUTTON_A",
+          "BUTTON_B",
+          "BUTTON_C",
+          "BUTTON_L1",
+          "BUTTON_L2",
+          "BUTTON_MODE",
+          "BUTTON_R1",
+          "BUTTON_R2",
+          "BUTTON_SELECT",
+          "BUTTON_START",
+          "BUTTON_THUMBL",
+          "BUTTON_THUMBR",
+          "BUTTON_X",
+          "BUTTON_Y",
+          "BUTTON_Z",
+          "C",
+          "CALCULATOR",
+          "CALENDAR",
+          "CALL",
+          "CAMERA",
+          "CAPS_LOCK",
+          "CAPTIONS",
+          "CHANNEL_DOWN",
+          "CHANNEL_UP",
+          "CLEAR",
+          "COMMA",
+          "CONTACTS",
+          "COPY",
+          "CTRL_LEFT",
+          "CTRL_RIGHT",
+          "CUT",
+          "D",
+          "DEL",
+          "DEMO_APP_1",
+          "DEMO_APP_2",
+          "DEMO_APP_3",
+          "DEMO_APP_4",
+          "DPAD_CENTER",
+          "DPAD_DOWN",
+          "DPAD_DOWN_LEFT",
+          "DPAD_DOWN_RIGHT",
+          "DPAD_LEFT",
+          "DPAD_RIGHT",
+          "DPAD_UP",
+          "DPAD_UP_LEFT",
+          "DPAD_UP_RIGHT",
+          "DVR",
+          "E",
+          "EISU",
+          "ENDCALL",
+          "END_LONG",
+          "ENTER",
+          "ENVELOPE",
+          "EQUALS",
+          "ESCAPE",
+          "EXPLORER",
+          "F",
+          "F1",
+          "F10",
+          "F11",
+          "F12",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "FEATURED_APP_1",
+          "FEATURED_APP_2",
+          "FEATURED_APP_3",
+          "FEATURED_APP_4",
+          "FOCUS",
+          "FORWARD",
+          "FORWARD_DEL",
+          "FUNCTION",
+          "G",
+          "GRAVE",
+          "GUIDE",
+          "H",
+          "HEADSETHOOK",
+          "HELP",
+          "HENKAN",
+          "HOME",
+          "I",
+          "INFO",
+          "INSERT",
+          "J",
+          "K",
+          "KANA",
+          "KATAKANA_HIRAGANA",
+          "L",
+          "LANGUAGE_SWITCH",
+          "LAST_CHANNEL",
+          "LEFT_BRACKET",
+          "M",
+          "MANNER_MODE",
+          "MEDIA_AUDIO_TRACK",
+          "MEDIA_CLOSE",
+          "MEDIA_EJECT",
+          "MEDIA_FAST_FORWARD",
+          "MEDIA_NEXT",
+          "MEDIA_PAUSE",
+          "MEDIA_PLAY",
+          "MEDIA_PLAY_PAUSE",
+          "MEDIA_PREVIOUS",
+          "MEDIA_RECORD",
+          "MEDIA_REWIND",
+          "MEDIA_SKIP_BACKWARD",
+          "MEDIA_SKIP_FORWARD",
+          "MEDIA_STEP_BACKWARD",
+          "MEDIA_STEP_FORWARD",
+          "MEDIA_STOP",
+          "MEDIA_TOP_MENU",
+          "MENU",
+          "META_LEFT",
+          "META_RIGHT",
+          "MINUS",
+          "MOVE_END",
+          "MOVE_HOME",
+          "MUHENKAN",
+          "MUSIC",
+          "MUTE",
+          "N",
+          "NAVIGATE_IN",
+          "NAVIGATE_NEXT",
+          "NAVIGATE_OUT",
+          "NAVIGATE_PREVIOUS",
+          "NOTIFICATION",
+          "NUM",
+          "NUMPAD_0",
+          "NUMPAD_1",
+          "NUMPAD_2",
+          "NUMPAD_3",
+          "NUMPAD_4",
+          "NUMPAD_5",
+          "NUMPAD_6",
+          "NUMPAD_7",
+          "NUMPAD_8",
+          "NUMPAD_9",
+          "NUMPAD_ADD",
+          "NUMPAD_COMMA",
+          "NUMPAD_DIVIDE",
+          "NUMPAD_DOT",
+          "NUMPAD_ENTER",
+          "NUMPAD_EQUALS",
+          "NUMPAD_LEFT_PAREN",
+          "NUMPAD_MULTIPLY",
+          "NUMPAD_RIGHT_PAREN",
+          "NUMPAD_SUBTRACT",
+          "NUM_LOCK",
+          "O",
+          "P",
+          "PAGE_DOWN",
+          "PAGE_UP",
+          "PAIRING",
+          "PASTE",
+          "PERIOD",
+          "PICTSYMBOLS",
+          "PLUS",
+          "POUND",
+          "PROFILE_SWITCH",
+          "PROG_BLUE",
+          "PROG_GREEN",
+          "PROG_RED",
+          "PROG_YELLOW",
+          "Q",
+          "R",
+          "REFRESH",
+          "RIGHT_BRACKET",
+          "RO",
+          "S",
+          "SCROLL_LOCK",
+          "SEARCH",
+          "SEMICOLON",
+          "SETTINGS",
+          "SHIFT_LEFT",
+          "SHIFT_RIGHT",
+          "SHORT",
+          "SLASH",
+          "SOFT_LEFT",
+          "SOFT_RIGHT",
+          "SPACE",
+          "STAR",
+          "START_LONG",
+          "STB_INPUT",
+          "STB_POWER",
+          "STEM_1",
+          "STEM_2",
+          "STEM_3",
+          "STEM_PRIMARY",
+          "SWITCH_CHARSET",
+          "SYM",
+          "SYSRQ",
+          "SYSTEM_NAVIGATION_DOWN",
+          "SYSTEM_NAVIGATION_LEFT",
+          "SYSTEM_NAVIGATION_RIGHT",
+          "SYSTEM_NAVIGATION_UP",
+          "T",
+          "TAB",
+          "THUMBS_DOWN",
+          "THUMBS_UP",
+          "TV",
+          "TV_ANTENNA_CABLE",
+          "TV_AUDIO_DESCRIPTION",
+          "TV_AUDIO_DESCRIPTION_MIX_DOWN",
+          "TV_AUDIO_DESCRIPTION_MIX_UP",
+          "TV_CONTENTS_MENU",
+          "TV_DATA_SERVICE",
+          "TV_INPUT",
+          "TV_INPUT_COMPONENT_1",
+          "TV_INPUT_COMPONENT_2",
+          "TV_INPUT_COMPOSITE_1",
+          "TV_INPUT_COMPOSITE_2",
+          "TV_INPUT_HDMI_1",
+          "TV_INPUT_HDMI_2",
+          "TV_INPUT_HDMI_3",
+          "TV_INPUT_HDMI_4",
+          "TV_INPUT_VGA_1",
+          "TV_MEDIA_CONTEXT_MENU",
+          "TV_NETWORK",
+          "TV_NUMBER_ENTRY",
+          "TV_RADIO_SERVICE",
+          "TV_SATELLITE",
+          "TV_SATELLITE_BS",
+          "TV_SATELLITE_CS",
+          "TV_SATELLITE_SERVICE",
+          "TV_TELETEXT",
+          "TV_TERRESTRIAL_ANALOG",
+          "TV_TERRESTRIAL_DIGITAL",
+          "TV_TIMER_PROGRAMMING",
+          "TV_ZOOM_MODE",
+          "U",
+          "V",
+          "VIDEO_APP_1",
+          "VIDEO_APP_2",
+          "VIDEO_APP_3",
+          "VIDEO_APP_4",
+          "VIDEO_APP_5",
+          "VIDEO_APP_6",
+          "VIDEO_APP_7",
+          "VIDEO_APP_8",
+          "VOICE_ASSIST",
+          "W",
+          "WINDOW",
+          "X",
+          "Y",
+          "YEN",
+          "Z",
+          "ZENKAKU_HANKAKU",
+          "ZOOM_IN",
+          "ZOOM_OUT"
+        ],
+        "volume": [
+          "VOLUME_DOWN",
+          "VOLUME_MUTE",
+          "VOLUME_UP"
+        ],
+        "power": [
+          "POWER",
+          "SLEEP",
+          "SOFT_SLEEP",
+          "TV_POWER",
+          "WAKEUP"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "identity": [
+          "mac",
+          "manufacturer",
+          "model",
+          "name",
+          "sw_version"
+        ],
+        "auth": [
+          "InvalidAuth on a wrong code",
+          "InvalidAuth on connect",
+          "async_finish_pairing",
+          "async_start_pairing"
+        ],
+        "session": [
+          "async_connect",
+          "disconnect",
+          "is_available callback",
+          "keep_reconnecting",
+          "ping"
+        ],
+        "state": [
+          "current_app",
+          "is_on",
+          "is_voice_enabled",
+          "volume_info"
+        ],
+        "voice": [
+          "VoiceSessionInProgress",
+          "async with",
+          "end",
+          "send_chunk",
+          "start_voice"
+        ],
+        "apps": [
+          "app id",
+          "app link"
+        ]
+      },
+      "answers": [
+        {
+          "status": 403,
+          "operation": "androidtv.remote",
+          "count": 2
+        },
+        {
+          "status": 499,
+          "operation": "voice.interrupted",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

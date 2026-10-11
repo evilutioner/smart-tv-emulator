@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "run_id": "20261007T172158Z",
+  "started_at": "2026-10-07T17:21:58+00:00",
+  "duration_s": 6.9,
+  "platform": "roku",
+  "client": {
+    "name": "rokuecp",
+    "install": "pypi",
+    "requested": "0.19.5",
+    "upstream": "https://github.com/ctalkington/python-rokuecp",
+    "license": "MIT",
+    "version": "0.19.5",
+    "commit": "",
+    "environment": [
+      "aiohappyeyeballs==2.7.1",
+      "aiohttp==3.14.4",
+      "aiosignal==1.4.0",
+      "attrs==26.1.0",
+      "awesomeversion==25.8.0",
+      "backoff==2.2.1",
+      "frozenlist==1.8.0",
+      "idna==3.20",
+      "multidict==6.9.1",
+      "propcache==0.5.4",
+      "rokuecp==0.19.5",
+      "xmltodict==1.0.4",
+      "yarl==1.25.1"
+    ]
+  },
+  "emulator": {
+    "version": "1.0.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "roku-streaming-stick-4k-3820eu2",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info, apps and channels",
+          "action": "identify",
+          "status": "known-gap",
+          "detail": "RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'No captured response is available in the selected device profile', 'status-code': 501})",
+          "events": [
+            3,
+            4
+          ],
+          "duration_ms": 2,
+          "required": true
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "query/device-info",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "The 12.0.0 stick capture holds no device-info exchange, and the contract answers 501 for it. rokuecp, and with it Home Assistant, asks for device-info before anything else, so on this profile it stops at its first request."
+        }
+      ],
+      "expect": null
+    },
+    {
+      "profile": "tcl-roku-tv-32s357",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info, apps and channels",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            3,
+            7
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "active app, media and channel state",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            7,
+            11
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            11,
+            39
+          ],
+          "duration_ms": 19
+        },
+        {
+          "name": "literal text 'tvemu42'",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            39,
+            53
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "volume up, down and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            53,
+            59
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "power off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            59,
+            63
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "standby reported by device-info",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: standby not parsed",
+          "events": [
+            63,
+            69
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "launch an application with a deep link",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            69,
+            70
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "tune a broadcast channel",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "events": [
+            70,
+            71
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "search for a keyword",
+          "action": "search",
+          "status": "known-gap",
+          "detail": "RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})",
+          "events": [
+            71,
+            72
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "play a URL on the device",
+          "action": "cast",
+          "status": "known-gap",
+          "detail": "RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})",
+          "events": [
+            72,
+            73
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "POST /input/15985",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`play_on_roku()` hands a URL to the Play on Roku channel. No capture holds it, and the emulator plays no media."
+        },
+        {
+          "operation": "POST /search/browse",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`search()` and the `search` remote key open the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
+        }
+      ],
+      "expect": {
+        "description": "rokuecp: identity over HTTP, keys, literal text and a launch, and no command refused",
+        "problems": []
+      }
+    }
+  ]
+}

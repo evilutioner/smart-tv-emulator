@@ -20,7 +20,7 @@ say what the captures cannot. The event log is the ground truth for what a drive
 - [CI](docs/ci.md): run an app's tests against the emulator and assert on the event log
 - [Manual validation](docs/manual-validation.md): the ledger of real apps driven against the emulator, and the method
 - [Open-source clients](docs/open-source-clients.md): upstream client libraries run against the emulator, with every run kept as a record
-- [AGENTS.md](AGENTS.md): conventions for changing the emulator itself
+- [Contributing](CONTRIBUTING.md): conventions for changing the emulator itself
 
 ## Contract
 

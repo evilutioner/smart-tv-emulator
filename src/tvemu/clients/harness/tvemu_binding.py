@@ -144,7 +144,7 @@ class Harness:
             raise Abort(name)
 
     def not_offered(self, name: str, action: str, reason: str) -> None:
-        """The client has no way to do this; a fact about the client, not a failure."""
+        """The client has no API for this step; reported apart from failures."""
         self._write({"name": name, "action": action, "status": "not-offered",
                      "detail": reason, "events": [0, 0], "duration_ms": 0})
 

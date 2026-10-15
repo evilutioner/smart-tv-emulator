@@ -1,0 +1,369 @@
+{
+ "schema_version": 1,
+ "id": "tcl-roku-tv-32s357-standby",
+ "device": {
+  "display_name": "TCL Roku TV 32S357",
+  "model_name": "32S357",
+  "model_number": "H104X",
+  "serial_number": "X02000EM0025",
+  "udn": "uuid:28002000-0000-1000-8000-020000000025",
+  "software_version": "15.3.4"
+ },
+ "source": {
+  "kind": "captured",
+  "captured_at": "2026-10-14",
+  "description": "The TCL Roku TV of tcl-roku-tv-32s357-enabled, ECP network access Enabled, on the home screen. PowerOff left it on the network: device-info answered over plain HTTP and over an authenticated ecp-2 session with power-mode Ready, eight seconds and again seventy seconds after the key, and PowerOn brought back PowerOn with no other field changed. Then a channel launch (Backdrops) and what active-app and media-player answered six seconds later, a keyword search, input to the foreground channel and to Play on Roku (15985, not installed on this set), and two routes the set does not have. The search left active-app on the home screen; the set was returned home with the Home key between steps. Unit and network identifiers use the same emulator-owned values as the earlier TCL captures, the Play on Roku media URL names a documentation address instead of the capturing machine, and the ecp-2 challenge is the fixed nonce with its answer recomputed. The channel icon was answered (image/jpeg) but not retained: it is a channel's trademark artwork."
+ },
+ "platform": {},
+ "exchanges": [
+  {
+   "id": "http.key-poweroff",
+   "operation_id": "roku.http.key",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "POST",
+      "path": "/keypress/PowerOff"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  },
+  {
+   "id": "http.device-info-standby",
+   "operation_id": "roku.http.device-info",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "GET",
+      "path": "/query/device-info"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+       "Cache-Control": "no-cache",
+       "Content-Type": "text/xml; charset=\"utf-8\""
+      }
+     },
+     "payload": "device-info-standby.xml"
+    }
+   ]
+  },
+  {
+   "id": "http.active-app-standby",
+   "operation_id": "roku.http.active-app",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "GET",
+      "path": "/query/active-app"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+       "Cache-Control": "no-cache",
+       "Content-Type": "text/xml; charset=\"utf-8\""
+      }
+     },
+     "payload": "active-app-standby.xml"
+    }
+   ]
+  },
+  {
+   "id": "ws.authenticate",
+   "operation_id": "roku.ecp2.authenticate-session",
+   "transport": "websocket",
+   "steps": [
+    {
+     "direction": "out",
+     "operation_id": "ecp-2.param-challenge",
+     "metadata": {
+      "channel": "ecp-2"
+     },
+     "payload": "challenge.json"
+    },
+    {
+     "direction": "in",
+     "operation_id": "ecp-2.authenticate",
+     "metadata": {
+      "channel": "ecp-2"
+     },
+     "payload": "authenticate.json"
+    },
+    {
+     "direction": "out",
+     "operation_id": "ecp-2.response",
+     "metadata": {
+      "channel": "ecp-2"
+     },
+     "payload": "authenticate-response.json"
+    }
+   ]
+  },
+  {
+   "id": "ws.query-device-info-standby",
+   "operation_id": "ecp-2.query-device-info",
+   "transport": "websocket",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "channel": "ecp-2"
+     },
+     "payload": "ws-query-device-info.json"
+    },
+    {
+     "direction": "out",
+     "operation_id": "ecp-2.response",
+     "metadata": {
+      "channel": "ecp-2"
+     },
+     "payload": "ws-query-device-info-standby-response.json"
+    }
+   ]
+  },
+  {
+   "id": "http.key-poweron",
+   "operation_id": "roku.http.key",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "POST",
+      "path": "/keypress/PowerOn"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  },
+  {
+   "id": "http.launch",
+   "operation_id": "roku.http.launch",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "POST",
+      "path": "/launch/773622"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  },
+  {
+   "id": "http.active-app-launched",
+   "operation_id": "roku.http.active-app",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "GET",
+      "path": "/query/active-app"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+       "Cache-Control": "no-cache",
+       "Content-Type": "text/xml; charset=\"utf-8\""
+      }
+     },
+     "payload": "active-app-launched.xml"
+    }
+   ]
+  },
+  {
+   "id": "http.media-player-launched",
+   "operation_id": "roku.http.media-player",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "GET",
+      "path": "/query/media-player"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+       "Cache-Control": "no-cache",
+       "Content-Type": "text/xml; charset=\"utf-8\""
+      }
+     },
+     "payload": "media-player-launched.xml"
+    }
+   ]
+  },
+  {
+   "id": "http.search-browse",
+   "operation_id": "roku.http.search",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "POST",
+      "path": "/search/browse?keyword=tvemu"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  },
+  {
+   "id": "http.input",
+   "operation_id": "roku.http.input",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "POST",
+      "path": "/input?tvemu=1"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 200,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  },
+  {
+   "id": "http.input-uninstalled",
+   "operation_id": "roku.http.input-channel",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "POST",
+      "path": "/input/15985?t=v&u=http%3A%2F%2F192.168.1.10%3A9%2Ftvemu.mp4&k=(null)"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 404,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  },
+  {
+   "id": "http.route-unknown",
+   "operation_id": "roku.http.other",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "GET",
+      "path": "/tvemu-nothing"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 404,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  },
+  {
+   "id": "http.query-unknown",
+   "operation_id": "roku.http.other",
+   "transport": "http",
+   "steps": [
+    {
+     "direction": "in",
+     "metadata": {
+      "method": "GET",
+      "path": "/query/tvemu-nothing"
+     }
+    },
+    {
+     "direction": "out",
+     "metadata": {
+      "status": 404,
+      "headers": {
+       "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+      }
+     },
+     "payload": "empty"
+    }
+   ]
+  }
+ ]
+}

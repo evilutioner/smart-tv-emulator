@@ -103,7 +103,9 @@ async def _read_response(reader: asyncio.StreamReader, head: bool) -> HTTPRespon
         if not line:
             break
         name, _, value = line.partition(":")
-        headers.append((name, value.strip()))
+        # Only the space after the colon is framing: a server that ends a value with a space
+        # wrote that space, and the capture keeps it.
+        headers.append((name, value.lstrip(" \t")))
     lookup = {name.lower(): value for name, value in headers}
     if head:
         body = b""

@@ -249,7 +249,7 @@ function drawVoice(data) {
 
 // ── application launches ──────────────────────────────────────────────────────────────
 // The shared UI knows only surface ids/labels supplied by the active platform. Native app
-// ids and payloads stay opaque, so package names, DIAL names and Cast ids are never guessed.
+// ids and payloads stay opaque: the UI never guesses one.
 const applicationCards = new Map();
 function drawApplications(data) {
   const applications = data.applications;
@@ -420,7 +420,7 @@ $("platform").addEventListener("change", async event => {
   $("platform-upsell").hidden = true;
   try { await api("platform", "POST", {platform: el.value}); }
   catch (error) {
-    // A platform this build does not include is an answer, not a fault: explain it.
+    // A platform not in this checkout answers 501 with reason n/a: describe it, not an error.
     if (error.body && error.body.reason === "n/a") showUpsell(error.body);
     else notify(error.message, true);
   }

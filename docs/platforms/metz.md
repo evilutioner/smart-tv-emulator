@@ -5,9 +5,9 @@
 > [ask about Metz Classic](https://marchik.dev).
 
 The Remote Control Receiver that Metz Classic sets expose to the vendor's remote app: SSDP
-discovery, a UPnP description and a SOAP control URL for keys and text. Unlike every other
-platform here, **no Metz television was measured** — the behaviour is what the vendor's app
-was seen to send and to need.
+discovery, a UPnP description and a SOAP control URL for keys and text. As with the other
+platforms marked 📱 Modelled, **no Metz television was measured**: the behaviour is what the
+vendor's app was seen to send and to need.
 
 ## Protocols
 

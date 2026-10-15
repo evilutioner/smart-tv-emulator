@@ -114,8 +114,8 @@ class DeclaredClientsTests(unittest.TestCase):
                                  "the upstream its client.toml names")
 
     def test_every_record_belongs_to_a_declared_client(self):
-        # Records of a television this build does not include ship as published evidence,
-        # while the client that made them ships only with the platform.
+        # The private build holds records of every television; the public one holds only the
+        # records of the platforms it ships, beside the clients that made them.
         declared = {spec.key for spec in client_specs()}
         present = set(platform_ids())
         for path in (ROOT / "docs" / "clients").glob("*/*/*.json"):
@@ -348,6 +348,16 @@ class CoverageTests(unittest.TestCase):
         self.assertIn("- **standby**, 2 runs (client on `a`, `b`). only PowerOn is captured", text)
         self.assertIn("- **state** (1): `app` ×1", text)
         self.assertIn("### Client bugs\n\nThe client parses a correct answer wrongly.\n\nNone.", text)
+
+    def test_a_step_the_client_does_not_offer_is_no_failure_in_the_backlog(self):
+        steps = [_step("keys", covers=["Home"]),
+                 _step("PIN pairing", "not-offered", action="pair",
+                       detail="the client always registers with a prompt")]
+        record = judge(self.spec, "a", steps, [], 0, offers={"keys": ["Home"]}).as_record()
+        self.assertEqual(record["verdict"], "pass")
+        text = "\n".join(coverage.backlog([(self.spec, {"profiles": [record]})]))
+        self.assertNotIn("Failed, not yet explained", text)
+        self.assertNotIn("PIN pairing", text)
 
     def test_televisions_with_the_same_outcome_share_a_row(self):
         same = [_step("keys", covers=["Home"])]

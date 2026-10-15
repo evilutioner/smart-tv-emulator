@@ -839,8 +839,8 @@ class Core:
             self.publish()
             return 400, str(error)
         if not field.focused:
-            # The captured set accepts the write and drops it: there is no field to edit, and
-            # it still answers returnValue true rather than failing the client's queue.
+            # The captured set accepts the write and drops it: there is no field to edit, but
+            # it still reports success rather than failing the client's queue.
             self.record("command", f"text/{op}", transport=transport, peer=peer, status=200,
                         detail="discarded: no field focused")
             self.publish()

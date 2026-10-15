@@ -4,6 +4,13 @@
 
 Upstream clients for webOS TV, installed in isolation and run against the emulator. What a run establishes, and what it does not: [Open-source clients](../open-source-clients.md).
 
+| Client | Installed from | Last green | Latest recorded run |
+|---|---|---|---|
+| [aiowebostv](#aiowebostv) | pypi | `0.10.0` | 2026-10-15, pass |
+| [bscpylgtv](#bscpylgtv) | pypi | `0.5.5` | 2026-10-15, pass |
+| [lgtv2](#lgtv2) | npm | `2.0.2` | 2026-10-15, pass |
+| [pywebostv](#pywebostv) | pypi | `0.8.9` | 2026-10-13, pass |
+
 ## Heatmap
 
 What real clients have confirmed of each emulated television, zone by zone, from each client's latest run.
@@ -12,18 +19,18 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `lg-webos-tv-ua75006la` | `lg-webos-tv-uq81006lb` | `sencor-webos-tv-sle50q871b` | `sencor-webos-tv-sle65q871b` |
 |---|---|---|---|---|
-| discovery | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API |
-| identity | ⬛ blocked | 🟩 100 % · 1/1 | ⬛ blocked | ⬛ blocked |
-| auth | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| session | 🟥 0 % · 0/1 · ⚠ 1 | 🟩 100 % · 1/1 | 🟥 0 % · 0/1 · ⚠ 1 | 🟥 0 % · 0/1 · ⚠ 1 |
-| keys | ⬛ blocked | 🟥 23 % · 1/1 · ⚠ 4 | ⬛ blocked | ⬛ blocked |
-| text | ⬛ blocked | 🟨 57 % · 1/1 | ⬛ blocked | ⬛ blocked |
-| pointer | ⬛ blocked | 🟨 50 % · 1/1 · ⚠ 1 | ⬛ blocked | ⬛ blocked |
+| discovery | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
+| identity | 🟥 0 % · 0/4 · ⚠ 1 | 🟩 100 % · 4/4 | 🟥 0 % · 0/4 · ⚠ 1 | 🟥 0 % · 0/4 · ⚠ 1 |
+| auth | 🟩 100 % · 4/4 · ⚠ 2 | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 · ⚠ 2 | 🟩 100 % · 4/4 · ⚠ 2 |
+| session | 🟩 100 % · 1/4 · ⚠ 3 | 🟩 100 % · 4/4 | 🟩 100 % · 1/4 · ⚠ 3 | 🟩 100 % · 1/4 · ⚠ 3 |
+| keys | 🟨 59 % · 1/4 | 🟨 59 % · 4/4 | 🟨 59 % · 1/4 | 🟨 59 % · 1/4 |
+| text | 🟩 100 % · 1/4 | 🟩 100 % · 4/4 | 🟩 100 % · 1/4 | 🟩 100 % · 1/4 |
+| pointer | 🟩 100 % · 1/4 | 🟩 100 % · 4/4 | 🟩 100 % · 1/4 | 🟩 100 % · 1/4 |
 | voice | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API |
-| state | ⬛ blocked | 🟩 80 % · 1/1 | ⬛ blocked | ⬛ blocked |
-| volume | ⬛ blocked | 🟨 50 % · 1/1 · ⚠ 1 | ⬛ blocked | ⬛ blocked |
-| power | ⬛ blocked | 🟨 50 % · 1/1 · ⚠ 1 | ⬛ blocked | ⬛ blocked |
-| apps | ⬛ blocked | 🟥 38 % · 1/1 · ⚠ 1 | ⬛ blocked | ⬛ blocked |
+| state | 🟥 0 % · 0/4 · ⚠ 7 | 🟩 100 % · 4/4 | 🟥 0 % · 0/4 · ⚠ 7 | 🟥 0 % · 0/4 · ⚠ 7 |
+| volume | 🟨 73 % · 1/4 · ⚠ 3 | 🟩 100 % · 4/4 | 🟨 73 % · 1/4 · ⚠ 3 | 🟨 73 % · 1/4 · ⚠ 3 |
+| power | 🟩 100 % · 1/4 | 🟩 100 % · 4/4 | 🟩 100 % · 1/4 | 🟩 100 % · 1/4 |
+| apps | 🟩 80 % · 1/4 · ⚠ 1 | 🟩 100 % · 4/4 | 🟩 80 % · 1/4 · ⚠ 1 | 🟩 80 % · 1/4 · ⚠ 1 |
 
 ## Backlog
 
@@ -33,16 +40,13 @@ Who moves next, and on what. Each item says how many client × television runs i
 
 Requests a client sent that no capture answers (unsupported by emulator).
 
-- 9 items, 3 runs each (aiowebostv on `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`). Captured off the 43UQ81006LB on 2026-10-08 and served for that profile; still a gap on the 50UA75006LA and the two Sencor sets, which were never paired. `ssap://com.webos.applicationManager/getForegroundAppInfo`, `ssap://com.webos.applicationManager/listLaunchPoints`, `ssap://com.webos.media/getForegroundAppInfo`, `ssap://com.webos.service.apiadapter/audio/getSoundOutput`, `ssap://com.webos.service.connectionmanager/getinfo`, `ssap://com.webos.service.tvpower/power/getPowerState`, `ssap://com.webos.service.update/getCurrentSWInformation`, `ssap://tv/getChannelList`, `ssap://tv/getExternalInputList`
-- 8 items, 1 run each (aiowebostv on `lg-webos-tv-uq81006lb`):
-  - **`button/1`**: A pointer-socket digit no capture holds.
-  - **`button/EXIT`**: A pointer-socket button name no capture holds.
-  - **`button/INFO`**: A pointer-socket button name no capture holds.
-  - **`button/MUTE`**: aiowebostv sends remote buttons over the pointer socket.
-  - **`button/RED`**: A pointer-socket button name no capture holds.
-  - **`pointer/click`**: `click()` sends a type:click record over the pointer socket.
-  - **`ssap://system.launcher/close`**: `close_app()` asks the launcher to close an app.
-  - **`ssap://system/turnOn`**: `power_on()` sends system/turnOn, which a set only answers while its socket is up, so a capture needs the screen-off state rather than standby.
+- **`ssap://com.webos.service.connectionmanager/getinfo`**, 6 runs (aiowebostv, lgtv2 on `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`). Recorded off the 43UQ81006LB and served for that profile only; the 50UA75006LA and the two Sencor sets were never paired.
+- **`ssap://com.webos.service.update/getCurrentSWInformation`**, 6 runs (bscpylgtv, pywebostv on `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`). Recorded off the 43UQ81006LB and served for that profile only: the software information, which a signed manifest is served on the 43UQ81006LB.
+- 2 items, 6 runs each (aiowebostv, pywebostv on `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`). Recorded off the 43UQ81006LB and served for that profile only; the 50UA75006LA and the two Sencor sets were never paired. `ssap://tv/getChannelList`, `ssap://tv/getExternalInputList`
+- 2 items, 3 runs each (pywebostv on `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`):
+  - **`ssap://audio/getSoundOutput`**: Recorded off the 43UQ81006LB and served for that profile only: the sound output.
+  - **`ssap://com.webos.applicationManager/listApps`**: Recorded off the 43UQ81006LB and served for that profile only: the installed applications.
+- 6 items, 3 runs each (aiowebostv on `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`). Recorded off the 43UQ81006LB and served for that profile only; the 50UA75006LA and the two Sencor sets were never paired. `ssap://audio/getStatus`, `ssap://com.webos.applicationManager/getForegroundAppInfo`, `ssap://com.webos.applicationManager/listLaunchPoints`, `ssap://com.webos.media/getForegroundAppInfo`, `ssap://com.webos.service.apiadapter/audio/getSoundOutput`, `ssap://com.webos.service.tvpower/power/getPowerState`
 
 ### Emulator: wrong answers
 
@@ -54,9 +58,9 @@ None.
 
 A required step stopped the run; nothing after it was reached.
 
-- **`lg-webos-tv-ua75006la`**: aiowebostv at session; 113 offered items never reached.
-- **`sencor-webos-tv-sle50q871b`**: aiowebostv at session; 113 offered items never reached.
-- **`sencor-webos-tv-sle65q871b`**: aiowebostv at session; 113 offered items never reached.
+- **`lg-webos-tv-ua75006la`**: aiowebostv at session, bscpylgtv at auth, lgtv2 at session; 337 offered items never reached.
+- **`sencor-webos-tv-sle50q871b`**: aiowebostv at session, bscpylgtv at auth, lgtv2 at session; 337 offered items never reached.
+- **`sencor-webos-tv-sle65q871b`**: aiowebostv at session, bscpylgtv at auth, lgtv2 at session; 337 offered items never reached.
 
 ### Client bugs
 
@@ -64,22 +68,16 @@ The client parses a correct answer wrongly.
 
 None.
 
-### Failed, not yet explained
-
-Failed for no declared reason: the run is red until someone says whose it is.
-
-- **PIN and COMBINED pairing**, 4 runs (aiowebostv on 4 televisions): `aiowebostv always registers with pairingType PROMPT`
-
 ### Tests to write
 
 Offered by a client and exercised by no step (untested), by zone; ×N is how many clients offer it.
 
-- **keys** (42): `0` ×1, `2` ×1, `3` ×1, `3D_MODE` ×1, `4` ×1, `5` ×1, `6` ×1, `7` ×1, `8` ×1, `9` ×1 and 32 more
+- **keys** (76): `0` ×3, `2` ×3, `3` ×3, `4` ×3, `5` ×3, `6` ×3, `7` ×3, `8` ×3, `9` ×3, `ASTERISK` ×3 and 66 more
 - **text** (3): `non-ASCII` ×1, `punctuation` ×1, `space` ×1
 - **pointer** (1): `drag` ×1
 - **state** (3): `get_apps_all` ×1, `get_channel_info` ×1, `get_current_channel` ×1
 - **volume** (3): `VOLUMEDOWN` ×1, `VOLUMEUP` ×1, `change_sound_output` ×1
-- **power** (1): `POWER` ×1
+- **power** (2): `POWER` ×2, `wake` ×1
 - **apps** (4): `close` ×1, `send_message` ×1, `set_channel` ×1, `set_input` ×1
 
 ## aiowebostv
@@ -88,11 +86,11 @@ Asynchronous SSAP client, the library behind Home Assistant's LG webOS integrati
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 0.10.0 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-13 | 0.10.0 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 0.10.0 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-09 | 0.10.0 | 1.0.0 | Python 3.13.11 | pass |
-| 2026-10-08 | 0.10.0 | 1.0.0 | Python 3.13.11 | pass |
 
-1 earlier runs are recorded beside this page.
+3 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -102,28 +100,23 @@ Asynchronous SSAP client, the library behind Home Assistant's LG webOS integrati
 - **identity**: passed 4/4.
 - **auth**: passed 2/2.
 - **session**: passed 4/4.
-- **keys**: passed 14/60.
+- **keys**: passed 18/60.
   - untested: `0`, `2`, `3`, `3D_MODE`, `4`, `5`, `6`, `7`, `8`, `9` and 32 more
-  - unsupported by emulator: other remote buttons over the pointer socket (`INFO`, `RED`, `1`, `EXIT`): `AssertionError: ['button/INFO', 'button/RED', 'button/1', 'button/EXIT']`
 - **text**: passed 4/7.
   - untested: `non-ASCII`, `punctuation`, `space`
-- **pointer**: passed 2/4.
+- **pointer**: passed 3/4.
   - untested: `drag`
-  - unsupported by emulator: pointer click (`click`): `AssertionError: [{'id': 56, 'time': '2026-10-11T05:14:41.311420+00:00', 'kind': 'unsupported', 'operation': 'pointer/click', 'transport': 'ws', 'peer': '127.0.0.1', 'status': 400, 'detail': 'Unknown pointer record', 'log_start_id': 0}]`
 - **voice**: no API. aiowebostv has no voice input.
 - **state**: passed 12/15.
   - untested: `get_apps_all`, `get_channel_info`, `get_current_channel`
-- **volume**: passed 4/8.
+- **volume**: passed 5/8.
   - untested: `VOLUMEDOWN`, `VOLUMEUP`, `change_sound_output`
-  - unsupported by emulator: MUTE button over the pointer socket (`MUTE`): `AssertionError: ['button/MUTE']`
-- **power**: passed 2/4.
+- **power**: passed 3/4.
   - untested: `POWER`
-  - unsupported by emulator: power on (`power_on`): `WebOsTvServiceNotFoundError: 404 no such service or method`
-- **apps**: passed 3/8.
+- **apps**: passed 4/8.
   - untested: `close`, `send_message`, `set_channel`, `set_input`
-  - unsupported by emulator: close the running app (`close_app`): `WebOsTvServiceNotFoundError: 404 no such service or method`
 
-Error statuses the emulator sent: 400 ×6, 401 ×8, 403 ×2, 404 ×2.
+Error statuses the emulator sent: 401 ×3, 403 ×2.
 
 #### `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`
 
@@ -132,7 +125,7 @@ Error statuses the emulator sent: 400 ×6, 401 ×8, 403 ×2, 404 ×2.
 - **auth**: passed 2/2.
 - **session**: passed 0/4.
   - blocked, not reached: `client_key`, `disconnect`, `heartbeat`
-  - unsupported by emulator: connect with the client key, reading and subscribing to state (`connect`): `WebOsTvCommandTimeoutError: Response timed out for tv/getExternalInputList with uid 8`
+  - unsupported by emulator: connect with the client key, reading and subscribing to state (`connect`): `WebOsTvCommandTimeoutError: Response timed out for com.webos.applicationManager/listLaunchPoints with uid 10`
 - **keys**: blocked 0/60.
 - **text**: blocked 0/7.
 - **pointer**: blocked 0/4.
@@ -142,4 +135,153 @@ Error statuses the emulator sent: 400 ×6, 401 ×8, 403 ×2, 404 ×2.
 - **power**: blocked 0/4.
 - **apps**: blocked 0/8.
 
-Error statuses the emulator sent: 401 ×3, 403 ×1, 404 ×18.
+Error statuses the emulator sent: 401 ×2, 403 ×1, 404 ×18.
+
+## bscpylgtv
+
+Asyncio SSAP client with the calibration and luna:// extensions LG tools use · [upstream](https://github.com/chros73/bscpylgtv) · licence MIT · last green `0.5.5`
+
+| Run | Client | Emulator | Runtime | Verdict |
+|---|---|---|---|---|
+| 2026-10-15 | 0.5.5 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-13 | 0.5.5 | 1.1.0 | Python 3.13.11 | pass |
+
+### Coverage by television
+
+#### `lg-webos-tv-uq81006lb`
+
+- **discovery**: no API. bscpylgtv connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 3/3.
+- **auth**: passed 3/3.
+- **session**: passed 4/4.
+- **keys**: passed 28/78.
+  - untested: `0`, `2`, `3`, `3D_MODE`, `4`, `5`, `6`, `7`, `8`, `9` and 40 more
+- **text**: passed 4/4.
+- **pointer**: passed 4/4.
+- **voice**: no API. bscpylgtv has no voice input.
+- **state**: passed 19/19.
+- **volume**: passed 8/8.
+- **power**: passed 4/5.
+  - untested: `POWER`
+- **apps**: passed 11/11.
+
+Error statuses the emulator sent: 403 ×3, 404 ×2.
+
+#### `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`
+
+- **discovery**: no API. bscpylgtv connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: blocked 0/3.
+- **auth**: passed 1/3.
+  - unsupported by emulator: PIN pairing with the code read off the screen (`PIN`): `PyLGTVServiceNotFoundError: 404 no such service or method`
+  - unsupported by emulator: PROMPT pairing accepted on the set, then connect() reads and subscribes (`PROMPT accepted`): `PyLGTVServiceNotFoundError: 404 no such service or method`
+- **session**: blocked 0/4.
+- **keys**: blocked 0/78.
+- **text**: blocked 0/4.
+- **pointer**: blocked 0/4.
+- **voice**: no API. bscpylgtv has no voice input.
+- **state**: blocked 0/19.
+- **volume**: blocked 0/8.
+- **power**: blocked 0/5.
+- **apps**: blocked 0/11.
+
+Error statuses the emulator sent: 403 ×1, 404 ×2.
+
+## lgtv2
+
+Node.js SSAP client behind node-red-contrib-lgtv, homebridge-webos-tv and ioBroker.lgtv · [upstream](https://github.com/hobbyquaker/lgtv2) · licence MIT · last green `2.0.2`
+
+| Run | Client | Emulator | Runtime | Verdict |
+|---|---|---|---|---|
+| 2026-10-15 | 2.0.2 | 1.2.0 | Node 25.8.0 | pass |
+| 2026-10-13 | 2.0.2 | 1.1.0 | Node 25.8.0 | pass |
+
+### Coverage by television
+
+#### `lg-webos-tv-uq81006lb`
+
+- **discovery**: no API. lgtv2 connects to a host or URL it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 3/3.
+- **auth**: passed 2/2.
+- **session**: passed 4/4.
+- **keys**: passed 24/41.
+  - untested: `0`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `ASTERISK` and 7 more
+- **text**: passed 3/3.
+- **pointer**: passed 3/3.
+- **voice**: no API. lgtv2 has no voice input.
+- **state**: passed 13/13.
+- **volume**: passed 8/8.
+- **power**: passed 3/4.
+  - untested: `wake`
+- **apps**: passed 11/11.
+
+Error statuses the emulator sent: 403 ×4, 500 ×1.
+
+#### `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`
+
+- **discovery**: no API. lgtv2 connects to a host or URL it is given and does no SSDP or mDNS discovery.
+- **identity**: blocked 0/3.
+- **auth**: passed 2/2.
+- **session**: passed 0/4.
+  - blocked, not reached: `disconnect`, `keepalive`
+  - unsupported by emulator: connect with the client key, no prompt (`connect`, `clientKey`): `Error: no mac event`
+- **keys**: blocked 0/41.
+- **text**: blocked 0/3.
+- **pointer**: blocked 0/3.
+- **voice**: no API. lgtv2 has no voice input.
+- **state**: blocked 0/13.
+- **volume**: blocked 0/8.
+- **power**: blocked 0/4.
+- **apps**: blocked 0/11.
+
+Error statuses the emulator sent: 403 ×1, 404 ×2.
+
+## pywebostv
+
+Synchronous SSAP client with typed controls for media, TV, system, apps, input and sources · [upstream](https://github.com/supersaiyanmode/PyWebOSTV) · licence MIT · last green `0.8.9`
+
+| Run | Client | Emulator | Runtime | Verdict |
+|---|---|---|---|---|
+| 2026-10-13 | 0.8.9 | 1.1.0 | Python 3.13.11 | pass |
+
+### Coverage by television
+
+#### `lg-webos-tv-uq81006lb`
+
+- **discovery**: passed 1/1.
+- **identity**: passed 1/1.
+- **auth**: passed 2/2.
+- **session**: passed 3/3.
+- **keys**: passed 24/41.
+  - untested: `button asterisk`, `button blue`, `button cc`, `button dash`, `button fastforward`, `button num_0`, `button num_2`, `button num_3`, `button num_4`, `button num_5` and 7 more
+- **text**: passed 3/3.
+- **pointer**: passed 3/3.
+- **voice**: no API. pywebostv has no voice input.
+- **state**: passed 7/7.
+- **volume**: passed 11/11.
+- **power**: passed 3/3.
+- **apps**: passed 5/5.
+
+Error statuses the emulator sent: 403 ×1, 500 ×1.
+
+#### `lg-webos-tv-ua75006la`, `sencor-webos-tv-sle50q871b`, `sencor-webos-tv-sle65q871b`
+
+- **discovery**: passed 1/1.
+- **identity**: passed 0/1.
+  - unsupported by emulator: software information (`info`): `OSError: 404 no such service or method`
+- **auth**: passed 2/2.
+- **session**: passed 3/3.
+- **keys**: passed 24/41.
+  - untested: `button asterisk`, `button blue`, `button cc`, `button dash`, `button fastforward`, `button num_0`, `button num_2`, `button num_3`, `button num_4`, `button num_5` and 7 more
+- **text**: passed 3/3.
+- **pointer**: passed 3/3.
+- **voice**: no API. pywebostv has no voice input.
+- **state**: passed 0/7.
+  - unsupported by emulator: apps, the foreground app and the inputs (`list_apps`, `get_current`, `list_sources`, `subscribe_get_current`): `OSError: 404 no such service or method`
+  - unsupported by emulator: channels, refused as the set refuses them with no tuner map (`channel_list`, `get_current_channel`, `get_current_program`): `OSError: 404 no such service or method`
+- **volume**: passed 8/11.
+  - unsupported by emulator: volume, mute and sound output, read and subscribed (`get_volume`, `subscribe_get_volume`, `get_audio_output`): `OSError: 404 no such service or method`
+- **power**: passed 3/3.
+- **apps**: passed 4/5.
+  - unsupported by emulator: switch to an input (`set_source`): `OSError: 404 no such service or method`
+
+Error statuses the emulator sent: 403 ×1, 404 ×5, 500 ×1.

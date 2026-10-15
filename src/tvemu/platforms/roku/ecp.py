@@ -15,6 +15,7 @@ from aiohttp import WSMsgType, web
 
 from tvemu.core import Core
 from tvemu.platforms.common import routing as route
+from tvemu.platforms.common import xmlbytes
 from tvemu.platforms.common.reply import (
     TEXT, ErrorFormat, ReplyStyle, WireError, missing_capture,
 )
@@ -26,9 +27,19 @@ from .profile import RokuProfile
 # television answers a route with an image where the rest of the family answers XML.
 CAPTURED = ReplyStyle("captured", "text/xml")
 
+# A captured answer other than a document -- a stick's 404 for the tuner -- carries only the
+# headers the set sent, which for a bodiless refusal is no Content-Type at all.
+CAPTURED_REFUSAL = ReplyStyle("captured-refusal", "")
+
 # Both ECP wires refuse in their own way. HTTP answers the status with the reason as the body,
 # and ecp-2 answers 200 with the status carried inside the envelope as a decimal string.
 HTTP_ERROR = ErrorFormat(TEXT, lambda error: error.detail)
+# The one refusal the set words, the Limited mode's 403 for a query, is spelled like its
+# documents: a quoted charset and no-cache. Measured on the TCL on 15.3.4.
+QUERY_REFUSAL = ErrorFormat(
+    ReplyStyle("query-refusal", 'text/plain; charset="utf-8"',
+               headers=(("Cache-Control", "no-cache"),)),
+    lambda error: error.detail)
 
 NO_CAPTURE = "No captured response is available in the selected device profile"
 
@@ -60,6 +71,19 @@ def restricted_query(path: str) -> bool:
 def is_command(path: str) -> bool:
     return (path.lstrip("/").partition("/")[0] in COMMANDS
             or _query_name(path) in KNOWN_QUERIES)
+
+
+# What the emulator writes live into a replayed document, per field. device-info names the
+# set's network-access value in the spelling the access modes use as their ids: enabled,
+# limited and disabled were each captured off the TCL, permissive is the client contract.
+LIVE_FIELDS: dict[str, Callable[[Core], str]] = {
+    "ecp-setting-mode": lambda core: core.access.id,
+}
+# A field whose live value is per device rather than a platform trait: the profile's
+# `runtime` names it for each state of the set, with the capture that measured it.
+STATE_FIELDS: dict[str, Callable[[Core], str]] = {
+    "power-mode": lambda core: "on" if core.power else "standby",
+}
 
 
 # The set writes its ecp-2 frames with keys in sorted order and without a space after the
@@ -137,6 +161,21 @@ class ECP:
             result.headers["Server"] = self.current_profile().server
         return result
 
+    def live(self, profile: RokuProfile, name: str, content: bytes) -> bytes:
+        """A replayed document with the fields its profile lets the emulator write filled in.
+
+        An ecp-2 substitution names the field inside the envelope's document
+        (`content-data::ecp-setting-mode`); the document here is already decoded.
+        """
+        for path in profile.substitutions_for(name):
+            field = path.rpartition("::")[2]
+            if field in STATE_FIELDS:
+                value = profile.live_states[field][STATE_FIELDS[field](self.core)]
+            else:
+                value = LIVE_FIELDS[field](self.core)
+            content = xmlbytes.replace_text(content, field, value)
+        return content
+
     def surface(self) -> Surface:
         """Everything this platform answers, as declared -- HTTP and ecp-2 alike."""
         return Surface("roku", tuple(spec for spec, _ in route.declarations(self)),
@@ -182,6 +221,38 @@ class ECP:
         # Like a key, a launch is answered by its status alone.
         return web.Response(status=status)
 
+    def _control_status(self) -> tuple[int, str]:
+        mode = self.core.access
+        status = dict(mode.control_statuses).get("http", mode.control_status)
+        return status, "Accepted" if status == 200 else (mode.detail or f"Rejected by {mode.label}")
+
+    # The TCL on 15.3.4 answered search and input 200 with no body, and moved nothing the
+    # queries show: search opens a screen inside the home channel, and input goes to whatever
+    # runs. Neither is rendered here; the request is recorded with its parameters.
+    @route.post("/search/browse", operation_id="roku.http.search",
+                summary="Open the search screen, with the keyword it names.")
+    @route.post("/input", operation_id="roku.http.input",
+                summary="Hand parameters to the channel in the foreground.")
+    async def command(self, request):
+        status, detail = self._control_status()
+        query = request.raw_path.partition("?")[2]
+        self.core.record("command", request.path.lstrip("/"), transport="http",
+                         peer=request.remote or "", status=status,
+                         detail=f"{detail}; {query}" if query else detail)
+        return web.Response(status=status)
+
+    @route.post("/input/{app_id}", operation_id="roku.http.input-channel",
+                summary="Hand parameters to one channel by its ECP id (Play on Roku is 15985).")
+    async def input_channel(self, request):
+        # The set answers 404 for a channel that is not installed, as launch does; the
+        # emulator accepts any id for the same reason it accepts any launch.
+        status, detail = self._control_status()
+        self.core.application_launch(
+            request.match_info["app_id"], surface="ecp", transport="http",
+            peer=request.remote or "", payload=request.raw_path.partition("?")[2],
+            status=status, detail=detail, operation="app.input/ecp")
+        return web.Response(status=status)
+
     @route.get("/", operation_id="roku.http.device-description",
                summary="The UPnP device description.", captured="/", missing=501,
                style=CAPTURED)
@@ -219,7 +290,7 @@ class ECP:
                summary="A channel's icon.",
                captured="/query/icon/{channel_id}", missing=501, style=CAPTURED)
     @route.get("/{tail:.*}", summary="Any other route the selected capture recorded.",
-               captured="*", missing=501, style=CAPTURED)
+               operation_id="roku.http.other", captured="*", missing=501, style=CAPTURED)
     async def document(self, request):
         mode = self.core.access
         status = dict(mode.query_statuses).get("http", 200)
@@ -228,7 +299,7 @@ class ECP:
             # answer, so whether this profile recorded the document does not matter.
             self.core.record("access", f"GET {request.path}", transport="http",
                              peer=request.remote or "", status=status, detail=mode.detail)
-            raise WireError(status, mode.refusal_body)
+            return QUERY_REFUSAL.response(WireError(status, mode.refusal_body))
         profile = self.current_profile()
         content = profile.document(request.path)
         operation = "description" if request.path == "/" else request.path.removeprefix("/")
@@ -240,8 +311,11 @@ class ECP:
                          status=status, detail=f"captured profile: {profile.id}")
         if status != 200:
             # What the set answered instead of a document, a route it does not have.
-            raise WireError(status, content.decode())
-        return CAPTURED.ok(content,
+            return CAPTURED_REFUSAL.ok(
+                content, status=status,
+                content_type=profile.document_content_type(request.path, default=""),
+                headers=profile.document_headers(request.path))
+        return CAPTURED.ok(self.live(profile, request.path, content),
                            content_type=profile.document_content_type(request.path),
                            headers=profile.document_headers(request.path))
 
@@ -391,6 +465,8 @@ class ECP:
             # identical on hardware: the envelope's copy adds virtual-device-id.
             route = "/query/device-info"
             content, content_type = profile.document(route), profile.document_content_type(route)
+        if content is not None:
+            content = self.live(profile, operation, content)
         # An unhandled request is Not Found, the way the set answers one: the request name is
         # a route on this wire, so an unknown one is missing rather than unimplemented.
         status = 200 if content is not None else 404

@@ -1,12 +1,8 @@
 """No committed capture may identify the physical television it came from.
 
-`test_public_build.py` states the same rule, but only over the files a build ships. Every
-other platform's captures are in this repository too, and they are the ones that would leak
-first, so the rule is applied here to all of them.
-
-It is applied structurally. A test that writes the real serial number down in order to assert
-that the profile does not contain it has put the serial number in the repository, which is the
-thing the rule exists to prevent. So nothing here names a secret.
+`test_public_build.py` scans text for addresses and keys; this file checks the structure of
+every capture. It names no real identifier: a test that wrote one down to assert its absence
+would put it in the repository.
 
 A capture is scrubbed in one of two ways, and both are deliberate. Zeroing the unit while
 keeping the vendor OUI stays faithful to a client that reads the OUI; setting the

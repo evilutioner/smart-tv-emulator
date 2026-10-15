@@ -12,18 +12,18 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `vizio-d24f-j09` |
 |---|---|
-| discovery | not written |
-| identity | 🟨 50 % · 1/1 · ⚠ 1 |
+| discovery | 🟥 0 % · 0/1 |
+| identity | 🟩 83 % · 1/1 |
 | auth | 🟩 100 % · 1/1 |
 | session | 🟩 100 % · 1/1 |
-| keys | 🟨 75 % · 1/1 · ⚠ 1 |
-| text | not written |
-| pointer | not written |
-| voice | not written |
-| state | 🟩 100 % · 1/1 |
+| keys | 🟩 96 % · 1/1 |
+| text | ⬜ no API |
+| pointer | ⬜ no API |
+| voice | ⬜ no API |
+| state | 🟨 47 % · 1/1 |
 | volume | 🟩 100 % · 1/1 |
 | power | 🟩 100 % · 1/1 |
-| apps | 🟥 0 % · 0/1 · ⚠ 3 |
+| apps | 🟥 0 % · 0/1 · ⚠ 2 |
 
 ## Backlog
 
@@ -39,10 +39,7 @@ Requests a client sent that no capture answers (unsupported by emulator).
 
 The emulator answers, but not as the set does (wrong answer from emulator).
 
-- 3 items, 1 run each (pyvizio on `vizio-d24f-j09`):
-  - **serial number, version and ESN from the settings tree**: The serial number and ESN now come back.
-  - **switch to a named input**: `set_input()` reads current_input and writes it back with REQUEST/VALUE/HASHVAL MODIFY.
-  - **the second Left code, LEFT2**: pyvizio sends CODESET 3 / CODE 4 for LEFT2.
+None.
 
 ### Blocked televisions
 
@@ -54,13 +51,17 @@ None.
 
 The client parses a correct answer wrongly.
 
-None.
+- 3 items, 1 run each (pyvizio on `vizio-d24f-j09`):
+  - **firmware version from the settings tree**: `get_version()` asks tv_information/version under system and then admin_and_privacy; the D24f-J09 answers both URI_NOT_FOUND (captured 2026-10-08, http.uri-not-found), because its firmware version is the `firmware` item of that menu, so pyvizio returns None against the set as well.
+  - **switch to a named input**: `set_input()` reads current_input and writes it back with REQUEST/VALUE/HASHVAL MODIFY.
+  - **the second Left code, LEFT2**: pyvizio sends CODESET 3 / CODE 4 for LEFT2.
 
 ### Tests to write
 
 Offered by a client and exercised by no step (untested), by zone; ×N is how many clients offer it.
 
-None.
+- **discovery** (2): `discovery_ssdp` ×1, `discovery_zeroconf` ×1
+- **state** (10): `get_all_audio_settings_options` ×1, `get_all_settings` ×1, `get_all_settings_options` ×1, `get_all_settings_options_xlist` ×1, `get_audio_setting` ×1, `get_audio_setting_options` ×1, `get_max_volume` ×1, `get_setting` ×1, `get_setting_options` ×1, `get_setting_options_xlist` ×1
 
 ## pyvizio
 
@@ -68,30 +69,34 @@ SmartCast REST client, the library behind Home Assistant's VIZIO SmartCast integ
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 0.1.64 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-12 | 0.1.64 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 0.1.64 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-08 | 0.1.64 | 1.0.0 | Python 3.13.11 | pass |
-| 2026-10-07 | 0.1.64 | 1.0.0 | Python 3.13.11 | pass |
+
+2 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
 #### `vizio-d24f-j09`
 
-- **discovery**: not written.
-- **identity**: passed 1/2 steps.
-  - wrong answer from emulator: serial number, version and ESN from the settings tree: `AssertionError: None`
-- **auth**: passed 3/3 steps.
-- **session**: passed 2/2 steps.
-- **keys**: passed 3/4 steps.
-  - wrong answer from emulator: the second Left code, LEFT2: `AssertionError: LEFT2 refused`
-- **text**: not written.
-- **pointer**: not written.
-- **voice**: not written.
-- **state**: passed 4/4 steps.
-- **volume**: passed 2/2 steps.
-- **power**: passed 1/1 steps.
-- **apps**: passed 0/3 steps.
-  - wrong answer from emulator: switch to a named input: `AssertionError: `
-  - unsupported by emulator: launch an application by name: `AssertionError: `
-  - unsupported by emulator: launch an application by its config: `AssertionError: `
+- **discovery**: passed 0/2.
+  - untested: `discovery_ssdp`, `discovery_zeroconf`
+- **identity**: passed 5/6.
+  - client bug: firmware version from the settings tree (`get_version`): `AssertionError: None`
+- **auth**: passed 5/5.
+- **session**: passed 3/3.
+- **keys**: passed 22/23.
+  - client bug: the second Left code, LEFT2 (`LEFT2`): `AssertionError: LEFT2 refused`
+- **text**: no API. pyvizio has no text input.
+- **pointer**: no API. pyvizio has no pointer input.
+- **voice**: no API. pyvizio has no voice input.
+- **state**: passed 9/19.
+  - untested: `get_all_audio_settings_options`, `get_all_settings`, `get_all_settings_options`, `get_all_settings_options_xlist`, `get_audio_setting`, `get_audio_setting_options`, `get_max_volume`, `get_setting`, `get_setting_options`, `get_setting_options_xlist`
+- **volume**: passed 5/5.
+- **power**: passed 3/3.
+- **apps**: passed 0/3.
+  - client bug: switch to a named input (`set_input`): `AssertionError: `
+  - unsupported by emulator: launch an application by name (`launch_app`): `AssertionError: `
+  - unsupported by emulator: launch an application by its config (`launch_app_config`): `AssertionError: `
 
 Error statuses the emulator sent: 500 ×4.

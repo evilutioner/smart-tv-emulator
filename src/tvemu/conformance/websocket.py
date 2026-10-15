@@ -6,21 +6,27 @@ channel it speaks in its own `platforms/<id>/conformance/__init__.py`:
     CHANNELS = {
         "<channel>": {                       # the `channel` its evidence steps carry
             "path": "/…",                    # the upgrade path
+            "protocol": "…",                 # the listener, where several serve that path
             "protocols": ["…"],              # Sec-WebSocket-Protocol offered, if any
             "opening": ["<exchange id>"],    # exchanges every session replays first
             "masks": {"<step operation_id>": ["<json path>", …]},
             "inputs": {"<step operation_id>": ["<json path>", …]},
         },
     }
-    def materialise(channel, step, received) -> dict[path, value]: …
+    def materialise(channel, step, received, screen) -> dict[path, value]: …
 
 `opening` is the captured handshake a session needs before anything else (an authentication
 round, say); its outputs are compared too. `masks` names the emulator-owned values in those
 outputs -- a random challenge, an uptime -- the only differences allowed there, since a
 profile's substitutions cover replays and an opening exchange is not one. `inputs` names the
-client-owned values in a captured client frame that must be recomputed for this session, and
-`materialise` computes them from the frames received so far. A captured client frame is sent
-byte for byte except at exactly those paths.
+client-owned values in a captured client frame that may be recomputed for this session, and
+`materialise` computes them from the frames received so far and from `screen()`, what the
+television shows (where a PIN appears). It returns the paths this one frame carries, a subset
+of those declared for its operation. A captured client frame is sent byte for byte except at
+exactly those paths.
+
+A replay of several frames -- a subscription, the command that moves it, the push -- may
+declare a substitution that only some of its frames carry; it is stale only when none does.
 
 The description is plain data so a platform that ships without this harness carries nothing
 that imports it.
@@ -47,7 +53,8 @@ class Channel:
     opening: tuple[str, ...] = ()
     masks: dict[str, tuple[str, ...]] = field(default_factory=dict)
     inputs: dict[str, tuple[str, ...]] = field(default_factory=dict)
-    materialise: Callable[[str, Step, list[bytes]], dict[str, Any]] | None = None
+    materialise: Callable[[str, Step, list[bytes], Callable[[], dict]], dict[str, Any]] | None = None
+    protocol: str = ""
 
 
 def platform_package(platform_id: str):
@@ -73,7 +80,7 @@ def channels(platform_id: str) -> dict[str, Channel]:
     materialise = getattr(module, "materialise", None)
     found = {}
     for channel_id, row in rows.items():
-        unknown = set(row) - {"path", "protocols", "opening", "masks", "inputs"}
+        unknown = set(row) - {"path", "protocol", "protocols", "opening", "masks", "inputs"}
         if unknown or not isinstance(row.get("path"), str) or not row["path"].startswith("/"):
             raise ValueError(f"{name}: channel {channel_id} is malformed")
         inputs = {key: tuple(paths) for key, paths in row.get("inputs", {}).items()}
@@ -83,7 +90,7 @@ def channels(platform_id: str) -> dict[str, Channel]:
             channel_id, row["path"], tuple(row.get("protocols", ())),
             tuple(row.get("opening", ())),
             {key: tuple(paths) for key, paths in row.get("masks", {}).items()},
-            inputs, materialise)
+            inputs, materialise, str(row.get("protocol", "")))
     return found
 
 
@@ -112,13 +119,14 @@ def replay_gap(exchange: Exchange, channel: Channel | None) -> str:
     return ""
 
 
-def _outgoing(channel: Channel, step: Step, received: list[bytes]) -> bytes:
+def _outgoing(channel: Channel, step: Step, received: list[bytes],
+              screen: Callable[[], dict]) -> bytes:
     """The captured client frame, with only its declared client-owned values recomputed."""
     paths = channel.inputs.get(step.operation_id, ())
     if not paths:
         return step.payload
-    values = channel.materialise(channel.id, step, received)
-    if set(values) != set(paths):
+    values = channel.materialise(channel.id, step, received, screen)
+    if not set(values) <= set(paths):
         raise ValueError(f"materialise returned {sorted(values)} for {step.operation_id}, "
                          f"which declares {sorted(paths)}")
     data = step.payload
@@ -130,7 +138,8 @@ def _outgoing(channel: Channel, step: Step, received: list[bytes]) -> bytes:
 
 async def run(url: str, authority: str, channel: Channel, exchanges: list[Exchange],
               substitutions: dict[str, tuple[str, ...]], values: dict[str, str],
-              timeout: float, tls: bool) -> tuple[list[str], list[str]]:
+              timeout: float, tls: bool, screen: Callable[[], dict] = dict
+              ) -> tuple[list[str], list[str]]:
     """Send and expect every step of `exchanges` over one session; (problems, notes)."""
     problems: list[str] = []
     notes: list[str] = []
@@ -142,10 +151,12 @@ async def run(url: str, authority: str, channel: Channel, exchanges: list[Exchan
                                       timeout=client_timeout, autoping=True) as socket:
             for exchange in exchanges:
                 masks = substitutions.get(exchange.id, ())
+                absent: dict[str, int] = {}
+                outputs = 0
                 for index, step in enumerate(exchange.steps):
                     where = f"{exchange.id} step {index}"
                     if step.direction == "in":
-                        frame = _outgoing(channel, step, received)
+                        frame = _outgoing(channel, step, received, screen)
                         try:
                             await socket.send_str(frame.decode("utf-8"))
                         except UnicodeDecodeError:
@@ -162,8 +173,14 @@ async def run(url: str, authority: str, channel: Channel, exchanges: list[Exchan
                         return problems, notes
                     received.append(data)
                     declared = masks + channel.masks.get(step.operation_id, ())
-                    outcome = compare.Outcome()
+                    outcome = compare.Outcome(absent=set())
                     compare.compare_body(step.payload, data, declared, values, outcome)
+                    outputs += 1
+                    for path in outcome.absent:
+                        absent[path] = absent.get(path, 0) + 1
                     problems += [f"{where}: {problem}" for problem in outcome.problems]
                     notes += [f"{where}: {note}" for note in outcome.notes]
+                problems += [f"{exchange.id}: declared substitution {path!r} is in none of "
+                             f"its frames" for path, count in absent.items()
+                             if count == outputs and path in masks]
     return problems, notes

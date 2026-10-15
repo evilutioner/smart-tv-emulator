@@ -86,6 +86,22 @@ class ReadingTests(unittest.TestCase):
         duplicated = b"".join(struct.pack("<hh", int(a * 32000), int(a * 32000)) for a in left)
         self.assertEqual(self.label(duplicated, 64000)["channels"], 2)
 
+    def test_quiet_sixteen_bit_is_not_read_as_full_scale_eight_bit(self):
+        # High bytes of only 0x00/0xFF read as 8-bit samples look like a full-scale signal.
+        noise = random.Random(1)
+        hiss = b"".join(struct.pack("<h", noise.randint(-6, 6)) for _ in range(32768))
+        found = self.label(hiss, 32000)
+        self.assertEqual((found["encoding"], found["channels"]), ("pcm_s16le", 1))
+        self.assertEqual(found["confidence"], "guess")
+        self.assertLess(found["level_db"], -60)
+        for gain in (0.0005, 0.002, 0.005):
+            for order, encoding in (("<", "pcm_s16le"), (">", "pcm_s16be")):
+                with self.subTest(gain=gain, order=order):
+                    found = self.label(s16([v * gain for v in voiced(64000, 16000)], order),
+                                       32000)
+                    self.assertEqual((found["encoding"], found["channels"]), (encoding, 1))
+                    self.assertLess(found["level_db"], -50)
+
     def test_a_rate_that_is_not_standard_is_said_so(self):
         found = self.label(s16(voiced(60000, 16000)), 2 * 20000)
         self.assertIsNone(found["sample_rate"])

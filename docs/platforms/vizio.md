@@ -20,15 +20,15 @@ community documentation — which is out of date for this firmware.
 
 - **Vizio D24f-J09** — firmware 3.3.3-2538.0001
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-A few of the firmware behaviours the emulator reproduces. The full guide covers every
-message, pairing step and refusal, each one tied to the capture it came from.
+Behaviours of the captured firmware the emulator reproduces, named here without their
+detail. The full guide gives each one, tied to the capture it came from.
 
-- Success and failure travel in the **JSON body, not the HTTP status** — control routes answer 200 either way.
-- An unknown route is **a 500 HTML crash page**, never a 404 — a driver that parses every answer as JSON breaks.
-- The **community-documented app launch crashes** this firmware; it wants a different envelope.
-- Pairing answers and every other route use **two different JSON serialisations**.
+- **Results and errors** in the set's own envelopes.
+- **Unknown routes**, answered as the firmware answers them.
+- **App launch**, in the form this firmware accepts and the form it refuses.
+- **Pairing and control answers**, each serialised exactly as captured.
 
 ## What the emulator lets you test
 

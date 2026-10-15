@@ -38,6 +38,11 @@ LIKELY = 0.35
 # one by this factor: the wrong readings of 16-bit audio are only rarely much smoother.
 CLEAR_WIN = 0.7
 SILENT = 24 / 32768
+# Quiet 16-bit audio has high bytes that are only sign extension, 0x00 or 0xFF, which read as
+# 8-bit samples look like a full-scale signal. When this share of one byte order's samples
+# stays under this magnitude (about -24 dBFS), that order is taken as the reading.
+QUIET_SHARE = 0.95
+QUIET_BELOW = 2048 / 32768
 RATES = (8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000)
 SNAP = 0.04
 MIN_SPAN = 1.5
@@ -146,6 +151,31 @@ def _decode(reading: str, data: bytes) -> list[float]:
     if reading == "pcm_u8":
         return [(value - 128) / 128 for value in data]
     return [(MULAW if reading == "g711_ulaw" else ALAW)[value] for value in data]
+
+
+def _quiet_sixteen(data: bytes) -> tuple[str, list[float]] | None:
+    """The 16-bit reading under which nearly every sample is small, with its samples.
+
+    Neither 8-bit audio nor the other byte order of 16-bit audio puts a byte this close to
+    0x00 or 0xFF in every other position, so this is the byte pattern of quiet 16-bit audio.
+    Digital silence is not judged here: it reads the same under every interpretation. Samples
+    of only a few steps are small under both byte orders, and the quieter reading is the one
+    whose high byte really is the sign extension.
+    """
+    found = []
+    for identity, _, width in READINGS:
+        if width != 2:
+            continue
+        samples = _decode(identity, data)
+        if not samples or not any(samples):
+            return None
+        small = sum(1 for value in samples if abs(value) < QUIET_BELOW)
+        if small >= QUIET_SHARE * len(samples):
+            found.append((sum(abs(value) for value in samples), identity, samples))
+    if not found:
+        return None
+    _, identity, samples = min(found, key=lambda item: item[0])
+    return identity, samples
 
 
 def _split(samples: list[float], channels: int) -> list[list[float]]:
@@ -292,8 +322,11 @@ class AudioSniffer:
                     "sample_rate": None, "confidence": "waiting", "basis": "too little data",
                     "bytes_per_second": round(self._rate(2, 1)[1]), "level_db": None}
 
+        quiet = _quiet_sixteen(data)
         scored = []
         for identity, description, width in READINGS:
+            if quiet is not None and identity != quiet[0]:
+                continue
             samples = _decode(identity, data)
             for channels in (1, 2):
                 parts = _split(samples, channels)
@@ -304,6 +337,12 @@ class AudioSniffer:
                 if channels == 2 and _asymmetry(samples) > 3:
                     score = 0.0
                 scored.append((identity, description, width, channels, score, samples))
+        if quiet is not None and (not scored or self._choose(scored)[4] > SAMPLE_LIKE):
+            # Too quiet to judge by smoothness, but the byte pattern still says what it is.
+            identity, samples = quiet
+            description = next(text for name, text, _ in READINGS if name == identity)
+            return self._samples(base, identity, description, 2, 1, samples, "guess",
+                                 "high bytes are sign extension only: quiet 16-bit samples")
         if not scored:
             return {**base, "encoding": None, "label": "Silence", "channels": None,
                     "sample_rate": None, "confidence": "waiting",
@@ -323,6 +362,15 @@ class AudioSniffer:
                     "basis": basis + self._framing(per_second),
                     "frame_size": self.frame_size or None,
                     "bytes_per_second": round(per_second), "level_db": None}
+        confidence = ("likely" if score < LIKELY and not identity.startswith("g711")
+                      else "guess")
+        return self._samples(base, identity, description, width, channels, samples,
+                             confidence, f"sample smoothness {score:.2f}")
+
+    def _samples(self, base: dict, identity: str, description: str, width: int,
+                 channels: int, samples: list[float], confidence: str, basis: str) -> dict:
+        """Describe bare samples read one way: layout, rate from arrival, and level."""
+        per_second = self._rate(width, channels)[1]
         rate, rate_text = (None, "rate unknown")
         measured = self._rate(width, channels)[0]
         if measured:
@@ -335,9 +383,8 @@ class AudioSniffer:
                 "label": f"{description} · {layout} · {rate_text}",
                 "channels": channels, "sample_rate": rate,
                 "sample_rate_measured": round(measured) if measured else None,
-                "confidence": "likely" if score < LIKELY and not identity.startswith("g711")
-                else "guess",
-                "basis": f"sample smoothness {score:.2f}; rate from arrival",
+                "confidence": confidence,
+                "basis": f"{basis}; rate from arrival",
                 "bytes_per_second": round(per_second),
                 "level_db": round(20 * math.log10(rms), 1) if rms > 0 else None,
                 "peak_db": round(20 * math.log10(peak), 1) if peak > 0 else None}

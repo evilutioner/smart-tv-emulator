@@ -59,8 +59,8 @@ curl -s -X PATCH -H "$H" -d '{"device_profile": "<profile>"}' http://127.0.0.1:8
 Switching the captured device inside one job is how a driver is tested against several
 firmwares: the same test, one `PATCH` per profile.
 
-Every mutation must be sent as `application/json`, and the API answers only on `127.0.0.1` or
-`localhost`, so a browser page cannot reach it.
+Every mutation must be sent as `application/json`, and a browser request with a foreign
+`Origin` or `Host` is refused, so another web page cannot drive the emulator.
 
 ## Checking an exported log instead
 
@@ -76,5 +76,6 @@ python -m tvemu.expect tests/tv/scenario.json --events tv-events.jsonl
   connects by address needs nothing more; one that discovers must run where multicast works.
 - **Ports.** A runner may refuse a privileged port a television uses. `--port` moves the
   primary protocol; the platform guide says which ports stay fixed.
-- **Time.** Prompts time out as on the set. Answer them from the test with the management API
-  rather than waiting.
+- **Time.** Prompts time out as on the set. Where a television offers an action that answers
+  one (`POST /api/v1/actions/<name>`, named in its guide), call it from the test rather than
+  waiting.

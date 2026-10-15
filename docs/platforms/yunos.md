@@ -1,12 +1,11 @@
 # YunOS / AliTV
 
-> **N/A in this build.** Modelled from a third-party Android remote app; the emulator and the
-> full driver guide are available on request — [ask about YunOS / AliTV](https://marchik.dev).
+> **N/A in this build.** Modelled; the emulator and the full driver guide are available on
+> request — [ask about YunOS / AliTV](https://marchik.dev).
 
-The LAN remote of an Alibaba YunOS (AliTV) set-top box as a third-party Android remote app
-drives it: an SSDP search for the YunOSTV device type, a TCP probe, and a binary session that
-logs in and then carries Android keycodes. **No YunOS box was measured, and no frame was
-recorded off a wire** — the behaviour follows what that app sends.
+The LAN remote of an Alibaba YunOS (AliTV) set-top box: an SSDP search for the YunOSTV device
+type, a TCP probe, and a binary session that logs in and then carries Android keycodes. **No
+YunOS box was measured, and no frame was recorded off a wire** — the behaviour is modelled.
 
 ## Protocols
 
@@ -17,7 +16,7 @@ recorded off a wire** — the behaviour follows what that app sends.
 
 ## Modelled devices
 
-- **YunOS / AliTV box (modelled)** — from a third-party Android remote app; no box measured
+- **YunOS / AliTV box (modelled)** — no box measured
 
 ## What a driver gets wrong here
 
@@ -28,8 +27,8 @@ recorded off a wire** — the behaviour follows what that app sends.
 
 ## What the emulator lets you test
 
-- [x] Discovery exactly as that app performs it
-- [x] Every key that app sends, by its Android keycode
+- [x] Discovery exactly as the remote app performs it
+- [x] Every key the remote app sends, by its Android keycode
 - [ ] Text, app launches, pointer (no client seen sending them)
 - [ ] Anything a real YunOS box answers (not measured)
 

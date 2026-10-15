@@ -7,13 +7,13 @@
 <p align="center">
   <img alt="Python 3.11+" src="https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white">
   <a href="LICENSE"><img alt="Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-187960"></a>
-  <img alt="aiohttp only" src="https://img.shields.io/badge/deps-aiohttp%20%2B%20pyOpenSSL-187960">
+  <img alt="aiohttp and pyOpenSSL" src="https://img.shields.io/badge/deps-aiohttp%20%2B%20pyOpenSSL-187960">
   <!-- generated:badges -->
-  <img alt="1 included, 16 N/A" src="https://img.shields.io/badge/televisions-1%20included%20%C2%B7%2016%20N%2FA-6c7a7e">
-  <img alt="26 captured devices" src="https://img.shields.io/badge/captured%20devices-26-6c7a7e">
-  <img alt="7 devices validated with real apps" src="https://img.shields.io/badge/validated%20with%20real%20apps-7-6c7a7e">
-  <img alt="tested with 12 open-source clients" src="https://img.shields.io/badge/tested%20with%20open--source%20clients-12-6c7a7e">
-  <img alt="75 protocol listeners" src="https://img.shields.io/badge/protocol%20listeners-75-6c7a7e">
+  <img alt="1 included, 18 N/A" src="https://img.shields.io/badge/televisions-1%20included%20%C2%B7%2018%20N%2FA-6c7a7e">
+  <img alt="27 captured devices" src="https://img.shields.io/badge/captured%20devices-27-6c7a7e">
+  <img alt="8 devices validated with real apps" src="https://img.shields.io/badge/validated%20with%20real%20apps-8-6c7a7e">
+  <img alt="tested with 18 open-source clients" src="https://img.shields.io/badge/tested%20with%20open--source%20clients-18-6c7a7e">
+  <img alt="81 protocol listeners" src="https://img.shields.io/badge/protocol%20listeners-81-6c7a7e">
 <!-- /generated -->
 </p>
 
@@ -136,7 +136,7 @@ Read next: [Open-source clients](docs/open-source-clients.md), including how to 
 
 ### Adding your television
 
-Own a set the emulator does not model, or a firmware it does not have? Tell us its model,
+Own a set the emulator does not model, or a firmware it does not have? Send its model,
 firmware and the app you use, or record a capture yourself: what to record, what to strip
 before sending, and what happens to it afterwards.
 
@@ -161,8 +161,8 @@ with it.
 |---|---|---|---|
 | **[Roku](docs/platforms/roku.md)**<br>**Included** | ECP over HTTP · authenticated ecp-2 WebSocket · SSDP roku:ecp | 📡 **Roku Streaming Stick 4K**<br>📡 **TCL Roku TV 32S357** | 🧪 [rokuecp](https://github.com/ctalkington/python-rokuecp) · [report](docs/clients/roku.md#rokuecp)<br>🧪 [python-roku](https://github.com/jcarbaugh/python-roku) · [report](docs/clients/roku.md#python-roku)<br>🧪 [roku-client](https://github.com/bschlenk/node-roku-client) · [report](docs/clients/roku.md#roku-client)<br>🔬 [unit and replay tests](docs/tests/roku.md) |
 | **[Fire TV](docs/platforms/firetv.md)**<br>N/A | Turnstile over HTTPS · legacy ADB shell · DIAL and SSDP · Bonjour on Fire OS | 📡✅ **Fire TV Stick (Vega)**<br>📡✅ **Fire TV Stick (Fire OS)**<br>📡 **Fire TV Stick 4K Max** | ✅ [Amazon Fire TV for iOS](https://apps.apple.com/app/id947984433) · [report](docs/manual-validation.md#ledger)<br>🧪 [androidtv](https://github.com/JeffLIrion/python-androidtv) · [report](docs/clients/firetv.md#androidtv)<br>🧪 [uc-intg-firetv](https://github.com/mase1981/uc-intg-firetv) · [report](docs/clients/firetv.md#uc-intg-firetv)<br>🔬 [unit and replay tests](docs/tests/firetv.md) |
-| **[webOS TV](docs/platforms/webos.md)**<br>N/A | SSAP over WSS · IME keyboard · pointer socket · DLNA renderer · four SSDP stacks | 📡 **LG 43UQ81006LB**<br>📡 **LG 50UA75006LA**<br>📡 **Sencor SLE50Q871B**<br>📡 **Sencor SLE65Q871B** | 🧪 [aiowebostv](https://github.com/home-assistant-libs/aiowebostv) · [report](docs/clients/webos.md#aiowebostv)<br>🔬 [unit and replay tests](docs/tests/webos.md) |
-| **[Android TV / Google TV](docs/platforms/androidtv.md)**<br>N/A | Remote v2 over mutual TLS · Polo pairing · Cast and DIAL launch · AirPlay identity · Bonjour | 📡✅ **Xiaomi MiTV-MOEU0**<br>📡 **TCL Android TV**<br>📡 **KIVI Mediatek MTXXXX** (2 captures)<br>📡✅ **Google Chromecast HD**<br>📡 **Nokia Streaming Stick 800** | ✅ [Google TV for iOS](https://apps.apple.com/app/id746894884) · [report](docs/manual-validation.md#ledger)<br>🧪 [androidtvremote2](https://github.com/tronikos/androidtvremote2) · [report](docs/clients/androidtv.md#androidtvremote2)<br>🔬 [unit and replay tests](docs/tests/androidtv.md) |
+| **[webOS TV](docs/platforms/webos.md)**<br>N/A | SSAP over WSS · IME keyboard · pointer socket · DLNA renderer · four SSDP stacks | 📡✅ **LG 43UQ81006LB**<br>📡 **LG 50UA75006LA**<br>📡 **Sencor SLE50Q871B**<br>📡 **Sencor SLE65Q871B** | ✅ [LG ThinQ for iOS](https://apps.apple.com/app/id993504342) · [report](docs/manual-validation.md#ledger)<br>🧪 [aiowebostv](https://github.com/home-assistant-libs/aiowebostv) · [report](docs/clients/webos.md#aiowebostv)<br>🧪 [bscpylgtv](https://github.com/chros73/bscpylgtv) · [report](docs/clients/webos.md#bscpylgtv)<br>🧪 [lgtv2](https://github.com/hobbyquaker/lgtv2) · [report](docs/clients/webos.md#lgtv2)<br>🧪 [pywebostv](https://github.com/supersaiyanmode/PyWebOSTV) · [report](docs/clients/webos.md#pywebostv)<br>🔬 [unit and replay tests](docs/tests/webos.md) |
+| **[Android TV / Google TV](docs/platforms/androidtv.md)**<br>N/A | Remote v2 over mutual TLS · Polo pairing · Cast and DIAL launch · AirPlay identity · Bonjour | 📡✅ **Xiaomi MiTV-MOEU0**<br>📡 **TCL Android TV**<br>📡 **KIVI Mediatek MTXXXX** (2 captures)<br>📡✅ **Google Chromecast HD**<br>📡 **Nokia Streaming Stick 800** | ✅ [Google TV for iOS](https://apps.apple.com/app/id746894884) · [report](docs/manual-validation.md#ledger)<br>🧪 [androidtvremote2](https://github.com/tronikos/androidtvremote2) · [report](docs/clients/androidtv.md#androidtvremote2)<br>🧪 [pychromecast](https://github.com/home-assistant-libs/pychromecast) · [report](docs/clients/androidtv.md#pychromecast)<br>🔬 [unit and replay tests](docs/tests/androidtv.md) |
 | **[Vizio SmartCast](docs/platforms/vizio.md)**<br>N/A | SmartCast REST over HTTPS · DIAL and SSDP | 📡 **Vizio D24f-J09** | 🧪 [pyvizio](https://github.com/raman325/pyvizio) · [report](docs/clients/vizio.md#pyvizio)<br>🔬 [unit and replay tests](docs/tests/vizio.md) |
 | **[VIDAA (Hisense)](docs/platforms/vidaa.md)**<br>N/A | MQTT over TLS · UPnP capability probe · Live TV channel list | 📡 **Hisense 32A3HE** | 🔬 [unit and replay tests](docs/tests/vidaa.md) |
 | **[Philips JointSpace](docs/platforms/philips.md)**<br>N/A | JointSpace v6 over HTTPS and HTTP · UPnP · SSDP · Bonjour | 📡✅ **Philips 32PHS6000/12** | ✅ [Philips TV Remote for iOS](https://apps.apple.com/gb/app/philips-smart-tv/id1479155903) · [report](docs/manual-validation.md#ledger)<br>🧪 [ha-philipsjs](https://github.com/danielperna84/ha-philipsjs) · [report](docs/clients/philips.md#ha-philipsjs)<br>🔬 [unit and replay tests](docs/tests/philips.md) |
@@ -172,10 +172,12 @@ with it.
 | **[Metz Classic](docs/platforms/metz.md)**<br>N/A | RCRService SOAP over HTTP · SSDP upnp:rootdevice · modelled from the vendor's remote app | 📱 **Metz Classic** | 🔬 [unit and replay tests](docs/tests/metz.md) |
 | **[TCL nScreen](docs/platforms/nscreen.md)**<br>N/A | nScreen XML remote over TCP · DLNA renderer · DIAL · SSDP, two stacks | 📡 **TCL H32S5916** | 🔬 [unit and replay tests](docs/tests/nscreen.md) |
 | **[Panasonic VIERA](docs/platforms/viera.md)**<br>N/A | NRC SOAP over HTTP, plain or PIN-paired and encrypted · volume, inputs and events · pointer and gamepad socket · driven by Panasonic TV Remote 2 and 3 | 📱✅ **Panasonic VIERA, no PIN**<br>📱✅ **Panasonic VIERA, PIN** | ✅ [Panasonic TV Remote 3 for iOS](https://apps.apple.com/app/id1435893441) · [report](docs/manual-validation.md#ledger)<br>✅ [Panasonic TV Remote 2 for iOS](https://apps.apple.com/app/id590335696) · [report](docs/manual-validation.md#ledger)<br>🧪 [panasonic-viera](https://github.com/florianholzapfel/panasonic-viera) · [report](docs/clients/viera.md#panasonic-viera)<br>🔬 [unit and replay tests](docs/tests/viera.md) |
-| **[Huawei MediaQ](docs/platforms/huawei.md)**<br>N/A | huawei-remote key events over HTTP · TCP probe on 9001 · modelled from a third-party Android remote app | 📱 **Huawei MediaQ** | 🔬 [unit and replay tests](docs/tests/huawei.md) |
-| **[YunOS / AliTV](docs/platforms/yunos.md)**<br>N/A | Binary remote over TCP 13510 · SSDP YunOSTV search · modelled from a third-party Android remote app | 📱 **YunOS / AliTV box** | 🔬 [unit and replay tests](docs/tests/yunos.md) |
+| **[Huawei MediaQ](docs/platforms/huawei.md)**<br>N/A | huawei-remote key events over HTTP · TCP probe on 9001 · modelled | 📱 **Huawei MediaQ** | 🔬 [unit and replay tests](docs/tests/huawei.md) |
+| **[YunOS / AliTV](docs/platforms/yunos.md)**<br>N/A | Binary remote over TCP 13510 · SSDP YunOSTV search · modelled | 📱 **YunOS / AliTV box** | 🔬 [unit and replay tests](docs/tests/yunos.md) |
 | **[Xbox](docs/platforms/xbox.md)**<br>N/A | SmartGlass over UDP 5050 · ECDH connect, AES-CBC session · captured session, input modelled from OpenXbox | 📡 **Xbox console** | 🔬 [unit and replay tests](docs/tests/xbox.md) |
-| **[LeTV / LeEco](docs/platforms/letv.md)**<br>N/A | JSON key datagrams over UDP 9900 · TCP probe on 13489 · modelled from a third-party Android remote app | 📱 **LeTV / LeEco set** | 🔬 [unit and replay tests](docs/tests/letv.md) |
+| **[LeTV / LeEco](docs/platforms/letv.md)**<br>N/A | JSON key datagrams over UDP 9900 · TCP probe on 13489 · modelled | 📱 **LeTV / LeEco set** | 🔬 [unit and replay tests](docs/tests/letv.md) |
+| **[Apple TV](docs/platforms/appletv.md)**<br>N/A | Companion link over TCP 49153 · HAP PIN pairing · sealed OPACK · Bonjour | 📡 **Apple TV 4K (3rd generation)** | 🧪 [pyatv](https://github.com/postlund/pyatv) · [report](docs/clients/appletv.md#pyatv)<br>🔬 [unit and replay tests](docs/tests/appletv.md) |
+| **[Xiaomi Mi TV (GiTV)](docs/platforms/mitv.md)**<br>N/A | GiTV remote over HTTP 6095 · isalive sweep · modelled | 📱 **Xiaomi Mi TV (GiTV)** | 🧪 [pymitv](https://github.com/simse/pymitv) · [report](docs/clients/mitv.md#pymitv)<br>🔬 [unit and replay tests](docs/tests/mitv.md) |
 <!-- /generated -->
 
 📡 **Captured** — replayed from packet captures of a physical set ·
@@ -184,7 +186,7 @@ with it.
 ([ledger](docs/manual-validation.md)) ·
 🧪 **Exercised** — an open-source client library runs against it every week
 ([clients](docs/open-source-clients.md)) ·
-🔬 **Tested** — our own unit tests and a byte-for-byte replay of every capture, reported per
+🔬 **Tested** — the project's own unit tests and a byte-for-byte replay of every capture, reported per
 television ·
 **N/A** — written and tested, [not in this build](#the-other-televisions).
 
@@ -203,7 +205,7 @@ Ports, discovery, pairing, firmware versions and every wire protocol by televisi
   contradicts fails the build.
 - **Honest about provenance.** Each device says whether it was captured from a set or
   modelled from an app, and a device is called *validated* only after a session with a real
-  app — never on the strength of tests we wrote.
+  app, not on the strength of the project's own tests.
 - **Driven by the clients people use.** The vendors' own remote apps, by hand; and
   open-source libraries — such as [rokuecp](docs/clients/roku.md), the one behind Home
   Assistant's Roku integration — installed untouched and re-run every week. What they ask
@@ -223,9 +225,10 @@ the dashboard so you can see what the emulator covers. Each has an overview unde
 [`docs/platforms/`](docs/platforms); the full driver guides — every message, pairing step and
 refusal, tied to the capture it came from — come with access.
 
-If one of them is what you need, [get in touch](https://marchik.dev) and say which. Bugs in the
-Roku adapter, and televisions you own and want modelled, are welcome as
+If one of them is what you need, [get in touch](https://marchik.dev) and say which. Bugs, and
+Roku models or firmwares the emulator does not have yet, are welcome as
 [issues](https://github.com/evilutioner/smart-tv-emulator/issues).
+Changing the emulator itself: [Contributing](CONTRIBUTING.md).
 
 ## Limits
 

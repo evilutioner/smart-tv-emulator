@@ -12,15 +12,15 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `panasonic-viera-nrc` | `panasonic-viera-pin-nrc` |
 |---|---|---|
-| discovery | not written | not written |
-| identity | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| auth | not written | 🟩 100 % · 1/1 |
-| session | not written | 🟩 100 % · 1/1 |
+| discovery | ⬜ no API | ⬜ no API |
+| identity | 🟨 67 % · 1/1 | 🟨 67 % · 1/1 |
+| auth | ⬜ no API | 🟩 100 % · 1/1 |
+| session | ⬜ no API | 🟩 100 % · 1/1 |
 | keys | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
 | text | ⬜ no API | ⬜ no API |
-| pointer | not written | not written |
-| voice | not written | not written |
-| state | 🟨 67 % · 1/1 · ⚠ 1 | 🟩 100 % · 1/1 |
+| pointer | ⬜ no API | ⬜ no API |
+| voice | ⬜ no API | ⬜ no API |
+| state | 🟩 89 % · 1/1 | 🟩 100 % · 1/1 |
 | volume | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
 | power | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
 | apps | 🟨 50 % · 1/1 · ⚠ 1 | 🟨 50 % · 1/1 · ⚠ 1 |
@@ -40,7 +40,6 @@ None.
 The emulator answers, but not as the set does (wrong answer from emulator).
 
 - **open a web page in the browser**, 2 runs (panasonic-viera on `panasonic-viera-nrc`, `panasonic-viera-pin-nrc`). `open_webpage` launches `resource_id=1063` and the emulator refuses it as an unknown application (HTTP 500 fault): its app list is emulator-owned and holds the browser by product id only.
-- **the app list**, 1 run (panasonic-viera on `panasonic-viera-nrc`). A defect of the client, not of the answer: on a set without encryption `get_apps` splits the raw `bytes` urlopen returns with a `str` separator and raises TypeError before it reads the list.
 
 ### Blocked televisions
 
@@ -52,19 +51,13 @@ None.
 
 The client parses a correct answer wrongly.
 
-None.
-
-### Failed, not yet explained
-
-Failed for no declared reason: the run is red until someone says whose it is.
-
-- **text entry**, 2 runs (panasonic-viera on `panasonic-viera-nrc`, `panasonic-viera-pin-nrc`): `panasonic_viera has no call for X_SendString or any other text input`
+- **the app list**, 1 run (panasonic-viera on `panasonic-viera-nrc`). A defect of the client, not of the answer: on a set without encryption `get_apps` splits the raw `bytes` urlopen returns with a `str` separator and raises TypeError before it reads the list.
 
 ### Tests to write
 
 Offered by a client and exercised by no step (untested), by zone; ×N is how many clients offer it.
 
-None.
+- **identity** (1): `get_vector_info` ×1
 
 ## panasonic-viera
 
@@ -72,44 +65,49 @@ Synchronous NRC, renderer and PAC client with PIN pairing, the library behind Ho
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 0.4.6 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-12 | 0.4.6 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 0.4.6 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-07 | 0.4.6 | 1.0.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
 #### `panasonic-viera-nrc`
 
-- **discovery**: not written.
-- **identity**: passed 1/1 steps.
-- **auth**: not written.
-- **session**: not written.
-- **keys**: passed 1/1 steps.
-- **text**: no API. panasonic_viera has no call for X_SendString or any other text input
-- **pointer**: not written.
-- **voice**: not written.
-- **state**: passed 2/3 steps.
-  - wrong answer from emulator: the app list: `TypeError: a bytes-like object is required, not 'str'`
-- **volume**: passed 2/2 steps.
-- **power**: passed 1/1 steps.
-- **apps**: passed 1/2 steps.
-  - wrong answer from emulator: open a web page in the browser: `HTTPError: HTTP Error 500: Internal Server Error`
+- **discovery**: no API. panasonic_viera connects to a host it is given and does no SSDP discovery.
+- **identity**: passed 2/3.
+  - untested: `get_vector_info`
+- **auth**: no API. This set takes plain commands: the client asks it for no PIN.
+- **session**: no API. This set takes plain commands: the client opens no encrypted session with it.
+- **keys**: passed 77/77.
+- **text**: no API. panasonic_viera has no call for X_SendString or any other text input.
+- **pointer**: no API. panasonic_viera has no pointer input.
+- **voice**: no API. panasonic_viera has no voice input.
+- **state**: passed 8/9.
+  - client bug: the app list (`get_apps`): `TypeError: a bytes-like object is required, not 'str'`
+- **volume**: passed 6/6.
+- **power**: passed 1/1.
+- **apps**: passed 1/2.
+  - wrong answer from emulator: open a web page in the browser (`open_webpage`): `HTTPError: HTTP Error 500: Internal Server Error`
 
 Error statuses the emulator sent: 404 ×1, 500 ×2.
 
 #### `panasonic-viera-pin-nrc`
 
-- **discovery**: not written.
-- **identity**: passed 1/1 steps.
-- **auth**: passed 2/2 steps.
-- **session**: passed 1/1 steps.
-- **keys**: passed 1/1 steps.
-- **text**: no API. panasonic_viera has no call for X_SendString or any other text input
-- **pointer**: not written.
-- **voice**: not written.
-- **state**: passed 3/3 steps.
-- **volume**: passed 2/2 steps.
-- **power**: passed 1/1 steps.
-- **apps**: passed 1/2 steps.
-  - wrong answer from emulator: open a web page in the browser: `HTTPError: HTTP Error 500: Internal Server Error`
+- **discovery**: no API. panasonic_viera connects to a host it is given and does no SSDP discovery.
+- **identity**: passed 2/3.
+  - untested: `get_vector_info`
+- **auth**: passed 4/4.
+- **session**: passed 1/1.
+- **keys**: passed 77/77.
+- **text**: no API. panasonic_viera has no call for X_SendString or any other text input.
+- **pointer**: no API. panasonic_viera has no pointer input.
+- **voice**: no API. panasonic_viera has no voice input.
+- **state**: passed 9/9.
+- **volume**: passed 6/6.
+- **power**: passed 1/1.
+- **apps**: passed 1/2.
+  - wrong answer from emulator: open a web page in the browser (`open_webpage`): `HTTPError: HTTP Error 500: Internal Server Error`
 
 Error statuses the emulator sent: 404 ×1, 500 ×3.

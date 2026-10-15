@@ -176,7 +176,7 @@ def _conformance_data(platform_id: str, reference: ProfileReference) -> dict:
 
 
 def declared_exchanges(platform_id: str, reference: ProfileReference) -> dict[str, str]:
-    """Exchanges a profile's conformance data declares uncoverable for now, with the reason."""
+    """Exchanges a profile's conformance data declares uncoverable, with the reason."""
     data = _conformance_data(platform_id, reference)
     owner = f"conformance data for {platform_id}/{reference.id}"
     found: dict[str, str] = {}
@@ -253,12 +253,16 @@ async def _plan_profile(plan: Plan, platform_id: str, reference: ProfileReferenc
             channel = sockets.get(websocket.channel_of(exchange))
             reason = websocket.replay_gap(exchange, channel)
             if not reason:
-                exchanges = (*channel.opening, exchange_id)
+                # An opening exchange is replayed by the opening itself, up to its own place.
+                exchanges = (channel.opening[:channel.opening.index(exchange_id) + 1]
+                             if exchange_id in channel.opening
+                             else (*channel.opening, exchange_id))
                 opening = [reference.capture.exchange(item) for item in channel.opening]
                 reason = next((f"opening exchange {item.id}: {gap}" for item in opening
                                if (gap := websocket.replay_gap(item, channel))), "")
             if not reason:
-                rows = paths.get(f"GET {channel.path}", [])
+                rows = [row for row in paths.get(f"GET {channel.path}", [])
+                        if not channel.protocol or row.protocol == channel.protocol]
                 if len(rows) != 1:
                     raise PlanError(f"{exchange_id}: {len(rows)} listeners serve the "
                                     f"{channel.id} upgrade path {channel.path}")
@@ -423,7 +427,8 @@ async def _websocket(case: ConformanceCase, reference: ProfileReference, adapter
     # channel's own masks.
     problems, notes = await websocket.run(
         url, authority, channel, exchanges, {exchanges[-1].id: substitutions},
-        {"host": ADVERTISED_HOST}, case.timeout, tls)
+        {"host": ADVERTISED_HOST}, case.timeout, tls,
+        screen=lambda: dict(adapter.core.pairing or {}))
     result.problems += problems
     result.notes += notes
 

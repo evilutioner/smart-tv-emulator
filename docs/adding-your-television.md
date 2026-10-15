@@ -1,14 +1,15 @@
 # Adding your television
 
-A television you own and want emulated can get here in two ways: you tell us about it and we
-measure it with you, or you record it yourself and send a capture. Either way the emulator ends
-up answering with the bytes your set sent, never with what someone expected it to send.
+A television you own and want emulated can get here in two ways: you describe it and the
+maintainer measures it with you, or you record it yourself and send a capture. Either way the
+emulator ends up answering with the bytes your set sent, not with what someone expected it to
+send.
 
 This page covers a new **device** on a television family the emulator already speaks (a
 different model or firmware) and a new **family** altogether. The code side of a new family is
 in [Architecture: adding a television](architecture.md#adding-a-television).
 
-## Tell us about it
+## Describe it
 
 Open an [issue with the television form](https://github.com/evilutioner/smart-tv-emulator/issues/new?template=television.yml), which asks for:
 
@@ -73,14 +74,14 @@ certificate taken from the set.
 
 ## From capture to a selectable device
 
-The steps are the maintainer's, listed so you know what happens to your capture:
+What happens to your capture after you send it:
 
 1. The capture goes in as **evidence**. An incomplete one stays evidence only: it informs the
    contract but is never selectable.
 2. A complete one gets a `profiles/<device-id>/profile.json` that references it, and appears
    under **Captured device** in the dashboard.
-3. `tvemu --contract <id> --check` must pass: a claim your set contradicts is fixed or narrowed,
-   never your capture.
+3. `tvemu --contract <id> --check` must pass. If your set contradicts a claim, the claim is
+   fixed or narrowed; your capture is not edited.
 4. The replay harness, `python -m tvemu.conformance`, sends each captured request to the
    emulator and compares the answer with your capture byte for byte.
 5. The device is listed in the README's table as **captured**, and as **validated** only after a
@@ -94,5 +95,5 @@ The steps are the maintainer's, listed so you know what happens to your capture:
 > **Gap:** a checker that scans a capture directory for real addresses and identifiers before
 > it is sent, the way the build checks shipped files.
 
-> **Gap:** a contribution guide (`CONTRIBUTING.md`) covering licence terms for submitted
-> captures and the review steps.
+> **Gap:** licence terms for submitted captures. Until they are written, get in touch before
+> sending one ([Contributing](../CONTRIBUTING.md)).

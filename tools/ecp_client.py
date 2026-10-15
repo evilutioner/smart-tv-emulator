@@ -4,8 +4,8 @@
     python tools/ecp_client.py 192.168.1.20:8060
 
 Opens the WebSocket, answers the challenge, presses a key, then holds the session open so
-the dashboard shows one authenticated connection. This is the whole handshake: a real
-remote application does the same thing before it sends anything.
+the dashboard shows one authenticated connection. A real remote application performs the
+same handshake before it sends anything.
 """
 from __future__ import annotations
 

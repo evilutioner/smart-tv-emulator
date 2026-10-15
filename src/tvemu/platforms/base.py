@@ -297,9 +297,8 @@ class PlatformDescriptor:
     voice: VoiceSpec | None = None
     # None means this platform has no app-launch surface, so shared UI hides the tile.
     applications: ApplicationSpec | None = None
-    # Whether this firmware matches key names without regard to case. Data, because it is a
-    # firmware trait rather than a rule: one platform's hardware answers `home`, `HOME` and
-    # `lit_a` exactly as it answers `Home` and `Lit_a`, and another's has never been measured.
+    # Whether this firmware matches key names without regard to case (`home` as `Home`).
+    # Left off unless measured on the device.
     fold_key_case: bool = False
     # Key prefixes a platform's own wire produces for text even though it declares no
     # keyboard. Such a key is refused as out of scope rather than as unknown, and naming the
@@ -311,9 +310,7 @@ class PlatformDescriptor:
     # What a remote key does to the simulated device. Data, so no shared `if key == …` exists.
     key_effects: tuple[tuple[str, KeyEffect], ...] = DEFAULT_KEY_EFFECTS
     volume: VolumeRange = VolumeRange()
-    # Where this platform sits in the dashboard selector. The lowest is the build's default.
-    # A sort key rather than a list in shared code, so a build that ships a subset of the
-    # platforms keeps a stable order without anything having to enumerate them.
+    # Position in the dashboard selector; the lowest present is the default platform.
     order: int = 500
 
 

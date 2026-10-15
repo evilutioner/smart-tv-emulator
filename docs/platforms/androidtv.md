@@ -5,7 +5,7 @@
 > [ask about Android TV / Google TV](https://marchik.dev).
 
 Android TV Remote Service v2 over mutual TLS with Polo pairing, plus DIAL, Google Cast launch
-validation and AirPlay identity. Six sets are captured, from a Xiaomi TV to HDMI dongles, and
+validation and AirPlay identity. Five sets are captured, six captures in all, from a Xiaomi TV to HDMI dongles, and
 each profile exposes only the protocols and ports its set did.
 
 ## Protocols
@@ -29,16 +29,15 @@ each profile exposes only the protocols and ports its set did.
 - **Google Chromecast HD** — Google TV, Android 14
 - **Nokia Streaming Stick 800** — SEI Robotics, Android 11
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-A few of the firmware behaviours the emulator reproduces. The full guide covers every
-message, pairing step and refusal, each one tied to the capture it came from.
+Behaviours of the captured firmware the emulator reproduces, named here without their
+detail. The full guide gives each one, tied to the capture it came from.
 
-- The **Chromecast owns no volume**: volume keys produce no frame at all, however the level moves.
-- The Nokia stick reports volume **only over Cast**, on a 15-step scale, as widened floats.
-- On the dongles **every error frame is followed by the set closing the connection**; a key sent too early gets no answer.
-- The MediaTek sets run **no Cast receiver** and serve DIAL on a different port and path.
-- After a pairing error the TLS connection **stays open but ignores everything**.
+- **Volume per device**: each set's own way of reporting it, or none.
+- **Connection handling after an error**, set by set.
+- **The services each set runs**: Cast and DIAL where the set has them, nothing where it does not.
+- **Pairing errors** and what the set does after one.
 
 ## What the emulator lets you test
 

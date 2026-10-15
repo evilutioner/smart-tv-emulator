@@ -2,9 +2,8 @@
 
 No platform is named here. A package under `platforms/` that exports `PLATFORM` (a
 `PlatformDescriptor`) and `ADAPTER` (its adapter class) is a platform, so the directory
-listing is the id list. That is what lets one build ship a single adapter and another ship
-eight from this same file. Display order is `PlatformDescriptor.order`, so a build that
-ships a subset still has a stable selector and a stable default.
+listing is the id list, and adding a television never touches this file. Display order is
+`PlatformDescriptor.order`, which also picks the default: the lowest comes first.
 """
 from __future__ import annotations
 
@@ -22,11 +21,10 @@ from .catalogue import CatalogueEntry, catalogue_entry, catalogue_ids, request_u
 _RESERVED = frozenset({"base", "catalogue", "common"})
 
 # Packages present but not loadable, by id. Never fatal: the process serves whatever else
-# imported, which keeps one broken adapter from taking the whole bench down.
+# imported, so one broken adapter does not stop the others.
 _errors: dict[str, str] = {}
 
-# Ids a build has been asked to serve, or None for "everything present". Set by
-# `restrict_to`, which is how a source tree previews a build that ships fewer platforms.
+# Ids to serve, or None for "everything present". Set by `restrict_to` (`tvemu --build`).
 _only: frozenset[str] | None = None
 
 

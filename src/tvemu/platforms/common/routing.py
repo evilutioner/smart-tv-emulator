@@ -1,14 +1,11 @@
 """Route declarations that sit next to the handler they describe.
 
-The whole emulated surface of a television used to be legible only by reading every
-`app.add_routes` call in its package. Here a handler carries its own declaration -- what it
-answers with, which captured document it replays, what it does when the capture lacks one --
-and `attach` builds the aiohttp routes from those declarations. The registry cannot drift from
-the code, because it is the code.
+A handler carries its own declaration: what it answers with, which captured document it
+replays, and what it does when the capture lacks one. `attach` builds the aiohttp routes from
+those declarations, and the contract exports read the same ones.
 
-HTTP is the smaller half of this product. A WebSocket envelope or a discovery target is
-declared with `Message`, so a surface map shows the whole television rather than the part that
-happens to travel over HTTP.
+A WebSocket envelope or a discovery target is declared with `Message`, so the surface map
+covers what a television sends outside HTTP too.
 """
 from __future__ import annotations
 
@@ -39,8 +36,7 @@ class RouteSpec:
     # Which of a platform's HTTP applications serves this route. A television that binds
     # several ports declares them all in one place and `attach` takes the group it is building.
     group: str = ""
-    # The status a route answers with every time, for one this television refuses outright.
-    # Declared, because "this set will not serve it" is a fact about the set, not a gap here.
+    # The status a route answers with every time, for one the captured set refuses outright.
     refuses: int = 0
     # aiohttp answers HEAD off every GET route; a firmware that tells the two apart says so.
     head: bool = True

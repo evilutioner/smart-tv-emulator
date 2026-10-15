@@ -1,12 +1,8 @@
-"""A build must not carry artifacts, addresses or keys it has no business shipping.
+"""Shipped files carry no real network address, hardware address or private key.
 
-Deliberately generic. In a build that runs every catalogued television the "absent" set is
-empty and those assertions are vacuously true, so this one file states the same rules in
-the private repository and the published one.
-
-The manifest cases run only where `PUBLIC.toml` exists, which is the repository that
-produces the public build. There, "shipped" means the files that manifest names; in the
-published repository itself, "shipped" means everything git tracks.
+"Shipped" means everything git tracks. The same file also runs where this repository is
+exported from; there a build manifest names the shipped files, and the manifest cases check
+that it stays complete. Without a manifest those cases skip.
 """
 from __future__ import annotations
 
@@ -29,9 +25,8 @@ try:
 except ImportError:                       # the published repository ships no manifest
     public_manifest = None
 
-# A private address in published text is somebody's real network, unless it is the one
-# block reserved here for examples. Captures came off other blocks, so the distinction is
-# real: an address outside 192.168.1.0/24 in a shipped file is a leak, not an illustration.
+# Examples use 192.168.1.0/24 and nothing else, so any other private address in a shipped
+# file came off a real network.
 EXAMPLE_LAN = "192.168.1."
 PRIVATE_ADDRESS = re.compile(
     r"\b(?:192\.168\.\d{1,3}\.\d{1,3}"
@@ -42,6 +37,10 @@ PRIVATE_ADDRESS = re.compile(
 HARDWARE_ADDRESS = re.compile(
     r"(?<![0-9A-Fa-f:])[0-9A-Fa-f]{2}(?::[0-9A-Fa-f]{2}){5}(?![0-9A-Fa-f:])")
 PRIVATE_KEY = re.compile(r"BEGIN [A-Z ]*PRIVATE KEY")
+# Files that exist only where this repository is exported from, and commit trailers.
+UNSHIPPED_REFERENCE = re.compile(
+    r"docs/internal\b|\b(?:RELEASING|LICENSING|AGENTS|CLAUDE)\.md\b|[\w-]+-plan\.md\b"
+    r"|Co-Authored-By", re.IGNORECASE)
 
 
 def leaked_addresses(text: str) -> list[str]:
@@ -62,8 +61,8 @@ def leaked_hardware_addresses(text: str) -> list[str]:
 TEXT_SUFFIXES = frozenset({".py", ".js", ".css", ".html", ".json", ".xml", ".md", ".toml",
                            ".yml", ".yaml", ".txt", ".cfg", ".ini", ""})
 
-# The catalogue names every television this product models, including the ones a build
-# cannot run. That is the whole point of it, so it is exempt from the name scan.
+# The catalogue names every television the project models, including ones not in this
+# checkout, so it is exempt from the name scan.
 NAME_SCAN_EXEMPT = frozenset({"src/tvemu/platforms/catalogue.json"})
 
 
@@ -103,7 +102,8 @@ class BuildContentsTests(unittest.TestCase):
                         name.startswith(f"src/tvemu/platforms/{platform_id}/")
                         or name == f"src/tvemu/web/platforms/{platform_id}.js"
                         or name == f"src/tvemu/web/platforms/{platform_id}.css"
-                        or name.startswith(f"tests/test_{platform_id}"),
+                        or name.startswith(f"tests/test_{platform_id}")
+                        or name.startswith(f"docs/clients/{platform_id}/"),
                         f"{name} belongs to {platform_id}, which this build does not ship")
 
     def test_no_key_material_is_shipped_outside_a_shipped_platform(self):
@@ -118,7 +118,7 @@ class BuildContentsTests(unittest.TestCase):
         patterns = {pid: re.compile(rf"\b{re.escape(pid)}\b", re.IGNORECASE)
                     for pid in self.absent}
         for name, text in self.text_files():
-            # Prose names every television on purpose; that is the point of publishing it.
+            # Documentation names every television; only shipped code is scanned.
             if not name.startswith("src/tvemu/") or name in NAME_SCAN_EXEMPT:
                 continue
             for platform_id, pattern in patterns.items():
@@ -134,6 +134,14 @@ class BuildContentsTests(unittest.TestCase):
                                   leaked_hardware_addresses(text))):
                 with self.subTest(file=name, kind=label):
                     self.assertEqual(found, [], f"{name} carries {label}")
+
+    def test_no_shipped_file_points_at_an_unshipped_working_file(self):
+        """Release notes, agent instructions and design plans stay where they were written."""
+        for name, text in self.text_files():
+            if name == "tests/test_public_build.py":
+                continue
+            with self.subTest(file=name):
+                self.assertEqual(UNSHIPPED_REFERENCE.findall(text), [], name)
 
     def test_no_shipped_file_carries_a_private_key(self):
         for name, text in self.text_files():
@@ -193,13 +201,22 @@ class BuildContentsTests(unittest.TestCase):
                     self.assertTrue(any(app in session for app in apps),
                                     f"the ledger's {session!r} is not in the catalogue's apps")
 
+    def test_every_catalogued_television_s_page_ships(self):
+        """The README and the television table link each page; an unlisted one is a dead link."""
+        shipped = set(self.shipped)
+        for entry in catalogue_entries():
+            with self.subTest(platform=entry.id):
+                self.assertTrue(entry.docs, f"{entry.id} names no page in catalogue.json")
+                self.assertTrue(entry.docs in shipped,
+                                f"{entry.docs} is linked from the README but not shipped")
+
     def test_the_manifest_names_only_paths_that_exist(self):
         if public_manifest is None:
             self.skipTest("this repository ships no build manifest")
         self.assertEqual(public_manifest.missing(ROOT), [])
 
     def test_every_shared_module_is_in_the_manifest(self):
-        """A new shared file that nobody listed is a red test, not a surprise at export."""
+        """A new shared file fails here until the manifest lists it as shipped or private."""
         if public_manifest is None:
             self.skipTest("this repository ships no build manifest")
         listed = set(self.shipped) | set(self.manifest.get("private") or [])

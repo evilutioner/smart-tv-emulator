@@ -1,12 +1,11 @@
 # Huawei MediaQ
 
-> **N/A in this build.** Modelled from a third-party Android remote app; the emulator and the
-> full driver guide are available on request — [ask about Huawei MediaQ](https://marchik.dev).
+> **N/A in this build.** Modelled; the emulator and the full driver guide are available on
+> request — [ask about Huawei MediaQ](https://marchik.dev).
 
-The LAN remote of the Huawei MediaQ set-top box (华为秘盒) as a third-party Android remote app
-drives it: a TCP probe that tells the app it has found a Huawei box, and an HTTP route that
-takes Android keycodes. **No Huawei box was measured, and no request was recorded off a wire**
-— the behaviour follows what that app sends.
+The LAN remote of the Huawei MediaQ set-top box (华为秘盒): a TCP probe that tells a remote app
+it has found a Huawei box, and an HTTP route that takes Android keycodes. **No Huawei box was
+measured, and no request was recorded off a wire** — the behaviour is modelled.
 
 ## Protocols
 
@@ -17,7 +16,7 @@ takes Android keycodes. **No Huawei box was measured, and no request was recorde
 
 ## Modelled devices
 
-- **Huawei MediaQ (modelled)** — from a third-party Android remote app; no box measured
+- **Huawei MediaQ (modelled)** — no box measured
 
 ## What a driver gets wrong here
 
@@ -28,8 +27,8 @@ takes Android keycodes. **No Huawei box was measured, and no request was recorde
 
 ## What the emulator lets you test
 
-- [x] Discovery exactly as that app performs it
-- [x] Every key that app sends, by its Android keycode
+- [x] Discovery exactly as the remote app performs it
+- [x] Every key the remote app sends, by its Android keycode
 - [ ] Text, app launches, pointer (no client seen sending them)
 - [ ] Anything a real MediaQ answers (not measured)
 

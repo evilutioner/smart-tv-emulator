@@ -64,6 +64,15 @@ class RokuCase(unittest.IsolatedAsyncioTestCase):
     async def press(self, websocket, request_id: str, key: str) -> dict:
         return await self.ask(websocket, request_id, request="key-press", **{"param-key": key})
 
+    async def device_info(self) -> tuple[bytes, bytes]:
+        http = await (await self.client.get("/query/device-info")).read()
+        websocket, _ = await self.session()
+        try:
+            reply = await self.ask(websocket, "2", request="query-device-info")
+        finally:
+            await websocket.close()
+        return http, base64.b64decode(reply["content-data"])
+
 
 class HttpKeyTests(RokuCase):
     async def test_the_whole_path_segment_is_percent_decoded_unlike_param_key(self):
@@ -325,12 +334,15 @@ class TclLimitedModeTests(RokuCase):
 
     async def test_plain_http_loses_every_restricted_query_in_the_sets_own_words(self):
         refusal = LIMITED_CAPTURE.payload("http.apps")
+        captured = LIMITED_CAPTURE.exchange("http.apps").response().metadata["headers"]
         for path in ("/query/apps", "/query/media-player", "/query/icon/12",
                      "/query/tv-channels", "/query/audio-device", "/query/sgnodes/all"):
             with self.subTest(path=path):
                 response = await self.client.get(path)
-                self.assertEqual((response.status, response.content_type),
-                                 (403, "text/plain"))
+                self.assertEqual(response.status, 403)
+                # The quoted charset and no-cache are the set's spelling, not aiohttp's.
+                for name, value in captured.items():
+                    self.assertEqual(response.headers.get(name), value, name)
                 self.assertEqual(await response.read(), refusal)
 
     async def test_device_info_active_app_and_the_documents_stay_open(self):
@@ -359,6 +371,78 @@ class TclLimitedModeTests(RokuCase):
             await websocket.close()
 
 
+class SettingModeTests(RokuCase):
+    """device-info names the selected network-access value, as each captured mode did."""
+
+    profile = TCL_PROFILE
+
+    async def test_plain_http_device_info_follows_the_mode(self):
+        for mode in ("enabled", "permissive", "limited"):
+            with self.subTest(mode=mode):
+                self.core.settings = Settings(device_profile=TCL_PROFILE, access_mode=mode)
+                document = await (await self.client.get("/query/device-info")).read()
+                self.assertIn(f"<ecp-setting-mode>{mode}</ecp-setting-mode>".encode(), document)
+                # Only that element is written: the rest is the capture byte for byte.
+                self.assertEqual(
+                    document.replace(f">{mode}<".encode(), b">enabled<"),
+                    TCL_CAPTURE.payload("http.device-info"))
+
+    async def test_the_envelope_names_disabled_as_the_tcl_did(self):
+        self.core.settings = Settings(device_profile=TCL_PROFILE, access_mode="disabled")
+        disabled = load_capture("tvemu.platforms.roku", "tcl-roku-tv-32s357-disabled")
+        captured = base64.b64decode(json.loads(
+            disabled.payload("ws.query-device-info"))["content-data"])
+        self.assertIn(b"<ecp-setting-mode>disabled</ecp-setting-mode>", captured)
+        websocket, _ = await self.session()
+        try:
+            reply = await self.ask(websocket, "2", request="query-device-info")
+        finally:
+            await websocket.close()
+        self.assertIn(b"<ecp-setting-mode>disabled</ecp-setting-mode>",
+                      base64.b64decode(reply["content-data"]))
+
+
+class PowerModeTests(RokuCase):
+    profile = TCL_PROFILE
+
+    async def test_standby_is_ready_on_both_wires_and_power_on_restores_it(self):
+        standby = load_capture("tvemu.platforms.roku", "tcl-roku-tv-32s357-standby")
+        self.assertIn(b"<power-mode>Ready</power-mode>",
+                      standby.payload("http.device-info-standby"))
+        self.assertEqual((await self.client.post("/keypress/PowerOff")).status, 200)
+        for document in await self.device_info():
+            self.assertIn(b"<power-mode>Ready</power-mode>", document)
+        await self.client.post("/keypress/PowerOn")
+        http, _ = await self.device_info()
+        self.assertEqual(http, TCL_CAPTURE.payload("http.device-info"))
+
+
+
+class StickPowerModeTests(RokuCase):
+    async def test_a_stick_whose_standby_is_unmeasured_keeps_the_captured_value(self):
+        await self.client.post("/keypress/PowerOff")
+        for document in await self.device_info():
+            self.assertIn(b"<power-mode>PowerOn</power-mode>", document)
+
+
+class SearchAndInputTests(RokuCase):
+    profile = TCL_PROFILE
+
+    async def test_search_and_input_answer_with_their_status_alone(self):
+        for path in ("/search/browse?keyword=x", "/input?a=1", "/input/15985?t=v&u=x"):
+            with self.subTest(path=path):
+                reply = await self.client.post(path)
+                self.assertEqual((reply.status, await reply.read()), (200, b""))
+        self.assertEqual(self.core.last_application_launch["id"], "15985")
+
+    async def test_the_access_modes_refuse_them_as_they_refuse_launch(self):
+        for mode, status in (("limited", 403), ("disabled", 401)):
+            self.core.settings = Settings(device_profile=TCL_PROFILE, access_mode=mode)
+            for path in ("/search/browse", "/input", "/input/12"):
+                with self.subTest(mode=mode, path=path):
+                    self.assertEqual((await self.client.post(path)).status, status)
+
+
 class StickProfileTests(RokuCase):
     async def test_a_route_the_capture_lacks_is_501_not_a_fabricated_body(self):
         self.assertEqual((await self.client.get("/query/icon/12")).status, 501)
@@ -367,6 +451,7 @@ class StickProfileTests(RokuCase):
         for route in ("/query/tv-channels", "/query/tv-active-channel"):
             reply = await self.client.get(route)
             self.assertEqual((reply.status, await reply.read()), (404, b""), route)
+            self.assertNotIn("Content-Type", reply.headers, route)
 
     async def test_the_stick_answers_device_info(self):
         reply = await self.client.get("/query/device-info")

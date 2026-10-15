@@ -6,13 +6,58 @@ All notable changes to the public build are recorded here. The format follows
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-15
+
+### Added
+
+- Overviews of two more televisions this build does not include: **Apple TV**, its
+  Companion link recorded off an Apple TV 4K on tvOS 26.5 and exercised with **pyatv**; and
+  **Xiaomi Mi TV (GiTV)**, modelled from **pymitv** with no set measured. Both have a client
+  page under `docs/clients/`.
+- The **TCL Roku TV 32S357** in standby, recorded off the set on Roku OS 15.3.4: `power-mode`
+  follows the emulated power state on that profile, over plain HTTP and over ecp-2, and a
+  channel launch, a keyword search and input to a channel are part of its evidence.
+- Roku answers `POST /search/browse`, `/input` and `/input/{id}` with their status alone, and
+  refuses them in Limited and Disabled as it refuses a launch. The three Roku clients no
+  longer report search and input as gaps.
+- [CONTRIBUTING.md](CONTRIBUTING.md), for people changing the emulator.
+
+### Changed
+
+- Roku `/query/device-info` names the access mode selected on the dashboard in
+  `ecp-setting-mode`, on both wires.
+- The Roku Limited refusal for a query carries the set's own `Content-Type` and
+  `Cache-Control`, and a captured bodiless 404 no longer gains a `Content-Type` the set never
+  sent.
+- The replay conformance harness checks a declared substitution inside XML, and inside a
+  base64 document carried in a JSON string, instead of excusing the whole body. It keeps a
+  trailing space in a header value, which some UPnP servers write, instead of trimming it.
+- The last five clients, **samsungtvws**, **pybravia**, **ha-philipsjs**, **panasonic-viera**
+  and **pyvizio**, say what they offer per zone, read from each library's own tables, and
+  which zones they have no API for. Their key steps now press every key the client offers.
+  Known failures where the emulator answers exactly as the set does are attributed to the
+  client.
+- A client step the client does not offer is no longer counted as a failure on its
+  television's page.
+- Raw client run records ship only for the televisions this build includes; the rendered
+  page per television stays the published evidence.
+- The overviews of televisions this build does not include name what the emulator
+  reproduces rather than each firmware quirk. The **Samsung Tizen** overview names what a raw
+  recapture of the UE43CU7172U added: SSDP, the MediaRenderer description and the DIAL
+  application documents.
+
+### Fixed
+
+- The audio sniffer no longer reads quiet 16-bit samples as full-scale unsigned 8-bit stereo.
+  A reading too quiet to judge is reported as 16-bit mono with confidence `guess`.
+
 ## [1.1.0] - 2026-10-11
 
 ### Added
 
 - Overviews of four more televisions this build does not include: **Xbox One**, as a
   SmartGlass client and a DLNA renderer sees it, replayed from a recorded console session;
-  and three modelled from what a third-party Android remote app sends, with no set measured:
+  and three modelled, with no set measured:
   **Huawei MediaQ**, **YunOS / AliTV** and **LeTV / LeEco**.
 - Open-source clients for more televisions: the libraries behind Home Assistant's webOS,
   Tizen, Bravia, VIZIO, Philips and VIERA integrations (**aiowebostv**, **samsungtvws**,
@@ -56,7 +101,7 @@ All notable changes to the public build are recorded here. The format follows
   passing on what was retained. Each event carries `log_start_id`, the last explicit clear,
   so a JSONL export is checked by the same rule offline.
 
-## 1.0.0 - 2026-10-07
+## [1.0.0] - 2026-10-07
 
 The first release whose shape is meant to hold. From here on the version follows Semantic
 Versioning across the management API (`/api/v1`), the event log, the `tvemu`, `tvemu.expect`
@@ -101,10 +146,10 @@ and `tvemu.clients` command lines, and the run-record format under `docs/clients
 - The README's television table ends with what each television was tested with, in place of
   the *In this build* column: ✅ the vendors' own remote apps, driven by hand, linked to their
   store pages, and 🧪 the open-source client libraries run against it every week, linked to
-  their repositories; and 🔬 our own unit tests and the byte-for-byte replay of its captures.
+  their repositories; and 🔬 the project's own unit tests and the byte-for-byte replay of its captures.
   Each one links to its report. A test report per television, `docs/tests/<id>.md`, is
-  written by `tools/test_reports.py` from a clean tree and ships for every television. Whether a television is in this build
-  now sits under its name. A badge counts the open-source clients. The catalogue
+  written by `tools/test_reports.py` from a clean tree and ships for every television.
+  Whether a television is in this build now sits under its name. A badge counts the open-source clients. The catalogue
   carries `apps` and `clients`, held by tests to the manual validation ledger and to the
   clients whose latest recorded run passes.
 - The default Roku device is the **TCL Roku TV 32S357** on Roku OS 15.3.4. The 12.0.0 stick
@@ -112,9 +157,9 @@ and `tvemu.clients` command lines, and the run-record format under `docs/clients
   first launch now answers what Home Assistant and the other clients need. The stick stays
   selectable.
 - Asking about a television this build does not include, from the docs or the dashboard, now
-  leads to [marchik.dev](https://marchik.dev). The GitHub request form is gone.
+  leads to [marchik.dev](https://marchik.dev). The GitHub request form for them is gone.
 
-## 0.2.0 - 2026-10-04
+## [0.2.0] - 2026-10-04
 
 ### Added
 
@@ -149,7 +194,7 @@ and `tvemu.clients` command lines, and the run-record format under `docs/clients
 - An mDNS TXT record with no keys is sent as one empty string, as RFC 6763 requires, rather
   than as empty rdata.
 
-## 0.1.0 - 2026-09-26
+## [0.1.0] - 2026-09-26
 
 First public build, under the [Apache License 2.0](LICENSE); see [`NOTICE`](NOTICE).
 
@@ -172,5 +217,9 @@ First public build, under the [Apache License 2.0](LICENSE); see [`NOTICE`](NOTI
   the README and the dashboard selector; the management API lists them with
   `"availability": "n/a"` and answers a switch to one with 501 and `"reason": "n/a"`.
 
-[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/evilutioner/smart-tv-emulator/releases/tag/v1.1.0
+[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v0.2.0...v1.0.0
+[0.2.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/evilutioner/smart-tv-emulator/releases/tag/v0.1.0

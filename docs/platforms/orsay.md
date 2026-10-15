@@ -22,15 +22,15 @@ channel. One physical set was recorded end to end, pairing included.
 
 - **Samsung UE48H6200** — H series, 14_X14, MSF 2.0.24
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-A few of the firmware behaviours the emulator reproduces. The full guide covers every
-message, pairing step and refusal, each one tied to the capture it came from.
+Behaviours of the captured firmware the emulator reproduces, named here without their
+detail. The full guide gives each one, tied to the capture it came from.
 
-- A frame under the **wrong key, or for an unknown session, gets no answer at all** — the socket just stays open.
-- The DIAL `Application-URL` **names the port twice**; a client following it reaches nothing.
-- The pairing request and its reply **spell the same key differently**.
-- The application probe **never reports a launched app as running**, even with it on screen.
+- **Frames the set ignores** stay unanswered rather than refused.
+- **DIAL as the set serves it**, faults included.
+- **PIN pairing** as the set answers it.
+- **The application probe**, reporting what the set reports.
 
 ## What the emulator lets you test
 

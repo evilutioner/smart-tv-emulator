@@ -1,0 +1,666 @@
+{
+  "schema_version": 2,
+  "run_id": "20261015T175815Z",
+  "started_at": "2026-10-15T17:58:15+00:00",
+  "duration_s": 5.2,
+  "platform": "roku",
+  "client": {
+    "name": "python-roku",
+    "install": "pypi",
+    "requested": "4.1.0",
+    "upstream": "https://github.com/jcarbaugh/python-roku",
+    "license": "BSD-3-Clause",
+    "version": "4.1.0",
+    "commit": "",
+    "environment": [
+      "certifi==2026.7.22",
+      "charset-normalizer==3.5.2",
+      "idna==3.20",
+      "requests==2.34.2",
+      "roku==4.1.0",
+      "urllib3==2.8.0"
+    ]
+  },
+  "emulator": {
+    "version": "1.2.0",
+    "clean": true
+  },
+  "runtime": {
+    "client": "Python 3.13.11",
+    "python": "3.13.11",
+    "implementation": "CPython",
+    "system": "Darwin",
+    "machine": "arm64"
+  },
+  "verdict": "pass",
+  "stale_gaps": [],
+  "profiles": [
+    {
+      "profile": "roku-streaming-stick-4k-3820eu2",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info and the app list",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model_num",
+            "software_version"
+          ],
+          "events": [
+            3,
+            5
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "active app, power state and channels",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "active_app",
+            "current_app",
+            "power_state"
+          ],
+          "events": [
+            5,
+            8
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "Home",
+            "Up",
+            "Down",
+            "Left",
+            "Right",
+            "Select",
+            "Back",
+            "Play",
+            "Rev",
+            "Fwd",
+            "InstantReplay",
+            "Info",
+            "Backspace",
+            "Enter"
+          ],
+          "events": [
+            8,
+            36
+          ],
+          "duration_ms": 24
+        },
+        {
+          "name": "literal text 'tvemu42'",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits"
+          ],
+          "events": [
+            36,
+            50
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "volume up, down and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VolumeUp",
+            "VolumeDown",
+            "VolumeMute"
+          ],
+          "events": [
+            50,
+            56
+          ],
+          "duration_ms": 5
+        },
+        {
+          "name": "power off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PowerOff",
+            "PowerOn"
+          ],
+          "events": [
+            56,
+            60
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "standby reported by device-info",
+          "action": "query-state",
+          "status": "known-failure",
+          "detail": "AssertionError: On",
+          "covers": [
+            "power_state"
+          ],
+          "events": [
+            60,
+            66
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch an installed application",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "launch"
+          ],
+          "events": [
+            66,
+            67
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "open an application's store page",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "store"
+          ],
+          "events": [
+            67,
+            68
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "an application's icon",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "RokuException: b'No captured response is available in the selected device profile'",
+          "covers": [
+            "icon"
+          ],
+          "events": [
+            68,
+            69
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "search for a keyword",
+          "action": "search",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "search"
+          ],
+          "events": [
+            69,
+            70
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "a touch at a point",
+          "action": "pointer",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "touch down"
+          ],
+          "events": [
+            70,
+            71
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "motion-sensor input",
+          "action": "pointer",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "orientation"
+          ],
+          "events": [
+            71,
+            72
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "query/icon/12",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
+        }
+      ],
+      "expect": {
+        "description": "python-roku: identity over HTTP, keys, literal text and a launch, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "Back",
+          "Backspace",
+          "ChannelDown",
+          "ChannelUp",
+          "Down",
+          "Enter",
+          "FindRemote",
+          "Fwd",
+          "Home",
+          "Info",
+          "InputAV1",
+          "InputHDMI1",
+          "InputHDMI2",
+          "InputHDMI3",
+          "InputHDMI4",
+          "InputTuner",
+          "InstantReplay",
+          "Left",
+          "Play",
+          "Rev",
+          "Right",
+          "Search",
+          "Select",
+          "Up"
+        ],
+        "volume": [
+          "VolumeDown",
+          "VolumeMute",
+          "VolumeUp"
+        ],
+        "power": [
+          "Power",
+          "PowerOff",
+          "PowerOn"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "pointer": [
+          "acceleration",
+          "magnetic",
+          "orientation",
+          "rotation",
+          "touch cancel",
+          "touch down",
+          "touch move",
+          "touch press",
+          "touch up"
+        ],
+        "auth": [
+          "refused in Disabled mode",
+          "refused in Limited mode"
+        ],
+        "state": [
+          "active_app",
+          "current_app",
+          "icon",
+          "power_state",
+          "tv_channels"
+        ],
+        "apps": [
+          "Channel.launch",
+          "launch",
+          "search",
+          "store"
+        ],
+        "discovery": [
+          "discover"
+        ],
+        "identity": [
+          "model_name",
+          "model_num",
+          "roku_type",
+          "serial_num",
+          "software_version",
+          "user_device_name"
+        ]
+      },
+      "answers": [
+        {
+          "status": 501,
+          "operation": "query/icon/12",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "profile": "tcl-roku-tv-32s357",
+      "verdict": "pass",
+      "problems": [],
+      "steps": [
+        {
+          "name": "device-info and the app list",
+          "action": "identify",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "model_num",
+            "software_version"
+          ],
+          "events": [
+            3,
+            5
+          ],
+          "duration_ms": 4
+        },
+        {
+          "name": "active app, power state and channels",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "active_app",
+            "current_app",
+            "power_state",
+            "tv_channels"
+          ],
+          "events": [
+            5,
+            9
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "navigation and playback keys",
+          "action": "key",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "Home",
+            "Up",
+            "Down",
+            "Left",
+            "Right",
+            "Select",
+            "Back",
+            "Play",
+            "Rev",
+            "Fwd",
+            "InstantReplay",
+            "Info",
+            "Backspace",
+            "Enter"
+          ],
+          "events": [
+            9,
+            37
+          ],
+          "duration_ms": 22
+        },
+        {
+          "name": "literal text 'tvemu42'",
+          "action": "text",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "letters",
+            "digits"
+          ],
+          "events": [
+            37,
+            51
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "volume up, down and mute",
+          "action": "volume",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "VolumeUp",
+            "VolumeDown",
+            "VolumeMute"
+          ],
+          "events": [
+            51,
+            57
+          ],
+          "duration_ms": 6
+        },
+        {
+          "name": "power off and on",
+          "action": "power",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "PowerOff",
+            "PowerOn"
+          ],
+          "events": [
+            57,
+            61
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "standby reported by device-info",
+          "action": "query-state",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "power_state"
+          ],
+          "events": [
+            61,
+            66
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "launch an installed application",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "launch"
+          ],
+          "events": [
+            66,
+            67
+          ],
+          "duration_ms": 2
+        },
+        {
+          "name": "open an application's store page",
+          "action": "launch",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "store"
+          ],
+          "events": [
+            67,
+            68
+          ],
+          "duration_ms": 3
+        },
+        {
+          "name": "an application's icon",
+          "action": "query-state",
+          "status": "known-gap",
+          "detail": "RokuException: b'No captured response is available in the selected device profile'",
+          "covers": [
+            "icon"
+          ],
+          "events": [
+            68,
+            69
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "search for a keyword",
+          "action": "search",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "search"
+          ],
+          "events": [
+            69,
+            70
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "a touch at a point",
+          "action": "pointer",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "touch down"
+          ],
+          "events": [
+            70,
+            71
+          ],
+          "duration_ms": 1
+        },
+        {
+          "name": "motion-sensor input",
+          "action": "pointer",
+          "status": "ok",
+          "detail": "",
+          "covers": [
+            "orientation"
+          ],
+          "events": [
+            71,
+            72
+          ],
+          "duration_ms": 1
+        }
+      ],
+      "gaps": [
+        {
+          "operation": "query/icon/12",
+          "status": 501,
+          "count": 1,
+          "known": true,
+          "reason": "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
+        }
+      ],
+      "expect": {
+        "description": "python-roku: identity over HTTP, keys, literal text and a launch, and no command refused",
+        "problems": []
+      },
+      "offers": {
+        "keys": [
+          "Back",
+          "Backspace",
+          "ChannelDown",
+          "ChannelUp",
+          "Down",
+          "Enter",
+          "FindRemote",
+          "Fwd",
+          "Home",
+          "Info",
+          "InputAV1",
+          "InputHDMI1",
+          "InputHDMI2",
+          "InputHDMI3",
+          "InputHDMI4",
+          "InputTuner",
+          "InstantReplay",
+          "Left",
+          "Play",
+          "Rev",
+          "Right",
+          "Search",
+          "Select",
+          "Up"
+        ],
+        "volume": [
+          "VolumeDown",
+          "VolumeMute",
+          "VolumeUp"
+        ],
+        "power": [
+          "Power",
+          "PowerOff",
+          "PowerOn"
+        ],
+        "text": [
+          "digits",
+          "letters",
+          "non-ASCII",
+          "punctuation",
+          "space"
+        ],
+        "pointer": [
+          "acceleration",
+          "magnetic",
+          "orientation",
+          "rotation",
+          "touch cancel",
+          "touch down",
+          "touch move",
+          "touch press",
+          "touch up"
+        ],
+        "auth": [
+          "refused in Disabled mode",
+          "refused in Limited mode"
+        ],
+        "state": [
+          "active_app",
+          "current_app",
+          "icon",
+          "power_state",
+          "tv_channels"
+        ],
+        "apps": [
+          "Channel.launch",
+          "launch",
+          "search",
+          "store"
+        ],
+        "discovery": [
+          "discover"
+        ],
+        "identity": [
+          "model_name",
+          "model_num",
+          "roku_type",
+          "serial_num",
+          "software_version",
+          "user_device_name"
+        ]
+      },
+      "answers": [
+        {
+          "status": 501,
+          "operation": "query/icon/12",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

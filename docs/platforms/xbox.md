@@ -23,16 +23,15 @@ emulator starts.
 
 - **Xbox console**, OS 10.0.26100 — anonymous session captured; input and text modelled from OpenXbox
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-- Two common client mistakes in the key exchange and in message encryption are each refused
-  as the console refuses them; the full guide says which.
-- Every need-ack message is **acknowledged on its own channel**; a heartbeat nobody
-  acknowledges ends the session, and the **console heartbeats too**.
-- Text input needs a **text session the console announced** when a field gained focus.
-- A seek position is a **u64**.
-- The console is **two devices on the LAN**: a SmartGlass console on UDP 5050 and a DLNA
-  MediaRenderer found over SSDP. It answers no mDNS.
+Behaviours of the captured firmware the emulator reproduces, named here without their
+detail. The full guide gives each one, tied to the capture it came from.
+
+- **The key exchange and message encryption**, the client mistakes the console refuses included.
+- **Acknowledgements and heartbeats** in both directions.
+- **Text input** into a field the console has focused.
+- **Two devices on the LAN**: the SmartGlass console and its DLNA renderer.
 
 ## What the emulator lets you test
 

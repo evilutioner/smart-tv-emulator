@@ -5,19 +5,31 @@ encoding are what a driver actually parses, so everything outside a declared run
 substitution is compared byte for byte. A substitution is honoured by masking exactly the
 span of its field on both sides and comparing what remains.
 
-Three kinds of substitution path exist in profiles, and each has one masker here:
+Four kinds of substitution path exist in profiles, and each has one masker here:
 
 - a placeholder such as ``{host}``, written literally into the capture where the set's own
   address or a generated value stood;
 - a JSON path such as ``id``, ``device.ip``, ``result[0].uri`` or ``audio/volume`` (a dot
-  separates keys, ``[n]`` indexes an array, and every other character belongs to the key);
-- a response header name such as ``Set-Cookie``, whose value the emulator issues live.
+  separates keys, ``[n]`` indexes an array, and every other character belongs to the key),
+  or, in an XML body, the dotted element path of a leaf below the root (``device.UDN``);
+- a response header name such as ``Set-Cookie``, whose value the emulator issues live;
+- ``outer::inner``, a field of a document the set carried base64-encoded in the JSON string
+  at ``outer`` (``content-data::ecp-setting-mode``): the two documents are decoded and
+  compared with ``inner`` masked, and the encoded string is excused only by that comparison.
 """
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 import re
 from dataclasses import dataclass, field
+
+from tvemu.platforms.common.jsonbytes import (
+    Node as _Node, Scanner as _Scanner, json_path, locate as _locate, replace_json_value,
+    value_node as _value_node,
+)
+from tvemu.platforms.common.xmlbytes import text_span as _xml_text_span
 
 PLACEHOLDER = re.compile(r"\{[A-Za-z_][A-Za-z0-9_]*\}")
 # What a placeholder may stand for: one token of an address, id or path, never markup.
@@ -37,6 +49,9 @@ class Outcome:
     problems: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
     used: set[str] = field(default_factory=set)
+    # Set by a caller comparing one frame of several: a declared path this frame lacks on
+    # both sides is collected here, and the caller decides whether any frame carried it.
+    absent: set[str] | None = None
 
     @property
     def ok(self) -> bool:
@@ -44,151 +59,6 @@ class Outcome:
 
 
 # ── JSON spans ───────────────────────────────────────────────────────────────────────────
-
-
-@dataclass
-class _Node:
-    start: int
-    end: int
-    # object: key -> (member start, member end, value node); array: list of nodes.
-    members: dict[str, tuple[int, int, "_Node"]] | None = None
-    items: list["_Node"] | None = None
-
-
-class _Scanner:
-    """A JSON reader that remembers where every value sits in the raw bytes."""
-
-    def __init__(self, data: bytes):
-        self.data = data
-        self.at = 0
-
-    def parse(self) -> _Node:
-        self._space()
-        node = self._value()
-        self._space()
-        if self.at != len(self.data):
-            raise ValueError(f"trailing bytes at offset {self.at}")
-        return node
-
-    def _space(self) -> None:
-        while self.at < len(self.data) and self.data[self.at] in b" \t\r\n":
-            self.at += 1
-
-    def _value(self) -> _Node:
-        if self.at >= len(self.data):
-            raise ValueError("unexpected end of JSON")
-        char = self.data[self.at:self.at + 1]
-        if char == b"{":
-            return self._object()
-        if char == b"[":
-            return self._array()
-        if char == b'"':
-            start = self.at
-            self._string()
-            return _Node(start, self.at)
-        start = self.at
-        while self.at < len(self.data) and self.data[self.at] not in b",]} \t\r\n":
-            self.at += 1
-        json.loads(self.data[start:self.at])  # rejects anything that is not a scalar
-        return _Node(start, self.at)
-
-    def _string(self) -> str:
-        start = self.at
-        self.at += 1
-        while True:
-            if self.at >= len(self.data):
-                raise ValueError("unterminated JSON string")
-            char = self.data[self.at]
-            if char == 0x5C:
-                self.at += 2
-                continue
-            self.at += 1
-            if char == 0x22:
-                return json.loads(self.data[start:self.at])
-
-    def _expect(self, char: bytes) -> None:
-        if self.data[self.at:self.at + 1] != char:
-            raise ValueError(f"expected {char!r} at offset {self.at}")
-        self.at += 1
-
-    def _object(self) -> _Node:
-        start = self.at
-        self.at += 1
-        members: dict[str, tuple[int, int, _Node]] = {}
-        self._space()
-        if self.data[self.at:self.at + 1] == b"}":
-            self.at += 1
-            return _Node(start, self.at, members=members)
-        while True:
-            self._space()
-            member_start = self.at
-            key = self._string()
-            self._space()
-            self._expect(b":")
-            self._space()
-            value = self._value()
-            members.setdefault(key, (member_start, value.end, value))
-            self._space()
-            if self.data[self.at:self.at + 1] == b",":
-                self.at += 1
-                continue
-            self._expect(b"}")
-            return _Node(start, self.at, members=members)
-
-    def _array(self) -> _Node:
-        start = self.at
-        self.at += 1
-        items: list[_Node] = []
-        self._space()
-        if self.data[self.at:self.at + 1] == b"]":
-            self.at += 1
-            return _Node(start, self.at, items=items)
-        while True:
-            self._space()
-            items.append(self._value())
-            self._space()
-            if self.data[self.at:self.at + 1] == b",":
-                self.at += 1
-                continue
-            self._expect(b"]")
-            return _Node(start, self.at, items=items)
-
-
-def json_path(path: str) -> tuple[str | int, ...]:
-    """``result[0][0].volume`` -> ("result", 0, 0, "volume"); ``audio/volume`` is one key."""
-    segments: list[str | int] = []
-    for part in path.split("."):
-        match = re.fullmatch(r"([^\[\]]*)((?:\[\d+\])*)", part)
-        if match is None or (not match.group(1) and not match.group(2)):
-            raise ValueError(f"malformed JSON path {path!r}")
-        if match.group(1):
-            segments.append(match.group(1))
-        segments.extend(int(index) for index in re.findall(r"\[(\d+)\]", match.group(2)))
-    return tuple(segments)
-
-
-def _locate(root: _Node, segments: tuple[str | int, ...]
-            ) -> tuple[int, int, bool] | None:
-    """The span to mask: (start, end, is_whole_member), or None when the path is absent.
-
-    A value is masked in place. A key present on one side only is masked as its whole member
-    together with one separating comma, so the surrounding serialisation still compares.
-    """
-    node, parent, key = root, None, None
-    for segment in segments:
-        parent, key = node, segment
-        if isinstance(segment, int):
-            if node.items is None or segment >= len(node.items):
-                return None
-            node = node.items[segment]
-        else:
-            if node.members is None or segment not in node.members:
-                return None
-            node = node.members[segment][2]
-    if parent is not None and isinstance(key, str):
-        start, end, _ = parent.members[key]
-        return start, end, True
-    return node.start, node.end, False
 
 
 def _member_with_comma(data: bytes, start: int, end: int) -> tuple[int, int]:
@@ -221,7 +91,10 @@ def _mask_json(expected: bytes, observed: bytes, paths: list[str], outcome: Outc
         found_expected = _locate(expected_root, segments)
         found_observed = _locate(observed_root, segments)
         if found_expected is None and found_observed is None:
-            outcome.problems.append(f"declared substitution {path!r} is on neither side")
+            if outcome.absent is not None:
+                outcome.absent.add(path)
+            else:
+                outcome.problems.append(f"declared substitution {path!r} is on neither side")
             continue
         for side, found, data in (("expected", found_expected, expected),
                                   ("observed", found_observed, observed)):
@@ -264,13 +137,6 @@ def _dropped(data: bytes, members: list[tuple[int, int]]) -> list[tuple[int, int
     return [_member_with_comma(data, start, end) for start, end in runs]
 
 
-def _value_node(root: _Node, segments: tuple[str | int, ...]) -> _Node:
-    node = root
-    for segment in segments:
-        node = node.items[segment] if isinstance(segment, int) else node.members[segment][2]
-    return node
-
-
 def _slice(data: bytes, root: _Node, segments: tuple[str | int, ...]) -> bytes:
     node = _value_node(root, segments)
     return data[node.start:node.end]
@@ -289,14 +155,89 @@ def _cut(data: bytes, cuts: list[tuple[int, int, bytes]]) -> bytes:
     return result
 
 
-def replace_json_value(data: bytes, path: str, value: bytes) -> bytes:
-    """`data` with the value at `path` replaced by `value`, every other byte kept."""
-    root = _Scanner(data).parse()
-    segments = json_path(path)
-    if _locate(root, segments) is None:
-        raise ValueError(f"{path!r} is not in the captured frame")
-    node = _value_node(root, segments)
-    return data[:node.start] + value + data[node.end:]
+# ── XML leaves ──────────────────────────────────────────────────────────────────────────
+
+
+def _is_xml(data: bytes) -> bool:
+    return data.lstrip(b"\xef\xbb\xbf \t\r\n").startswith(b"<")
+
+
+def _mask_xml(expected: bytes, observed: bytes, paths: list[str], outcome: Outcome
+              ) -> tuple[bytes, bytes]:
+    cuts: dict[str, list[tuple[int, int, bytes]]] = {"expected": [], "observed": []}
+    for path in paths:
+        try:
+            found_expected = _xml_text_span(expected, path)
+            found_observed = _xml_text_span(observed, path)
+        except ValueError as exc:
+            outcome.problems.append(f"XML substitution {path!r}: {exc}")
+            continue
+        if found_expected is None and found_observed is None:
+            if outcome.absent is not None:
+                outcome.absent.add(path)
+            else:
+                outcome.problems.append(f"declared substitution {path!r} is on neither side")
+            continue
+        if found_expected is None or found_observed is None:
+            # An element is written in place, never added or dropped.
+            side = "observed" if found_expected is None else "expected"
+            outcome.problems.append(f"XML substitution {path!r} is only on the {side} side")
+            continue
+        cuts["expected"].append((*found_expected, MASK))
+        cuts["observed"].append((*found_observed, MASK))
+        if expected[slice(*found_expected)] != observed[slice(*found_observed)]:
+            outcome.used.add(path)
+        else:
+            outcome.notes.append(f"substitution {path!r} served the captured value")
+    return _cut(expected, cuts["expected"]), _cut(observed, cuts["observed"])
+
+
+# ── base64 documents inside JSON ─────────────────────────────────────────────────────────
+
+
+def _mask_encoded(expected: bytes, observed: bytes, paths: list[str],
+                  values: dict[str, str], outcome: Outcome) -> tuple[bytes, bytes]:
+    inner: dict[str, list[str]] = {}
+    for path in paths:
+        outer, _, rest = path.partition("::")
+        inner.setdefault(outer, []).append(rest)
+    try:
+        roots = (_Scanner(expected).parse(), _Scanner(observed).parse())
+    except (ValueError, UnicodeDecodeError) as exc:
+        outcome.problems.append(f"substitutions {paths} need JSON on both sides: {exc}")
+        return expected, observed
+    cuts: list[list[tuple[int, int, bytes]]] = [[], []]
+    for outer, fields in inner.items():
+        segments = json_path(outer)
+        nodes = [_locate(root, segments) for root in roots]
+        if nodes[0] is None and nodes[1] is None:
+            for rest in fields:
+                if outcome.absent is not None:
+                    outcome.absent.add(f"{outer}::{rest}")
+                else:
+                    outcome.problems.append(
+                        f"declared substitution {outer + '::' + rest!r} is on neither side")
+            continue
+        documents = []
+        for side, (root, data) in enumerate(zip(roots, (expected, observed))):
+            node = _value_node(root, segments) if nodes[side] is not None else None
+            try:
+                text = json.loads(data[node.start:node.end]) if node else None
+                documents.append(base64.b64decode(text, validate=True))
+            except (ValueError, TypeError, binascii.Error) as exc:
+                documents.append(None)
+                outcome.problems.append(f"{outer}: not a base64 document "
+                                        f"({'expected' if side == 0 else 'observed'}): {exc}")
+            if node:
+                cuts[side].append((node.start, node.end, MASK))
+        if None in documents:
+            continue
+        nested = Outcome()
+        compare_body(documents[0], documents[1], tuple(fields), values, nested)
+        outcome.problems += [f"{outer}: {problem}" for problem in nested.problems]
+        outcome.notes += [f"{outer}: {note}" for note in nested.notes]
+        outcome.used |= {f"{outer}::{rest}" for rest in nested.used}
+    return _cut(expected, cuts[0]), _cut(observed, cuts[1])
 
 
 # ── placeholders ─────────────────────────────────────────────────────────────────────────
@@ -360,9 +301,14 @@ def compare_body(expected: bytes | None, observed: bytes, substitutions: tuple[s
     placeholders = [path for path in substitutions if PLACEHOLDER.fullmatch(path)]
     paths = [path for path in substitutions
              if path not in placeholders and path.lower() not in headers]
+    encoded = [path for path in paths if "::" in path]
+    paths = [path for path in paths if "::" not in path]
     left, right = expected, observed
+    if encoded:
+        left, right = _mask_encoded(left, right, encoded, values, outcome)
     if paths:
-        left, right = _mask_json(left, right, paths, outcome)
+        mask = _mask_xml if _is_xml(left) else _mask_json
+        left, right = mask(left, right, paths, outcome)
     present = [name for name in placeholders if name.encode() in left]
     left, right = _placeholders(left, right, present, values, outcome)
     if left != right:

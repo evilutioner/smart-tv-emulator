@@ -100,9 +100,8 @@ async def serve(args):
             loop.remove_signal_handler(sig)
 
 
-# A build manifest beside the source tree names a smaller set of platforms than this
-# checkout holds, so `--build <name>` previews that build without a separate checkout. The
-# names come from the manifest, never from here: shared code still knows no television.
+# `--build <name>` serves only the platforms a build manifest beside the source tree names.
+# A checkout without that manifest serves everything present.
 BUILD_MANIFESTS = {"public": "PUBLIC.toml"}
 
 
@@ -111,8 +110,7 @@ def manifest_path(name):
     filename = BUILD_MANIFESTS.get(name)
     if filename is None:
         return None
-    # src/tvemu/__main__.py -> the repository root. An installed wheel has no manifest,
-    # which is correct: a wheel already contains exactly the platforms its build ships.
+    # src/tvemu/__main__.py -> the repository root. An installed wheel has no manifest.
     candidate = Path(__file__).resolve().parents[2] / filename
     return candidate if candidate.is_file() else None
 

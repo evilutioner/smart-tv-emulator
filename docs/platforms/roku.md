@@ -2,7 +2,7 @@
 
 Emulates the network contract a Roku remote application speaks: SSDP discovery, the captured
 device documents, HTTP ECP commands, and the authenticated `ecp-2` WebSocket. Two physical
-devices are modelled — a TCL Roku TV 32S357 on 15.3.4, captured in each of its network-access
+devices are captured — a TCL Roku TV 32S357 on 15.3.4, captured in each of its network-access
 modes, and a Roku Streaming Stick 4K on the same firmware — and they differ in ways a driver has
 to handle: the stick has no tuner, so it answers the `tv-channels` queries 404, and its
 device-info carries the stick-only elements. The TCL is the default. An older 12.0.0 stick
@@ -36,6 +36,9 @@ response schema wherever a capture showed one.
 | `GET` | `/ecp-session` | computed | — |
 | `POST` | `/{action:keypress\|keydown\|keyup}/{key}` | computed | — |
 | `POST` | `/launch/{app_id}` | computed | — |
+| `POST` | `/search/browse` | computed | — |
+| `POST` | `/input` | computed | — |
+| `POST` | `/input/{app_id}` | computed | — |
 | `GET` | `/` | captured `/`, else **501** | — |
 | `GET` | `/query/device-info` | captured `/query/device-info`, else **501** | — |
 | `GET` | `/device-image.png` | captured `/device-image.png`, else **501** | — |
@@ -74,7 +77,7 @@ Generated from `src/tvemu/platforms/roku/contract.py` and checked against every 
 `tvemu --contract roku` prints the same thing.
 
 <!-- generated:contract -->
-Checked against 8 captures: `roku-ecp2-probe-15-2-4`, `roku-streaming-stick-4k-12-0-0`, `roku-streaming-stick-4k-15-3-4`, `roku-streaming-stick-4k-3820eu2-15-3-4`, `tcl-roku-tv-32s357-15-2-4`, `tcl-roku-tv-32s357-15-3-4`, `tcl-roku-tv-32s357-disabled`, `tcl-roku-tv-32s357-enabled`.
+Checked against 9 captures: `roku-ecp2-probe-15-2-4`, `roku-streaming-stick-4k-12-0-0`, `roku-streaming-stick-4k-15-3-4`, `roku-streaming-stick-4k-3820eu2-15-3-4`, `tcl-roku-tv-32s357-15-2-4`, `tcl-roku-tv-32s357-15-3-4`, `tcl-roku-tv-32s357-disabled`, `tcl-roku-tv-32s357-enabled`, `tcl-roku-tv-32s357-standby`.
 
 ### The UPnP device description.
 
@@ -89,12 +92,12 @@ Checked against 8 captures: `roku-ecp2-probe-15-2-4`, `roku-streaming-stick-4k-1
   Values: `true`, `false`.
 - **`screen-size`, `panel-id`, `tuner-type`, `trc-version`, `trc-channel-version`, `supports-private-listening-dtv`, `supports-warm-standby`** (presence: optional) — Television only: absent from the stick.
 - **`find-remote-is-possible`, `is-powered-by-tv`, `supports-cec-power-control`, `supports-cec-audio-volume-control`** (presence: optional) — Stick only: absent from the television.
-- **`ecp-setting-mode`** (values: closed) — Which clients the set answers; mirrors the platform's four access modes.
+- **`ecp-setting-mode`** (values: closed) — Which clients the set answers; mirrors the platform's four access modes. The emulator writes the selected mode here, over HTTP and inside the envelope.
   Values: `limited`, `enabled`, `disabled`, `permissive` (client-contract).
 - **`user-profile-type`** (values: open) — Who is signed in on the set; the same TCL answered none and later adult.
   Values: `none`, `adult`, and possibly others.
-- **`power-mode`** (values: open) — A sleeping set does not answer, so only PowerOn is captured.
-  Values: `PowerOn`, `DisplayOff` (client-contract), `Headless` (client-contract), `Ready` (client-contract), and possibly others.
+- **`power-mode`** (values: open) — A television in standby keeps answering: the TCL said Ready after PowerOff, over both wires, and PowerOn again after PowerOn. The emulator writes it from the power state where the profile gives both values; the stick's standby is not measured, so it stays as captured.
+  Values: `PowerOn`, `Ready`, `DisplayOff` (client-contract), `Headless` (client-contract), and possibly others.
 
 ### A picture of the device.
 
@@ -104,6 +107,7 @@ Checked against 8 captures: `roku-ecp2-probe-15-2-4`, `roku-streaming-stick-4k-1
 
 - **`screensaver`** (presence: optional) — Present only while a screensaver runs, beside app rather than instead of it: the set answered app Roku both times.
 - **The whole document** (behavior: ecp-setting-mode is disabled and the command arrives over plain HTTP -> 401 with an empty body) — Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.
+- **The whole document** (behavior: a launched channel is running -> app names that channel, with its id, type, version and name) — The type is appl and ui-location is the channel id, where the home screen answers type home and ui-location home. The emulator replays the captured document whatever was launched.
 
 ### The installed channels.
 
@@ -131,13 +135,30 @@ Checked against 8 captures: `roku-ecp2-probe-15-2-4`, `roku-streaming-stick-4k-1
 
 - **The whole document** (behavior: the key is neither a button name nor Lit_ and one character -> 400 with an empty body) — The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.
 - **The whole document** (behavior: ecp-setting-mode is limited -> 403 with an empty body; the same key over ecp-2 is accepted) — Unlike a refused query, a refused key carries no words and no Content-Type.
-- **The whole document** (behavior: ecp-setting-mode is disabled and the command arrives over plain HTTP -> 401 with an empty body) — Refused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.
+- **The whole document** (behavior: ecp-setting-mode is disabled and the command arrives over plain HTTP -> 401 with an empty body) — Refused before the key name is read, with neither words nor a Content-Type. An unknown key is 401 too, not 400. The device documents, SSDP and an authenticated ecp-2 session keep working.
 - **The whole document** (behavior: keyup names a key this client is not holding -> 202 with an empty body) — The same rule as ecp-2: releasing a key nobody pressed is accepted as 202.
 
 ### Launch a channel.
 
-- **The whole document** (behavior: ecp-setting-mode is disabled and the command arrives over plain HTTP -> 401 with an empty body) — Refused before the channel id, so an unknown channel is 401 and not 404 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.
+- **The whole document** (behavior: ecp-setting-mode is disabled and the command arrives over plain HTTP -> 401 with an empty body) — Refused before the channel id is read, with neither words nor a Content-Type. An unknown channel is 401 too, not 404. The device documents, SSDP and an authenticated ecp-2 session keep working.
 - **The whole document** (behavior: the channel id is not installed -> 404 with an empty body) — The set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue.
+- **The whole document** (behavior: the channel id is installed -> 200 with an empty body) — The channel comes to the foreground; see active-app.
+
+### Open the search screen.
+
+- **The whole document** (behavior: a keyword search is asked for -> 200 with an empty body) — The search screen belongs to the home channel, so active-app still answers the home screen afterwards.
+
+### Parameters for the foreground channel.
+
+- **The whole document** (behavior: any parameters are posted -> 200 with an empty body) — Accepted on the home screen too, where nothing consumes it.
+
+### Parameters for one channel by id.
+
+- **The whole document** (behavior: the channel id is not installed -> 404 with an empty body) — Play on Roku (15985) is a channel like any other: this TCL does not have it installed. The emulator accepts any id, as it does for launch.
+
+### Any other route.
+
+- **The whole document** (behavior: the set has no such route -> 404 with an empty body) — A query name the set does not know is no different from any other unknown path. The emulator answers 501 for every route it holds no capture of, which keeps a gap in the emulator distinguishable from the set's answer.
 
 ### The device inventory inside the envelope.
 
@@ -145,7 +166,7 @@ Checked against 8 captures: `roku-ecp2-probe-15-2-4`, `roku-streaming-stick-4k-1
 
 ### A held remote key, released.
 
-- **The whole document** (behavior: the key is not held by this session -> status 202, status-msg Accepted) — The set tracks what is held, character keys included: releasing a key that went down answers 200.
+- **The whole document** (behavior: the key is not held by this session -> status 202, status-msg Accepted) — The set tracks what is held, character keys included: releasing a key this session did not press answers 202, where releasing a held one answers 200.
 
 ### The unprompted frame as the ecp-2 socket opens.
 
@@ -206,8 +227,9 @@ platform data: the dashboard cannot change what each one answers.
 has completed the challenge keeps full control. Plain HTTP keeps the device documents,
 `/query/device-info` and `/query/active-app`; channels, playback, icons, audio and the tuner
 answer 403 with the text `ECP command not allowed in Limited mode.`, whether or not the
-selected capture recorded the document. A key name is judged before the mode, so an unknown
-key is still 400.
+selected capture recorded the document. The refusal is spelled like the set's documents,
+`text/plain; charset="utf-8"` with `Cache-Control: no-cache`. A key name is judged before
+the mode, so an unknown key is still 400.
 
 `disabled` is narrower than its name: it switches off plain HTTP control, not the set. Every
 ECP command — any `/query/…` the set knows, keys, launch, search, input — is 401 with no body
@@ -228,14 +250,17 @@ sits beside it byte for byte. A profile under `profiles/` only names a complete 
 the exchanges it replays: a path for an HTTP document, an `ecp-2` request name for the document
 the set carried inside its envelope. The two are kept apart because they differ — the
 envelope's device-info adds `virtual-device-id` and its channel list gives every channel a
-`subtype`. The 15.3.4 stick capture and the ecp-2 probe are evidence only: they feed the
+`subtype`. The other 15.3.4 stick capture (`roku-streaming-stick-4k-15-3-4`) and the ecp-2 probe are evidence only: they feed the
 claims above but have no discovery evidence, so they are never selectable.
 
 The TCL was captured three times on 15.3.4, once per network-access value it was switched
 through. Its profile replays `tcl-roku-tv-32s357-enabled`, the one mode in which every document
 answers on both wires; `tcl-roku-tv-32s357-15-3-4` (Limited) and `tcl-roku-tv-32s357-disabled`
 are the evidence for what the other modes refuse, which the emulator reproduces from mode data
-rather than from a replay. Its 15.2.4 capture is evidence too.
+rather than from a replay. Its 15.2.4 capture is evidence too, and so is
+`tcl-roku-tv-32s357-standby`: device-info after `PowerOff`, a launch and what followed it,
+search, input and two routes the set does not have. Its standby `power-mode` reaches the
+profile through `runtime`, with that capture named as the source.
 
 To add a Roku, add one evidence directory and, if it is complete, a profile reference, then
 run `tvemu --contract roku --check`. The dashboard's **Captured device** selector switches
@@ -260,24 +285,28 @@ rejected. Address and port are launch options and are not stored.
 
 ## Not emulated
 
-Channel launch accepts any id for client validation without running anything, where the set
-answers 404 for a channel that is not installed. The channel list, foreground channel, player
-state, tuner and audio documents are the captured ones, not live state: a launch does not
-change what `query-active-app` answers, and a volume key does not change `audio-device`.
-`device-info` keeps the `ecp-setting-mode` it was captured with whichever access mode is
-selected. There is no Cast and no rendered
-screen. Other app and media endpoints answer **501**, and an unknown remote key is **400**. A
-malformed escape such as `/keypress/Lit_%ZZ` is **404** on the set, whose URL parser rejects it
-before routing; the emulator keeps the bytes and answers 200 or 400.
+Channel launch, and `input` to a channel by id, accept any id for client validation without
+running anything, where the set answers 404 for a channel that is not installed. Search and
+`input` to the foreground channel answer 200 with no body, as the set does, and change nothing
+the queries show. The channel list, foreground channel, player state, tuner and audio
+documents are the captured ones, not live state: a launch does not change what
+`query-active-app` answers, although on the set the launched channel comes to the foreground,
+and a volume key does not change `audio-device`. `device-info` is the captured document except
+`ecp-setting-mode`, which names the selected access mode on both wires, and, on the TCL,
+`power-mode`, which reads `Ready` after `PowerOff` as the set did and `PowerOn` again after
+`PowerOn`. The stick's standby is not measured, so its `power-mode` stays as captured.
+There is no Cast and no rendered screen. Other app and media endpoints answer **501**, and an unknown
+remote key is **400**. A malformed escape such as `/keypress/Lit_%ZZ` is **404** on the set,
+whose URL parser rejects it before routing; the emulator keeps the bytes and answers 200 or 400.
 
-Where the TCL set on 15.3.4 answers differently and the emulator does not follow yet:
+Where the TCL set on 15.3.4 answers differently and the emulator does not follow:
 
-- A route the set does not have is **404** with no body there and **501** here.
-- Every HTTP reply carries `Cache-Control: no-cache` and XML is `text/xml; charset="utf-8"`;
-  the emulator sends neither. The `ecp-2` envelope does replay the captured type exactly.
-- The icon and the developer diagnostics (`chanperf`, `registry`, `sgnodes`, `r2d2-bitmaps`,
-  the beacons) answer on the set and are not captured here; the diagnostics answer 202 while
-  no channel runs.
+- A route the set does not have is **404** with no body there and **501** here. This one is
+  deliberate: the emulator cannot tell a route the set lacks from one it was never captured
+  answering, and 501 keeps the second visible.
+- The channel icon (`image/jpeg`) and the developer diagnostics (`chanperf`, `registry`,
+  `sgnodes`, `r2d2-bitmaps`, the beacons) answer on the set and are not captured here: an icon
+  is a channel's trademark artwork. The diagnostics answer 202 while no channel runs.
 
 ## Manual acceptance
 
@@ -296,7 +325,7 @@ Upstream Roku libraries run against this emulator, with the known gaps each one 
 
 ## Writing a Roku driver
 
-The contract is committed beside this guide, so a driver (or a model writing one) can start
+The contract is committed beside this guide, so a driver can start
 from it without running anything:
 
 - [`docs/spec/roku.openapi.json`](../spec/roku.openapi.json) — ECP over HTTP;
@@ -326,6 +355,6 @@ The general loop, for any television, is in [Writing a driver](../writing-a-driv
 ## References
 
 Claims marked `client-contract` record what ECP clients in the field expect, where no capture
-can show it; no third-party emulator source was copied. See also [python-rokuecp](https://github.com/ctalkington/python-rokuecp) and
+can show it. See also [python-rokuecp](https://github.com/ctalkington/python-rokuecp) and
 [Roku's mobile-app documentation](https://support.roku.com/article/install-the-mobile-app),
 which describes the network-access values at feature level rather than at wire level.

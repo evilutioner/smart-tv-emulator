@@ -15,8 +15,8 @@ per run; that is a different kind of fact, *exercised* rather than validated, an
 
 ## Ledger
 
-One row per platform and app. A newer session on the same app replaces its row; the older one
-stays in the platform's own guide.
+One row per app and profile. A newer session with the same app replaces its row; earlier
+sessions stay in the television's full driver guide.
 
 | Television | App | Date | Profile | Status |
 |---|---|---|---|---|
@@ -28,14 +28,15 @@ stays in the platform's own guide.
 | Panasonic VIERA | Panasonic TV Remote 3 for iOS **1.01 (1.02.05)**, iPhone | 2026-10-05 | `panasonic-viera-nrc` | **Supported**: cold-start discovery, remote buttons and the App Launcher list; launching an app not confirmed, cast photo needs a DLNA renderer, listed in the [VIERA guide](platforms/viera.md#support-and-validation) |
 | Panasonic VIERA | the same app | 2026-10-05 | `panasonic-viera-pin-nrc` | **Supported**: the PIN dialog, pairing, the encrypted session and remote buttons; the pairing outlives an emulator restart |
 | Panasonic VIERA | Panasonic TV Remote 2 for iOS **2.73 (2.73.01)**, iPhone | 2026-10-05 | `panasonic-viera-nrc` | **Supported**: discovery and remote buttons; touchpad and gamepad not validated |
+| webOS TV | LG ThinQ for iOS, build **162** (`com.lgeha.nuts`), iPhone | 2026-10-13 | `lg-webos-tv-uq81006lb` | **Supported**: discovery, PIN pairing, adding the set, the remote (pointer buttons, touchpad, volume, channels), app launches, power-off and the voice button; power-on is Wake-on-LAN, which the emulator does not answer, listed in the [webOS guide](platforms/webos.md#support-and-validation) |
 
 Platforms with no row have not been recorded here yet, which says nothing about whether they
 work.
 
 ## What a session establishes
 
-Each session ends with every behaviour of the app in one of three states, and the platform
-guide lists them under those names:
+Each session ends with every behaviour of the app in one of three states, and the
+television's full driver guide lists them under those names:
 
 - **Validated**: the app sent it, the emulator answered, and the app carried on. The event
   log shows the exchange.
@@ -43,8 +44,7 @@ guide lists them under those names:
   device does with it was not measured. The emulator's behaviour is a stated assumption.
 - **Not exercised**: nobody pressed the button. Nothing is claimed.
 
-A behaviour is never moved to *validated* on the strength of a test written by the emulator's
-author. Only a session with the app can do that.
+Only a session with the app moves a behaviour to *validated*; the project's own tests do not.
 
 ## Method
 
@@ -63,10 +63,10 @@ author. Only a session with the app can do that.
    - `request` events: what a key or command carried besides its name;
    - `application`, `voice` and `text` events: the launch payload, the audio channel and the
      text that arrived.
-5. **Turn each finding into evidence or a claim**, never into a guess: a new shape goes into a
-   test that names the app and the date, and into the platform guide. A value that identifies
+5. **Turn each finding into evidence or a claim**, not a guess: a new shape goes into a test
+   that names the app and the date, and into the television's guide. A value that identifies
    the person or the session (an account id, a session id, a token) is masked by the emulator
-   and is never copied into a test, a guide or this page.
+   and is not copied into a test, a guide or this page.
 6. **Record the session here**: the app and its version, the date, the profile, and the
    validated, observed and not-exercised lists.
 

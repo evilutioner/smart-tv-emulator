@@ -13,8 +13,8 @@ emulator at that version. Every request it sent has a captured answer, or is a d
 and the event log shows what the binding expected.
 
 It does **not** make a behaviour *validated*. Validation takes a session with the app a user
-actually has; that is the [manual validation ledger](manual-validation.md), and a test we
-wrote, binding included, never moves a row there. A client run is a third kind of fact,
+actually has; that is the [manual validation ledger](manual-validation.md), and the project's
+own tests, bindings included, do not move a row there. A client run is a third kind of fact,
 beside *captured* and *validated*: the behaviour was **exercised** by a named client at a
 named version on a named date.
 
@@ -137,8 +137,7 @@ two lists cannot drift apart.
 `--record` writes one JSON file per run to `docs/clients/<platform>/<client>/<run id>.json`
 and re-renders `docs/clients/<platform>.md` from all of them. It refuses to record when `src/`
 or `pyproject.toml` has uncommitted changes: a record names the emulator by its version, and
-that version has to be the code that ran. The version, not a commit, because the source tree
-and the published build share it.
+that version has to be the code that ran.
 
 A record holds:
 
@@ -151,9 +150,9 @@ A record holds:
 The workspace path and the home directory are replaced before anything is kept, and the run
 uses loopback only, so a record carries no address of anybody's network.
 
-The records and pages of every television are published, including the televisions a build
-does not include: they are the evidence. The clients themselves, `client.toml`, the binding
-and the expectation, live in the television's package and ship only with it.
+Every television's page is published, including the televisions not in this repository. The
+records behind a page, like the clients themselves (`client.toml`, the binding and the
+expectation), live with the television's own code.
 
 The pages are derived, never edited: `python -m tvemu.clients report --check` and
 `tests/test_clients.py` fail when a page no longer matches its records.
@@ -175,8 +174,8 @@ of failure apart:
 | pass | fail | the client: a new request, a new expectation, or a bug of its own |
 | fail | — | the emulator: it no longer does what that client version relied on |
 
-A scheduled run records nothing in the repository. A person reads it, then runs `--record`
-from a clean checkout.
+A scheduled run records nothing in the repository. The maintainer reads it, then runs
+`--record` from a clean checkout.
 
 ## Adding a client
 

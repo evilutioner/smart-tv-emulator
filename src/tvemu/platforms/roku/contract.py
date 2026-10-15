@@ -21,6 +21,7 @@ _TCL = "tcl-roku-tv-32s357-15-2-4"
 _TCL_15 = "tcl-roku-tv-32s357-15-3-4"
 _OFF = "tcl-roku-tv-32s357-disabled"
 _ON = "tcl-roku-tv-32s357-enabled"
+_STANDBY = "tcl-roku-tv-32s357-standby"
 _PROBE = "roku-ecp2-probe-15-2-4"
 
 
@@ -87,10 +88,10 @@ _TCL_RESPONSES = _TCL_QUERIES + tuple(
 _UNHELD = _at("ws.key-up-unheld", _TCL_15, _ON)
 
 
-def _disabled(exchange: str, what: str) -> BehaviorClaim:
+def _disabled(exchange: str, what: str, consequence: str = "") -> BehaviorClaim:
     return BehaviorClaim(
-        "", f"Refused before {what} is read, with neither words nor a Content-Type. The "
-            "device documents, SSDP and an authenticated ecp-2 session keep working.",
+        "", f"Refused before {what} is read, with neither words nor a Content-Type.{consequence} "
+            "The device documents, SSDP and an authenticated ecp-2 session keep working.",
         _at(exchange, _OFF),
         condition="ecp-setting-mode is disabled and the command arrives over plain HTTP",
         outcome="401 with an empty body")
@@ -157,7 +158,8 @@ OPERATION_CLAIMS = {
               for name in STICK_ONLY),
             ValueSetClaim(
                 "ecp-setting-mode",
-                "Which clients the set answers; mirrors the platform's four access modes.",
+                "Which clients the set answers; mirrors the platform's four access modes. The "
+                "emulator writes the selected mode here, over HTTP and inside the envelope.",
                 _DEVICE_INFO,
                 (ClaimedValue("limited", _at("http.device-info", _TCL)),
                  ClaimedValue("enabled", _at("http.device-info", _STICK_15, _STICK, _ON)),
@@ -171,10 +173,14 @@ OPERATION_CLAIMS = {
                  ClaimedValue("adult", _at("http.device-info", _TCL_15, _ON))), closed=False),
             ValueSetClaim(
                 "power-mode",
-                "A sleeping set does not answer, so only PowerOn is captured.",
-                _DEVICE_INFO,
+                "A television in standby keeps answering: the TCL said Ready after PowerOff, "
+                "over both wires, and PowerOn again after PowerOn. The emulator writes it from "
+                "the power state where the profile gives both values; the stick's standby is "
+                "not measured, so it stays as captured.",
+                _DEVICE_INFO + _at("http.device-info-standby", _STANDBY),
                 (ClaimedValue("PowerOn", _DEVICE_INFO),
-                 *_values(_ECP_DOCS, "DisplayOff", "Headless", "Ready")), closed=False),
+                 ClaimedValue("Ready", _at("http.device-info-standby", _STANDBY)),
+                 *_values(_ECP_DOCS, "DisplayOff", "Headless")), closed=False),
         ),
     ),
     "roku.http.device-image": OperationClaims(
@@ -194,6 +200,13 @@ OPERATION_CLAIMS = {
                 "the set answered app Roku both times.",
                 _at("http.active-app-screensaver", _TCL_15)),
             _disabled("http.active-app", "the query"),
+            BehaviorClaim(
+                "", "The type is appl and ui-location is the channel id, where the home screen "
+                    "answers type home and ui-location home. The emulator replays the captured "
+                    "document whatever was launched.",
+                _at("http.active-app-launched", _STANDBY),
+                condition="a launched channel is running",
+                outcome="app names that channel, with its id, type, version and name"),
         ),
     ),
     "roku.http.apps": _limited(
@@ -229,7 +242,7 @@ OPERATION_CLAIMS = {
             _at("http.key-refused", _TCL_15),
             condition="ecp-setting-mode is limited",
             outcome="403 with an empty body; the same key over ecp-2 is accepted"),
-        _disabled("http.key-unknown", "the key name, so even an unknown key is 401 and not 400"),
+        _disabled("http.key-unknown", "the key name", " An unknown key is 401 too, not 400."),
         BehaviorClaim(
             "", "The same rule as ecp-2: releasing a key nobody pressed is accepted as 202.",
             _at("http.key-up-unheld", _ON),
@@ -237,12 +250,46 @@ OPERATION_CLAIMS = {
             outcome="202 with an empty body"),
     )),
     "roku.http.launch": OperationClaims("roku.http.launch", "Launch a channel.", (
-        _disabled("http.launch", "the channel id, so an unknown channel is 401 and not 404"),
+        _disabled("http.launch", "the channel id", " An unknown channel is 401 too, not 404."),
         BehaviorClaim(
             "", "The set checks the id against its installed channels. The emulator accepts "
                 "any id, so a driver's launch can be observed without a catalogue.",
             _at("http.launch-unknown", _ON),
             condition="the channel id is not installed", outcome="404 with an empty body"),
+        BehaviorClaim(
+            "", "The channel comes to the foreground; see active-app.",
+            _at("http.launch", _STANDBY),
+            condition="the channel id is installed", outcome="200 with an empty body"),
+    )),
+    "roku.http.search": OperationClaims("roku.http.search", "Open the search screen.", (
+        BehaviorClaim(
+            "", "The search screen belongs to the home channel, so active-app still answers "
+                "the home screen afterwards.",
+            _at("http.search-browse", _STANDBY),
+            condition="a keyword search is asked for", outcome="200 with an empty body"),
+    )),
+    "roku.http.input": OperationClaims("roku.http.input", "Parameters for the foreground channel.", (
+        BehaviorClaim(
+            "", "Accepted on the home screen too, where nothing consumes it.",
+            _at("http.input", _STANDBY),
+            condition="any parameters are posted", outcome="200 with an empty body"),
+    )),
+    "roku.http.input-channel": OperationClaims(
+        "roku.http.input-channel", "Parameters for one channel by id.", (
+            BehaviorClaim(
+                "", "Play on Roku (15985) is a channel like any other: this TCL does not have "
+                    "it installed. The emulator accepts any id, as it does for launch.",
+                _at("http.input-uninstalled", _STANDBY),
+                condition="the channel id is not installed", outcome="404 with an empty body"),
+        ),
+    ),
+    "roku.http.other": OperationClaims("roku.http.other", "Any other route.", (
+        BehaviorClaim(
+            "", "A query name the set does not know is no different from any other unknown "
+                "path. The emulator answers 501 for every route it holds no capture of, "
+                "which keeps a gap in the emulator distinguishable from the set's answer.",
+            _at("http.route-unknown", _STANDBY) + _at("http.query-unknown", _STANDBY),
+            condition="the set has no such route", outcome="404 with an empty body"),
     )),
     "ecp-2.query-device-info": OperationClaims(
         "ecp-2.query-device-info", "The device inventory inside the envelope.", (
@@ -256,8 +303,9 @@ OPERATION_CLAIMS = {
     ),
     "ecp-2.key-up": OperationClaims("ecp-2.key-up", "A held remote key, released.", (
         BehaviorClaim(
-            "", "The set tracks what is held, character keys included: releasing a key that "
-                "went down answers 200.", _UNHELD,
+            "", "The set tracks what is held, character keys included: releasing a key this "
+                "session did not press answers 202, where releasing a held one answers 200.",
+            _UNHELD,
             condition="the key is not held by this session",
             outcome="status 202, status-msg Accepted"),
     )),

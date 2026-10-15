@@ -5,7 +5,7 @@ reader could not have guessed are written by hand and the parts the code already
 written from the code. A hand-maintained route table drifts; this one cannot.
 
 The same run writes `docs/spec/<id>.openapi.json` and `docs/spec/<id>.asyncapi.json`, the
-machine contract a driver (or a model writing one) reads without starting the emulator. A
+machine contract a driver reads without starting the emulator. A
 television whose ports answer the same request gets one `<id>.<application>.openapi.json`
 per application instead.
 

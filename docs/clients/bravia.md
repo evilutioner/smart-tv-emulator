@@ -12,17 +12,17 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `sony-bravia-kdl-32wd600` | `sony-bravia-kdl-55w807c` |
 |---|---|---|
-| discovery | not run | not written |
-| identity | not run | 🟩 100 % · 1/1 |
+| discovery | not run | ⬜ no API |
+| identity | not run | 🟨 67 % · 1/1 |
 | auth | not run | 🟨 60 % · 1/1 · ⚠ 2 |
 | session | not run | 🟩 100 % · 1/1 |
 | keys | not run | 🟩 100 % · 1/1 |
 | text | not run | 🟥 0 % · 0/1 · ⚠ 1 |
-| pointer | not run | not written |
-| voice | not run | not written |
-| state | not run | 🟩 100 % · 1/1 |
+| pointer | not run | ⬜ no API |
+| voice | not run | ⬜ no API |
+| state | not run | 🟩 84 % · 1/1 |
 | volume | not run | 🟩 100 % · 1/1 |
-| power | not run | 🟥 33 % · 1/1 · ⚠ 2 |
+| power | not run | 🟨 57 % · 1/1 · ⚠ 2 |
 | apps | not run | 🟨 67 % · 1/1 · ⚠ 1 |
 
 ## Backlog
@@ -63,7 +63,9 @@ None.
 
 Offered by a client and exercised by no step (untested), by zone; ×N is how many clients offer it.
 
-None.
+- **identity** (1): `get_api_info` ×1
+- **state** (3): `get_content_list` ×1, `get_content_list_full` ×1, `get_sound_settings` ×1
+- **power** (1): `Sleep` ×1
 
 ## pybravia
 
@@ -71,30 +73,36 @@ Asynchronous ScalarWebAPI and IRCC client, the library behind Home Assistant's S
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 0.5.3 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-12 | 0.5.3 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 0.5.3 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-07 | 0.5.3 | 1.0.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
 #### `sony-bravia-kdl-55w807c`
 
-- **discovery**: not written.
-- **identity**: passed 1/1 steps.
-- **auth**: passed 3/5 steps.
-  - wrong answer from emulator: pair(): PIN 0000 puts a PIN on screen: `AssertionError: timed out waiting for a PIN on screen`
-  - wrong answer from emulator: pre-shared key: `BraviaAuthError: `
-- **session**: passed 3/3 steps.
-- **keys**: passed 2/2 steps.
-- **text**: passed 0/1 steps.
-  - wrong answer from emulator: setTextForm into the on-screen keyboard: `AssertionError: setTextForm refused`
-- **pointer**: not written.
-- **voice**: not written.
-- **state**: passed 3/3 steps.
-- **volume**: passed 3/3 steps.
-- **power**: passed 1/3 steps.
-  - unsupported by emulator: turn_off() over setPowerStatus: `AssertionError: timed out waiting for power off`
-  - unsupported by emulator: reboot: `AssertionError: requestReboot refused`
-- **apps**: passed 2/3 steps.
-  - unsupported by emulator: terminate applications: `AssertionError: terminateApps refused`
+- **discovery**: no API. pybravia connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 2/3.
+  - untested: `get_api_info`
+- **auth**: passed 3/5.
+  - wrong answer from emulator: pair(): PIN 0000 puts a PIN on screen (`pair() with PIN 0000`): `AssertionError: timed out waiting for a PIN on screen`
+  - wrong answer from emulator: pre-shared key (`pre-shared key`): `BraviaAuthError: `
+- **session**: passed 4/4.
+- **keys**: passed 110/110.
+- **text**: passed 0/1.
+  - wrong answer from emulator: setTextForm into the on-screen keyboard (`set_text_form`): `AssertionError: setTextForm refused`
+- **pointer**: no API. pybravia has no pointer or touchpad input.
+- **voice**: no API. pybravia has no voice input.
+- **state**: passed 16/19.
+  - untested: `get_content_list`, `get_content_list_full`, `get_sound_settings`
+- **volume**: passed 7/7.
+- **power**: passed 4/7.
+  - untested: `Sleep`
+  - unsupported by emulator: turn_off() over setPowerStatus (`turn_off`): `AssertionError: timed out waiting for power off`
+  - unsupported by emulator: reboot (`reboot`): `AssertionError: requestReboot refused`
+- **apps**: passed 2/3.
+  - unsupported by emulator: terminate applications (`terminate_apps`): `AssertionError: terminateApps refused`
 
 Error statuses the emulator sent: 401 ×3, 403 ×2, 404 ×1, 501 ×4.

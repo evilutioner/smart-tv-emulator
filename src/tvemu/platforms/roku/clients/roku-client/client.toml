@@ -13,17 +13,13 @@ profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
 timeout = 120
 
 [[gaps]]
-operation = "POST /search/browse"
-reason = "`search()` opens the search screen. No capture holds this request or its answer, so the emulator refuses it; recording it off a set closes the gap."
-
-[[gaps]]
 operation = "query/icon/*"
 reason = "`icon()` fetches an application's artwork. No capture holds an HTTP icon answer, so the emulator refuses it rather than serve an invented image."
 
 [[known_failures]]
 step = "standby reported by device-info"
-profiles = ["roku-streaming-stick-4k-3820eu2", "tcl-roku-tv-32s357"]
-reason = "After PowerOff the emulator keeps replaying the captured device-info, whose power-mode is PowerOn, so `info().powerMode` stays PowerOn. Only PowerOn is captured on either device; a capture of a set in DisplayOff closes this."
+profiles = ["roku-streaming-stick-4k-3820eu2"]
+reason = "The stick's device-info in standby has not been measured, so the emulator keeps its captured power-mode, PowerOn, after PowerOff. The TCL answers Ready and the emulator follows it there; a capture of the stick in standby closes this."
 
 [not_offered]
 session = "Plain ECP is stateless HTTP; roku-client does not speak the authenticated ecp-2 session."

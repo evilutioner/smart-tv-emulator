@@ -6,7 +6,7 @@
 
 Everything a Fire TV remote app speaks: DIAL discovery and launch, the Turnstile control API over
 TLS with on-screen PIN pairing, and — on Fire OS — Bonjour and the legacy ADB shell. Three
-physical sticks are modelled; every difference between them is capture data.
+physical sticks are captured; every difference between them is capture data.
 
 ## Protocols
 
@@ -26,16 +26,16 @@ physical sticks are modelled; every difference between them is capture data.
 - **Fire TV Stick (Fire OS)** — AFTMA08C15, Fire OS 8.1.8.2
 - **Fire TV Stick 4K Max** — AFTKA, Fire OS; ADB off on the captured unit
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-A few of the firmware behaviours the emulator reproduces. The full guide covers every
-message, pairing step and refusal, each one tied to the capture it came from.
+Behaviours of the captured firmware the emulator reproduces, named here without their
+detail. The full guide gives each one, tied to the capture it came from.
 
-- The control port is **closed at boot** and opens only after a DIAL launch — probe it cold and the stick looks dead.
-- A **wrong PIN is answered 200**, not 403, and a new PIN silently invalidates the previous one.
-- Authorization failures come in a fixed order, each with its own message, so the message tells you what is missing.
-- A **declined ADB key leaves the connection open with no reply**, as the stick does.
-- An unknown URI is **403, never 404**.
+- **A cold start**: the control port as it is right after the stick boots.
+- **PIN pairing**, wrong PINs and repeated PINs, answered as the stick answers them.
+- **Every authorization failure** with the stick's own status and message.
+- **ADB key approval and refusal**, with ADB off by default.
+- **Unknown requests**, refused with the stick's own status.
 
 ## What the emulator lets you test
 
@@ -48,10 +48,10 @@ message, pairing step and refusal, each one tied to the capture it came from.
 
 ## Support and validation
 
-Fire TV is **fully supported** on the Vega and Fire OS 8 sticks for everything the official app does
+Fire TV is **supported** on the Vega and Fire OS 8 sticks for everything the official app does
 (Amazon Fire TV for iOS **4.8.0**), validated by hand on **2026-09-29**: discovery, pairing,
-remote and media keys, text, the microphone, and application and title launches. The channel
-up and down buttons were never told apart from a swipe. The
+remote and media keys, text, the microphone, and application and title launches. The one gap:
+the channel up and down buttons were never told apart from a swipe. The
 [manual validation ledger](../manual-validation.md) has the row; the full guide lists each
 behaviour.
 

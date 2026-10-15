@@ -1,9 +1,8 @@
 """The dashboard document is declared, and the declaration is checked against a live one.
 
-`src/tvemu/view.py` says what `/api/v1/state` contains. Nothing used to: the shape was a dict
-literal in `core.py` and `app.js` read it by convention, so a field renamed on one side became
-`undefined` on the other with nothing to notice. These cases walk a real snapshot of every
-platform the build ships against the declaration, in both directions.
+`src/tvemu/view.py` says what `/api/v1/state` contains, so a field renamed on one side does
+not silently become `undefined` in `app.js`. These cases walk a real snapshot of every platform
+present against the declaration, in both directions.
 """
 from __future__ import annotations
 

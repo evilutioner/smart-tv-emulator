@@ -12,18 +12,18 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `samsung-tizen-tv-ue43cu7172u` | `samsung-tizen-tv-ue55du7172u` | `samsung-tizen-tv-ue65u8072f` |
 |---|---|---|---|
-| discovery | not written | not written | not written |
+| discovery | ⬜ no API | ⬜ no API | ⬜ no API |
 | identity | 🟨 50 % · 1/1 · ⚠ 1 | 🟨 50 % · 1/1 · ⚠ 1 | 🟨 50 % · 1/1 · ⚠ 1 |
 | auth | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
 | session | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
 | keys | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| text | 🟨 50 % · 1/1 · ⚠ 1 | 🟨 50 % · 1/1 · ⚠ 1 | 🟨 50 % · 1/1 · ⚠ 1 |
+| text | 🟨 67 % · 1/1 · ⚠ 1 | 🟨 67 % · 1/1 · ⚠ 1 | 🟨 67 % · 1/1 · ⚠ 1 |
 | pointer | 🟥 0 % · 0/1 · ⚠ 1 | 🟥 0 % · 0/1 · ⚠ 1 | 🟥 0 % · 0/1 · ⚠ 1 |
-| voice | not written | not written | not written |
-| state | 🟨 67 % · 1/1 · ⚠ 1 | 🟨 67 % · 1/1 · ⚠ 1 | 🟨 67 % · 1/1 · ⚠ 1 |
+| voice | ⬜ no API | ⬜ no API | ⬜ no API |
+| state | 🟩 100 % · 1/1 | 🟨 67 % · 1/1 · ⚠ 1 | 🟨 67 % · 1/1 · ⚠ 1 |
 | volume | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
 | power | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| apps | 🟨 50 % · 1/1 · ⚠ 1 | 🟨 50 % · 1/1 · ⚠ 1 | 🟨 50 % · 1/1 · ⚠ 1 |
+| apps | 🟨 40 % · 1/1 · ⚠ 1 | 🟨 40 % · 1/1 · ⚠ 1 | 🟨 40 % · 1/1 · ⚠ 1 |
 
 ## Backlog
 
@@ -33,11 +33,11 @@ Who moves next, and on what. Each item says how many client × television runs i
 
 Requests a client sent that no capture answers (unsupported by emulator).
 
-- 4 items, 3 runs each (samsungtvws on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`):
+- 3 items, 3 runs each (samsungtvws on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`):
   - **`GET /api/v2/`**: Home Assistant reads /api/v2/ on the port its remote uses, which is https on 8002.
-  - **`GET /api/v2/applications/111299001912`**: `rest_app_status()` asks for one application's status document.
   - **`ms.channel.emit/custom.remote.textReceived`**: After text entry the client emits custom.remote.textReceived on the channel.
   - **`ms.remote.control/ProcessMouseDevice`**: `move_cursor()` sends ms.remote.control with TypeOfRemote ProcessMouseDevice.
+- **`GET /api/v2/applications/111299001912`**, 2 runs (samsungtvws on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`). `rest_app_status()` asks for one application's status document.
 - **`POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=43000003`**, 1 run (samsungtvws on `samsung-tizen-tv-ue43cu7172u`). `send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port.
 - **`POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=55000002`**, 1 run (samsungtvws on `samsung-tizen-tv-ue55du7172u`). `send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port.
 - **`POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=65000001`**, 1 run (samsungtvws on `samsung-tizen-tv-ue65u8072f`). `send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port.
@@ -64,7 +64,7 @@ None.
 
 Offered by a client and exercised by no step (untested), by zone; ×N is how many clients offer it.
 
-None.
+- **apps** (2): `rest_app_close` ×1, `rest_app_install` ×1
 
 ## samsungtvws
 
@@ -72,29 +72,55 @@ Samsung Tizen WebSocket and REST client, the library behind Home Assistant's Sam
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 3.0.6 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-12 | 3.0.6 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 3.0.6 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-07 | 3.0.6 | 1.0.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
-#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`
+#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`
 
-- **discovery**: not written.
-- **identity**: passed 1/2 steps.
-  - unsupported by emulator: REST device info over TLS on 8002, as Home Assistant reads it: `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
-- **auth**: passed 3/3 steps.
-- **session**: passed 5/5 steps.
-- **keys**: passed 2/2 steps.
-- **text**: passed 1/2 steps.
-  - unsupported by emulator: text through the REST IME on 8001: `AssertionError: the set refused it`
-- **pointer**: passed 0/1 steps.
-  - unsupported by emulator: pointer movement: `AssertionError: timed out waiting for a pointer command`
-- **voice**: not written.
-- **state**: passed 2/3 steps.
-  - unsupported by emulator: application status over REST on 8001: `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
-- **volume**: passed 1/1 steps.
-- **power**: passed 1/1 steps.
-- **apps**: passed 1/2 steps.
-  - wrong answer from emulator: launch over REST on 8001: `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
+- **discovery**: no API. samsungtvws connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 1/2.
+  - unsupported by emulator: REST device info over TLS on 8002, as Home Assistant reads it (`rest_device_info over https`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
+- **auth**: passed 3/3.
+- **session**: passed 5/5.
+- **keys**: passed 30/30.
+- **text**: passed 2/3.
+  - unsupported by emulator: text through the REST IME on 8001 (`send_password`): `AssertionError: the set refused it`
+- **pointer**: passed 0/1.
+  - unsupported by emulator: pointer movement (`move_cursor`): `AssertionError: timed out waiting for a pointer command`
+- **voice**: no API. samsungtvws has no voice input.
+- **state**: passed 2/3.
+  - unsupported by emulator: application status over REST on 8001 (`rest_app_status`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
+- **volume**: passed 3/3.
+- **power**: passed 1/1.
+- **apps**: passed 2/5.
+  - untested: `rest_app_close`, `rest_app_install`
+  - wrong answer from emulator: launch over REST on 8001 (`rest_app_run`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
 
 Error statuses the emulator sent: 401 ×2, 404 ×3.
+
+#### `samsung-tizen-tv-ue43cu7172u`
+
+- **discovery**: no API. samsungtvws connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 1/2.
+  - unsupported by emulator: REST device info over TLS on 8002, as Home Assistant reads it (`rest_device_info over https`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
+- **auth**: passed 3/3.
+- **session**: passed 5/5.
+- **keys**: passed 30/30.
+- **text**: passed 2/3.
+  - unsupported by emulator: text through the REST IME on 8001 (`send_password`): `AssertionError: the set refused it`
+- **pointer**: passed 0/1.
+  - unsupported by emulator: pointer movement (`move_cursor`): `AssertionError: timed out waiting for a pointer command`
+- **voice**: no API. samsungtvws has no voice input.
+- **state**: passed 3/3.
+- **volume**: passed 3/3.
+- **power**: passed 1/1.
+- **apps**: passed 2/5.
+  - untested: `rest_app_close`, `rest_app_install`
+  - wrong answer from emulator: launch over REST on 8001 (`rest_app_run`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
+
+Error statuses the emulator sent: 401 ×2, 404 ×2.

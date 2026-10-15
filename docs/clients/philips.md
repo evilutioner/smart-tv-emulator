@@ -12,18 +12,18 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `philips-32phs6000-12` |
 |---|---|
-| discovery | not written |
+| discovery | ⬜ no API |
 | identity | 🟩 100 % · 1/1 |
 | auth | 🟩 100 % · 1/1 |
 | session | 🟩 100 % · 1/1 |
 | keys | 🟩 100 % · 1/1 |
 | text | 🟩 100 % · 1/1 |
-| pointer | not written |
-| voice | not written |
-| state | 🟩 100 % · 1/1 |
+| pointer | ⬜ no API |
+| voice | ⬜ no API |
+| state | 🟨 69 % · 1/1 |
 | volume | 🟩 100 % · 1/1 |
-| power | 🟩 100 % · 1/1 |
-| apps | 🟩 100 % · 1/1 |
+| power | 🟨 75 % · 1/1 |
+| apps | 🟨 67 % · 1/1 |
 
 ## Backlog
 
@@ -53,19 +53,13 @@ The client parses a correct answer wrongly.
 
 None.
 
-### Failed, not yet explained
-
-Failed for no declared reason: the run is red until someone says whose it is.
-
-- **launch an application intent**, 1 run (ha-philipsjs on `philips-32phs6000-12`): `setApplication() posts activities/launch only when /system lists the `intent` activity; this Linux set lists `browser` alone, so the client sends nothing.`
-- **notifychange long poll**, 1 run (ha-philipsjs on `philips-32phs6000-12`): `notifyChange() long-polls only when /system carries a `notifyChange` key, which this set's captured /system does not; the client sends nothing, and Home Assistant falls back to polling update().`
-- **wake the set from standby**, 1 run (ha-philipsjs on `philips-32phs6000-12`): `The client powers on only with POST /6/powerstate, which this set answers 404; it has no Cast wake, so Home Assistant needs a Wake-on-LAN or a turn-on automation.`
-
 ### Tests to write
 
 Offered by a client and exercised by no step (untested), by zone; ×N is how many clients offer it.
 
-None.
+- **state** (4): `ambilight_mode` ×1, `ambilight_modes` ×1, `application_id` ×1, `channel_active` ×1
+- **power** (1): `setScreenState` ×1
+- **apps** (1): `setSource` ×1
 
 ## ha-philipsjs
 
@@ -73,27 +67,30 @@ Asynchronous JointSpace client, the library behind Home Assistant's Philips TV i
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 3.2.5 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-12 | 3.2.5 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 3.2.5 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-08 | 3.2.5 | 1.0.0 | Python 3.13.11 | pass |
-| 2026-10-08 | 3.2.5 | 1.0.0 | Python 3.13.11 | pass |
 
-1 earlier runs are recorded beside this page.
+3 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
 #### `philips-32phs6000-12`
 
-- **discovery**: not written.
-- **identity**: passed 1/1 steps.
-- **auth**: passed 3/3 steps.
-- **session**: passed 2/2 steps.
-- **keys**: passed 1/1 steps.
-- **text**: passed 1/1 steps.
-- **pointer**: not written.
-- **voice**: not written.
-- **state**: passed 1/1 steps.
-- **volume**: passed 1/1 steps.
-- **power**: passed 3/3 steps.
-- **apps**: passed 2/2 steps.
+- **discovery**: no API. haphilipsjs connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 10/10.
+- **auth**: passed 4/4.
+- **session**: passed 2/2.
+- **keys**: passed 46/46.
+- **text**: passed 1/1.
+- **pointer**: no API. haphilipsjs has no pointer or touchpad input.
+- **voice**: no API. haphilipsjs has no voice input.
+- **state**: passed 9/13.
+  - untested: `ambilight_mode`, `ambilight_modes`, `application_id`, `channel_active`
+- **volume**: passed 4/4.
+- **power**: passed 3/4.
+  - untested: `setScreenState`
+- **apps**: passed 2/3.
+  - untested: `setSource`
 
 Error statuses the emulator sent: 401 ×7, 403 ×1, 404 ×2.

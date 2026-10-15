@@ -29,7 +29,7 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name is read, with neither words nor a Content-Type. An unknown key is 401 too, not 400. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
                 }
               }
             },
@@ -51,7 +51,7 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name is read, with neither words nor a Content-Type. An unknown key is 401 too, not 400. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
                 }
               }
             },
@@ -73,7 +73,7 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name is read, with neither words nor a Content-Type. An unknown key is 401 too, not 400. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
                 }
               }
             },
@@ -95,7 +95,7 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name is read, with neither words nor a Content-Type. An unknown key is 401 too, not 400. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
                 }
               }
             },
@@ -117,7 +117,7 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name, so even an unknown key is 401 and not 400 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
+                  "description": "The key name is judged before the access mode, so an unknown key is 400 even where every key would be refused.\nUnlike a refused query, a refused key carries no words and no Content-Type.\nRefused before the key name is read, with neither words nor a Content-Type. An unknown key is 401 too, not 400. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe same rule as ecp-2: releasing a key nobody pressed is accepted as 202."
                 }
               }
             },
@@ -165,7 +165,7 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "Refused before the channel id, so an unknown channel is 401 and not 404 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue."
+                  "description": "Refused before the channel id is read, with neither words nor a Content-Type. An unknown channel is 401 too, not 404. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue.\nThe channel comes to the foreground; see active-app."
                 }
               }
             },
@@ -187,7 +187,129 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "Refused before the channel id, so an unknown channel is 401 and not 404 is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue."
+                  "description": "Refused before the channel id is read, with neither words nor a Content-Type. An unknown channel is 401 too, not 404. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue.\nThe channel comes to the foreground; see active-app."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          },
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "Refused before the channel id is read, with neither words nor a Content-Type. An unknown channel is 401 too, not 404. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe set checks the id against its installed channels. The emulator accepts any id, so a driver's launch can be observed without a catalogue.\nThe channel comes to the foreground; see active-app."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/search/browse": {
+      "post": {
+        "operationId": "roku.http.search",
+        "summary": "Open the search screen, with the keyword it names.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "The search screen belongs to the home channel, so active-app still answers the home screen afterwards."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/input": {
+      "post": {
+        "operationId": "roku.http.input",
+        "summary": "Hand parameters to the channel in the foreground.",
+        "responses": {
+          "200": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "Accepted on the home screen too, where nothing consumes it."
+                }
+              }
+            },
+            "headers": {
+              "Server": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/input/{app_id}": {
+      "post": {
+        "operationId": "roku.http.input-channel",
+        "summary": "Hand parameters to one channel by its ECP id (Play on Roku is 15985).",
+        "responses": {
+          "404": {
+            "description": "An answer observed in capture evidence.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream",
+                  "description": "Play on Roku (15985) is a channel like any other: this TCL does not have it installed. The emulator accepts any id, as it does for launch."
                 }
               }
             },
@@ -730,7 +852,7 @@
                         "disabled",
                         "permissive"
                       ],
-                      "description": "Which clients the set answers; mirrors the platform's four access modes."
+                      "description": "Which clients the set answers; mirrors the platform's four access modes. The emulator writes the selected mode here, over HTTP and inside the envelope."
                     },
                     "language": {
                       "type": "string",
@@ -810,11 +932,11 @@
                       },
                       "examples": [
                         "PowerOn",
+                        "Ready",
                         "DisplayOff",
-                        "Headless",
-                        "Ready"
+                        "Headless"
                       ],
-                      "description": "A sleeping set does not answer, so only PowerOn is captured."
+                      "description": "A television in standby keeps answering: the TCL said Ready after PowerOff, over both wires, and PowerOn again after PowerOn. The emulator writes it from the power state where the profile gives both values; the stick's standby is not measured, so it stays as captured."
                     },
                     "supports-suspend": {
                       "type": "string",
@@ -1700,7 +1822,7 @@
                   "xml": {
                     "name": "active-app"
                   },
-                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working."
+                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe type is appl and ui-location is the channel id, where the home screen answers type home and ui-location home. The emulator replays the captured document whatever was launched."
                 }
               }
             },
@@ -1730,7 +1852,7 @@
                 "schema": {
                   "type": "string",
                   "contentMediaType": "application/octet-stream",
-                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working."
+                  "description": "Refused before the query is read, with neither words nor a Content-Type. The device documents, SSDP and an authenticated ecp-2 session keep working.\nThe type is appl and ui-location is the channel id, where the home screen answers type home and ui-location home. The emulator replays the captured document whatever was launched."
                 }
               }
             },

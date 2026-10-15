@@ -34,8 +34,7 @@ jobs:
       - name: Package
         run: python -m build
 
-  # The platforms this build ships, read off the registry rather than written here, so the
-  # same file gates a build of one television or of ten.
+  # The platforms in this checkout, read from the registry rather than listed here.
   platforms:
     runs-on: ubuntu-latest
     outputs:

@@ -4,6 +4,11 @@
 
 Upstream clients for Android TV / Google TV, installed in isolation and run against the emulator. What a run establishes, and what it does not: [Open-source clients](../open-source-clients.md).
 
+| Client | Installed from | Last green | Latest recorded run |
+|---|---|---|---|
+| [androidtvremote2](#androidtvremote2) | git | `e664a8e1f14e` | 2026-10-15, pass |
+| [pychromecast](#pychromecast) | pypi | `14.0.10` | 2026-10-15, pass |
+
 ## Heatmap
 
 What real clients have confirmed of each emulated television, zone by zone, from each client's latest run.
@@ -12,18 +17,18 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `google-chromecast-hd` | `kivi-android-tv-mtxxxx` | `kivi-android-tv-mtxxxx-2` | `nokia-streaming-stick-800` | `tcl-android-tv-c06` | `xiaomi-mitv-moeu0` |
 |---|---|---|---|---|---|---|
-| discovery | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API |
-| identity | 🟨 60 % · 1/1 · ⚠ 1 | 🟨 60 % · 1/1 · ⚠ 1 | 🟨 60 % · 1/1 · ⚠ 1 | 🟨 60 % · 1/1 · ⚠ 1 | 🟨 60 % · 1/1 · ⚠ 1 | 🟩 80 % · 1/1 |
+| discovery | 🟨 50 % · 1/1 | ⬜ no API | ⬜ no API | 🟨 50 % · 1/1 | 🟨 50 % · 1/1 | 🟨 50 % · 1/1 |
+| identity | 🟨 67 % · 2/2 · ⚠ 2 | 🟨 60 % · 1/1 · ⚠ 1 | 🟨 60 % · 1/1 · ⚠ 1 | 🟨 67 % · 2/2 · ⚠ 2 | 🟨 67 % · 2/2 · ⚠ 2 | 🟩 80 % · 2/2 · ⚠ 1 |
 | auth | 🟨 75 % · 1/1 | 🟨 75 % · 1/1 | 🟨 75 % · 1/1 | 🟨 75 % · 1/1 | 🟨 75 % · 1/1 | 🟨 75 % · 1/1 |
-| session | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 |
+| session | 🟩 100 % · 2/2 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟩 100 % · 2/2 | 🟩 80 % · 2/2 · ⚠ 1 | 🟩 100 % · 2/2 |
 | keys | 🟥 2 % · 1/1 | 🟥 2 % · 1/1 | 🟥 2 % · 1/1 | 🟥 2 % · 1/1 | 🟥 2 % · 1/1 | 🟥 2 % · 1/1 |
 | text | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 |
 | pointer | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API | ⬜ no API |
 | voice | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 | 🟨 60 % · 1/1 |
-| state | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| volume | 🟨 67 % · 1/1 | 🟨 67 % · 1/1 | 🟨 67 % · 1/1 | 🟨 67 % · 1/1 | 🟨 67 % · 1/1 | 🟨 67 % · 1/1 |
+| state | 🟩 100 % · 2/2 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 2/2 | 🟩 100 % · 2/2 | 🟩 100 % · 2/2 |
+| volume | 🟨 67 % · 1/2 · ⚠ 2 | 🟨 67 % · 1/1 | 🟨 67 % · 1/1 | 🟨 67 % · 1/2 · ⚠ 2 | 🟨 67 % · 1/2 · ⚠ 2 | 🟨 67 % · 1/2 · ⚠ 2 |
 | power | 🟥 20 % · 1/1 | 🟥 20 % · 1/1 | 🟥 20 % · 1/1 | 🟥 20 % · 1/1 | 🟥 20 % · 1/1 | 🟥 20 % · 1/1 |
-| apps | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
+| apps | 🟩 100 % · 2/2 · ⚠ 2 | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | 🟩 100 % · 2/2 · ⚠ 2 | 🟩 100 % · 2/2 · ⚠ 2 | 🟩 100 % · 2/2 · ⚠ 2 |
 
 ## Backlog
 
@@ -40,6 +45,12 @@ None.
 The emulator answers, but not as the set does (wrong answer from emulator).
 
 - **the set's name in its certificate**, 5 runs (androidtvremote2 on 5 televisions). The emulator serves one Remote v2 TLS identity for the platform, whose dnQualifier names MiTV-MOEU0, so the client reads that model for every set.
+- 4 items, 4 runs each (pychromecast on 4 televisions):
+  - **load a clip on the media namespace**: The emulator's launched application is a placeholder that lists no namespaces, so pychromecast refuses urn:x-cast:com.google.cast.media before sending anything; media playback is not emulated.
+  - **model and manufacturer from eureka_info**: pychromecast asks /setup/eureka_info?params=device_info,name and reads the model and manufacturer from a device_info block.
+  - **quit the running application**: No capture holds STOP.
+  - **set the receiver volume and mute**: No capture holds SET_VOLUME.
+- **heartbeats keep the channel open**, 1 run (pychromecast on `tcl-android-tv-c06`). The TCL capture did not probe a heartbeat PING, so the emulator leaves it unanswered on this set and pychromecast drops the channel after twenty seconds without a PONG.
 
 ### Blocked televisions
 
@@ -57,14 +68,17 @@ None.
 
 Offered by a client and exercised by no step (untested), by zone; ×N is how many clients offer it.
 
-- **identity** (1): `manufacturer` ×1
+- **discovery** (1): `zeroconf` ×1
+- **identity** (1): `manufacturer` ×2
 - **auth** (1): `InvalidAuth on a wrong code` ×1
 - **session** (2): `is_available callback` ×1, `keep_reconnecting` ×1
 - **keys** (294): `0` ×1, `1` ×1, `11` ×1, `12` ×1, `2` ×1, `3` ×1, `3D_MODE` ×1, `4` ×1, `5` ×1, `6` ×1 and 284 more
 - **text** (2): `non-ASCII` ×1, `punctuation` ×1
 - **voice** (2): `VoiceSessionInProgress` ×1, `async with` ×1
-- **volume** (1): `VOLUME_DOWN` ×1
+- **state** (6): `display_name` ×1, `icon_url` ×1, `namespaces` ×1, `session_id` ×1, `status_text` ×1, `transport_id` ×1
+- **volume** (3): `VOLUME_DOWN` ×1, `volume_down` ×1, `volume_up` ×1
 - **power** (4): `SLEEP` ×1, `SOFT_SLEEP` ×1, `TV_POWER` ×1, `WAKEUP` ×1
+- **apps** (4): `pause` ×1, `play` ×1, `seek` ×1, `stop` ×1
 
 ## androidtvremote2
 
@@ -72,11 +86,11 @@ Remote v2 and Polo pairing client, the library behind Home Assistant's Android T
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 0.3.2 (`e664a8e`) | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 0.3.2 (`e664a8e`) | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-09 | 0.3.2 (`e664a8e`) | 1.0.0 | Python 3.13.11 | pass |
-| 2026-10-07 | 0.3.2 (`e664a8e`) | 1.0.0 | Python 3.13.11 | pass |
 
-1 earlier runs are recorded beside this page.
+2 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -130,3 +144,67 @@ Error statuses the emulator sent: 403 ×2, 499 ×1.
 - **apps**: passed 2/2.
 
 Error statuses the emulator sent: 403 ×2, 499 ×1.
+
+## pychromecast
+
+Google Cast v2 client, the library behind Home Assistant's Google Cast integration · [upstream](https://github.com/home-assistant-libs/pychromecast) · licence MIT · last green `14.0.10`
+
+| Run | Client | Emulator | Runtime | Verdict |
+|---|---|---|---|---|
+| 2026-10-15 | 14.0.10 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-12 | 14.0.10 | 1.1.0 | Python 3.13.11 | pass |
+
+### Coverage by television
+
+#### `google-chromecast-hd`, `nokia-streaming-stick-800`, `xiaomi-mitv-moeu0`
+
+- **discovery**: passed 1/2.
+  - untested: `zeroconf`
+- **identity**: passed 4/6.
+  - untested: `manufacturer`
+  - wrong answer from emulator: model and manufacturer from eureka_info (`model_name`): `AssertionError: DeviceStatus(friendly_name='Chromecast HD', model_name='Unknown model name', manufacturer='Unknown manufacturer', uuid=UUID('5e0c7a3d-91b4-4c2e-8f6a-2d7b9c1e4a58'), cast_type='cast', multizone_supported=False)`
+- **auth**: no API. pychromecast opens the Cast channel without pairing and sends no device-auth challenge.
+- **session**: passed 5/5.
+- **keys**: no API. Cast has no remote keys; pychromecast sends none.
+- **text**: no API. pychromecast has no text input.
+- **pointer**: no API. pychromecast has no pointer input.
+- **voice**: no API. pychromecast has no voice input.
+- **state**: passed 6/12.
+  - untested: `display_name`, `icon_url`, `namespaces`, `session_id`, `status_text`, `transport_id`
+- **volume**: passed 0/4.
+  - untested: `volume_down`, `volume_up`
+  - wrong answer from emulator: set the receiver volume and mute (`set_volume`, `set_volume_muted`): `AssertionError: timed out waiting for mute`
+- **power**: no API. pychromecast has no power call; a launch wakes a set, which is the launch step.
+- **apps**: passed 1/7.
+  - untested: `pause`, `play`, `seek`, `stop`
+  - wrong answer from emulator: load a clip on the media namespace (`play_media`): `UnsupportedNamespace: Namespace urn:x-cast:com.google.cast.media is not supported by current app. Supported are `
+  - wrong answer from emulator: quit the running application (`quit_app`): `AssertionError: timed out waiting for the client's application status`
+
+Error statuses the emulator sent: 400 ×3.
+
+#### `tcl-android-tv-c06`
+
+- **discovery**: passed 1/2.
+  - untested: `zeroconf`
+- **identity**: passed 4/6.
+  - untested: `manufacturer`
+  - wrong answer from emulator: model and manufacturer from eureka_info (`model_name`): `AssertionError: DeviceStatus(friendly_name='Smart TV', model_name='Unknown model name', manufacturer='Unknown manufacturer', uuid=UUID('3f6c21d8-45ae-4b90-8c17-9d2e5a0fb374'), cast_type='cast', multizone_supported=False)`
+- **auth**: no API. pychromecast opens the Cast channel without pairing and sends no device-auth challenge.
+- **session**: passed 4/5.
+  - wrong answer from emulator: heartbeats keep the channel open (`heartbeat`): `AssertionError: [{'id': 18, 'time': '2026-10-15T18:10:05.058588+00:00', 'kind': 'connection', 'operation': 'androidtv.cast.closed', 'transport': 'tls', 'peer': '127.0.0.1', 'status': None, 'detail': '10 messages: connection CONNECT, receiver GET_STATUS, receiver SET_VOLUME, receiver SET_VOLUME, receiver LAUNCH, receiver STOP, connection CLOSE; 3 heartbeat pings', 'log_start_id': 0}, {'id': 19, 'ti`
+- **keys**: no API. Cast has no remote keys; pychromecast sends none.
+- **text**: no API. pychromecast has no text input.
+- **pointer**: no API. pychromecast has no pointer input.
+- **voice**: no API. pychromecast has no voice input.
+- **state**: passed 6/12.
+  - untested: `display_name`, `icon_url`, `namespaces`, `session_id`, `status_text`, `transport_id`
+- **volume**: passed 0/4.
+  - untested: `volume_down`, `volume_up`
+  - wrong answer from emulator: set the receiver volume and mute (`set_volume`, `set_volume_muted`): `AssertionError: timed out waiting for mute`
+- **power**: no API. pychromecast has no power call; a launch wakes a set, which is the launch step.
+- **apps**: passed 1/7.
+  - untested: `pause`, `play`, `seek`, `stop`
+  - wrong answer from emulator: load a clip on the media namespace (`play_media`): `UnsupportedNamespace: Namespace urn:x-cast:com.google.cast.media is not supported by current app. Supported are `
+  - wrong answer from emulator: quit the running application (`quit_app`): `AssertionError: timed out waiting for the client's application status`
+
+Error statuses the emulator sent: 400 ×3.

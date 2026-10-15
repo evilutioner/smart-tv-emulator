@@ -269,6 +269,8 @@ def backlog(columns: list[tuple[ClientSpec, dict]]) -> list[str]:
                 captures.setdefault(gap["operation"], {"reason": gap.get("reason") or "",
                                                        "at": []})["at"].append(pair)
             for step in profile.get("steps") or []:
+                if step.get("status") == "not-offered":
+                    continue      # a fact about the client, shown as "no API" in its zones
                 kind = step_kind(spec, step)
                 if kind in failures:
                     reason = next((entry.reason for entry in spec.known_failures

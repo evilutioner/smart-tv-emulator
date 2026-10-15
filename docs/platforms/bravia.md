@@ -23,16 +23,15 @@ of that range — including one that can be discovered but not controlled.
 - **Sony KDL-55W807C** — BRAVIA 2015, Android 7.0
 - **Sony KDL-32WD600** — BRAVIA 2016, Linux; discoverable, no remote protocol
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-A few of the firmware behaviours the emulator reproduces. The full guide covers every
-message, pairing step and refusal, each one tied to the capture it came from.
+Behaviours of the captured firmware the emulator reproduces, named here without their
+detail. The full guide gives each one, tied to the capture it came from.
 
-- The 2015 set speaks **Remote v1 only**; a v2 client is disconnected without a word.
-- Volume is an **integer on the wire** where a common client expects a string, so it cannot read it.
-- **Sending the auth cookie back to registration revokes it** — exactly what a cookie jar does.
-- Some Simple IP Control queries are **never answered**; a client waiting for them waits forever.
-- The 2016 set **can be found but not controlled** — a driver must explain that, not time out.
+- **Two generations**: the 2015 set's remote protocol, and the 2016 set that can be found but not controlled.
+- **PIN registration and the auth cookie's lifetime**, as the set handles them.
+- **Simple IP Control** as the set answers it, silences included.
+- **Volume** as the set reports it.
 
 ## What the emulator lets you test
 

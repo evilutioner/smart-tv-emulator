@@ -385,7 +385,7 @@
               "type": "string"
             }
           },
-          "description": "The set tracks what is held, character keys included: releasing a key that went down answers 200."
+          "description": "The set tracks what is held, character keys included: releasing a key this session did not press answers 202, where releasing a held one answers 200."
         }
       },
       "ecp-2.query-device-info": {

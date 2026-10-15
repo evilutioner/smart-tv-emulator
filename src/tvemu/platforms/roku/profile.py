@@ -8,6 +8,32 @@ from dataclasses import dataclass
 from tvemu.platforms.common import profile as common
 
 
+# What the handlers write live into a replayed document, by replay name: the set reports its
+# own network-access value in device-info, so the emulator reports the selected mode.
+# Each replay that carries device-info, with the path prefix that reaches inside it: over
+# ecp-2 the document is base64 in the envelope's content-data.
+DEVICE_INFO = {"/query/device-info": "", "query-device-info": "content-data::"}
+LIVE = ("ecp-setting-mode",)
+# Device-info fields whose value per state of the set is device data. A profile writes one
+# live only where its `runtime` gives the measured value for every state: a stick in standby
+# has not been measured, so its power-mode stays the captured one.
+STATES = {"power-mode": ("on", "standby")}
+
+
+def _live_states(runtime: dict, profile_id: str) -> dict[str, dict[str, str]]:
+    states = {}
+    for field, names in STATES.items():
+        declared = runtime.get(field)
+        if declared is None:
+            continue
+        if (not isinstance(declared, dict) or not isinstance(declared.get("source"), str)
+                or not all(isinstance(declared.get(name), str) for name in names)):
+            raise ValueError(f"Profile {profile_id}: runtime {field} needs "
+                             f"{', '.join(names)} and a source")
+        states[field] = {name: declared[name] for name in names}
+    return states
+
+
 @dataclass(frozen=True)
 class RokuProfile(common.CapturedProfile):
     """Roku serves captured HTTP documents keyed by request path.
@@ -25,6 +51,8 @@ class RokuProfile(common.CapturedProfile):
     # queries -- replays that status with the captured (empty) body.
     http_statuses: dict[str, int]
     ecp2_documents: dict[str, tuple[bytes, str]]
+    # Per device-info field the profile writes from the set's state, the value per state.
+    live_states: dict[str, dict[str, str]]
 
     @property
     def server(self) -> str:
@@ -36,8 +64,8 @@ class RokuProfile(common.CapturedProfile):
     def ssdp_location(self, host: str, service_port: int) -> str:
         return f"http://{host}:{service_port}/"
 
-    def document_content_type(self, route: str) -> str:
-        return self.http_content_types.get(route, "text/xml")
+    def document_content_type(self, route: str, default: str = "text/xml") -> str:
+        return self.http_content_types.get(route, default)
 
     def document_headers(self, route: str) -> dict[str, str]:
         return dict(self.http_headers.get(route, ()))
@@ -57,8 +85,10 @@ def _envelope_document(capture, exchange_id: str, profile_id: str) -> tuple[byte
 def _load_profile(directory) -> RokuProfile:
     reference = common.profile_capture(directory, __package__)
     profile_id, capture, replay = reference.id, reference.capture, reference.replays
-    if reference.substitutions:
-        raise ValueError(f"Profile {profile_id}: Roku replays allow no runtime substitutions")
+    live_states = _live_states(reference.runtime, profile_id)
+    reference.expect_substitutions({
+        name: tuple(prefix + field for field in (*LIVE, *live_states))
+        for name, prefix in DEVICE_INFO.items()})
     ssdp = capture.platform.get("ssdp")
     if not isinstance(ssdp, dict):
         raise ValueError(f"Profile {profile_id}: ssdp.response_headers must be a list")
@@ -105,6 +135,7 @@ def _load_profile(directory) -> RokuProfile:
         http_headers=http_headers,
         http_statuses=http_statuses,
         ecp2_documents=ecp2_documents,
+        live_states=live_states,
     )
 
 

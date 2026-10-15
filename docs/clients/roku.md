@@ -6,9 +6,9 @@ Upstream clients for Roku, installed in isolation and run against the emulator. 
 
 | Client | Installed from | Last green | Latest recorded run |
 |---|---|---|---|
-| [python-roku](#python-roku) | pypi | `4.1.0` | 2026-10-11, pass |
-| [roku-client](#roku-client) | npm | `6.0.0` | 2026-10-11, pass |
-| [rokuecp](#rokuecp) | pypi | `0.19.5` | 2026-10-11, pass |
+| [python-roku](#python-roku) | pypi | `4.1.0` | 2026-10-15, pass |
+| [roku-client](#roku-client) | npm | `6.0.0` | 2026-10-15, pass |
+| [rokuecp](#rokuecp) | pypi | `0.19.5` | 2026-10-15, pass |
 
 ## Heatmap
 
@@ -24,12 +24,12 @@ A cell is one zone of one emulated television, over every client that drove it: 
 | session | ⬜ no API | ⬜ no API |
 | keys | 🟨 62 % · 3/3 | 🟨 62 % · 3/3 |
 | text | 🟨 40 % · 3/3 | 🟨 40 % · 3/3 |
-| pointer | 🟥 0 % · 0/1 · ⚠ 2 | 🟥 0 % · 0/1 · ⚠ 2 |
+| pointer | 🟥 22 % · 1/1 | 🟥 22 % · 1/1 |
 | voice | ⬜ no API | ⬜ no API |
-| state | 🟨 50 % · 3/3 · ⚠ 5 | 🟨 60 % · 3/3 · ⚠ 5 |
+| state | 🟨 50 % · 3/3 · ⚠ 5 | 🟩 80 % · 3/3 · ⚠ 2 |
 | volume | 🟩 100 % · 3/3 | 🟩 100 % · 3/3 |
 | power | 🟨 67 % · 3/3 | 🟨 67 % · 3/3 |
-| apps | 🟨 50 % · 3/3 · ⚠ 4 | 🟨 67 % · 3/3 · ⚠ 4 |
+| apps | 🟨 75 % · 3/3 | 🟩 100 % · 3/3 |
 
 ## Backlog
 
@@ -39,16 +39,13 @@ Who moves next, and on what. Each item says how many client × television runs i
 
 Requests a client sent that no capture answers (unsupported by emulator).
 
-- **`POST /search/browse`**, 6 runs (python-roku, roku-client, rokuecp on `roku-streaming-stick-4k-3820eu2`, `tcl-roku-tv-32s357`). `search()` opens the search screen.
 - **`query/icon/12`**, 4 runs (python-roku, roku-client on `roku-streaming-stick-4k-3820eu2`, `tcl-roku-tv-32s357`). `icon()` fetches an application's artwork.
-- **`POST /input`**, 2 runs (python-roku on `roku-streaming-stick-4k-3820eu2`, `tcl-roku-tv-32s357`). `touch()` and the motion-sensor methods post to /input.
-- **`POST /input/15985`**, 2 runs (rokuecp on `roku-streaming-stick-4k-3820eu2`, `tcl-roku-tv-32s357`). `play_on_roku()` hands a URL to the Play on Roku channel.
 
 ### Emulator: wrong answers
 
 The emulator answers, but not as the set does (wrong answer from emulator).
 
-- **standby reported by device-info**, 6 runs (python-roku, roku-client, rokuecp on `roku-streaming-stick-4k-3820eu2`, `tcl-roku-tv-32s357`). After PowerOff the emulator keeps replaying the captured device-info, whose power-mode is PowerOn, so `power_state` stays On.
+- **standby reported by device-info**, 3 runs (python-roku, roku-client, rokuecp on `roku-streaming-stick-4k-3820eu2`). The stick's device-info in standby has not been measured, so the emulator keeps its captured power-mode, PowerOn, after PowerOff.
 
 ### Blocked televisions
 
@@ -82,11 +79,11 @@ Synchronous ECP client built on requests, one of the oldest Roku libraries · [u
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 4.1.0 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-14 | 4.1.0 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 4.1.0 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-09 | 4.1.0 | 1.0.0 | Python 3.13.11 | pass |
-| 2026-10-09 | 4.1.0 | 1.0.0 | Python 3.13.11 | pass |
 
-2 earlier runs are recorded beside this page.
+4 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -103,10 +100,8 @@ Synchronous ECP client built on requests, one of the oldest Roku libraries · [u
   - untested: `ChannelDown`, `ChannelUp`, `FindRemote`, `InputAV1`, `InputHDMI1`, `InputHDMI2`, `InputHDMI3`, `InputHDMI4`, `InputTuner`, `Search`
 - **text**: passed 2/5.
   - untested: `non-ASCII`, `punctuation`, `space`
-- **pointer**: passed 0/9.
+- **pointer**: passed 2/9.
   - untested: `acceleration`, `magnetic`, `rotation`, `touch cancel`, `touch move`, `touch press`, `touch up`
-  - unsupported by emulator: a touch at a point (`touch down`): `RokuException: b'Remote-only emulator: this endpoint is not implemented'`
-  - unsupported by emulator: motion-sensor input (`orientation`): `RokuException: b'Remote-only emulator: this endpoint is not implemented'`
 - **voice**: no API. python-roku has no voice API.
 - **state**: passed 2/5.
   - untested: `tv_channels`
@@ -115,11 +110,10 @@ Synchronous ECP client built on requests, one of the oldest Roku libraries · [u
 - **volume**: passed 3/3.
 - **power**: passed 2/3.
   - untested: `Power`
-- **apps**: passed 2/4.
+- **apps**: passed 3/4.
   - untested: `Channel.launch`
-  - unsupported by emulator: search for a keyword (`search`): `RokuException: b'Remote-only emulator: this endpoint is not implemented'`
 
-Error statuses the emulator sent: 501 ×4.
+Error statuses the emulator sent: 501 ×1.
 
 #### `tcl-roku-tv-32s357`
 
@@ -134,22 +128,18 @@ Error statuses the emulator sent: 501 ×4.
   - untested: `ChannelDown`, `ChannelUp`, `FindRemote`, `InputAV1`, `InputHDMI1`, `InputHDMI2`, `InputHDMI3`, `InputHDMI4`, `InputTuner`, `Search`
 - **text**: passed 2/5.
   - untested: `non-ASCII`, `punctuation`, `space`
-- **pointer**: passed 0/9.
+- **pointer**: passed 2/9.
   - untested: `acceleration`, `magnetic`, `rotation`, `touch cancel`, `touch move`, `touch press`, `touch up`
-  - unsupported by emulator: a touch at a point (`touch down`): `RokuException: b'Remote-only emulator: this endpoint is not implemented'`
-  - unsupported by emulator: motion-sensor input (`orientation`): `RokuException: b'Remote-only emulator: this endpoint is not implemented'`
 - **voice**: no API. python-roku has no voice API.
-- **state**: passed 3/5.
-  - wrong answer from emulator: standby reported by device-info (`power_state`): `AssertionError: On`
+- **state**: passed 4/5.
   - unsupported by emulator: an application's icon (`icon`): `RokuException: b'No captured response is available in the selected device profile'`
 - **volume**: passed 3/3.
 - **power**: passed 2/3.
   - untested: `Power`
-- **apps**: passed 2/4.
+- **apps**: passed 3/4.
   - untested: `Channel.launch`
-  - unsupported by emulator: search for a keyword (`search`): `RokuException: b'Remote-only emulator: this endpoint is not implemented'`
 
-Error statuses the emulator sent: 501 ×4.
+Error statuses the emulator sent: 501 ×1.
 
 ## roku-client
 
@@ -157,11 +147,11 @@ Node.js ECP client with key holds, a chained command builder and SSDP discovery 
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 6.0.0 | 1.2.0 | Node 25.8.0 | pass |
+| 2026-10-14 | 6.0.0 | 1.1.0 | Node 25.8.0 | pass |
 | 2026-10-11 | 6.0.0 | 1.1.0 | Node 25.8.0 | pass |
-| 2026-10-09 | 6.0.0 | 1.0.0 | Node 25.8.0 | pass |
-| 2026-10-09 | 6.0.0 | 1.0.0 | Node 25.8.0 | pass |
 
-2 earlier runs are recorded beside this page.
+4 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -182,15 +172,14 @@ Node.js ECP client with key holds, a chained command builder and SSDP discovery 
 - **voice**: no API. roku-client has no voice API.
 - **state**: passed 2/4.
   - wrong answer from emulator: standby reported by device-info (`powerMode`): `AssertionError: powerMode PowerOn`
-  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:55992/query/icon/12: Not Implemented`
+  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:55794/query/icon/12: Not Implemented`
 - **volume**: passed 3/3.
 - **power**: passed 2/3.
   - untested: `Power`
-- **apps**: passed 1/3.
+- **apps**: passed 2/3.
   - untested: `launchDtv`
-  - unsupported by emulator: search for a keyword (`search`): `Error: Failed to POST http://127.0.0.1:55992/search/browse?keyword=tvemu: Not Implemented`
 
-Error statuses the emulator sent: 501 ×2.
+Error statuses the emulator sent: 501 ×1.
 
 #### `tcl-roku-tv-32s357`
 
@@ -207,16 +196,14 @@ Error statuses the emulator sent: 501 ×2.
   - untested: `non-ASCII`, `punctuation`, `space`
 - **pointer**: no API. roku-client has no touch or sensor input.
 - **voice**: no API. roku-client has no voice API.
-- **state**: passed 2/4.
-  - wrong answer from emulator: standby reported by device-info (`powerMode`): `AssertionError: powerMode PowerOn`
-  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:56003/query/icon/12: Not Implemented`
+- **state**: passed 3/4.
+  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:55805/query/icon/12: Not Implemented`
 - **volume**: passed 3/3.
 - **power**: passed 2/3.
   - untested: `Power`
-- **apps**: passed 2/3.
-  - unsupported by emulator: search for a keyword (`search`): `Error: Failed to POST http://127.0.0.1:56003/search/browse?keyword=tvemu: Not Implemented`
+- **apps**: passed 3/3.
 
-Error statuses the emulator sent: 501 ×2.
+Error statuses the emulator sent: 501 ×1.
 
 ## rokuecp
 
@@ -224,11 +211,11 @@ Asynchronous ECP client, the library behind Home Assistant's Roku integration ·
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-15 | 0.19.5 | 1.2.0 | Python 3.13.11 | pass |
+| 2026-10-14 | 0.19.5 | 1.1.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 0.19.5 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-09 | 0.19.5 | 1.0.0 | Python 3.13.11 | pass |
-| 2026-10-09 | 0.19.5 | 1.0.0 | Python 3.13.11 | pass |
 
-2 earlier runs are recorded beside this page.
+4 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -252,12 +239,10 @@ Asynchronous ECP client, the library behind Home Assistant's Roku integration ·
 - **volume**: passed 3/3.
 - **power**: passed 2/4.
   - untested: `Power`, `Sleep`
-- **apps**: passed 1/4.
+- **apps**: passed 3/4.
   - untested: `tune`
-  - unsupported by emulator: search for a keyword (`search`): `RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})`
-  - unsupported by emulator: play a URL on the device (`play_on_roku`): `RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})`
 
-Error statuses the emulator sent: 501 ×2.
+The emulator sent no error status.
 
 #### `tcl-roku-tv-32s357`
 
@@ -273,14 +258,11 @@ Error statuses the emulator sent: 501 ×2.
   - untested: `non-ASCII`, `punctuation`, `space`
 - **pointer**: no API. rokuecp has no touch or sensor input.
 - **voice**: no API. rokuecp has no voice API.
-- **state**: passed 3/5.
+- **state**: passed 4/5.
   - untested: `channel`
-  - wrong answer from emulator: standby reported by device-info (`state`): `AssertionError: standby not parsed`
 - **volume**: passed 3/3.
 - **power**: passed 2/4.
   - untested: `Power`, `Sleep`
-- **apps**: passed 2/4.
-  - unsupported by emulator: search for a keyword (`search`): `RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})`
-  - unsupported by emulator: play a URL on the device (`play_on_roku`): `RokuError: ('HTTP 501', {'content-type': 'text/plain; charset=utf-8', 'message': 'Remote-only emulator: this endpoint is not implemented', 'status-code': 501})`
+- **apps**: passed 4/4.
 
-Error statuses the emulator sent: 501 ×2.
+The emulator sent no error status.

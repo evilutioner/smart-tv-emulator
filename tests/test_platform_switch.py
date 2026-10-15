@@ -36,8 +36,8 @@ def free_port() -> int:
 
 class SettingsResolutionTests(unittest.TestCase):
     def test_saved_platform_is_reported_not_rejected(self):
-        # A settings file records whichever platform was active, including one this build
-        # no longer ships, so reading it must report the tag rather than reject the file.
+        # A settings file records whichever platform was active, possibly one this checkout
+        # does not have, so reading it reports the tag rather than rejecting the file.
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "settings.json"
             write_settings(path, Settings(device_profile="some-captured-device",

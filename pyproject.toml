@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "smart-tv-emulator"
-version = "1.1.0"
+version = "1.2.0"
 description = "Extensible Smart TV protocol emulator with a local tester dashboard"
 readme = "README.md"
 license = "Apache-2.0"
@@ -17,8 +17,7 @@ tvemu = "tvemu.__main__:main"
 tvemu-mcp = "tvemu.mcp:main"
 
 [tool.setuptools.package-data]
-# Globs rather than one line per television, so neither this file nor any other
-# shared file has to enumerate the platforms a build ships.
+# Globs rather than one line per television, so adding one needs no change here.
 tvemu = [
   "web/*",
   "web/platforms/*",

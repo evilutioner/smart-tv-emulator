@@ -55,8 +55,7 @@ src/tvemu/
 **A television's name never appears in a shared file.** Differences between sets are
 expressed as `PlatformDescriptor` data, a hook in `common/`, or a dashboard module — never
 as `if platform == …`. Differences between two sets of the same brand are captured profile
-data. That rule is what makes a build with one television and a build with eight the same
-code.
+data, so adding a television never changes shared code.
 
 ## Runtime
 
@@ -146,8 +145,9 @@ python -m tvemu.conformance --all --json-report conformance.json
 ```
 
 A replay nothing verifies is never skipped: it is listed as uncovered with its reason — a
-transport with no driver yet, or a capture that kept no client frame — and the run stays red
-until it is covered. HTTP, HTTPS, WebSocket and MQTT run today; raw TCP comes next.
+transport with no driver yet, or a capture that kept no client frame. It fails the gate once
+the television declares complete coverage (below). HTTP, HTTPS, WebSocket and MQTT have
+drivers; raw TCP does not yet.
 
 A captured request rarely stands alone. It went to a paired route, or it carries a token or
 a PIN the capture wrote as `{token}`, because the value belonged to the client. A television
@@ -220,8 +220,8 @@ hardware address.
    [Manual validation](manual-validation.md)) is `"validated": true`. Then run
    `python tools/render_docs.py`, which writes the README's table and badges and
    [Televisions](televisions.md) from the catalogue.
-9. Validate discovery, pairing, commands, failures, disconnects and recovery against both the
-   target application and physical hardware.
+9. Validate discovery, pairing, commands, failures, disconnects and recovery against the
+   target application, and against the physical set where there is one.
 
 A television need not be discoverable at all: the captured VIDAA set answers no SSDP or mDNS
 search, so its descriptor declares no discovery protocol and its capture says so in

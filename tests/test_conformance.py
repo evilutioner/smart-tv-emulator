@@ -6,6 +6,7 @@ rules here hold for a build that ships one television or ten.
 from __future__ import annotations
 
 import asyncio
+import base64
 import unittest
 from dataclasses import replace
 
@@ -129,6 +130,38 @@ class ComparatorTest(unittest.TestCase):
         outcome = body(b'{"Set-Cookie":1}', b'{"Set-Cookie":2}', "Set-Cookie",
                        headers=frozenset({"set-cookie"}))
         self.assertFalse(outcome.ok)
+
+
+    def test_an_xml_mask_excuses_one_leafs_text_and_nothing_beside_it(self):
+        expected = b'<?xml version="1.0"?>\n<info>\n\t<mode>enabled</mode>\n\t<n>1</n>\n</info>'
+        outcome = body(expected, expected.replace(b">enabled<", b">limited<"), "mode")
+        self.assertTrue(outcome.ok, outcome.problems)
+        self.assertEqual(outcome.used, {"mode"})
+        self.assertFalse(body(expected, expected.replace(b">enabled<", b">limited<")
+                              .replace(b"<n>1", b"<n>2"), "mode").ok)
+        self.assertFalse(body(expected, expected.replace(b"<mode>", b'<mode a="1">'),
+                              "mode").ok)
+
+    def test_an_xml_mask_refuses_a_repeated_or_missing_element(self):
+        self.assertFalse(body(b"<r><a>1</a><a>2</a></r>", b"<r><a>1</a><a>3</a></r>", "a").ok)
+        self.assertFalse(body(b"<r><a>1</a></r>", b"<r><a>1</a></r>", "b").ok)
+        self.assertFalse(body(b"<r><a>1</a></r>", b"<r></r>", "a").ok)
+
+    def test_a_field_of_a_base64_document_is_judged_inside_it(self):
+        def frame(document: bytes) -> bytes:
+            return b'{"content-data":"' + base64.b64encode(document) + b'","status":"200"}'
+
+        captured = b"<info><mode>enabled</mode><n>1</n></info>"
+        served = frame(captured.replace(b"enabled", b"disabled"))
+        outcome = body(frame(captured), served, "content-data::mode")
+        self.assertTrue(outcome.ok, outcome.problems)
+        self.assertEqual(outcome.used, {"content-data::mode"})
+        self.assertFalse(body(frame(captured), frame(captured.replace(b"<n>1", b"<n>2")),
+                              "content-data::mode").ok)
+        self.assertFalse(body(frame(captured), served.replace(b'"200"', b'"404"'),
+                              "content-data::mode").ok)
+        self.assertFalse(body(b'{"status":"200"}', b'{"status":"200"}',
+                              "content-data::mode").ok)
 
 
 class RequestTest(unittest.TestCase):
@@ -321,7 +354,8 @@ def _json_scalar(reference, case, path):
     """(path, start, end) of a declared JSON scalar in the captured output, or None."""
     if compare.PLACEHOLDER.fullmatch(path):
         return None
-    payload = reference.capture.exchange(case.exchanges[0]).response().payload
+    outputs = reference.capture.exchange(case.exchanges[0]).outputs()
+    payload = outputs[0].payload if len(outputs) == 1 else None
     if not payload:
         return None
     try:

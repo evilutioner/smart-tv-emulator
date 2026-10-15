@@ -83,12 +83,18 @@
       "order": 30,
       "summary": "SSAP over WSS · IME keyboard · pointer socket · DLNA renderer · four SSDP stacks",
       "docs": "docs/platforms/webos.md",
-      "remote": "SSAP over WSS **3001**, IME keyboard, pointer socket, DLNA renderer",
+      "remote": "SSAP over WSS **3001**, IME keyboard, pointer socket, voice input, DLNA renderer",
       "discovery": "SSDP from **four independent stacks**, each with its own UUID and ports",
       "pairing": "On-screen prompt, client key",
       "protocols": 7,
+      "apps": [
+        {"name": "LG ThinQ for iOS", "url": "https://apps.apple.com/app/id993504342"}
+      ],
       "clients": [
-        {"name": "aiowebostv", "url": "https://github.com/home-assistant-libs/aiowebostv"}
+        {"name": "aiowebostv", "url": "https://github.com/home-assistant-libs/aiowebostv"},
+        {"name": "bscpylgtv", "url": "https://github.com/chros73/bscpylgtv"},
+        {"name": "lgtv2", "url": "https://github.com/hobbyquaker/lgtv2"},
+        {"name": "pywebostv", "url": "https://github.com/supersaiyanmode/PyWebOSTV"}
       ],
       "captured": [
         {
@@ -96,7 +102,8 @@
           "detail": "webOS 7.6.0",
           "profiles": [
             "lg-webos-tv-uq81006lb"
-          ]
+          ],
+          "validated": true
         },
         {
           "name": "LG 50UA75006LA",
@@ -135,7 +142,8 @@
         {"name": "Google TV for iOS", "url": "https://apps.apple.com/app/id746894884"}
       ],
       "clients": [
-        {"name": "androidtvremote2", "url": "https://github.com/tronikos/androidtvremote2"}
+        {"name": "androidtvremote2", "url": "https://github.com/tronikos/androidtvremote2"},
+        {"name": "pychromecast", "url": "https://github.com/home-assistant-libs/pychromecast"}
       ],
       "captured": [
         {
@@ -255,9 +263,9 @@
       "summary": "samsung.remote.control over WSS · device API · DIAL description",
       "docs": "docs/platforms/tizen.md",
       "remote": "`samsung.remote.control` over WSS **8002**, base64 text input; device API **8001**",
-      "discovery": "**None captured.** The sets run SSDP, but the ordered headers were never saved, so a client reaches them by address",
+      "discovery": "SSDP: two captured stacks on the UE43CU7172U, the DIAL receiver on **7678** and the MediaRenderer on **9197**; the other two sets are reached by address",
       "pairing": "On-screen Allow prompt, then an eight-digit token",
-      "protocols": 3,
+      "protocols": 6,
       "clients": [
         {"name": "samsungtvws", "url": "https://github.com/xchwarze/samsung-tv-ws-api"}
       ],
@@ -418,7 +426,7 @@
       "id": "huawei",
       "display_name": "Huawei MediaQ",
       "order": 130,
-      "summary": "huawei-remote key events over HTTP · TCP probe on 9001 · modelled from a third-party Android remote app",
+      "summary": "huawei-remote key events over HTTP · TCP probe on 9001 · modelled",
       "docs": "docs/platforms/huawei.md",
       "remote": "`POST /huawei-remote?cmd=key_event` over HTTP **8080**, Android keycodes in headers",
       "discovery": "None advertised: the app connects to TCP **9001** across the subnet",
@@ -427,7 +435,7 @@
       "captured": [
         {
           "name": "Huawei MediaQ",
-          "detail": "Third-party Android remote app, no box measured",
+          "detail": "Modelled, no box measured",
           "profiles": [
             "huawei-mediaq-modelled"
           ],
@@ -439,7 +447,7 @@
       "id": "yunos",
       "display_name": "YunOS / AliTV",
       "order": 140,
-      "summary": "Binary remote over TCP 13510 · SSDP YunOSTV search · modelled from a third-party Android remote app",
+      "summary": "Binary remote over TCP 13510 · SSDP YunOSTV search · modelled",
       "docs": "docs/platforms/yunos.md",
       "remote": "Binary login, key and heartbeat frames over TCP **13510**, Android keycodes",
       "discovery": "SSDP `urn:schemas-yunos-com:device:YunOSTV:1`, then a connect to TCP **13510**",
@@ -448,7 +456,7 @@
       "captured": [
         {
           "name": "YunOS / AliTV box",
-          "detail": "Third-party Android remote app, no box measured",
+          "detail": "Modelled, no box measured",
           "profiles": [
             "yunos-box-modelled"
           ],
@@ -480,7 +488,7 @@
       "id": "letv",
       "display_name": "LeTV / LeEco",
       "order": 160,
-      "summary": "JSON key datagrams over UDP 9900 · TCP probe on 13489 · modelled from a third-party Android remote app",
+      "summary": "JSON key datagrams over UDP 9900 · TCP probe on 13489 · modelled",
       "docs": "docs/platforms/letv.md",
       "remote": "`{\"CONTROL_ACTION\":\"<action>\"}` datagrams over UDP **9900**, one per button",
       "discovery": "None advertised: the app connects to TCP **13489** across the subnet",
@@ -489,9 +497,56 @@
       "captured": [
         {
           "name": "LeTV / LeEco set",
-          "detail": "Third-party Android remote app, no set measured",
+          "detail": "Modelled, no set measured",
           "profiles": [
             "letv-tv-modelled"
+          ],
+          "modelled": true
+        }
+      ]
+    },
+    {
+      "id": "appletv",
+      "display_name": "Apple TV",
+      "order": 170,
+      "summary": "Companion link over TCP 49153 · HAP PIN pairing · sealed OPACK · Bonjour",
+      "docs": "docs/platforms/appletv.md",
+      "remote": "Companion link over TCP **49153**: buttons, touch, Remote Text Input, apps, power state, volume",
+      "discovery": "Bonjour `_companion-link._tcp` with the set's `rp*` TXT record",
+      "pairing": "HAP pair-setup by a four-digit PIN on screen, then pair-verify on every connection",
+      "protocols": 2,
+      "clients": [
+        {"name": "pyatv", "url": "https://github.com/postlund/pyatv"}
+      ],
+      "captured": [
+        {
+          "name": "Apple TV 4K (3rd generation)",
+          "detail": "AppleTV14,1, tvOS 26.5",
+          "profiles": [
+            "apple-tv-4k-3rd-gen"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mitv",
+      "display_name": "Xiaomi Mi TV (GiTV)",
+      "order": 180,
+      "summary": "GiTV remote over HTTP 6095 · isalive sweep · modelled",
+      "docs": "docs/platforms/mitv.md",
+      "remote": "Bodiless `GET`s on HTTP **6095**: `keyevent`, `changesource`, `getVolum`",
+      "discovery": "None advertised: the client sends `isalive` across the subnet",
+      "pairing": "None",
+      "protocols": 1,
+      "clients": [
+        {"name": "pymitv", "url": "https://github.com/simse/pymitv"}
+      ],
+      "captured": [
+        {
+          "name": "Xiaomi Mi TV (GiTV)",
+          "detail": "Modelled, no set measured",
+          "profiles": [
+            "xiaomi-mitv-gitv-modelled"
           ],
           "modelled": true
         }

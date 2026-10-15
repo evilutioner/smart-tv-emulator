@@ -109,7 +109,7 @@ export class Harness {
     if (record.required) throw new Abort(name);
   }
 
-  // The client has no way to do this; a fact about the client, not a failure.
+  // The client has no API for this step; reported apart from failures.
   notOffered(name, action, reason) {
     this.write({ name, action, status: 'not-offered', detail: reason, events: [0, 0], duration_ms: 0 });
   }

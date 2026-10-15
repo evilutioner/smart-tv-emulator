@@ -26,6 +26,6 @@ CHANNELS = {
 }
 
 
-def materialise(channel: str, step, received: list[bytes]) -> dict:
+def materialise(channel: str, step, received: list[bytes], screen) -> dict:
     challenge = json.loads(received[0])["param-challenge"]
     return {"param-response": auth_response(challenge)}

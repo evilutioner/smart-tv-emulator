@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "id": "roku-rtcp-handshake-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Ordered RTCP request/response capture from the physical stick after successful authenticated ecp-2 set-audio-output(datagram), destination capacity960 and payload97. VDLY1200000 and CVER2 were transmitted from the client RTP port6970 to5150; XDLY and NCLI were received at the adjacent client RTCP port6971. All four RTCP packets are retained unchanged. ECP setup, concurrent silent RTP packets and the final BYE are outside this partial exchange. No device identity, LAN addresses or programme audio occur in these packets."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "rtcp-handshake",
+      "operation_id": "roku.rtcp.feedback",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "roku.rtcp.feedback",
+          "metadata": {
+            "channel": "rtcp",
+            "elapsed_ms": 0.0
+          },
+          "payload": "rtcp-00.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.rtcp.reply",
+          "metadata": {
+            "channel": "rtcp",
+            "elapsed_ms": 14.552
+          },
+          "payload": "rtcp-01.bin"
+        },
+        {
+          "direction": "in",
+          "operation_id": "roku.rtcp.feedback",
+          "metadata": {
+            "channel": "rtcp",
+            "elapsed_ms": 14.618
+          },
+          "payload": "rtcp-02.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.rtcp.reply",
+          "metadata": {
+            "channel": "rtcp",
+            "elapsed_ms": 25.875
+          },
+          "payload": "rtcp-03.bin"
+        }
+      ]
+    }
+  ]
+}

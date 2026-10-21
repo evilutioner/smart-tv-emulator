@@ -73,11 +73,11 @@ Asynchronous ScalarWebAPI and IRCC client, the library behind Home Assistant's S
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 0.5.3 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.5.3 | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-12 | 0.5.3 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-11 | 0.5.3 | 1.1.0 | Python 3.13.11 | pass |
 
-1 earlier runs are recorded beside this page.
+2 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

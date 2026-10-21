@@ -78,6 +78,8 @@ class BaseAdapter:
         self.active: set[str] = set()
         # Protocols a device starts on demand stay closed until their trigger arrives.
         self.warmed: set[str] = set()
+        # Protocols a device opens only some time after it boots, and the timer that opens each.
+        self.delayed: dict[str, asyncio.Task] = {}
         self.errors: dict[str, str] = {}
         self.publish_profile()
 
@@ -147,6 +149,8 @@ class BaseAdapter:
 
     def protocol_armed(self, protocol_id: str) -> bool:
         """Whether an enabled protocol is still waiting for the request that opens it."""
+        if protocol_id in self.delayed:
+            return True
         binding = self.profile.binding(protocol_id)
         return bool(binding and binding.warm_up) and protocol_id not in self.warmed
 
@@ -197,6 +201,8 @@ class BaseAdapter:
                 "enabled": self.protocol_enabled(spec.id),
                 "listening": spec.id in self.active,
                 "armed": self.protocol_enabled(spec.id) and self.protocol_armed(spec.id),
+                # Armed by time rather than by a request: the device is still starting it.
+                "booting": spec.id in self.delayed,
                 "error": self.errors.get(spec.id),
             })
         self.core.set_protocols(rows)
@@ -282,6 +288,9 @@ class BaseAdapter:
         """Open a protocol the captured device starts on demand. Safe to call repeatedly."""
         if protocol_id not in self.listeners or not self.protocol_armed(protocol_id):
             return
+        if protocol_id in self.delayed:
+            # A device still booting opens the service when it is ready, not on demand.
+            return
         if not self.protocol_enabled(protocol_id):
             return
         self.warmed.add(protocol_id)
@@ -292,7 +301,41 @@ class BaseAdapter:
             self.core.record("protocol", f"protocol.{protocol_id}.error", detail=str(exc))
         self.publish_protocols()
 
+    async def delay_protocol(self, protocol_id: str, seconds: float) -> None:
+        """Close a protocol and hold it armed for `seconds`, as a device still booting does.
+
+        The protocol reads armed, like one waiting for its warm-up trigger, and opens by itself
+        when the time is up if it is still wanted. Calling again restarts the wait.
+        """
+        self.cancel_delay(protocol_id)
+        await self.stop_protocol(protocol_id)
+        if not self.protocol_enabled(protocol_id):
+            return
+        self.delayed[protocol_id] = asyncio.ensure_future(self._open_later(protocol_id, seconds))
+        self.publish_protocols()
+        self.core.record("protocol", f"protocol.{protocol_id}.delayed",
+                         detail=f"Opens in {seconds:g} s")
+
+    async def _open_later(self, protocol_id: str, seconds: float) -> None:
+        await asyncio.sleep(seconds)
+        self.delayed.pop(protocol_id, None)
+        if self.protocol_wanted(protocol_id):
+            try:
+                await self.start_protocol(protocol_id)
+            except OSError as exc:
+                self.errors[protocol_id] = str(exc)
+                self.core.record("protocol", f"protocol.{protocol_id}.error", detail=str(exc))
+        self.publish_protocols()
+
+    def cancel_delay(self, protocol_id: str | None = None) -> None:
+        """Drop the pending open of one protocol, or of every protocol."""
+        for key in ([protocol_id] if protocol_id else list(self.delayed)):
+            task = self.delayed.pop(key, None)
+            if task is not None:
+                task.cancel()
+
     async def stop_all(self) -> None:
+        self.cancel_delay()
         for protocol_id in sorted(self.active):
             await self.stop_protocol(protocol_id)
         self.warmed.clear()

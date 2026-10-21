@@ -178,7 +178,7 @@ def main():
                         help="serve only the platforms a named build ships, to preview that "
                              "build from this source tree (default: full)")
     parser.add_argument("--platform", choices=platform_ids(),
-                        help="TV platform to emulate at startup; overrides the saved platform "
+                        help="Platform to emulate at startup; overrides the saved platform "
                              f"(default: {default_platform()}). Platforms this build does not "
                              "serve are listed in the dashboard")
     parser.add_argument("--bind", type=ipv4,

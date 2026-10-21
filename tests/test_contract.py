@@ -365,3 +365,34 @@ class GuideTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class BodilessContractTests(unittest.TestCase):
+    def test_bodiless_input_allows_served_fields_but_not_unknown_fields(self):
+        from unittest.mock import patch
+        from tvemu.platforms.common.evidence import Capture, Exchange, Step
+        from tvemu.platforms.common.routing import RouteSpec, Surface
+        operation = "contract.bodiless"
+        capture = Capture("client", {}, {}, {}, {"input": Exchange("input", operation, "http", (
+            Step("in", {"method": "GET", "path": "/control"}),))})
+        surface = Surface("stub", (RouteSpec("GET", "/control", operation_id=operation),))
+        evidence = (EvidenceRef("capture", "client", "input"),)
+        for scope, expected in (("served", ()), ("all", (f"{operation}: value is in no capture",))):
+            claims = {operation: OperationClaims(operation, "Client input with unknown answer.", (
+                PresenceClaim("value", "Runtime answer.", evidence, scope=scope),))}
+            with patch.object(report, "captures_of", return_value={"client": capture}), \
+                 patch.object(report, "_operation_claims", return_value=claims):
+                self.assertEqual(report.contract_problems("stub", surface), expected)
+
+class ServedValueClaimTests(unittest.TestCase):
+    def test_a_value_set_on_a_declared_live_field_needs_no_fabricated_sample(self):
+        from tvemu.platforms.common.ir import ObservedOperation
+        evidence = (EvidenceRef("client-contract", detail="Example client response field"),)
+        presence = PresenceClaim("result.code", "Emulator-owned live result.", evidence, scope="served")
+        values = ValueSetClaim("result.code", "Codes the client accepts.", evidence,
+                               values=(ClaimedValue(0, evidence),), closed=False)
+        operation = ObservedOperation("example", "tcp", ())
+        self.assertEqual(report.claim_problems("example", operation,
+                         OperationClaims("example", "Runtime answer.", (presence, values)), {}), ())
+        self.assertEqual(report.claim_problems("example", operation,
+                         OperationClaims("example", "Unknown field.", (values,)), {}),
+                         ("example: result.code is in no capture",))

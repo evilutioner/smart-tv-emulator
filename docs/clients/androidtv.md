@@ -6,8 +6,8 @@ Upstream clients for Android TV / Google TV, installed in isolation and run agai
 
 | Client | Installed from | Last green | Latest recorded run |
 |---|---|---|---|
-| [androidtvremote2](#androidtvremote2) | git | `e664a8e1f14e` | 2026-10-15, pass |
-| [pychromecast](#pychromecast) | pypi | `14.0.10` | 2026-10-15, pass |
+| [androidtvremote2](#androidtvremote2) | git | `e664a8e1f14e` | 2026-10-21, pass |
+| [pychromecast](#pychromecast) | pypi | `14.0.10` | 2026-10-21, pass |
 
 ## Heatmap
 
@@ -86,11 +86,11 @@ Remote v2 and Polo pairing client, the library behind Home Assistant's Android T
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 0.3.2 (`e664a8e`) | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.3.2 (`e664a8e`) | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-11 | 0.3.2 (`e664a8e`) | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-09 | 0.3.2 (`e664a8e`) | 1.0.0 | Python 3.13.11 | pass |
 
-2 earlier runs are recorded beside this page.
+3 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -151,6 +151,7 @@ Google Cast v2 client, the library behind Home Assistant's Google Cast integrati
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 14.0.10 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 14.0.10 | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-12 | 14.0.10 | 1.1.0 | Python 3.13.11 | pass |
 
@@ -191,7 +192,7 @@ Error statuses the emulator sent: 400 ×3.
   - wrong answer from emulator: model and manufacturer from eureka_info (`model_name`): `AssertionError: DeviceStatus(friendly_name='Smart TV', model_name='Unknown model name', manufacturer='Unknown manufacturer', uuid=UUID('3f6c21d8-45ae-4b90-8c17-9d2e5a0fb374'), cast_type='cast', multizone_supported=False)`
 - **auth**: no API. pychromecast opens the Cast channel without pairing and sends no device-auth challenge.
 - **session**: passed 4/5.
-  - wrong answer from emulator: heartbeats keep the channel open (`heartbeat`): `AssertionError: [{'id': 18, 'time': '2026-10-15T18:10:05.058588+00:00', 'kind': 'connection', 'operation': 'androidtv.cast.closed', 'transport': 'tls', 'peer': '127.0.0.1', 'status': None, 'detail': '10 messages: connection CONNECT, receiver GET_STATUS, receiver SET_VOLUME, receiver SET_VOLUME, receiver LAUNCH, receiver STOP, connection CLOSE; 3 heartbeat pings', 'log_start_id': 0}, {'id': 19, 'ti`
+  - wrong answer from emulator: heartbeats keep the channel open (`heartbeat`): `AssertionError: [{'id': 18, 'time': '2026-10-21T07:32:20.327960+00:00', 'kind': 'connection', 'operation': 'androidtv.cast.closed', 'transport': 'tls', 'peer': '127.0.0.1', 'status': None, 'detail': '10 messages: connection CONNECT, receiver GET_STATUS, receiver SET_VOLUME, receiver SET_VOLUME, receiver LAUNCH, receiver STOP, connection CLOSE; 3 heartbeat pings', 'log_start_id': 0}, {'id': 19, 'ti`
 - **keys**: no API. Cast has no remote keys; pychromecast sends none.
 - **text**: no API. pychromecast has no text input.
 - **pointer**: no API. pychromecast has no pointer input.

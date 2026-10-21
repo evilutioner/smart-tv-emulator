@@ -21,7 +21,7 @@ from tvemu.clients import coverage, report
 from tvemu.clients.model import (ACTIONS, PLATFORMS, ZONE_NAMES, ZONE_OF, client_specs, judge,
                                  load_spec, split_results, stale_gaps)
 from tvemu.clients.runner import HARNESS, Scrubber, _npm_tree, _ready, repository_root, run
-from tvemu.platforms import platform_ids
+from tvemu.platforms import default_platform, platform_ids
 from tvemu.platforms.catalogue import catalogue_entry
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -410,6 +410,22 @@ class HarnessTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_spec(root, "any")
 
+    def test_a_checkout_layout_is_for_a_git_upstream_only(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "client"
+            self.assertEqual(_spec(root, "any", ["a"], install="git").layout, "package")
+            for kind, layout, valid in (("git", "checkout", True), ("pypi", "checkout", False),
+                                        ("git", "tree", False)):
+                text = (root / "client.toml").read_text().split("[install]")[0] + (
+                    f'[install]\nkind = "{kind}"\nlayout = "{layout}"\n\n'
+                    '[run]\nprofiles = ["a"]\n')
+                (root / "client.toml").write_text(text)
+                if valid:
+                    self.assertEqual(load_spec(root, "any").layout, layout)
+                else:
+                    with self.assertRaises(ValueError):
+                        load_spec(root, "any")
+
     def test_an_npm_tree_flattens_to_every_package_once(self):
         tree = {"dependencies": {
             "client": {"version": "2.0.0", "dependencies": {
@@ -430,7 +446,9 @@ class EndToEndTests(unittest.TestCase):
     """One real run: a fresh virtual environment, the emulator in its own process."""
 
     def test_a_binding_without_dependencies_runs_against_the_emulator(self):
-        platform_id = next((pid for pid in platform_ids() if pid not in STUB_IDS), None)
+        shipped = [pid for pid in platform_ids() if pid not in STUB_IDS]
+        platform_id = (default_platform() if default_platform() in shipped
+                       else next(iter(shipped), None))
         if platform_id is None:
             self.skipTest("this build ships no television")
         profile = _profiles(platform_id)[0]

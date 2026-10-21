@@ -1,0 +1,2972 @@
+{
+  "schema_version": 1,
+  "source": {
+    "kind": "client-contract",
+    "app": "Roku mobile app for Android",
+    "version": "14.1.2",
+    "description": "client contract: ECP request list"
+  },
+  "requests": {
+    "commit-av-sync-offset": {
+      "parameters": [],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "query-av-sync-offset": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "AvSyncOffsetResponse"
+      ]
+    },
+    "reset-av-sync-offset-all": {
+      "parameters": [],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "set-av-sync-offset": {
+      "parameters": [
+        "dd-offset",
+        "ddplus-offset",
+        "param-audio-offset",
+        "pcm-offset"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "query-curr-audio-format": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "AVSyncAudioFormatExternal"
+      ]
+    },
+    "check-link": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true
+    },
+    "input": {
+      "parameters": [
+        "param-channel-id",
+        "param-params"
+      ],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "key-down": {
+      "parameters": [
+        "param-key"
+      ],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": false
+    },
+    "key-press": {
+      "parameters": [
+        "param-key"
+      ],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true
+    },
+    "key-up": {
+      "parameters": [
+        "param-key"
+      ],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": false
+    },
+    "launch": {
+      "parameters": [
+        "param-channel-id",
+        "param-params"
+      ],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "mobile-sas-disconnect": {
+      "parameters": [
+        "param-devname"
+      ],
+      "implementation": "test-tone-sender; SAS experimental",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "string"
+      ]
+    },
+    "query-active-app": {
+      "parameters": [],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "ActiveApp"
+      ]
+    },
+    "query-tv-active-channel": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "ActiveTvChannel"
+      ]
+    },
+    "query-apps": {
+      "parameters": [],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "list"
+      ]
+    },
+    "query-audio-device": {
+      "parameters": [],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "audio-device XML reader"
+      ]
+    },
+    "query-audio-setting": {
+      "parameters": [
+        "param-id"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "map"
+      ]
+    },
+    "query-audio-settings": {
+      "parameters": [
+        "param-category"
+      ],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "map"
+      ]
+    },
+    "capture-screen": {
+      "parameters": [],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "query-device-info": {
+      "parameters": [],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "DeviceInfo"
+      ]
+    },
+    "generate-issue-id": {
+      "parameters": [],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "query-icon": {
+      "parameters": [
+        "param-channel-id"
+      ],
+      "implementation": "gap; successful image response measured but artwork not retained",
+      "stick_probe_2026_10_18": true
+    },
+    "query-info-for-voice-service": {
+      "parameters": [],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "VoiceServiceInfo"
+      ]
+    },
+    "query-media-player": {
+      "parameters": [],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "MediaPlayerState"
+      ]
+    },
+    "query-pq-color-space-settings": {
+      "parameters": [
+        "param-settings"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "TVPQColorSpaceSettings"
+      ]
+    },
+    "query-pq-color-temp-settings": {
+      "parameters": [
+        "param-settings"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "TVPQColorTempSettings"
+      ]
+    },
+    "query-pq-options": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "TVPQOptions"
+      ]
+    },
+    "query-pq-picture-modes": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "TVPQPictureModes"
+      ]
+    },
+    "query-pq-picture-settings": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "TVPQPictureSettings"
+      ]
+    },
+    "query-screensavers": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "Screensavers"
+      ]
+    },
+    "query-textedit-state": {
+      "parameters": [],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "QueryTextEditState"
+      ]
+    },
+    "query-themes": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "Themes"
+      ]
+    },
+    "query-tv-active-input": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true
+    },
+    "query-tv-channels-ex": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "TvChannels"
+      ]
+    },
+    "query-warm-standby": {
+      "parameters": [],
+      "implementation": "captured-stick-query",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "WarmStandbySettings"
+      ]
+    },
+    "authenticate": {
+      "parameters": [],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true
+    },
+    "request-events": {
+      "parameters": [
+        "param-events"
+      ],
+      "implementation": "implemented",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "string"
+      ]
+    },
+    "reset-audio-setting": {
+      "parameters": [],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "reset-audio-settings": {
+      "parameters": [
+        "param-scope"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "get-mobile-pl-headset-delay": {
+      "parameters": [
+        "param-id"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "set-mobile-pl-headset-delay": {
+      "parameters": [
+        "param-delay",
+        "param-id"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "send-intent": {
+      "parameters": [
+        "param-cmd",
+        "param-intent"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "send-voice-events": {
+      "parameters": [
+        "param-events",
+        "param-mode",
+        "param-session-id"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "set-audio-output": {
+      "parameters": [
+        "param-app-build",
+        "param-audio-output",
+        "param-devname",
+        "param-guid",
+        "param-os-version",
+        "param-sas-ip-address",
+        "param-sas-max-version",
+        "param-sas-min-version",
+        "param-sas-port"
+      ],
+      "implementation": "test-tone-sender; SAS experimental",
+      "stick_probe_2026_10_18": true,
+      "response_models": [
+        "string"
+      ]
+    },
+    "set-audio-setting": {
+      "parameters": [
+        "param-id",
+        "param-value"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "set-pq-color-space-settings": {
+      "parameters": [
+        "content-type",
+        "param-settings"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "set-pq-color-temp-settings": {
+      "parameters": [
+        "content-type",
+        "param-settings"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "set-pq-picture-mode": {
+      "parameters": [
+        "content-type",
+        "param-settings"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "set-pq-picture-settings": {
+      "parameters": [
+        "content-type",
+        "param-settings"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "set-screensaver": {
+      "parameters": [
+        "param-channel-id"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "set-textedit-text": {
+      "parameters": [
+        "param-selection-end",
+        "param-selection-start",
+        "param-text",
+        "param-textedit-id"
+      ],
+      "implementation": "measured full-field editing; unmasked full type only",
+      "stick_probe_2026_10_18": true
+    },
+    "set-warm-standby": {
+      "parameters": [
+        "param-enable"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "sync-channels": {
+      "parameters": [
+        "param-mode"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ]
+    },
+    "shutdown": {
+      "parameters": [],
+      "implementation": "internal value; never sent on the wire",
+      "stick_probe_2026_10_18": false,
+      "wire": false
+    },
+    "secret": {
+      "parameters": [],
+      "implementation": "open value; not a wire command",
+      "stick_probe_2026_10_18": false,
+      "response_models": [
+        "string"
+      ],
+      "wire": false
+    },
+    "initiate-becp-pairing": {
+      "parameters": [],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    },
+    "remove-ble-device": {
+      "parameters": [
+        "param-mac"
+      ],
+      "implementation": "capture-needed",
+      "stick_probe_2026_10_18": false
+    }
+  },
+  "notes": [
+    "This is the Android client contract, not a statement of device support.",
+    "`secret` is an open value in the request list, not a request named secret.",
+    "BLE forbids client-id fallback; Wi-Fi allows it."
+  ],
+  "text": {
+    "source": "client contract: set-textedit-text",
+    "selection_units": "UTF-16 code units",
+    "serial_number_required_by": "client contract: device-info model"
+  },
+  "audio": {
+    "source": "client contract: private listening",
+    "datagram_devname": "<ip>:<port>:97:960:0:10",
+    "sas_preferred_when": "mobile-sas advertised, version ranges overlap, and active RTP address is empty",
+    "sas_version_range": {
+      "min": 43,
+      "max": 45
+    },
+    "receiver_contract": {
+      "source": "client contract: private-listening RTP receiver and Opus decoder",
+      "rtp_payload_type": 97,
+      "opus_sample_rate": 48000,
+      "client_rtp_port": 6970,
+      "client_rtcp_port": 6971,
+      "device_rtcp_port": 5150,
+      "destination_capacity": 960,
+      "decoder_frame_samples": 480
+    },
+    "device_observations": {
+      "source": [
+        "roku-rtp-clock-3820eu2-2026-10-18/rtp-start",
+        "roku-rtcp-handshake-3820eu2-2026-10-18/rtcp-handshake",
+        "roku-sas-clock-3820eu2-2026-10-18/clock-start",
+        "roku-sas-fec5-3820eu2-2026-10-18/fec-start"
+      ],
+      "scope": "3820EU2 Roku OS15.3.4 only; client expectations above do not establish TV behaviour",
+      "rtp_ssrc": 0,
+      "rtp_opus_frame_samples": 480,
+      "rtp_timestamp_rate_approximately": 1000,
+      "rtcp_requests_from_rtp_port_replied_on_adjacent_rtcp_port": true,
+      "sas_measured_version": 45,
+      "sas_finite_clock_required_for_audio": true
+    },
+    "emulator_validation": {
+      "source": "checked against the Roku mobile app for Android 14.1.2 by playback, and by a separate RTP/RTCP parser and Opus decoder",
+      "sas_v45_test_tone": "audible; stop/re-enable and independent local sessions exercised",
+      "rtp": "801 packets decoded by a separate RTP/RTCP parser and Opus decoder",
+      "startup_lead_samples": 24000,
+      "startup_lead_source": "emulator-owned 500 ms buffer guided by an observed receiver-clock lead of about 522 ms",
+      "not_validated": [
+        "SAS43/44",
+        "FEC receiver recovery / retransmission",
+        "adaptive delay",
+        "physical multi-client conflict policy",
+        "receiver loss with control socket retained",
+        "official Android RTP playback"
+      ],
+      "fec": "Format-5 parity matches four captured startup vectors and five-pair ordered UDP conformance; an independent polynomial oracle rejects corrupt parity. The Roku mobile app 14.1.2 played the alternating tone with format-5 parity enabled; turning Headphone Mode off removed the session. Receiver recovery under actual packet loss remains untested."
+    }
+  },
+  "notifications": {
+    "source": "client contract: ECP notification subscriptions",
+    "events": {
+      "language-changed": [],
+      "language-changing": [],
+      "media-player-state-changed": [
+        "param-media-player-state",
+        "param-media-player-position",
+        "param-media-player-duration"
+      ],
+      "plugin-ui-run": [
+        "param-channel-id"
+      ],
+      "plugin-ui-run-script": [
+        "param-channel-id"
+      ],
+      "plugin-ui-exit": [
+        "param-channel-id"
+      ],
+      "screensaver-run": [],
+      "screensaver-exit": [],
+      "plugins-changed": [],
+      "sync-completed": [],
+      "power-mode-changed": [
+        "param-power-mode"
+      ],
+      "volume-changed": [
+        "param-volume",
+        "param-mute"
+      ],
+      "textedit-opened": [
+        "param-textedit-id",
+        "param-textedit-type",
+        "param-max-length",
+        "param-masked",
+        "param-text",
+        "param-selection-start",
+        "param-selection-end"
+      ],
+      "textedit-changed": [
+        "param-textedit-id",
+        "param-text",
+        "param-selection-start",
+        "param-selection-end"
+      ],
+      "textedit-closed": [
+        "param-textedit-id"
+      ],
+      "device-name-changed": [],
+      "device-location-changed": [],
+      "audio-setting-changed": [
+        "param-audio-setting-id",
+        "param-audio-setting-value"
+      ],
+      "audio-settings-invalidated": [],
+      "user-profile-changed": [
+        "param-user-profile-type"
+      ],
+      "tv-power-volume-control-changed": [],
+      "tv-channel-changed": [
+        "param-tv-channel-number"
+      ],
+      "tvinput-ui-run": [],
+      "tvinput-ui-exit": []
+    },
+    "implemented": [
+      "plugin-ui-run",
+      "plugin-ui-exit"
+    ],
+    "remaining": "Subscriptions accepted; sending other notifications needs measured frames and triggers."
+  },
+  "device_info": {
+    "source": "client contract: device-info model",
+    "required": [
+      "serial-number"
+    ],
+    "ignored": [
+      "ecp-setting-mode"
+    ],
+    "note": "Every scalar field the device-info model of the Roku mobile app reads. The types are what the app decodes, client requirements rather than wire types.",
+    "fields": {
+      "advertising-id": {
+        "type": "string",
+        "required": false
+      },
+      "av-sync-calibration-enabled": {
+        "type": "string",
+        "required": false
+      },
+      "country": {
+        "type": "string",
+        "required": false
+      },
+      "davinci-version": {
+        "type": "string",
+        "required": false
+      },
+      "developer-enabled": {
+        "type": "boolean",
+        "required": false
+      },
+      "device-id": {
+        "type": "string",
+        "required": false
+      },
+      "ethernet-mac": {
+        "type": "string",
+        "required": false
+      },
+      "find-remote-is-possible": {
+        "type": "boolean",
+        "required": false
+      },
+      "software-build": {
+        "type": "string",
+        "required": false
+      },
+      "software-version": {
+        "type": "string",
+        "required": false
+      },
+      "notifications-first-use": {
+        "type": "boolean",
+        "required": false
+      },
+      "grandcentral-version": {
+        "type": "string",
+        "required": false
+      },
+      "supports-find-remote": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-ecs-microphone": {
+        "type": "boolean",
+        "required": false
+      },
+      "headphones-connected": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-audio-settings": {
+        "type": "boolean",
+        "required": false
+      },
+      "beta-test": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-private-listening-dtv": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-warm-standby": {
+        "type": "boolean",
+        "required": false
+      },
+      "is-headless": {
+        "type": "boolean",
+        "required": false
+      },
+      "in-guided-setup": {
+        "type": "boolean",
+        "required": false
+      },
+      "has-mobile-screensaver": {
+        "type": "boolean",
+        "required": false
+      },
+      "search-enabled": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-cec-audio-volume-control": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-cec-power-control": {
+        "type": "boolean",
+        "required": false
+      },
+      "has-play-on-roku": {
+        "type": "boolean",
+        "required": false
+      },
+      "is-tv": {
+        "type": "boolean",
+        "required": false
+      },
+      "time-zone-auto": {
+        "type": "boolean",
+        "required": false
+      },
+      "voice-search-enabled": {
+        "type": "boolean",
+        "required": false
+      },
+      "language": {
+        "type": "string",
+        "required": false
+      },
+      "locale": {
+        "type": "string",
+        "required": false
+      },
+      "mobile-has-live-tv": {
+        "type": "string",
+        "required": false
+      },
+      "mobile-remote-style": {
+        "type": "string",
+        "required": false
+      },
+      "model-name": {
+        "type": "string",
+        "required": false
+      },
+      "model-number": {
+        "type": "string",
+        "required": false
+      },
+      "network-type": {
+        "type": "string",
+        "required": false
+      },
+      "wifi-mac": {
+        "type": "string",
+        "required": false
+      },
+      "notifications-enabled": {
+        "type": "boolean",
+        "required": false
+      },
+      "power-mode": {
+        "type": "string",
+        "required": false
+      },
+      "build-number": {
+        "type": "string",
+        "required": false
+      },
+      "user-profile-type": {
+        "type": "string",
+        "required": false
+      },
+      "serial-number": {
+        "type": "string",
+        "required": true
+      },
+      "supports-becp": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-private-listening": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-rva": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-suspend": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-wake-on-wlan": {
+        "type": "boolean",
+        "required": false
+      },
+      "supports-ecs-textedit": {
+        "type": "boolean",
+        "required": false
+      },
+      "time-zone": {
+        "type": "string",
+        "required": false
+      },
+      "time-zone-name": {
+        "type": "string",
+        "required": false
+      },
+      "time-zone-offset": {
+        "type": "integer",
+        "required": false
+      },
+      "time-zone-tz": {
+        "type": "string",
+        "required": false
+      },
+      "trc-channel-version": {
+        "type": "string",
+        "required": false
+      },
+      "trc-version": {
+        "type": "string",
+        "required": false
+      },
+      "expert-pq-enabled": {
+        "type": "number",
+        "required": false
+      },
+      "udn": {
+        "type": "string",
+        "required": false
+      },
+      "uptime": {
+        "type": "integer",
+        "required": false
+      },
+      "user-device-location": {
+        "type": "string",
+        "required": false
+      },
+      "user-device-name": {
+        "type": "string",
+        "required": false
+      },
+      "virtual-device-id": {
+        "type": "string",
+        "required": false
+      },
+      "network-name": {
+        "type": "string",
+        "required": false
+      }
+    }
+  },
+  "response_models": {
+    "scope": "Fields the Roku mobile app 14.1.2 decodes, by response model. Client requiredness is a decoder expectation only, not television requiredness. Whether the app reads a field and whether a device offers it still need per-feature checks. XML element lists keep their entry and inline settings; names are not flattened into invented paths.",
+    "models": {
+      "AVSyncAudioFormatExternal": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "audio-format",
+            "client_required": true
+          }
+        ]
+      },
+      "ActiveApp": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "App",
+            "kind": "element",
+            "name": "app",
+            "client_required": false
+          },
+          {
+            "type": "App",
+            "kind": "element",
+            "name": "screensaver",
+            "client_required": false
+          }
+        ]
+      },
+      "ActiveApp.App": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "id",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "subtype",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "text",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "type",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "ui-location",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "version",
+            "client_required": false
+          }
+        ]
+      },
+      "ActiveTvChannel": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "Channel",
+            "kind": "element",
+            "name": "channel",
+            "client_required": false
+          }
+        ]
+      },
+      "ActiveTvChannel.Channel": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "active-input",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "name",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "number",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "physical-channel",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "physical-frequency",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-analog-audio",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-audio-format",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-audio-formats",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-audio-language",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-audio-languages",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-description",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-digital-audio",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-has-cc",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-is-blocked",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-ratings",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "program-title",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "signal-mode",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "signal-quality",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "signal-stalled-pts-cnt",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "signal-standard",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "signal-state",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "signal-strength",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "type",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "user-favorite",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "user-hidden",
+            "client_required": false
+          }
+        ]
+      },
+      "AudioFormat": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "codec",
+            "type": "string"
+          },
+          {
+            "name": "channels",
+            "type": "integer"
+          },
+          {
+            "name": "byte_order",
+            "type": "string"
+          },
+          {
+            "name": "bits",
+            "type": "integer"
+          },
+          {
+            "name": "signed",
+            "type": "boolean"
+          },
+          {
+            "name": "bitrate",
+            "type": "integer"
+          },
+          {
+            "name": "float",
+            "type": "boolean"
+          }
+        ]
+      },
+      "AudioSetting": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "name": "description_key",
+            "type": "string"
+          },
+          {
+            "name": "is_default",
+            "type": "boolean"
+          },
+          {
+            "name": "is_disabled",
+            "type": "boolean"
+          },
+          {
+            "name": "name_key",
+            "type": "string"
+          },
+          {
+            "name": "range_info",
+            "type": "RangeInfo"
+          },
+          {
+            "name": "type",
+            "type": "AudioSettingType"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          },
+          {
+            "name": "weight",
+            "type": "number"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "conversion": "any value coerced to a string"
+          }
+        ]
+      },
+      "AvSyncOffsetResponse": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "integer",
+            "kind": "element",
+            "name": "av-sync-offset",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "element",
+            "name": "dd-offset",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "element",
+            "name": "ddplus-offset",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "element",
+            "name": "pcm-offset",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "user-defined",
+            "client_required": false
+          }
+        ]
+      },
+      "BoxApp": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "id",
+            "client_required": true
+          },
+          {
+            "type": "string",
+            "kind": "text",
+            "client_required": true
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "subtype",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "type",
+            "client_required": true
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "version",
+            "client_required": true
+          }
+        ]
+      },
+      "ChannelContext": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "inner_provider_id",
+            "type": "string"
+          },
+          {
+            "name": "page_id",
+            "type": "string"
+          }
+        ]
+      },
+      "CheckLink": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "linked",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "status",
+            "client_required": false
+          }
+        ]
+      },
+      "Data": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "host_device_settings",
+            "type": "HostDeviceSettings"
+          },
+          {
+            "name": "host_device_state",
+            "type": "HostDeviceState"
+          },
+          {
+            "name": "roku_search_params",
+            "type": "string"
+          },
+          {
+            "name": "supported_fulfillers",
+            "type": "list<string>"
+          }
+        ]
+      },
+      "DeviceInfo": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "advertising-id",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "av-sync-calibration-enabled",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "country",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "davinci-version",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "developer-enabled",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "device-id",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "ethernet-mac",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "find-remote-is-possible",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "software-build",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "software-version",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "notifications-first-use",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "grandcentral-version",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-find-remote",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-ecs-microphone",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "headphones-connected",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-audio-settings",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "beta-test",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-private-listening-dtv",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-warm-standby",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "is-headless",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "in-guided-setup",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "has-mobile-screensaver",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "search-enabled",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-cec-audio-volume-control",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-cec-power-control",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "has-play-on-roku",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "is-tv",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "time-zone-auto",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "voice-search-enabled",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "language",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "locale",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "mobile-has-live-tv",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "mobile-remote-style",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "model-name",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "model-number",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "network-type",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "wifi-mac",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "notifications-enabled",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "power-mode",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "build-number",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "user-profile-type",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "serial-number",
+            "client_required": true
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-becp",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-private-listening",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-rva",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-suspend",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-wake-on-wlan",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "supports-ecs-textedit",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "time-zone",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "time-zone-name",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "element",
+            "name": "time-zone-offset",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "time-zone-tz",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "trc-channel-version",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "trc-version",
+            "client_required": false
+          },
+          {
+            "type": "number",
+            "kind": "element",
+            "name": "expert-pq-enabled",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "udn",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "element",
+            "name": "uptime",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "user-device-location",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "user-device-name",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "virtual-device-id",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "network-name",
+            "client_required": false
+          }
+        ]
+      },
+      "GCViewPort": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "ids",
+            "type": "list<string>"
+          },
+          {
+            "name": "focus_id",
+            "type": "string"
+          },
+          {
+            "name": "screen_id",
+            "type": "string"
+          }
+        ]
+      },
+      "HostDevice": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "display_resolution",
+            "type": "string"
+          },
+          {
+            "name": "mac_address",
+            "type": "string"
+          },
+          {
+            "name": "display_output",
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "type": "string"
+          },
+          {
+            "name": "software_version",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "platform",
+            "type": "string"
+          },
+          {
+            "name": "application_version",
+            "type": "string"
+          }
+        ]
+      },
+      "HostDeviceSettings": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "device_name",
+            "type": "string"
+          },
+          {
+            "name": "ota_channels",
+            "type": "list<OtaChannelsItem>"
+          },
+          {
+            "name": "fast_start",
+            "type": "string"
+          },
+          {
+            "name": "closed_captions",
+            "type": "string"
+          },
+          {
+            "name": "external_control_method",
+            "type": "string"
+          },
+          {
+            "name": "epg_hide_ott",
+            "type": "boolean"
+          },
+          {
+            "name": "time_display_format",
+            "type": "string"
+          },
+          {
+            "name": "tv_inputs",
+            "type": "map<string, string>"
+          }
+        ]
+      },
+      "HostDeviceState": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "roku_channel",
+            "type": "string"
+          },
+          {
+            "name": "tv_input",
+            "type": "string"
+          },
+          {
+            "name": "ui",
+            "type": "string"
+          },
+          {
+            "name": "media_type",
+            "type": "string"
+          },
+          {
+            "name": "ota_channel",
+            "type": "string"
+          },
+          {
+            "name": "media",
+            "type": "string"
+          },
+          {
+            "name": "media_kids_directed",
+            "type": "boolean"
+          },
+          {
+            "name": "overlay",
+            "type": "string"
+          },
+          {
+            "name": "is_overlay_supported",
+            "type": "boolean"
+          },
+          {
+            "name": "star_button",
+            "type": "string"
+          },
+          {
+            "name": "star_button_features",
+            "type": "list<string>"
+          },
+          {
+            "name": "volume_level",
+            "type": "integer"
+          },
+          {
+            "name": "volume_muted",
+            "type": "boolean"
+          },
+          {
+            "name": "voice_events_on_screen",
+            "type": "VoiceEventOnScreen"
+          },
+          {
+            "name": "available_voice_triggers",
+            "type": "list<string>"
+          },
+          {
+            "name": "amoeba_identifiers",
+            "type": "string"
+          },
+          {
+            "name": "channel_context",
+            "type": "ChannelContext"
+          },
+          {
+            "name": "gc_viewport",
+            "type": "GCViewPort"
+          }
+        ]
+      },
+      "IssueId": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "issue-id",
+            "client_required": true
+          }
+        ]
+      },
+      "LocalRokuDevicesItem": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "esn",
+            "type": "string"
+          },
+          {
+            "name": "last_seen_date",
+            "type": "integer"
+          }
+        ]
+      },
+      "MediaPlayerState": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "error",
+            "client_required": false
+          },
+          {
+            "type": "Buffering",
+            "kind": "element",
+            "name": "buffering",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "duration",
+            "client_required": false
+          },
+          {
+            "type": "Error",
+            "kind": "element",
+            "name": "error",
+            "client_required": false
+          },
+          {
+            "type": "Format",
+            "kind": "element",
+            "name": "format",
+            "client_required": false
+          },
+          {
+            "type": "InspectStream",
+            "kind": "element",
+            "name": "inspect_stream",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "element",
+            "name": "is_live",
+            "client_required": false
+          },
+          {
+            "type": "NewStream",
+            "kind": "element",
+            "name": "new_stream",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "pick_stream",
+            "client_required": false
+          },
+          {
+            "type": "Plugin",
+            "kind": "element",
+            "name": "plugin",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "position",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "runtime",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "state",
+            "client_required": false
+          },
+          {
+            "type": "StreamSegment",
+            "kind": "element",
+            "name": "stream_segment",
+            "client_required": false
+          }
+        ]
+      },
+      "MediaPlayerState.Buffering": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "current",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "max",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "target",
+            "client_required": false
+          }
+        ]
+      },
+      "MediaPlayerState.Error": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "category",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "cat_code",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "verbose",
+            "client_required": false
+          }
+        ]
+      },
+      "MediaPlayerState.Format": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "audio",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "captions",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "container",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "drm",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "video",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "video_res",
+            "client_required": false
+          }
+        ]
+      },
+      "MediaPlayerState.InspectStream": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "speed",
+            "client_required": false
+          }
+        ]
+      },
+      "MediaPlayerState.NewStream": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "speed",
+            "client_required": false
+          }
+        ]
+      },
+      "MediaPlayerState.Plugin": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "bandwidth",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "id",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "name",
+            "client_required": false
+          }
+        ]
+      },
+      "MediaPlayerState.StreamSegment": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "bitrate",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "media_sequence",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "time",
+            "client_required": false
+          }
+        ]
+      },
+      "NetworkState": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "interface",
+            "type": "string"
+          },
+          {
+            "name": "local_roku_devices",
+            "type": "list<LocalRokuDevicesItem>"
+          }
+        ]
+      },
+      "OtaChannelsItem": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "frequency",
+            "type": "string"
+          },
+          {
+            "name": "score",
+            "type": "number"
+          },
+          {
+            "name": "names",
+            "type": "list<string>"
+          },
+          {
+            "name": "station_id",
+            "type": "string"
+          },
+          {
+            "name": "channel",
+            "type": "string"
+          },
+          {
+            "name": "favorite",
+            "type": "boolean"
+          }
+        ]
+      },
+      "Parameters": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "host_device_state",
+            "type": "HostDeviceState"
+          },
+          {
+            "name": "audio_format",
+            "type": "AudioFormat"
+          },
+          {
+            "name": "host_device_settings",
+            "type": "HostDeviceSettings"
+          },
+          {
+            "name": "trigger",
+            "type": "Trigger"
+          },
+          {
+            "name": "network_state",
+            "type": "NetworkState"
+          },
+          {
+            "name": "host_device",
+            "type": "HostDevice"
+          },
+          {
+            "name": "request_settings",
+            "type": "RequestSettings"
+          },
+          {
+            "name": "source_device",
+            "type": "SourceDevice"
+          }
+        ]
+      },
+      "QueryTextEditState": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "textedit-state",
+            "type": "TextEditStateDetails"
+          }
+        ]
+      },
+      "RangeInfo": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "options",
+            "type": "list<RangeInfoOption>"
+          },
+          {
+            "name": "max",
+            "type": "number"
+          },
+          {
+            "name": "min",
+            "type": "number"
+          },
+          {
+            "name": "step",
+            "type": "number"
+          }
+        ]
+      },
+      "RangeInfoOption": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "description_key",
+            "type": "string"
+          },
+          {
+            "name": "name_key",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "conversion": "any value coerced to a string"
+          }
+        ]
+      },
+      "RequestSettings": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "roku_search_params",
+            "type": "string"
+          },
+          {
+            "name": "supported_state_events",
+            "type": "list<string>"
+          },
+          {
+            "name": "supported_fulfillers",
+            "type": "list<string>"
+          }
+        ]
+      },
+      "SASLatencyResponse": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "integer",
+            "kind": "element",
+            "name": "delay-ms",
+            "client_required": true
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "status",
+            "client_required": true
+          }
+        ]
+      },
+      "Screensavers": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "list<Screensaver>",
+            "kind": "element-list",
+            "entry": "screensaver",
+            "name": "screensaver",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "Screensavers.Screensaver": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "id",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "default",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "selected",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "text",
+            "client_required": false
+          }
+        ]
+      },
+      "SetSASLatencyResponse": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "status",
+            "client_required": true
+          }
+        ]
+      },
+      "SourceDevice": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "platform",
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "type": "string"
+          },
+          {
+            "name": "microphone_type",
+            "type": "string"
+          },
+          {
+            "name": "software_version",
+            "type": "string"
+          },
+          {
+            "name": "application_version",
+            "type": "string"
+          }
+        ]
+      },
+      "TVPQColorSpaceSettings": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "default",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "color_space",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "input_mode",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "picture_mode",
+            "client_required": false
+          },
+          {
+            "type": "list<Setting>",
+            "kind": "element-list",
+            "entry": "setting",
+            "name": "setting",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQColorSpaceSettings.Setting": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "name",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "value",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQColorTempSettings": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "default",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "color_temp",
+            "client_required": false
+          },
+          {
+            "type": "list<Setting>",
+            "kind": "element-list",
+            "entry": "setting",
+            "name": "setting",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQColorTempSettings.Setting": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "name",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "value",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQOptions": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "ColorControl",
+            "kind": "element",
+            "name": "color_control",
+            "client_required": false
+          },
+          {
+            "type": "ColorSpaceControl",
+            "kind": "element",
+            "name": "color_space_control",
+            "client_required": false
+          },
+          {
+            "type": "list<Setting>",
+            "kind": "element-list",
+            "entry": "setting",
+            "name": "setting",
+            "inline": true,
+            "client_required": false
+          },
+          {
+            "type": "WhiteBalanceControl",
+            "kind": "element",
+            "name": "white_balance_control",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQOptions.ColorControl": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "max",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "min",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQOptions.ColorSpaceControl": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "max",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "min",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQOptions.Option": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "default",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "value",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQOptions.Setting": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "name",
+            "client_required": false
+          },
+          {
+            "type": "list<Option>",
+            "kind": "element-list",
+            "entry": "option",
+            "name": "option",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQOptions.WhiteBalanceControl": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "max",
+            "client_required": false
+          },
+          {
+            "type": "integer",
+            "kind": "attribute",
+            "name": "min",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQPictureModes": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "input_mode",
+            "client_required": false
+          },
+          {
+            "type": "Setting",
+            "kind": "element",
+            "name": "setting",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQPictureModes.Option": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "default",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "value",
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQPictureModes.Setting": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "name",
+            "client_required": false
+          },
+          {
+            "type": "list<Option>",
+            "kind": "element-list",
+            "entry": "option",
+            "name": "option",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQPictureSettings": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "default",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "input_mode",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "picture_mode",
+            "client_required": false
+          },
+          {
+            "type": "list<Setting>",
+            "kind": "element-list",
+            "entry": "setting",
+            "name": "setting",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "TVPQPictureSettings.Setting": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "name",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "value",
+            "client_required": false
+          }
+        ]
+      },
+      "TextEditStateDetails": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "masked",
+            "type": "string"
+          },
+          {
+            "name": "max-length",
+            "type": "string"
+          },
+          {
+            "name": "selection-end",
+            "type": "string"
+          },
+          {
+            "name": "selection-start",
+            "type": "string"
+          },
+          {
+            "name": "text",
+            "type": "string"
+          },
+          {
+            "name": "textedit-id",
+            "type": "string"
+          },
+          {
+            "name": "textedit-type",
+            "type": "string"
+          }
+        ]
+      },
+      "Themes": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "list<Theme>",
+            "kind": "element-list",
+            "entry": "theme",
+            "name": "theme",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "Themes.Theme": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "attribute",
+            "name": "id",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "default",
+            "client_required": false
+          },
+          {
+            "type": "boolean",
+            "kind": "attribute",
+            "name": "selected",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "text",
+            "client_required": false
+          }
+        ]
+      },
+      "Trigger": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "action",
+            "type": "string"
+          }
+        ]
+      },
+      "TvChannels": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "list<TVChannel>",
+            "kind": "element-list",
+            "entry": "channel",
+            "name": "channel",
+            "inline": true,
+            "client_required": false
+          }
+        ]
+      },
+      "TvChannels.TVChannel": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "name",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "number",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "physical-channel",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "physical-frequency",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "type",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "user-favorite",
+            "client_required": false
+          },
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "user-hidden",
+            "client_required": false
+          }
+        ]
+      },
+      "VoiceConfig": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "parameters",
+            "type": "Parameters"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ]
+      },
+      "VoiceEventOnScreen": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "tts",
+            "type": "string"
+          },
+          {
+            "name": "popup",
+            "type": "string"
+          },
+          {
+            "name": "visual_search_results",
+            "type": "string"
+          },
+          {
+            "name": "direct_to_detail",
+            "type": "string"
+          },
+          {
+            "name": "direct_to_zone",
+            "type": "string"
+          },
+          {
+            "name": "confirmation",
+            "type": "string"
+          },
+          {
+            "name": "voice_hud_v3",
+            "type": "string"
+          }
+        ]
+      },
+      "VoiceServiceInfo": {
+        "encoding": "json",
+        "fields": [
+          {
+            "name": "data",
+            "type": "Data"
+          }
+        ]
+      },
+      "WarmStandbySettings": {
+        "encoding": "xml",
+        "fields": [
+          {
+            "type": "string",
+            "kind": "element",
+            "name": "warm-standby",
+            "client_required": false
+          }
+        ]
+      }
+    },
+    "custom_readers": {
+      "query-audio-device": {
+        "source": "client contract: audio-device XML reader",
+        "path_matching": "case insensitive",
+        "fields": [
+          {
+            "parser_path": "audio-device/global/muted",
+            "value_type": "boolean"
+          },
+          {
+            "parser_path": "audio-device/global/destination-list",
+            "value_type": "string"
+          },
+          {
+            "parser_path": "audio-device/global/volume",
+            "value_type": "integer"
+          },
+          {
+            "parser_path": "audio-device/global/destination",
+            "value_type": "comma-separated names"
+          },
+          {
+            "parser_path": "audio-device/capabilities/all-destinations",
+            "value_type": "comma-separated names"
+          },
+          {
+            "parser_path": "audio-device/rtp-info/rtp-address",
+            "value_type": "string"
+          },
+          {
+            "parser_path": "audio-device/rtp-info/rtcp-port",
+            "value_type": "integer",
+            "blank_default": 5150
+          },
+          {
+            "parser_path": "audio-device/rtp-info/current-buffer-delay-us",
+            "value_type": "integer",
+            "blank_default": 0
+          },
+          {
+            "parser_path": "audio-device/rtp-info/client-versions",
+            "value_type": "string",
+            "blank_default": ""
+          },
+          {
+            "parser_path": "audio-device/mobile-sas/min-version",
+            "value_type": "integer",
+            "blank_default": 0
+          },
+          {
+            "parser_path": "audio-device/mobile-sas/max-version",
+            "value_type": "integer",
+            "blank_default": 0
+          },
+          {
+            "parser_path": "audio-device/destination/destinations",
+            "attribute": "name",
+            "value_type": "string",
+            "note": "The client compares this exact path; kept as client expectation, not asserted to be a measured device XML path."
+          }
+        ]
+      }
+    }
+  },
+  "textedit_observations": {
+    "source": [
+      "roku-text-write-3820eu2-2026-10-18",
+      "roku-text-limits-3820eu2-2026-10-18"
+    ],
+    "scope": "System text field, unmasked, full type, on 3820EU2 OS 15.3.4 only",
+    "selection_units": "Unicode code points, unlike the UTF-16 units the app counts",
+    "selection_start": "ignored; cursor collapses to clamped selection-end",
+    "max_length": 75,
+    "over_limit": "200 with no change",
+    "unknown_id": "200 with no change"
+  }
+}

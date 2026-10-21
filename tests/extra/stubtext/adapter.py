@@ -15,7 +15,6 @@ STUBTEXT = PlatformDescriptor(
     id="stubtext",
     display_name="Stub Text TV",
     # After the other stub, and after every real platform.
-    order=9001,
     default_device_profile="stub-text-tv",
     protocol_label="Stub HTTP",
     default_port=0,

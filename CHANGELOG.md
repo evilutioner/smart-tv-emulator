@@ -6,6 +6,72 @@ All notable changes to the public build are recorded here. The format follows
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-21
+
+### Added
+
+- **Roku private listening** on the Roku Streaming Stick 4K, recorded off the stick: the
+  official Roku app for Android can start Headphone Mode and hear a prepared test tone,
+  over RTP or the stick's own stream, while `query-audio-device` follows each transition.
+  Partially validated with the app; see the [Roku guide](docs/platforms/roku.md#support-and-validation).
+
+- **Roku native text field** on the Roku Streaming Stick 4K, measured on the stick: focusing
+  the dashboard's text field opens it, `set-textedit-text` replaces it, and subscribed
+  ecp-2 sessions receive `textedit-opened`, `textedit-changed` and `textedit-closed`.
+  Partially validated with the official Roku app for Android.
+
+- Roku's ecp-2 session answers `request-events`, `launch` and `input` as the stick does,
+  including 204 for a channel already running, and the read-only queries the official app
+  sends (themes, screensavers, picture and audio settings, AV sync, tuner and input) from
+  captured answers or captured refusals.
+
+- **Samsung**: the 2011–13 legacy remote and the 2014–16 sets modelled from the apps and
+  libraries that drive them, and a client page, `docs/clients/samsung.md`, for seven
+  open-source clients.
+
+- The dashboard follows the system's **dark appearance**.
+
+- **JMGO** projectors, modelled with no projector measured: discovery and remote keys.
+
+- **Xiaomi Mi TV**: pairing and remote keys on newer firmware, modelled with no set measured.
+
+- **XGIMI** projectors, modelled with no projector measured: discovery, remote keys and
+  pairing with a code on screen, on older and newer firmware.
+
+- **T-Cast**, the LAN remote of TCL's own phone apps, modelled with no set measured: an older
+  and a newer protocol generation.
+
+### Changed
+
+- Roku's ecp-2 `authenticate` takes any string request id, as the set does; the official
+  Roku app for Android sends `"0"`, which the emulator used to refuse. A wrong answer is
+  601 and leaves the session open, any other request before it is 401, and a session that
+  has not authenticated 10.5 s after it opened is dropped, as the stick does. The Roku app
+  for Android 14.1.2 is now in the [validation ledger](docs/manual-validation.md).
+
+- The dashboard's selector is now **Platform**, grouped into TVs, Projectors and Consoles and
+  sorted by name; the catalogue declares each platform's `kind` and which one is the
+  default, and the state snapshot carries `version`, `device.platform_kind` and each
+  platform's `kind`. Platform names read "Vendor Product": **Amazon Fire TV**,
+  **Hisense VIDAA**, **LeEco (LeTV)**, **LG webOS**, **Metz**, **Philips** and
+  **Xiaomi Mi TV**.
+
+- **Samsung Tizen** and **Samsung Smart TV (2014–15)** are now **Samsung**, one television
+  whose devices each serve their own generation's protocols: the three captured Tizen sets,
+  the captured 2014–15 UE48H6200 and the modelled ones. Its overview moved to `docs/platforms/samsung.md`.
+
+- **TCL nScreen** is now **TCL**, one television with three devices: the captured H32S5916 on
+  the nScreen remote and the two T-Cast sets. Its overview moved to `docs/platforms/tcltv.md`.
+
+### Fixed
+
+- A tester disconnect on Roku's ecp-2 drops the connection, as the set does, instead of
+  closing it with code 1001.
+
+- With `--bind 127.0.0.1` on a machine that is also on a LAN, SSDP answers a search sent
+  from the same machine by the default multicast route, which leaves through the LAN
+  interface rather than loopback. Searches from other hosts are still ignored.
+
 ## [1.2.0] - 2026-10-15
 
 ### Added
@@ -42,9 +108,7 @@ All notable changes to the public build are recorded here. The format follows
 - Raw client run records ship only for the televisions this build includes; the rendered
   page per television stays the published evidence.
 - The overviews of televisions this build does not include name what the emulator
-  reproduces rather than each firmware quirk. The **Samsung Tizen** overview names what a raw
-  recapture of the UE43CU7172U added: SSDP, the MediaRenderer description and the DIAL
-  application documents.
+  reproduces rather than each firmware quirk.
 
 ### Fixed
 
@@ -110,10 +174,9 @@ and `tvemu.clients` command lines, and the run-record format under `docs/clients
 ### Added
 
 - Overview of one more television this build does not include: **Panasonic VIERA**, with two
-  modelled devices, an older one that takes plain commands (NRC-2) and a newer one that pairs
-  a remote with a four-digit PIN and encrypts its commands (NRC-4). It serves the remote
-  service, the media renderer's volume and mute, the PAC channel for inputs and picture modes,
-  UPnP events and a touchpad and gamepad socket. The official **Panasonic TV Remote 2** (iOS
+  modelled devices, an older one without pairing and a newer one that pairs a remote with a
+  PIN on screen. It covers remote keys, volume and mute, inputs and picture modes, and a
+  touchpad and gamepad. The official **Panasonic TV Remote 2** (iOS
   2.73) and **TV Remote 3** (iOS 1.01) were validated against it by hand; see the
   [ledger](docs/manual-validation.md).
 - The dashboard's pairing panel is shared by every platform that publishes `Core.pairing`.
@@ -217,7 +280,8 @@ First public build, under the [Apache License 2.0](LICENSE); see [`NOTICE`](NOTI
   the README and the dashboard selector; the management API lists them with
   `"availability": "n/a"` and answers a switch to one with 501 and `"reason": "n/a"`.
 
-[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v0.2.0...v1.0.0

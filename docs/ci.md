@@ -72,8 +72,10 @@ python -m tvemu.expect tests/tv/scenario.json --events tv-events.jsonl
 
 ## Limits worth knowing
 
-- **Discovery on loopback.** SSDP and mDNS answer on the bound interface. A driver that only
-  connects by address needs nothing more; one that discovers must run where multicast works.
+- **Discovery on loopback.** SSDP and mDNS answer on the bound interface. Bound to loopback,
+  SSDP also hears a search from the same machine that leaves by the default multicast route,
+  and still answers nobody else. A driver that only connects by address needs nothing more;
+  one that discovers must run where multicast works.
 - **Ports.** A runner may refuse a privileged port a television uses. `--port` moves the
   primary protocol; the platform guide says which ports stay fixed.
 - **Time.** Prompts time out as on the set. Where a television offers an action that answers

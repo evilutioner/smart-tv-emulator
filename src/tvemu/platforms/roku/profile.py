@@ -53,6 +53,11 @@ class RokuProfile(common.CapturedProfile):
     ecp2_documents: dict[str, tuple[bytes, str]]
     # Per device-info field the profile writes from the set's state, the value per state.
     live_states: dict[str, dict[str, str]]
+    ecp2_statuses: dict[str, int]
+    notifications: dict[str, dict]
+    runtime: dict
+    native_text_document: bytes | None
+    native_text_notifications: dict[str, dict]
 
     @property
     def server(self) -> str:
@@ -74,9 +79,11 @@ class RokuProfile(common.CapturedProfile):
         return self.http_statuses.get(route, 200)
 
 
-def _envelope_document(capture, exchange_id: str, profile_id: str) -> tuple[bytes, str]:
+def _envelope_document(capture, exchange_id: str, profile_id: str) -> tuple[bytes | None, str]:
     frame = json.loads(capture.payload(exchange_id))
     data, content_type = frame.get("content-data"), frame.get("content-type")
+    if data is None and content_type is None:
+        return None, ""
     if not isinstance(data, str) or not isinstance(content_type, str):
         raise ValueError(f"Profile {profile_id}: {exchange_id} carries no ecp-2 document")
     return base64.b64decode(data, validate=True), content_type
@@ -86,9 +93,19 @@ def _load_profile(directory) -> RokuProfile:
     reference = common.profile_capture(directory, __package__)
     profile_id, capture, replay = reference.id, reference.capture, reference.replays
     live_states = _live_states(reference.runtime, profile_id)
-    reference.expect_substitutions({
+    expected = {
         name: tuple(prefix + field for field in (*LIVE, *live_states))
-        for name, prefix in DEVICE_INFO.items()})
+        for name, prefix in DEVICE_INFO.items()}
+    for name in reference.replays:
+        if name.startswith("notify."):
+            expected[name] = ("timestamp", "param-channel-id", "param-channel-title")
+    audio_state = reference.runtime.get("audio", {}).get("query_state")
+    if audio_state:
+        for name, prefix in (("/query/audio-device", ""), ("query-audio-device", "content-data::")):
+            expected[name] = tuple(prefix + field for field in audio_state["fields"])
+    if reference.runtime.get("textedit", {}).get("native"):
+        expected["query-textedit-state"] = ("content-data::textedit-state",)
+    reference.expect_substitutions(expected)
     ssdp = capture.platform.get("ssdp")
     if not isinstance(ssdp, dict):
         raise ValueError(f"Profile {profile_id}: ssdp.response_headers must be a list")
@@ -99,12 +116,22 @@ def _load_profile(directory) -> RokuProfile:
         raise ValueError(f"Profile {profile_id}: replays must include /")
     documents: dict[str, bytes] = {}
     ecp2_documents: dict[str, tuple[bytes, str]] = {}
+    ecp2_statuses: dict[str, int] = {}
+    notifications: dict[str, dict] = {}
     for name, exchange_id in replay.items():
         transport = capture.exchange(exchange_id).transport
         if name.startswith("/") and transport == "http":
             documents[name] = capture.payload(exchange_id)
-        elif name.startswith("query-") and transport == "websocket":
+        elif name.startswith("notify.") and transport == "websocket":
+            event = name.removeprefix("notify.")
+            candidates = [json.loads(step.payload) for step in capture.exchange(exchange_id).outputs()
+                          if step.operation_id == "ecp-2." + event]
+            if len(candidates) != 1:
+                raise ValueError(f"Profile {profile_id}: {name} needs one captured notification")
+            notifications[event] = candidates[0]
+        elif transport == "websocket":
             ecp2_documents[name] = _envelope_document(capture, exchange_id, profile_id)
+            ecp2_statuses[name] = int(json.loads(capture.payload(exchange_id))["status"])
         else:
             raise ValueError(f"Profile {profile_id}: {name} cannot replay {exchange_id}")
     content_types: dict[str, str] = {}
@@ -124,6 +151,19 @@ def _load_profile(directory) -> RokuProfile:
                 kept.append((name, value))
         http_headers[route] = tuple(kept)
 
+    native = reference.runtime.get("textedit", {}).get("native")
+    native_document, native_notifications = None, {}
+    if native:
+        template = native["query_template"]
+        raw = capture.exchange(template["exchange"]).steps[template["step"]].payload
+        native_document = base64.b64decode(json.loads(raw)["content-data"], validate=True)
+        for event, template in native["notification_templates"].items():
+            raw = capture.exchange(template["exchange"]).steps[template["step"]].payload
+            payload = json.loads(raw)
+            if payload.get("notify") != event:
+                raise ValueError(f"Profile {profile_id}: wrong native notification template")
+            native_notifications[event] = payload
+
     return RokuProfile(
         **common.capture_identity_fields(capture, profile_id),
         search_target=common.require_string(ssdp, "search_target", profile_id),
@@ -136,6 +176,11 @@ def _load_profile(directory) -> RokuProfile:
         http_statuses=http_statuses,
         ecp2_documents=ecp2_documents,
         live_states=live_states,
+        ecp2_statuses=ecp2_statuses,
+        notifications=notifications,
+        runtime=reference.runtime,
+        native_text_document=native_document,
+        native_text_notifications=native_notifications,
     )
 
 

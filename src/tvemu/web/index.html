@@ -14,7 +14,7 @@
     <section class="card settings"><div class="card-title"><h2>Configuration</h2><button id="save-settings" class="primary">Save settings</button></div>
       <div class="group">
         <div class="group-title"><h3>Lab settings</h3><span class="section-number">01</span></div>
-        <div class="setting"><label class="label" for="platform">TV platform</label><select id="platform"></select><p class="hint">Switches the emulated platform without restarting. Sessions, counters, the captured device, and the access mode are reset.</p>
+        <div class="setting"><label class="label" for="platform">Platform</label><select id="platform"></select><p class="hint">Switches the emulated platform without restarting. Sessions, counters, the device, and the access mode are reset.</p>
           <p id="platform-locked" class="hint locked" hidden></p>
           <div id="platform-upsell" class="upsell" hidden>
             <p id="upsell-title"></p>
@@ -22,10 +22,10 @@
             <p id="upsell-devices" class="hint"></p>
             <a id="upsell-link" target="_blank" rel="noopener">Ask about it</a>
           </div></div>
-        <div class="setting"><label class="label" for="device-profile">Captured device</label><select id="device-profile"></select><p id="profile-hint" class="hint">Switches the captured identity and wire responses. Existing device sessions are disconnected.</p></div>
+        <div class="setting"><label class="label" for="device-profile">Device</label><select id="device-profile"></select><p id="profile-hint" class="hint">Switches the captured identity and wire responses. Existing device sessions are disconnected.</p></div>
       </div>
       <div class="group">
-        <div class="group-title"><h3 id="behaviour-title">TV behaviour</h3><span class="section-number">02</span></div>
+        <div class="group-title"><h3 id="behaviour-title">Device behaviour</h3><span class="section-number">02</span></div>
         <div class="setting" id="access-setting"><label class="label" for="access-mode">Control by mobile apps</label><select id="access-mode"></select><p id="access-hint" class="hint"></p></div>
         <p id="access-static" class="hint" hidden></p>
         <div id="platform-settings"></div>
@@ -67,7 +67,7 @@
       </div>
       <div class="group">
         <div class="group-title"><h3>Simulate the device</h3></div>
-        <div class="toggle-row"><div><strong>Field focused</strong><p id="keyboard-focus-hint" class="hint">As if an app on the TV opened a text field.</p></div><label class="switch"><input type="checkbox" id="keyboard-focused"><span></span></label></div>
+        <div class="toggle-row"><div><strong>Field focused</strong><p id="keyboard-focus-hint" class="hint">As if an app on the device opened a text field.</p></div><label class="switch"><input type="checkbox" id="keyboard-focused"><span></span></label></div>
         <div class="setting" id="keyboard-type-setting"><label class="label" for="keyboard-content-type">Field type</label><select id="keyboard-content-type"></select><p id="keyboard-type-hint" class="hint"></p></div>
       </div>
       <div class="group">
@@ -88,6 +88,6 @@
     </section>
     </div>
   </div>
-  <footer><span><i class="dot"></i> One Python process. Everything stays on the local network.</span><span id="footer-platform">Smart TV adapter · v0.1</span></footer>
+  <footer><span><i class="dot"></i> One Python process. Everything stays on the local network.</span><span id="footer-platform">Smart TV Emulator</span></footer>
 </main>
 </body></html>

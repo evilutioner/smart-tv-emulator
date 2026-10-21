@@ -23,6 +23,7 @@ from tests.support import (control_protocol, first_platform, install_stub_platfo
                            stub_profiles_on)
 from tvemu.control import control_app
 from tvemu.core import Core, Settings, read_settings, write_settings
+from tvemu.platforms.catalogue import default_id
 from tvemu.platforms import (create_platform, default_platform, platform_choices,
                              platform_descriptor, platform_ids)
 from tvemu.runtime import Runtime
@@ -51,8 +52,10 @@ class SettingsResolutionTests(unittest.TestCase):
         saved_platform, settings = read_settings(Path("/nonexistent/settings.json"))
         self.assertIsNone(saved_platform)
         self.assertEqual(settings, Settings())
-        # The default is the first platform the dashboard offers, whatever a build ships.
-        self.assertEqual(default_platform(), platform_choices()[0]["id"])
+        # The default is the catalogue's choice when a build ships it, else the first offered.
+        preferred = default_id()
+        expected = preferred if preferred in platform_ids() else platform_ids()[0]
+        self.assertEqual(default_platform(), expected)
         self.assertIn(default_platform(), platform_ids())
 
     def test_a_foreign_profile_does_not_survive_a_platform_change(self):

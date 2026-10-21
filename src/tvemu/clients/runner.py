@@ -173,17 +173,27 @@ def _prepare_python(spec: ClientSpec, requested: str, workspace: Path, info: dic
         _run([git, "fetch", "--quiet", "--depth", "1", spec.upstream, ref], cwd=source, timeout=300)
         _run([git, "checkout", "--quiet", "FETCH_HEAD"], cwd=source)
         info["commit"] = _run([git, "rev-parse", "HEAD"], cwd=source).strip()
-        _run([*pip, str(source)], cwd=workspace)
+        if spec.layout == "checkout":
+            # Plain modules with no packaging: nothing to build, so no version but the commit.
+            requirements = source / "requirements.txt"
+            if requirements.is_file():
+                _run([*pip, "-r", str(requirements)], cwd=workspace)
+            prepared.environment["PYTHONPATH"] = os.pathsep.join([str(HARNESS), str(source)])
+        else:
+            _run([*pip, str(source)], cwd=workspace)
 
-    info["version"] = _run([str(python), "-c",
-                            "import importlib.metadata, sys; "
-                            "print(importlib.metadata.version(sys.argv[1]))", spec.package],
-                           cwd=workspace).strip()
+    if spec.layout != "checkout":
+        info["version"] = _run([str(python), "-c",
+                                "import importlib.metadata, sys; "
+                                "print(importlib.metadata.version(sys.argv[1]))", spec.package],
+                               cwd=workspace).strip()
     frozen = _run([str(python), "-m", "pip", "freeze", "--disable-pip-version-check"],
                   cwd=workspace).splitlines()
     pinned = f"{spec.package} @ git+{spec.upstream}@{info['commit']}"
-    info["environment"] = sorted(pinned if " @ file:" in line else line
-                                 for line in frozen if line.strip())
+    frozen = [pinned if " @ file:" in line else line for line in frozen if line.strip()]
+    if spec.layout == "checkout":
+        frozen.append(pinned)
+    info["environment"] = sorted(frozen)
     return prepared
 
 

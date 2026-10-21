@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="44" viewBox="0 0 240 44" role="img">
+  <title>Samsung: 4 legacy iApp, 3 Orsay, 3 Tizen</title>
+  <style>
+    text { font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    .year { font-size: 11px; fill: #6e7781; } .dot { fill: #6e7781; }
+    .e0{fill:#BA7517} .e1{fill:#0F6E56} .e2{fill:#185FA5}
+    @media (prefers-color-scheme: dark) { .year, .dot { fill: #9198a1; } .e0{fill:#EF9F27} .e1{fill:#5DCAA5} .e2{fill:#85B7EB} }
+  </style>
+  <rect x="0.0" y="0" width="11.1" height="10" rx="2" fill="#EF9F27"/>
+  <rect x="13.1" y="0" width="11.1" height="10" rx="2" fill="#EF9F27"/>
+  <rect x="26.2" y="0" width="11.1" height="10" rx="2" fill="#EF9F27"/>
+  <rect x="39.3" y="0" width="11.1" height="10" rx="2" fill="#EF9F27"/>
+  <rect x="52.4" y="0" width="22.2" height="10" rx="2" fill="#1D9E75"/>
+  <rect x="76.6" y="0" width="11.1" height="10" rx="2" fill="#1D9E75"/>
+  <rect x="89.7" y="0" width="11.1" height="10" rx="2" fill="#1D9E75"/>
+  <rect x="102.8" y="0" width="22.2" height="10" rx="2" fill="#378ADD"/>
+  <rect x="127.0" y="0" width="11.1" height="10" rx="2" fill="#378ADD"/>
+  <rect x="140.1" y="0" width="99.9" height="10" rx="2" fill="#378ADD"/>
+  <text class="year" x="0.0" y="24">2011</text>
+  <text class="year" x="52.4" y="24">2014</text>
+  <text class="year" x="102.8" y="24">2015</text>
+  <text class="year" x="240" y="24" text-anchor="end">2025</text>
+  <text y="40"><tspan class="e0">4 legacy iApp</tspan><tspan class="dot"> · </tspan><tspan class="e1">3 Orsay</tspan><tspan class="dot"> · </tspan><tspan class="e2">3 Tizen</tspan></text>
+</svg>

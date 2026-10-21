@@ -16,6 +16,7 @@
 // Each step is appended to the results file as one JSON line with the event ids it covers,
 // exactly as the Python harness writes it, so the runner judges both the same way.
 import { appendFileSync } from 'node:fs';
+import { createConnection, createServer } from 'node:net';
 
 const DETAIL_LIMIT = 400;
 
@@ -126,6 +127,22 @@ export class Harness {
       throw error;
     }
   }
+}
+
+// `port` on `host` forwarded to the emulator's loopback `target` port without reading it, for
+// a client that decides its transport from a port number it never lets the caller change.
+// Resolves to the listening server; close() it when done.
+export function relay(port, target, host = '127.0.0.1') {
+  const server = createServer((socket) => {
+    const upstream = createConnection(target, '127.0.0.1');
+    socket.pipe(upstream).pipe(socket);
+    socket.on('error', () => upstream.destroy());
+    upstream.on('error', () => socket.destroy());
+  });
+  return new Promise((resolve, reject) => {
+    server.once('error', reject);
+    server.listen(port, host, () => resolve(server));
+  });
 }
 
 export function assert(condition, message) {

@@ -81,9 +81,11 @@ class ReplyStyle:
         """
         merged = dict(self.headers)
         merged.update(headers or {})
-        if "Content-Type" in merged:
-            raise ValueError("Content-Type is the style's to set: pass content_type instead")
         kind = content_type or self.content_type
+        if merged.get("Content-Type") is not None and (merged["Content-Type"] or kind):
+            # The one exception is a header the firmware writes with an empty value, which
+            # differs on the wire from writing none and goes out as a plain header.
+            raise ValueError("Content-Type is the style's to set: pass content_type instead")
         if not kind:
             # A firmware that answers with no Content-Type at all, as some refusals do.
             return web.Response(body=self.encode(value), status=status,

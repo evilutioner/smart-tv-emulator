@@ -79,7 +79,7 @@ What happens to your capture after you send it:
 1. The capture goes in as **evidence**. An incomplete one stays evidence only: it informs the
    contract but is never selectable.
 2. A complete one gets a `profiles/<device-id>/profile.json` that references it, and appears
-   under **Captured device** in the dashboard.
+   under **Device** in the dashboard.
 3. `tvemu --contract <id> --check` must pass. If your set contradicts a claim, the claim is
    fixed or narrowed; your capture is not edited.
 4. The replay harness, `python -m tvemu.conformance`, sends each captured request to the

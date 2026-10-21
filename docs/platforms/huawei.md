@@ -11,19 +11,18 @@ measured, and no request was recorded off a wire** — the behaviour is modelled
 
 | Protocol | Transport · port | What is emulated |
 |---|---|---|
-| huawei-remote | HTTP 8080 | key press and release |
+| Huawei remote | HTTP 8080 | key press and release |
 | Probe | TCP 9001 | a connect, which is all the app does |
 
 ## Modelled devices
 
 - **Huawei MediaQ (modelled)** — no box measured
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-- There is **no discovery protocol**: the app connects to TCP 9001 on every address in the phone's ARP cache, or on its whole /24 only when that cache is empty.
-- The key code is an **Android keycode in a header**, not in the path or the body.
-- Every button is **two requests**, a press (`Action: 0`) and a release (`Action: 1`).
-- Enter goes out as **DPAD_CENTER (23)**, never as 66.
+- **No discovery protocol**: the app probes the addresses it already knows, or sweeps its subnet.
+- **Every button is two requests**, a press and a release.
+- **Keys are Android keycodes**, with Enter sent as the D-pad centre key.
 
 ## What the emulator lets you test
 

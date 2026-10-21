@@ -58,6 +58,8 @@ class TextField:
     # Who last wrote, so remote-typed and API-typed text are distinguishable in the dashboard.
     source: str = ""
     transport: str = ""
+    # None retains append-only input. A measured native editor may expose a caret.
+    cursor: int | None = None
 
 
 @dataclass
@@ -174,6 +176,9 @@ class Core:
         self.log_start_id = 0
         self.revision = 0
         self.subscribers: set[asyncio.Queue] = set()
+        # Wire adapters may need every transition, even when dashboard snapshots coalesce.
+        # Observers inspect state synchronously and must not mutate it or publish recursively.
+        self.state_observers: set = set()
         self.connections: dict[str, dict] = {}
         self.held: dict[str, set[str]] = {}
         self.counts: Counter = Counter()
@@ -192,6 +197,10 @@ class Core:
         # Which field types exist is captured per device, so the adapter publishes them.
         self.content_types: tuple = ()
         self.default_content_type = ""
+        # The platform's keyboard applies unless the active device says it takes no text.
+        self.text_input = True
+        # Likewise the platform's voice input, for a device whose identity says it has none.
+        self.voice_input = True
         self.voice_state = VoiceState()
         self.application_catalog: dict[str, dict[str, Any]] = {}
         self.dynamic_applications: dict[str, dict[str, Any]] = {}
@@ -205,13 +214,28 @@ class Core:
 
     @property
     def keyboard(self):
-        """The active platform's KeyboardSpec, or None when it serves no text input."""
-        return self.platform.keyboard
+        """The active platform's KeyboardSpec, or None when it serves no text input.
+
+        A platform whose devices differ in this -- one runs a remote that carries text, a
+        sibling runs one that does not -- says so per device through `set_text_input`.
+        """
+        return self.platform.keyboard if self.text_input else None
+
+    def set_text_input(self, available: bool) -> None:
+        """Whether the active device takes text at all; published from its captured profile."""
+        self.text_input = bool(available)
 
     @property
     def voice(self):
-        """The active platform's VoiceSpec, or None when it exposes no voice input."""
-        return self.platform.voice
+        """The active platform's VoiceSpec, or None when it exposes no voice input.
+
+        A platform whose devices differ in this says so per device through `set_voice_input`.
+        """
+        return self.platform.voice if self.voice_input else None
+
+    def set_voice_input(self, available: bool) -> None:
+        """Whether the active device takes voice at all; published from its captured profile."""
+        self.voice_input = bool(available)
 
     @property
     def applications(self):
@@ -296,7 +320,9 @@ class Core:
 
     def set_device_profile(self, active: dict[str, Any], available: list[dict[str, Any]]) -> None:
         self.device_profile = dict(active)
-        self.device_profiles = [dict(item) for item in available]
+        # Listed by label, so a platform orders its picker through the labels it writes.
+        self.device_profiles = sorted((dict(item) for item in available),
+                                      key=lambda item: str(item.get("label", "")).casefold())
 
     def retarget(self, platform: PlatformDescriptor) -> None:
         """Point shared state at another platform.
@@ -315,6 +341,8 @@ class Core:
         self.device_profiles = []
         self.content_types = ()
         self.default_content_type = ""
+        self.text_input = True
+        self.voice_input = True
         self.discovery_error = None
         self.protocols = []
         self.service_listening = False
@@ -328,18 +356,21 @@ class Core:
 
     def snapshot(self) -> dict:
         # Deferred: the platform registry imports Core, so it cannot be imported at module level.
+        from . import __version__
         from .platforms import platform_choices
+        from .platforms.catalogue import platform_kind
 
         primary = next((row for row in self.protocols if row["primary"]), {})
         discovery = " · ".join(row["label"] for row in self.protocols
                                if row["kind"] in _discovery_kinds() and row["enabled"])
         return {
-            "schema_version": 2, "revision": self.revision,
+            "schema_version": 2, "revision": self.revision, "version": __version__,
             "device": {
                 **self.device_profile,
                 "profile": self.device_profile.get("id", ""),
                 "platform": self.platform.id,
                 "platform_name": self.platform.display_name,
+                "platform_kind": platform_kind(self.platform.id),
                 "host": self.host,
                 "port": self.service_port,
                 "protocol": primary.get("protocol_label") or self.platform.protocol_label,
@@ -620,6 +651,8 @@ class Core:
 
     def publish(self) -> None:
         self.revision += 1
+        for observer in tuple(self.state_observers):
+            observer()
         # Coalesce updates for slow UI clients; each message is a complete snapshot.
         for queue in self.subscribers:
             if queue.full():
@@ -758,6 +791,7 @@ class Core:
             field.focus_serial += 1
         if not field.focused:
             field.text = ""
+            field.cursor = None
         field.source, field.transport = source or transport, transport
         self.record("state", "field.focus" if field.focused else "field.blur",
                     transport=transport, peer=peer, status=200,
@@ -784,18 +818,27 @@ class Core:
         self.check_text(op, text=text, count=count)
         field = self.text_field
         if op == "insert":
-            value = text if replace else field.text + text
+            cursor = len(field.text) if field.cursor is None else max(0, min(field.cursor, len(field.text)))
+            value = text if replace else field.text[:cursor] + text + field.text[cursor:]
+            content = self.content_type
+            if content and content.max_length and len(value) > content.max_length:
+                return "text/insert", "discarded: field character limit"
             if len(value) > MAX_TEXT_FIELD:
                 value = value[:MAX_TEXT_FIELD]
             keyboard = self.keyboard
             if keyboard and keyboard.max_length:
                 value = value[:keyboard.max_length]
             field.text = value
+            if field.cursor is not None:
+                field.cursor = len(value) if replace else min(cursor + len(text), len(value))
             detail = self.text_detail(text)
             return "text/insert", f"replace {detail}" if replace else detail
         if op == "delete":
-            removed = min(count, len(field.text))
-            field.text = field.text[:len(field.text) - removed]
+            cursor = len(field.text) if field.cursor is None else max(0, min(field.cursor, len(field.text)))
+            removed = min(count, cursor)
+            field.text = field.text[:cursor - removed] + field.text[cursor:]
+            if field.cursor is not None:
+                field.cursor = cursor - removed
             return "text/delete", f"{removed} of {count}"
         if op == "enter":
             detail = self.text_detail(field.text)
@@ -806,11 +849,13 @@ class Core:
             field.focus_serial += 1
             return "text/enter", detail
         field.text = ""
+        if field.cursor is not None:
+            field.cursor = 0
         return "text/clear", ""
 
     async def text(self, op: str, *, transport: str, peer: str = "", text: str = "",
                    count: int = 1, replace: bool = False,
-                   source: str = "") -> tuple[int, str]:
+                   source: str = "", cursor: int | None = None) -> tuple[int, str]:
         """Apply one text command from the dashboard or from the wire.
 
         A device may answer a text write successfully even when nothing on screen has focus,
@@ -846,6 +891,8 @@ class Core:
             self.publish()
             return 200, "Accepted"
         operation, applied = self.apply_text(op, text=text, count=count, replace=replace)
+        if cursor is not None:
+            field.cursor = max(0, min(cursor, len(field.text)))
         field.source, field.transport = source or transport, transport
         self.record("command", operation, transport=transport, peer=peer, status=200,
                     detail=applied)
@@ -905,7 +952,7 @@ class Core:
                 if action != "keyup":
                     self.edit_key(name, transport, peer)
                 effect = dict(self.platform.key_effects).get(name)
-                if effect is not None:
+                if effect is not None and action != "keyup":
                     self.apply(effect)
         else:
             self.rejected += 1

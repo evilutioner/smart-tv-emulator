@@ -5,17 +5,38 @@
     {
       "id": "roku",
       "display_name": "Roku",
-      "order": 10,
-      "summary": "ECP over HTTP · authenticated ecp-2 WebSocket · SSDP roku:ecp",
+      "kind": "tv",
+      "default": true,
+      "summary": "ECP over HTTP \u00b7 authenticated ecp-2 WebSocket \u00b7 SSDP roku:ecp",
       "docs": "docs/platforms/roku.md",
       "remote": "ECP over HTTP **8060** + authenticated `ecp-2` WebSocket",
       "discovery": "SSDP `roku:ecp`",
-      "pairing": "ECP-2 challenge–response",
-      "protocols": 2,
+      "pairing": "ECP-2 challenge\u2013response",
+      "protocols": 3,
+      "generations": [
+        {
+          "name": "ECP and ecp-2, Roku OS 15.3"
+        }
+      ],
+      "apps": [
+        {
+          "name": "Roku for Android",
+          "url": "https://play.google.com/store/apps/details?id=com.roku.remote"
+        }
+      ],
       "clients": [
-        {"name": "rokuecp", "url": "https://github.com/ctalkington/python-rokuecp"},
-        {"name": "python-roku", "url": "https://github.com/jcarbaugh/python-roku"},
-        {"name": "roku-client", "url": "https://github.com/bschlenk/node-roku-client"}
+        {
+          "name": "rokuecp",
+          "url": "https://github.com/ctalkington/python-rokuecp"
+        },
+        {
+          "name": "python-roku",
+          "url": "https://github.com/jcarbaugh/python-roku"
+        },
+        {
+          "name": "roku-client",
+          "url": "https://github.com/bschlenk/node-roku-client"
+        }
       ],
       "captured": [
         {
@@ -23,33 +44,58 @@
           "detail": "3820EU2, Roku OS 15.3.4",
           "profiles": [
             "roku-streaming-stick-4k-3820eu2"
-          ]
+          ],
+          "validated": true
         },
         {
           "name": "TCL Roku TV 32S357",
           "detail": "hw H104X, Roku OS 15.3.4",
           "profiles": [
             "tcl-roku-tv-32s357"
-          ]
+          ],
+          "validated": true
         }
       ]
     },
     {
       "id": "firetv",
-      "display_name": "Fire TV",
-      "order": 20,
-      "summary": "Turnstile over HTTPS · legacy ADB shell · DIAL and SSDP · Bonjour on Fire OS",
+      "display_name": "Amazon Fire TV",
+      "kind": "tv",
+      "summary": "Turnstile over HTTPS \u00b7 legacy ADB shell \u00b7 DIAL and SSDP \u00b7 Bonjour on Fire OS",
       "docs": "docs/platforms/firetv.md",
       "remote": "Turnstile over HTTPS **8080**; legacy ADB shell **5555**, off by default",
       "discovery": "DIAL/SSDP; Bonjour `_amzn-wplay._tcp` on Fire OS",
       "pairing": "On-screen PIN and client token; ADB public-key approval",
       "protocols": 7,
+      "generations": [
+        {
+          "name": "ADB shell",
+          "era": "legacy ADB"
+        },
+        {
+          "name": "Turnstile on Fire OS",
+          "era": "Fire OS"
+        },
+        {
+          "name": "Turnstile on Vega",
+          "era": "Vega"
+        }
+      ],
       "apps": [
-        {"name": "Amazon Fire TV for iOS", "url": "https://apps.apple.com/app/id947984433"}
+        {
+          "name": "Amazon Fire TV for iOS",
+          "url": "https://apps.apple.com/app/id947984433"
+        }
       ],
       "clients": [
-        {"name": "androidtv", "url": "https://github.com/JeffLIrion/python-androidtv"},
-        {"name": "uc-intg-firetv", "url": "https://github.com/mase1981/uc-intg-firetv"}
+        {
+          "name": "androidtv",
+          "url": "https://github.com/JeffLIrion/python-androidtv"
+        },
+        {
+          "name": "uc-intg-firetv",
+          "url": "https://github.com/mase1981/uc-intg-firetv"
+        }
       ],
       "captured": [
         {
@@ -79,22 +125,42 @@
     },
     {
       "id": "webos",
-      "display_name": "webOS TV",
-      "order": 30,
-      "summary": "SSAP over WSS · IME keyboard · pointer socket · DLNA renderer · four SSDP stacks",
+      "display_name": "LG webOS",
+      "kind": "tv",
+      "summary": "SSAP over WSS \u00b7 IME keyboard \u00b7 pointer socket \u00b7 DLNA renderer \u00b7 four SSDP stacks",
       "docs": "docs/platforms/webos.md",
       "remote": "SSAP over WSS **3001**, IME keyboard, pointer socket, voice input, DLNA renderer",
       "discovery": "SSDP from **four independent stacks**, each with its own UUID and ports",
       "pairing": "On-screen prompt, client key",
       "protocols": 7,
+      "generations": [
+        {
+          "name": "SSAP, webOS 7.6"
+        }
+      ],
       "apps": [
-        {"name": "LG ThinQ for iOS", "url": "https://apps.apple.com/app/id993504342"}
+        {
+          "name": "LG ThinQ for iOS",
+          "url": "https://apps.apple.com/app/id993504342"
+        }
       ],
       "clients": [
-        {"name": "aiowebostv", "url": "https://github.com/home-assistant-libs/aiowebostv"},
-        {"name": "bscpylgtv", "url": "https://github.com/chros73/bscpylgtv"},
-        {"name": "lgtv2", "url": "https://github.com/hobbyquaker/lgtv2"},
-        {"name": "pywebostv", "url": "https://github.com/supersaiyanmode/PyWebOSTV"}
+        {
+          "name": "aiowebostv",
+          "url": "https://github.com/home-assistant-libs/aiowebostv"
+        },
+        {
+          "name": "bscpylgtv",
+          "url": "https://github.com/chros73/bscpylgtv"
+        },
+        {
+          "name": "lgtv2",
+          "url": "https://github.com/hobbyquaker/lgtv2"
+        },
+        {
+          "name": "pywebostv",
+          "url": "https://github.com/supersaiyanmode/PyWebOSTV"
+        }
       ],
       "captured": [
         {
@@ -131,19 +197,33 @@
     {
       "id": "androidtv",
       "display_name": "Android TV / Google TV",
-      "order": 40,
-      "summary": "Remote v2 over mutual TLS · Polo pairing · Cast and DIAL launch · AirPlay identity · Bonjour",
+      "kind": "tv",
+      "summary": "Remote v2 over mutual TLS \u00b7 Polo pairing \u00b7 Cast and DIAL launch \u00b7 AirPlay identity \u00b7 Bonjour",
       "docs": "docs/platforms/androidtv.md",
       "remote": "Remote v2 over mutual TLS **6466**; DIAL and Cast launch validation; AirPlay identity",
       "discovery": "Bonjour `_androidtvremote2._tcp`, `_googlecast._tcp`, `_airplay._tcp`; DIAL/SSDP",
-      "pairing": "Polo pairing on **6467** — six hex characters and a client certificate",
+      "pairing": "Polo pairing on **6467** \u2014 six hex characters and a client certificate",
       "protocols": 11,
+      "generations": [
+        {
+          "name": "Remote v2, Android 11 to 14"
+        }
+      ],
       "apps": [
-        {"name": "Google TV for iOS", "url": "https://apps.apple.com/app/id746894884"}
+        {
+          "name": "Google TV for iOS",
+          "url": "https://apps.apple.com/app/id746894884"
+        }
       ],
       "clients": [
-        {"name": "androidtvremote2", "url": "https://github.com/tronikos/androidtvremote2"},
-        {"name": "pychromecast", "url": "https://github.com/home-assistant-libs/pychromecast"}
+        {
+          "name": "androidtvremote2",
+          "url": "https://github.com/tronikos/androidtvremote2"
+        },
+        {
+          "name": "pychromecast",
+          "url": "https://github.com/home-assistant-libs/pychromecast"
+        }
       ],
       "captured": [
         {
@@ -189,15 +269,23 @@
     {
       "id": "vizio",
       "display_name": "Vizio SmartCast",
-      "order": 50,
-      "summary": "SmartCast REST over HTTPS · DIAL and SSDP",
+      "kind": "tv",
+      "summary": "SmartCast REST over HTTPS \u00b7 DIAL and SSDP",
       "docs": "docs/platforms/vizio.md",
       "remote": "SmartCast REST over HTTPS **7345**",
       "discovery": "DIAL/SSDP, description on **56790**",
       "pairing": "Four-digit PIN, then `AUTH_TOKEN`",
       "protocols": 3,
+      "generations": [
+        {
+          "name": "SmartCast REST, API 3.3"
+        }
+      ],
       "clients": [
-        {"name": "pyvizio", "url": "https://github.com/raman325/pyvizio"}
+        {
+          "name": "pyvizio",
+          "url": "https://github.com/raman325/pyvizio"
+        }
       ],
       "captured": [
         {
@@ -211,14 +299,19 @@
     },
     {
       "id": "vidaa",
-      "display_name": "VIDAA (Hisense)",
-      "order": 60,
-      "summary": "MQTT over TLS · UPnP capability probe · Live TV channel list",
+      "display_name": "Hisense VIDAA",
+      "kind": "tv",
+      "summary": "MQTT over TLS \u00b7 UPnP capability probe \u00b7 Live TV channel list",
       "docs": "docs/platforms/vidaa.md",
-      "remote": "MQTT over TLS **36669** — keys, app and source lists, Live TV channels",
+      "remote": "MQTT over TLS **36669** \u2014 keys, app and source lists, Live TV channels",
       "discovery": "**None.** The set answers no SSDP and no mDNS; a client reaches it by address after probing the UPnP description on **18400**",
       "pairing": "On-screen PIN, then access and refresh tokens",
       "protocols": 2,
+      "generations": [
+        {
+          "name": "MQTT over TLS, VIDAA U7"
+        }
+      ],
       "captured": [
         {
           "name": "Hisense 32A3HE",
@@ -231,19 +324,30 @@
     },
     {
       "id": "philips",
-      "display_name": "Philips JointSpace",
-      "order": 70,
-      "summary": "JointSpace v6 over HTTPS and HTTP · UPnP · SSDP · Bonjour",
+      "display_name": "Philips",
+      "kind": "tv",
+      "summary": "JointSpace v6 over HTTPS and HTTP \u00b7 UPnP \u00b7 SSDP \u00b7 Bonjour",
       "docs": "docs/platforms/philips.md",
       "remote": "JointSpace v6 over HTTPS **1926** and HTTP **1925**",
       "discovery": "SSDP/UPnP; Bonjour `_philipstv_rpc._tcp`",
       "pairing": "Four-digit PIN, then HTTP Digest",
       "protocols": 6,
+      "generations": [
+        {
+          "name": "JointSpace 6.1"
+        }
+      ],
       "clients": [
-        {"name": "ha-philipsjs", "url": "https://github.com/danielperna84/ha-philipsjs"}
+        {
+          "name": "ha-philipsjs",
+          "url": "https://github.com/danielperna84/ha-philipsjs"
+        }
       ],
       "apps": [
-        {"name": "Philips TV Remote for iOS", "url": "https://apps.apple.com/gb/app/philips-smart-tv/id1479155903"}
+        {
+          "name": "Philips TV Remote for iOS",
+          "url": "https://apps.apple.com/gb/app/philips-smart-tv/id1479155903"
+        }
       ],
       "captured": [
         {
@@ -257,74 +361,262 @@
       ]
     },
     {
-      "id": "tizen",
-      "display_name": "Samsung Tizen",
-      "order": 80,
-      "summary": "samsung.remote.control over WSS · device API · DIAL description",
-      "docs": "docs/platforms/tizen.md",
-      "remote": "`samsung.remote.control` over WSS **8002**, base64 text input; device API **8001**",
-      "discovery": "SSDP: two captured stacks on the UE43CU7172U, the DIAL receiver on **7678** and the MediaRenderer on **9197**; the other two sets are reached by address",
-      "pairing": "On-screen Allow prompt, then an eight-digit token",
-      "protocols": 6,
+      "id": "samsung",
+      "display_name": "Samsung",
+      "kind": "tv",
+      "summary": "Tizen: samsung.remote.control over WSS \u00b7 device API \u00b7 DIAL description; 2014\u201315: SPC PIN pairing \u00b7 encrypted Socket.IO companion channel \u00b7 multiscreen API; pre-2014: iApp remote on 55000 or HTTP 8080 \u00b7 SECWOW wake \u00b7 SSDP",
+      "docs": "docs/platforms/samsung.md",
+      "remote": "Tizen: `samsung.remote.control` over WSS **8002**, base64 text input, voice input; device API **8001**. 2014\u201316 PIN/SPC sets: encrypted Socket.IO 0.9 companion channel **8000**; multiscreen API **8001**, and on Tizen J and K a token channel that issues no token. Pre-2014: iApp remote on TCP **55000**, in the clear or under RSA with AES-ECB or AES-CTR, or over HTTP **8080**",
+      "discovery": "SSDP. Tizen: two captured stacks on the UE43CU7172U, the DIAL receiver on **7678** and the MediaRenderer on **9197**; the other two sets are reached by address. 2014\u201315: four captured stacks, descriptions on **7676**. Pre-2014: RemoteControlReceiver and MediaRenderer, descriptions on **7676**",
+      "pairing": "Tizen: on-screen Allow prompt, then an eight-digit token; a 2016 set allows without issuing one. 2014\u201316 PIN/SPC sets (H, J and some K): four-digit on-screen PIN, then SPC key exchange on **8080**. Pre-2014: on-screen Allow prompt, remembered per remote",
+      "protocols": 16,
+      "generations": [
+        {
+          "name": "iApp on 55000 in the clear",
+          "era": "legacy iApp",
+          "years": [
+            2011,
+            2011
+          ]
+        },
+        {
+          "name": "iApp with RSA and AES-ECB",
+          "era": "legacy iApp",
+          "years": [
+            2012,
+            2012
+          ]
+        },
+        {
+          "name": "iApp with RSA and AES-CTR",
+          "era": "legacy iApp",
+          "years": [
+            2013,
+            2013
+          ]
+        },
+        {
+          "name": "iApp over HTTP 8080",
+          "era": "legacy iApp",
+          "years": [
+            2014,
+            2014
+          ]
+        },
+        {
+          "name": "PIN/SPC and companion channel",
+          "era": "Orsay",
+          "years": [
+            2014,
+            2015
+          ]
+        },
+        {
+          "name": "PIN/SPC without companion channel",
+          "era": "Orsay",
+          "years": [
+            2014,
+            2014
+          ]
+        },
+        {
+          "name": "Evolution Kit PIN/SPC",
+          "era": "Orsay",
+          "years": [
+            2014,
+            2014
+          ]
+        },
+        {
+          "name": "Tizen PIN/SPC",
+          "era": "Tizen",
+          "years": [
+            2015,
+            2016
+          ]
+        },
+        {
+          "name": "Tizen Allow without a token",
+          "era": "Tizen",
+          "years": [
+            2016,
+            2016
+          ]
+        },
+        {
+          "name": "Tizen token over WSS",
+          "era": "Tizen",
+          "years": [
+            2017,
+            2025
+          ]
+        }
+      ],
+      "apps": [
+        {
+          "name": "Samsung Smart View for Android",
+          "url": "https://play.google.com/store/apps/details?id=com.samsung.smartviewad"
+        }
+      ],
       "clients": [
-        {"name": "samsungtvws", "url": "https://github.com/xchwarze/samsung-tv-ws-api"}
+        {
+          "name": "samsungtvws",
+          "url": "https://github.com/xchwarze/samsung-tv-ws-api"
+        },
+        {
+          "name": "samsungtvws-async",
+          "url": "https://github.com/xchwarze/samsung-tv-ws-api"
+        },
+        {
+          "name": "samsungtvws-encrypted",
+          "url": "https://github.com/xchwarze/samsung-tv-ws-api"
+        },
+        {
+          "name": "samsungctl",
+          "url": "https://github.com/Ape/samsungctl"
+        },
+        {
+          "name": "samsung-tv-control",
+          "url": "https://github.com/Toxblh/samsung-tv-control"
+        },
+        {
+          "name": "samsung-tv-remote",
+          "url": "https://github.com/Badisi/samsung-tv-remote"
+        },
+        {
+          "name": "samsung-remote",
+          "url": "https://github.com/natalan/samsung-remote"
+        }
       ],
       "captured": [
         {
           "name": "Samsung UE65U8072F",
-          "detail": "25_KSUE_UB",
+          "detail": "Tizen, 25_KSUE_UB",
           "profiles": [
             "samsung-tizen-tv-ue65u8072f"
           ]
         },
         {
           "name": "Samsung UE55DU7172U",
-          "detail": "24_KANTSU2E_UB",
+          "detail": "Tizen, 24_KANTSU2E_UB",
           "profiles": [
             "samsung-tizen-tv-ue55du7172u"
           ]
         },
         {
           "name": "Samsung UE43CU7172U",
-          "detail": "23_KSUE_UB_T09",
+          "detail": "Tizen, 23_KSUE_UB_T09",
           "profiles": [
             "samsung-tizen-tv-ue43cu7172u"
           ]
-        }
-      ]
-    },
-    {
-      "id": "orsay",
-      "display_name": "Samsung Smart TV (2014–15)",
-      "order": 90,
-      "summary": "SPC PIN pairing · encrypted Socket.IO companion channel · multiscreen API · SSDP",
-      "docs": "docs/platforms/orsay.md",
-      "remote": "Encrypted Socket.IO 0.9 companion channel **8000**; multiscreen API **8001**",
-      "discovery": "SSDP: four captured stacks, descriptions on **7676**",
-      "pairing": "Four-digit on-screen PIN, then SPC key exchange on **8080**",
-      "protocols": 5,
-      "captured": [
+        },
         {
           "name": "Samsung UE48H6200",
-          "detail": "14_X14, MSF 2.0.24",
+          "detail": "Orsay (2014\u201315), 14_X14, MSF 2.0.24",
           "profiles": [
             "samsung-orsay-tv-ue48h6200"
-          ]
+          ],
+          "validated": true
+        },
+        {
+          "name": "Samsung UN40H5203 (2014), PIN/SPC with no companion",
+          "detail": "As its owner reported, PIN for step 0 type 0 only, a short refusal, Socket.IO 403 on 8080 and no companion channel, so no remote; Smart View lists it as unsupported; no local set measured",
+          "profiles": [
+            "samsung-orsay-tv-un40h5203-modelled"
+          ],
+          "modelled": true
+        },
+        {
+          "name": "Samsung UE46F8000 + SEK-2000 (2013 set, Evolution Kit)",
+          "detail": "2013 UE46F8000 with Evolution Kit: 2014 PIN/SPC and companion 8000. Smart View 2.1 validated modelled MediaRenderer discovery, PIN and remote keys; no physical Evolution Kit measured",
+          "profiles": [
+            "samsung-orsay-tv-ue46f8000-sek2000-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        },
+        {
+          "name": "Samsung D series (2011)",
+          "detail": "iApp remote on 55000 in the clear; Smart View and open-source clients, no set measured",
+          "profiles": [
+            "samsung-iapp-tv-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        },
+        {
+          "name": "Samsung E series (2012)",
+          "detail": "iApp remote on 55000, RSA and AES-ECB; Smart View, no set measured",
+          "profiles": [
+            "samsung-iapp-aes-tv-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        },
+        {
+          "name": "Samsung F series (2013)",
+          "detail": "iApp remote on 55000, RSA and AES-CTR selected by IMPROVEAUTH; Smart View 2.1 validated pairing, IV exchange, keys, keyboard, Unicode sync and reconnect; no physical set measured",
+          "profiles": [
+            "samsung-iapp-improved-tv-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        },
+        {
+          "name": "Samsung H series (2014), HTTP remote",
+          "detail": "Experimental: iApp remote over HTTP on 8080, which Smart View assigns to 2014-15 discovery data; original WatchON native routines exercised, no live app session or set measured",
+          "profiles": [
+            "samsung-iapp-web-tv-modelled"
+          ],
+          "modelled": true
+        },
+        {
+          "name": "Samsung UN55KU6290 (2016), Tizen PIN/SPC",
+          "detail": "The token channel times out at once with no prompt, as owners of the real set report; PIN/SPC on 8080 and companion on 8000. Smart View 2.1 sends every 2016 set to the token channel and fails here as it does on the real set; samsungtvws encrypted flow exercised; no local set measured",
+          "profiles": [
+            "samsung-tizen-pin-tv-un55ku6290-modelled"
+          ],
+          "modelled": true
+        },
+        {
+          "name": "Samsung UE48JU6400 (2015), Tizen PIN/SPC",
+          "detail": "The token channel admits with no prompt and refuses every key, as a real UE48JU6400 answered; PIN/SPC on 8080 and companion on 8000. Smart View chose PIN and controlled it; no local set measured",
+          "profiles": [
+            "samsung-tizen-pin-tv-ue48ju6400-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        },
+        {
+          "name": "Samsung UE43KU6079 (2016), Tizen Allow without token",
+          "detail": "The Allow prompt issues no token and an allowed client is admitted with any token, as reported on a real UE43KU6079; Boost Samsung Remote controlled it; no local set measured",
+          "profiles": [
+            "samsung-tizen-tv-ue43ku6079-modelled"
+          ],
+          "modelled": true
         }
       ]
     },
     {
       "id": "bravia",
       "display_name": "Sony BRAVIA",
-      "order": 100,
-      "summary": "ScalarWebAPI JSON-RPC · IRCC · Simple IP Control · PIN registration · Android TV Remote v1 · SSDP · Bonjour",
+      "kind": "tv",
+      "summary": "ScalarWebAPI JSON-RPC \u00b7 IRCC \u00b7 Simple IP Control \u00b7 PIN registration \u00b7 Android TV Remote v1 \u00b7 SSDP \u00b7 Bonjour",
       "docs": "docs/platforms/bravia.md",
       "remote": "ScalarWebAPI JSON-RPC and IRCC over HTTP **80**; Simple IP Control **20060**; Android TV Remote **v1 only** over TLS **6466**",
       "discovery": "SSDP: four captured stacks; Bonjour `_androidtvremote._tcp` (no `_androidtvremote2`)",
-      "pairing": "Four-digit PIN for an `auth` cookie; Polo v1 on **6467** — four hex symbols and a client certificate",
+      "pairing": "Four-digit PIN for an `auth` cookie; Polo v1 on **6467** \u2014 four hex symbols and a client certificate",
       "protocols": 10,
+      "generations": [
+        {
+          "name": "ScalarWebAPI, IRCC and Remote v1"
+        }
+      ],
       "clients": [
-        {"name": "pybravia", "url": "https://github.com/Drafteed/pybravia"}
+        {
+          "name": "pybravia",
+          "url": "https://github.com/Drafteed/pybravia"
+        }
       ],
       "captured": [
         {
@@ -345,14 +637,19 @@
     },
     {
       "id": "metz",
-      "display_name": "Metz Classic",
-      "order": 110,
-      "summary": "RCRService SOAP over HTTP · SSDP upnp:rootdevice · modelled from the vendor's remote app",
+      "display_name": "Metz",
+      "kind": "tv",
+      "summary": "RCRService SOAP over HTTP \u00b7 SSDP upnp:rootdevice \u00b7 modelled from the vendor's remote app",
       "docs": "docs/platforms/metz.md",
       "remote": "RCRService SOAP over HTTP **49200**",
       "discovery": "SSDP `upnp:rootdevice`, deviceType `RemoteControlReceiver:1`",
       "pairing": "None",
       "protocols": 2,
+      "generations": [
+        {
+          "name": "RCRService SOAP"
+        }
+      ],
       "captured": [
         {
           "name": "Metz Classic",
@@ -365,41 +662,84 @@
       ]
     },
     {
-      "id": "nscreen",
-      "display_name": "TCL nScreen",
-      "order": 120,
-      "summary": "nScreen XML remote over TCP · DLNA renderer · DIAL · SSDP, two stacks",
-      "docs": "docs/platforms/nscreen.md",
-      "remote": "nScreen XML actions over TCP **4123**; no pairing",
-      "discovery": "SSDP: two captured stacks (MediaRenderer on **49152**, DIAL description on **56790**)",
-      "pairing": "None",
-      "protocols": 5,
+      "id": "tcltv",
+      "display_name": "TCL",
+      "kind": "tv",
+      "summary": "nScreen XML remote \u00b7 T-Cast remote with optional AES \u00b7 DLNA renderer \u00b7 DIAL",
+      "docs": "docs/platforms/tcltv.md",
+      "remote": "nScreen XML actions over TCP **4123**, or T-Cast `>>` frames over TCP **6553**; by device",
+      "discovery": "SSDP, two captured stacks, for nScreen; T-Cast's own broadcast on UDP **6537**",
+      "pairing": "None: nScreen has none, T-Cast a plaintext `159` handshake",
+      "protocols": 7,
+      "generations": [
+        {
+          "name": "nScreen"
+        },
+        {
+          "name": "T-Cast v8"
+        },
+        {
+          "name": "T-Cast v14"
+        }
+      ],
+      "clients": [
+        {
+          "name": "tcl-remote",
+          "url": "https://github.com/jarvis2f/tcl-remote"
+        }
+      ],
       "captured": [
         {
           "name": "TCL H32S5916",
-          "detail": "Linux 3.10, MediaTek MT5655 (not Roku, not Android TV)",
+          "detail": "Linux 3.10, MediaTek MT5655 (not Roku, not Android TV); nScreen",
           "profiles": [
             "tcl-h32s5916"
           ]
+        },
+        {
+          "name": "TCL T-Cast set",
+          "detail": "Modelled, no set measured; T-Cast",
+          "profiles": [
+            "tcl-tcast-v8-modelled",
+            "tcl-tcast-v14-modelled"
+          ],
+          "modelled": true
         }
       ]
     },
     {
       "id": "viera",
       "display_name": "Panasonic VIERA",
-      "order": 120,
-      "summary": "NRC SOAP over HTTP, plain or PIN-paired and encrypted · volume, inputs and events · pointer and gamepad socket · driven by Panasonic TV Remote 2 and 3",
+      "kind": "tv",
+      "summary": "NRC SOAP over HTTP, plain or PIN-paired and encrypted \u00b7 volume, inputs and events \u00b7 pointer and gamepad socket \u00b7 driven by Panasonic TV Remote 2 and 3",
       "docs": "docs/platforms/viera.md",
       "remote": "NRC, renderer volume and PAC over HTTP **55000**; pointer and gamepad frames on TCP **55010**",
       "discovery": "SSDP `urn:panasonic-com:service:p00NetworkControl:1`, `p00RemoteController:1`, or a search by UDN",
       "pairing": "None on the older device; a four-digit PIN with AES-encrypted sessions on the newer one",
       "protocols": 3,
+      "generations": [
+        {
+          "name": "NRC-2 without a PIN"
+        },
+        {
+          "name": "NRC-4 with a PIN and AES"
+        }
+      ],
       "clients": [
-        {"name": "panasonic-viera", "url": "https://github.com/florianholzapfel/panasonic-viera"}
+        {
+          "name": "panasonic-viera",
+          "url": "https://github.com/florianholzapfel/panasonic-viera"
+        }
       ],
       "apps": [
-        {"name": "Panasonic TV Remote 3 for iOS", "url": "https://apps.apple.com/app/id1435893441"},
-        {"name": "Panasonic TV Remote 2 for iOS", "url": "https://apps.apple.com/app/id590335696"}
+        {
+          "name": "Panasonic TV Remote 3 for iOS",
+          "url": "https://apps.apple.com/app/id1435893441"
+        },
+        {
+          "name": "Panasonic TV Remote 2 for iOS",
+          "url": "https://apps.apple.com/app/id590335696"
+        }
       ],
       "captured": [
         {
@@ -425,13 +765,18 @@
     {
       "id": "huawei",
       "display_name": "Huawei MediaQ",
-      "order": 130,
-      "summary": "huawei-remote key events over HTTP · TCP probe on 9001 · modelled",
+      "kind": "tv",
+      "summary": "huawei-remote key events over HTTP \u00b7 TCP probe on 9001 \u00b7 modelled",
       "docs": "docs/platforms/huawei.md",
       "remote": "`POST /huawei-remote?cmd=key_event` over HTTP **8080**, Android keycodes in headers",
       "discovery": "None advertised: the app connects to TCP **9001** across the subnet",
       "pairing": "None",
       "protocols": 2,
+      "generations": [
+        {
+          "name": "huawei-remote"
+        }
+      ],
       "captured": [
         {
           "name": "Huawei MediaQ",
@@ -446,13 +791,18 @@
     {
       "id": "yunos",
       "display_name": "YunOS / AliTV",
-      "order": 140,
-      "summary": "Binary remote over TCP 13510 · SSDP YunOSTV search · modelled",
+      "kind": "tv",
+      "summary": "Binary remote over TCP 13510 \u00b7 SSDP YunOSTV search \u00b7 modelled",
       "docs": "docs/platforms/yunos.md",
       "remote": "Binary login, key and heartbeat frames over TCP **13510**, Android keycodes",
       "discovery": "SSDP `urn:schemas-yunos-com:device:YunOSTV:1`, then a connect to TCP **13510**",
       "pairing": "None: a fixed login, answered with a session",
       "protocols": 2,
+      "generations": [
+        {
+          "name": "Binary remote on 13510"
+        }
+      ],
       "captured": [
         {
           "name": "YunOS / AliTV box",
@@ -467,13 +817,18 @@
     {
       "id": "xbox",
       "display_name": "Xbox",
-      "order": 150,
-      "summary": "SmartGlass over UDP 5050 · ECDH connect, AES-CBC session · captured session, input modelled from OpenXbox",
+      "kind": "console",
+      "summary": "SmartGlass over UDP 5050 \u00b7 ECDH connect, AES-CBC session \u00b7 captured session, input modelled from OpenXbox",
       "docs": "docs/platforms/xbox.md",
       "remote": "Encrypted SmartGlass messages over UDP **5050**: gamepad, media commands, system text",
       "discovery": "SmartGlass discovery request broadcast to UDP **5050**; SSDP for its DLNA renderer",
       "pairing": "Anonymous ECDH P-256 connect against the console's certificate",
       "protocols": 3,
+      "generations": [
+        {
+          "name": "SmartGlass, OS 10.0"
+        }
+      ],
       "captured": [
         {
           "name": "Xbox console",
@@ -486,14 +841,19 @@
     },
     {
       "id": "letv",
-      "display_name": "LeTV / LeEco",
-      "order": 160,
-      "summary": "JSON key datagrams over UDP 9900 · TCP probe on 13489 · modelled",
+      "display_name": "LeEco (LeTV)",
+      "kind": "tv",
+      "summary": "JSON key datagrams over UDP 9900 \u00b7 TCP probe on 13489 \u00b7 modelled",
       "docs": "docs/platforms/letv.md",
       "remote": "`{\"CONTROL_ACTION\":\"<action>\"}` datagrams over UDP **9900**, one per button",
       "discovery": "None advertised: the app connects to TCP **13489** across the subnet",
       "pairing": "None",
       "protocols": 2,
+      "generations": [
+        {
+          "name": "JSON over UDP 9900"
+        }
+      ],
       "captured": [
         {
           "name": "LeTV / LeEco set",
@@ -508,15 +868,23 @@
     {
       "id": "appletv",
       "display_name": "Apple TV",
-      "order": 170,
-      "summary": "Companion link over TCP 49153 · HAP PIN pairing · sealed OPACK · Bonjour",
+      "kind": "tv",
+      "summary": "Companion link over TCP 49153 \u00b7 HAP PIN pairing \u00b7 sealed OPACK \u00b7 Bonjour",
       "docs": "docs/platforms/appletv.md",
       "remote": "Companion link over TCP **49153**: buttons, touch, Remote Text Input, apps, power state, volume",
       "discovery": "Bonjour `_companion-link._tcp` with the set's `rp*` TXT record",
       "pairing": "HAP pair-setup by a four-digit PIN on screen, then pair-verify on every connection",
       "protocols": 2,
+      "generations": [
+        {
+          "name": "Companion link, tvOS 26.5"
+        }
+      ],
       "clients": [
-        {"name": "pyatv", "url": "https://github.com/postlund/pyatv"}
+        {
+          "name": "pyatv",
+          "url": "https://github.com/postlund/pyatv"
+        }
       ],
       "captured": [
         {
@@ -530,16 +898,36 @@
     },
     {
       "id": "mitv",
-      "display_name": "Xiaomi Mi TV (GiTV)",
-      "order": 180,
-      "summary": "GiTV remote over HTTP 6095 · isalive sweep · modelled",
+      "display_name": "Xiaomi Mi TV",
+      "kind": "tv",
+      "summary": "TV Assistant HTTP, airkan pairing and RC \u00b7 modelled",
       "docs": "docs/platforms/mitv.md",
-      "remote": "Bodiless `GET`s on HTTP **6095**: `keyevent`, `changesource`, `getVolum`",
-      "discovery": "None advertised: the client sends `isalive` across the subnet",
-      "pairing": "None",
-      "protocols": 1,
+      "remote": "HTTP **6095** and **9095**: keys, volume, applications and device name",
+      "discovery": "mDNS and TCP **6087** service verification; isalive sweep",
+      "pairing": "6-digit code on newer firmware",
+      "protocols": 8,
+      "generations": [
+        {
+          "name": "GiTV"
+        },
+        {
+          "name": "TV Assistant"
+        },
+        {
+          "name": "airkan"
+        }
+      ],
+      "apps": [
+        {
+          "name": "Xiaomi TV Assistant for Android",
+          "url": "https://sj.qq.com/appdetail/com.xiaomi.mitv.phone.tvassistant"
+        }
+      ],
       "clients": [
-        {"name": "pymitv", "url": "https://github.com/simse/pymitv"}
+        {
+          "name": "pymitv",
+          "url": "https://github.com/simse/pymitv"
+        }
       ],
       "captured": [
         {
@@ -547,6 +935,103 @@
           "detail": "Modelled, no set measured",
           "profiles": [
             "xiaomi-mitv-gitv-modelled"
+          ],
+          "modelled": true
+        },
+        {
+          "name": "Xiaomi Mi TV (TV Assistant)",
+          "detail": "Social 110; modelled, no set measured",
+          "profiles": [
+            "xiaomi-mitv-tva-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        },
+        {
+          "name": "Xiaomi Mi TV (airkan)",
+          "detail": "Social 111; modelled, no set measured",
+          "profiles": [
+            "xiaomi-mitv-airkan-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        }
+      ]
+    },
+    {
+      "id": "xgimi",
+      "display_name": "XGIMI",
+      "kind": "projector",
+      "summary": "JSON over UDP 16750 or framed TCP 13145 \u00b7 UDP broadcast discovery \u00b7 modelled",
+      "docs": "docs/platforms/xgimi.md",
+      "remote": "ASCII `KEYPRESSES:<code>` datagrams on UDP **16735**, or JSON `action 50036` over TCP **13145**",
+      "discovery": "`{\"action\":9998}` broadcast to UDP **16752**, answered to the phone's UDP **16751**",
+      "pairing": "A code shown on the projector, sent back as `action 50001`",
+      "protocols": 4,
+      "generations": [
+        {
+          "name": "UDP, older firmware"
+        },
+        {
+          "name": "TCP, newer firmware"
+        }
+      ],
+      "captured": [
+        {
+          "name": "XGIMI projector, older firmware",
+          "detail": "JSON over UDP; modelled, no projector measured",
+          "profiles": [
+            "xgimi-projector-udp-modelled"
+          ],
+          "modelled": true
+        },
+        {
+          "name": "XGIMI projector, newer firmware",
+          "detail": "JSON over TCP; modelled, no projector measured",
+          "profiles": [
+            "xgimi-projector-tcp-modelled"
+          ],
+          "modelled": true
+        }
+      ]
+    },
+    {
+      "id": "jmgo",
+      "display_name": "JMGO",
+      "kind": "projector",
+      "summary": "Google TV Anymote over plain TCP 9005 \u00b7 UDP broadcast discovery \u00b7 modelled",
+      "docs": "docs/platforms/jmgo.md",
+      "remote": "Anymote `KeyEvent` down and up after a varint length over TCP **9005**",
+      "discovery": "`discover _anymote._tcp 9101` broadcast to UDP **9101**, answered to the sender's port",
+      "pairing": "None",
+      "protocols": 2,
+      "generations": [
+        {
+          "name": "Anymote, three firmwares"
+        }
+      ],
+      "captured": [
+        {
+          "name": "JMGO projector, newer firmware",
+          "detail": "Power key 2011; modelled, no projector measured",
+          "profiles": [
+            "jmgo-projector-modelled"
+          ],
+          "modelled": true
+        },
+        {
+          "name": "JMGO projector, older Arwen firmware",
+          "detail": "Power key 705; modelled, no projector measured",
+          "profiles": [
+            "jmgo-projector-arwen-modelled"
+          ],
+          "modelled": true
+        },
+        {
+          "name": "JMGO projector with ambient light",
+          "detail": "C62A family; modelled, no projector measured",
+          "profiles": [
+            "jmgo-projector-light-modelled"
           ],
           "modelled": true
         }

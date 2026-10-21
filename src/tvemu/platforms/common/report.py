@@ -22,7 +22,7 @@ from .claims import (
     ValueSetClaim,
 )
 from .evidence import Capture, load_captures
-from .ir import ContractIR, WireNode, build_ir, paths_of, schema_for, values_at
+from .ir import ContractIR, ObservedOperation, WireNode, build_ir, paths_of, schema_for, values_at
 from .routing import Surface
 
 # aiohttp names a path variable with an inline pattern; OpenAPI wants the bare name.
@@ -94,8 +94,16 @@ def contract_problems(platform_id: str, surface: Surface) -> tuple[str, ...]:
     for operation_id, declared in operation_claims.items():
         operation = observed.operation(operation_id)
         if operation is None:
-            problems.append(f"{operation_id}: claims reference no captured operation")
-            continue
+            # A bodiless client request still establishes an operation, even when no
+            # answer is known. Served presence claims must not require invented bytes.
+            exchange = next((exchange for capture in captures.values()
+                             for exchange in capture.exchanges.values()
+                             if any((step.operation_id or exchange.operation_id) == operation_id
+                                    for step in exchange.steps)), None)
+            if exchange is None or operation_id not in declared_operations:
+                problems.append(f"{operation_id}: claims reference no captured operation")
+                continue
+            operation = ObservedOperation(operation_id, exchange.transport, ())
         problems.extend(claim_problems(operation_id, operation, declared, captures))
     for operation_id, operation in observed.operations.items():
         statuses = {sample.metadata.get("status", 200)
@@ -114,6 +122,8 @@ def claim_problems(operation_id: str, operation, declared: OperationClaims,
     """Validate typed claims against their evidence-derived operation."""
     problems: list[str] = []
     observed_paths = set().union(*(paths_of(sample.node) for sample in operation.samples))
+    served_paths = {claim.path for claim in declared.claims
+                    if isinstance(claim, PresenceClaim) and claim.scope == "served"}
     for claim in declared.claims:
         for reference in claim.evidence:
             if reference.kind != "capture":
@@ -132,7 +142,7 @@ def claim_problems(operation_id: str, operation, declared: OperationClaims,
         # live; only the second is legitimate, and it says so with `scope="served"`.
         live = isinstance(claim, PresenceClaim) and (claim.scope == "served"
                                                      or claim.presence == "absent")
-        if claim.path and not live and claim.path not in observed_paths:
+        if claim.path and not live and claim.path not in observed_paths and claim.path not in served_paths:
             problems.append(f"{operation_id}: {claim.path} is in no capture")
         if isinstance(claim, PresenceClaim) and claim.presence == "required":
             for sample in operation.samples:

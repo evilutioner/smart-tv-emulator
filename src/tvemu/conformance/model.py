@@ -24,6 +24,9 @@ class ConformanceCase:
     replays: tuple[str, ...]
     timeout: float = DEFAULT_TIMEOUT
     setup: str = ""
+    scope: str = "replay"              # replay | evidence
+    capture: str = ""                  # evidence-only capture, not profile identity
+    evidence_steps: tuple[int, ...] = ()
     # (exchange, parent exchange, JSON path): a capture of a document the set carried inside
     # a field of another answer, compared out of that field of the parent's observed output.
     embedded: tuple[tuple[str, str, str], ...] = ()
@@ -31,7 +34,13 @@ class ConformanceCase:
     def __post_init__(self) -> None:
         if not self.exchanges:
             raise ValueError(f"{self.id}: a case needs at least one exchange")
-        if not self.replays:
+        if self.scope not in ("replay", "evidence"):
+            raise ValueError(f"{self.id}: unknown coverage scope {self.scope!r}")
+        if self.scope == "evidence" and self.replays:
+            raise ValueError(f"{self.id}: evidence cannot claim profile replay names")
+        if self.scope == "evidence" and (not self.capture or not self.evidence_steps):
+            raise ValueError(f"{self.id}: evidence needs a capture and selected steps")
+        if not self.replays and self.scope == "replay":
             raise ValueError(f"{self.id}: a case covers at least one replay")
         if self.timeout <= 0:
             raise ValueError(f"{self.id}: timeout must be positive")
@@ -69,6 +78,8 @@ class Plan:
     cases: list[ConformanceCase] = field(default_factory=list)
     gaps: list[CoverageGap] = field(default_factory=list)
     replays: int = 0
+    evidence_scenarios: int = 0
+    evidence_gaps: list[CoverageGap] = field(default_factory=list)
 
 
 @dataclass
@@ -78,14 +89,15 @@ class Report:
 
     @property
     def complete(self) -> bool:
-        return not self.plan.gaps
+        return not self.plan.gaps and not self.plan.evidence_gaps
 
     @property
     def passed(self) -> bool:
         return all(result.passed for result in self.results)
 
     def totals(self) -> dict[str, Any]:
-        covered = sum(len(result.case.replays) for result in self.results)
+        covered = sum(len(result.case.replays) for result in self.results
+                      if result.case.scope == "replay")
         return {
             "cases": len(self.results),
             "passed": sum(result.passed for result in self.results),
@@ -95,6 +107,10 @@ class Report:
             "passed_replays": sum(len(result.case.replays)
                                   for result in self.results if result.passed),
             "uncovered_replays": len(self.plan.gaps),
+            "evidence_scenarios": self.plan.evidence_scenarios,
+            "passed_evidence_scenarios": sum(result.passed for result in self.results
+                                             if result.case.scope == "evidence"),
+            "uncovered_evidence_scenarios": len(self.plan.evidence_gaps),
         }
 
     def summary(self) -> dict[str, dict[str, int]]:
@@ -108,13 +124,19 @@ class Report:
         for result in self.results:
             column = "passed" if result.passed else "failed"
             case = result.case
-            for key in (f"platform {case.platform}",
-                        f"profile {case.platform}/{case.profile}",
-                        f"driver {case.driver}"):
-                bump(key, column, len(case.replays))
+            prefix = "evidence " if case.scope == "evidence" else ""
+            for key in (f"{prefix}platform {case.platform}",
+                        f"{prefix}profile {case.platform}/{case.profile}",
+                        f"{prefix}driver {case.driver}"):
+                bump(key, column, len(case.replays) if case.scope == "replay" else 1)
         for gap in self.plan.gaps:
             for key in (f"platform {gap.platform}", f"profile {gap.platform}/{gap.profile}",
                         f"transport {gap.transport}"):
+                bump(key, "uncovered")
+        for gap in self.plan.evidence_gaps:
+            for key in (f"evidence platform {gap.platform}",
+                        f"evidence profile {gap.platform}/{gap.profile}",
+                        f"evidence transport {gap.transport}"):
                 bump(key, "uncovered")
         return rows
 
@@ -130,4 +152,5 @@ class Report:
                 "notes": result.notes,
             } for result in self.results],
             "uncovered": [asdict(gap) for gap in self.plan.gaps],
+            "uncovered_evidence": [asdict(gap) for gap in self.plan.evidence_gaps],
         }

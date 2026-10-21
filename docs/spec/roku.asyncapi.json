@@ -9,6 +9,24 @@
     "ecp-2": {
       "address": "ecp-2",
       "messages": {
+        "ecp-2.plugin-ui-run": {
+          "$ref": "#/components/messages/ecp-2.plugin-ui-run"
+        },
+        "ecp-2.plugin-ui-run-script": {
+          "$ref": "#/components/messages/ecp-2.plugin-ui-run-script"
+        },
+        "ecp-2.plugin-ui-exit": {
+          "$ref": "#/components/messages/ecp-2.plugin-ui-exit"
+        },
+        "ecp-2.textedit-opened": {
+          "$ref": "#/components/messages/ecp-2.textedit-opened"
+        },
+        "ecp-2.textedit-changed": {
+          "$ref": "#/components/messages/ecp-2.textedit-changed"
+        },
+        "ecp-2.textedit-closed": {
+          "$ref": "#/components/messages/ecp-2.textedit-closed"
+        },
         "ecp-2.param-challenge": {
           "$ref": "#/components/messages/ecp-2.param-challenge"
         },
@@ -47,11 +65,164 @@
         },
         "ecp-2.query-tv-channels": {
           "$ref": "#/components/messages/ecp-2.query-tv-channels"
+        },
+        "ecp-2.launch": {
+          "$ref": "#/components/messages/ecp-2.launch"
+        },
+        "ecp-2.input": {
+          "$ref": "#/components/messages/ecp-2.input"
+        },
+        "ecp-2.request-events": {
+          "$ref": "#/components/messages/ecp-2.request-events"
+        },
+        "ecp-2.set-audio-output": {
+          "$ref": "#/components/messages/ecp-2.set-audio-output"
+        },
+        "ecp-2.mobile-sas-disconnect": {
+          "$ref": "#/components/messages/ecp-2.mobile-sas-disconnect"
+        },
+        "ecp-2.set-textedit-text": {
+          "$ref": "#/components/messages/ecp-2.set-textedit-text"
+        },
+        "ecp-2.query-themes": {
+          "$ref": "#/components/messages/ecp-2.query-themes"
+        },
+        "ecp-2.query-screensavers": {
+          "$ref": "#/components/messages/ecp-2.query-screensavers"
+        },
+        "ecp-2.query-av-sync-offset": {
+          "$ref": "#/components/messages/ecp-2.query-av-sync-offset"
+        },
+        "ecp-2.query-curr-audio-format": {
+          "$ref": "#/components/messages/ecp-2.query-curr-audio-format"
+        },
+        "ecp-2.query-tv-active-channel": {
+          "$ref": "#/components/messages/ecp-2.query-tv-active-channel"
+        },
+        "ecp-2.query-tv-channels-ex": {
+          "$ref": "#/components/messages/ecp-2.query-tv-channels-ex"
+        },
+        "ecp-2.query-tv-active-input": {
+          "$ref": "#/components/messages/ecp-2.query-tv-active-input"
+        },
+        "ecp-2.query-warm-standby": {
+          "$ref": "#/components/messages/ecp-2.query-warm-standby"
+        },
+        "ecp-2.query-pq-options": {
+          "$ref": "#/components/messages/ecp-2.query-pq-options"
+        },
+        "ecp-2.query-pq-picture-modes": {
+          "$ref": "#/components/messages/ecp-2.query-pq-picture-modes"
+        },
+        "ecp-2.query-pq-picture-settings": {
+          "$ref": "#/components/messages/ecp-2.query-pq-picture-settings"
+        },
+        "ecp-2.query-audio-settings": {
+          "$ref": "#/components/messages/ecp-2.query-audio-settings"
+        },
+        "ecp-2.check-link": {
+          "$ref": "#/components/messages/ecp-2.check-link"
+        }
+      }
+    },
+    "rtcp": {
+      "address": "rtcp",
+      "messages": {
+        "roku.rtcp.reply": {
+          "$ref": "#/components/messages/roku.rtcp.reply"
+        },
+        "roku.rtcp.feedback": {
+          "$ref": "#/components/messages/roku.rtcp.feedback"
+        }
+      }
+    },
+    "sas": {
+      "address": "sas",
+      "messages": {
+        "roku.sas.feedback": {
+          "$ref": "#/components/messages/roku.sas.feedback"
+        },
+        "roku.sas.datagram": {
+          "$ref": "#/components/messages/roku.sas.datagram"
+        }
+      }
+    },
+    "rtp": {
+      "address": "rtp",
+      "messages": {
+        "roku.rtp.audio": {
+          "$ref": "#/components/messages/roku.rtp.audio"
         }
       }
     }
   },
   "operations": {
+    "ecp-2.plugin-ui-run": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.plugin-ui-run"
+        }
+      ]
+    },
+    "ecp-2.plugin-ui-run-script": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.plugin-ui-run-script"
+        }
+      ]
+    },
+    "ecp-2.plugin-ui-exit": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.plugin-ui-exit"
+        }
+      ]
+    },
+    "ecp-2.textedit-opened": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.textedit-opened"
+        }
+      ]
+    },
+    "ecp-2.textedit-changed": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.textedit-changed"
+        }
+      ]
+    },
+    "ecp-2.textedit-closed": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.textedit-closed"
+        }
+      ]
+    },
     "ecp-2.param-challenge": {
       "action": "send",
       "channel": {
@@ -194,10 +365,442 @@
           "$ref": "#/channels/ecp-2/messages/ecp-2.query-tv-channels"
         }
       ]
+    },
+    "ecp-2.launch": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.launch"
+        }
+      ]
+    },
+    "ecp-2.input": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.input"
+        }
+      ]
+    },
+    "ecp-2.request-events": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.request-events"
+        }
+      ]
+    },
+    "ecp-2.set-audio-output": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.set-audio-output"
+        }
+      ]
+    },
+    "ecp-2.mobile-sas-disconnect": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.mobile-sas-disconnect"
+        }
+      ]
+    },
+    "ecp-2.set-textedit-text": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.set-textedit-text"
+        }
+      ]
+    },
+    "ecp-2.query-themes": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-themes"
+        }
+      ]
+    },
+    "ecp-2.query-screensavers": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-screensavers"
+        }
+      ]
+    },
+    "ecp-2.query-av-sync-offset": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-av-sync-offset"
+        }
+      ]
+    },
+    "ecp-2.query-curr-audio-format": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-curr-audio-format"
+        }
+      ]
+    },
+    "ecp-2.query-tv-active-channel": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-tv-active-channel"
+        }
+      ]
+    },
+    "ecp-2.query-tv-channels-ex": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-tv-channels-ex"
+        }
+      ]
+    },
+    "ecp-2.query-tv-active-input": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-tv-active-input"
+        }
+      ]
+    },
+    "ecp-2.query-warm-standby": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-warm-standby"
+        }
+      ]
+    },
+    "ecp-2.query-pq-options": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-pq-options"
+        }
+      ]
+    },
+    "ecp-2.query-pq-picture-modes": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-pq-picture-modes"
+        }
+      ]
+    },
+    "ecp-2.query-pq-picture-settings": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-pq-picture-settings"
+        }
+      ]
+    },
+    "ecp-2.query-audio-settings": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.query-audio-settings"
+        }
+      ]
+    },
+    "ecp-2.check-link": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/ecp-2"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/ecp-2/messages/ecp-2.check-link"
+        }
+      ]
+    },
+    "roku.rtcp.reply": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/rtcp"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/rtcp/messages/roku.rtcp.reply"
+        }
+      ]
+    },
+    "roku.rtcp.feedback": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/rtcp"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/rtcp/messages/roku.rtcp.feedback"
+        }
+      ]
+    },
+    "roku.sas.feedback": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/sas"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/sas/messages/roku.sas.feedback"
+        }
+      ]
+    },
+    "roku.rtp.audio": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/rtp"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/rtp/messages/roku.rtp.audio"
+        }
+      ]
+    },
+    "roku.sas.datagram": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/sas"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/sas/messages/roku.sas.datagram"
+        }
+      ]
     }
   },
   "components": {
     "messages": {
+      "ecp-2.plugin-ui-run": {
+        "name": "plugin-ui-run",
+        "title": "A subscribed channel-start notification.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "notify": {
+              "type": "string"
+            },
+            "param-channel-id": {
+              "type": "string"
+            },
+            "param-channel-title": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.plugin-ui-run-script": {
+        "name": "plugin-ui-run-script",
+        "title": "A captured channel-script notification; requires a profile template.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "notify": {
+              "type": "string"
+            },
+            "param-channel-id": {
+              "type": "string"
+            },
+            "param-channel-title": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.plugin-ui-exit": {
+        "name": "plugin-ui-exit",
+        "title": "A subscribed channel-exit notification.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "notify": {
+              "type": "string"
+            },
+            "param-channel-id": {
+              "type": "string"
+            },
+            "param-channel-title": {
+              "type": "string"
+            },
+            "param-plugin-exit-code": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.textedit-opened": {
+        "name": "textedit-opened",
+        "title": "A measured native text field opened.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "notify": {
+              "type": "string"
+            },
+            "param-masked": {
+              "type": "string"
+            },
+            "param-max-length": {
+              "type": "string"
+            },
+            "param-selection-end": {
+              "type": "string"
+            },
+            "param-selection-start": {
+              "type": "string"
+            },
+            "param-text": {
+              "type": "string"
+            },
+            "param-textedit-id": {
+              "type": "string",
+              "description": "Live field identity increments on opening; closing names the former id."
+            },
+            "param-textedit-type": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string"
+            }
+          },
+          "description": "Subscribed connections have independent notification queues."
+        }
+      },
+      "ecp-2.textedit-changed": {
+        "name": "textedit-changed",
+        "title": "Native text and collapsed cursor changed.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "notify": {
+              "type": "string"
+            },
+            "param-masked": {
+              "type": "string"
+            },
+            "param-max-length": {
+              "type": "string"
+            },
+            "param-selection-end": {
+              "type": "string"
+            },
+            "param-selection-start": {
+              "type": "string"
+            },
+            "param-text": {
+              "type": "string"
+            },
+            "param-textedit-id": {
+              "type": "string",
+              "description": "Live field identity increments on opening; closing names the former id."
+            },
+            "param-textedit-type": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string"
+            }
+          },
+          "description": "Subscribed connections have independent notification queues."
+        }
+      },
+      "ecp-2.textedit-closed": {
+        "name": "textedit-closed",
+        "title": "The native text field closed.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "notify": {
+              "type": "string"
+            },
+            "param-textedit-id": {
+              "type": "string",
+              "description": "Live field identity increments on opening; closing names the former id."
+            },
+            "timestamp": {
+              "type": "string"
+            }
+          },
+          "description": "Subscribed connections have independent notification queues."
+        }
+      },
       "ecp-2.param-challenge": {
         "name": "param-challenge",
         "title": "The authentication challenge, sent unprompted as the socket opens.",
@@ -236,7 +839,7 @@
       },
       "ecp-2.authenticate": {
         "name": "authenticate",
-        "title": "The only request that may carry request-id 1.",
+        "title": "The answer to the challenge, the only request before it succeeds.",
         "contentType": "application/octet-stream",
         "payload": {
           "type": "object",
@@ -246,15 +849,19 @@
             },
             "request-id": {
               "type": "string",
-              "enum": [
-                "1"
+              "examples": [
+                "1",
+                "0",
+                "abc"
               ],
-              "description": "The one request id the set prescribes."
+              "description": "Any string, echoed as response-id like every other request's: the set prescribes no value. The official Roku app for Android numbers its requests from 0, so its authenticate carries \"0\"; other clients start at 1.\nThe same framing rule as after authenticating."
             },
             "param-response": {
-              "type": "string"
+              "type": "string",
+              "description": "A wrong answer does not end the session: the client may answer the same challenge again, and a right answer then authenticates it."
             }
-          }
+          },
+          "description": "The deadline runs from the open, whatever the client sent meanwhile; an authenticated session idle for 80 s stayed open.\nOnce authenticated, authenticate is no longer a request the session has."
         }
       },
       "ecp-2.response": {
@@ -272,19 +879,65 @@
                 "key-down",
                 "key-up",
                 "query-device-info",
+                "request-events",
+                "launch",
+                "input",
                 "query-active-app",
                 "query-apps",
                 "query-media-player",
                 "query-textedit-state",
                 "query-audio-device",
                 "query-tv-channels",
+                "commit-av-sync-offset",
+                "query-av-sync-offset",
+                "reset-av-sync-offset-all",
+                "set-av-sync-offset",
+                "query-curr-audio-format",
+                "check-link",
+                "input",
+                "key-down",
+                "key-press",
+                "key-up",
+                "launch",
+                "mobile-sas-disconnect",
+                "query-tv-active-channel",
+                "query-audio-setting",
+                "query-audio-settings",
+                "capture-screen",
+                "query-device-info",
+                "generate-issue-id",
                 "query-icon",
-                "set-textedit-text",
                 "query-info-for-voice-service",
-                "send-voice-events",
+                "query-pq-color-space-settings",
+                "query-pq-color-temp-settings",
+                "query-pq-options",
+                "query-pq-picture-modes",
+                "query-pq-picture-settings",
+                "query-screensavers",
+                "query-themes",
+                "query-tv-active-input",
+                "query-tv-channels-ex",
+                "query-warm-standby",
+                "authenticate",
                 "request-events",
+                "reset-audio-setting",
+                "reset-audio-settings",
+                "get-mobile-pl-headset-delay",
+                "set-mobile-pl-headset-delay",
+                "send-intent",
+                "send-voice-events",
                 "set-audio-output",
-                "launch"
+                "set-audio-setting",
+                "set-pq-color-space-settings",
+                "set-pq-color-temp-settings",
+                "set-pq-picture-mode",
+                "set-pq-picture-settings",
+                "set-screensaver",
+                "set-textedit-text",
+                "set-warm-standby",
+                "sync-channels",
+                "initiate-becp-pairing",
+                "remove-ble-device"
               ],
               "description": "Echoes the request name."
             },
@@ -296,16 +949,22 @@
               "enum": [
                 "200",
                 "202",
+                "204",
+                "401",
+                "601",
                 "400",
                 "404"
               ],
-              "description": "A decimal string about the request, not the transport: a refusal arrives in a successful frame. 400 is an unusable parameter, 404 an unknown request name, 202 the release of a key not held."
+              "description": "A decimal string about the request, not the transport: a refusal arrives in a successful frame. 400 is an unusable parameter, 404 an unknown request name, 202 the release of a key not held, 401 a request before authenticating and 601 a wrong challenge answer.\nNothing but authenticate is served before it succeeds."
             },
             "status-msg": {
               "type": "string",
               "enum": [
                 "OK",
                 "Accepted",
+                "No Content",
+                "Unauthorized",
+                "Invalid Credentials",
                 "Bad Request",
                 "Not Found"
               ],
@@ -342,9 +1001,18 @@
                 "Home",
                 "home",
                 "Lit_a",
-                "LIT_a"
+                "LIT_a",
+                "Stop",
+                "Guide",
+                "LiveTV",
+                "Exit",
+                "ClosedCaption",
+                "Red",
+                "Green",
+                "Yellow",
+                "Blue"
               ],
-              "description": "A button name, or Lit_ and exactly one raw UTF-8 character. Case is ignored, so a client that sends LIT_ works. Nothing is percent-decoded on this wire: Lit_%20 is 400 while a literal space is 200, although over HTTP /keypress/%48ome presses Home. Anything else, or a field spelled key, is 400."
+              "description": "A button name, or Lit_ and exactly one raw UTF-8 character. Case is ignored, so a client that sends LIT_ works. Nothing is percent-decoded on this wire: Lit_%20 is 400 while a literal space is 200, although over HTTP /keypress/%48ome presses Home. Anything else, or a field spelled key, is 400.\nNames the official Roku app for Android has that the set does not take."
             }
           }
         }
@@ -482,7 +1150,8 @@
             "request-id": {
               "type": "string"
             }
-          }
+          },
+          "description": "Ordered Stick audio-state capture, separately measured over HTTP and ecp-2."
         }
       },
       "ecp-2.query-tv-channels": {
@@ -499,6 +1168,435 @@
               "type": "string"
             }
           }
+        }
+      },
+      "ecp-2.launch": {
+        "name": "launch",
+        "title": "Launch a channel, with its params as one JSON string.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            },
+            "param-channel-id": {
+              "type": "string",
+              "description": "The emulator does not follow: like the HTTP launch, it accepts any id."
+            },
+            "param-params": {
+              "type": "string",
+              "examples": [
+                "{}",
+                "not json"
+              ],
+              "description": "One string holding a JSON object; the official Roku app for Android always sends its gc_run_source keys. Missing, empty and {} are all no params."
+            }
+          },
+          "description": "The set leaves a running channel alone; the official Roku app for Android reads 204 as already launched.\nWith params, a running channel is restarted.\nBoth parameters are checked before anything runs."
+        }
+      },
+      "ecp-2.input": {
+        "name": "input",
+        "title": "Hand params to a channel, launching it if it is not running.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            },
+            "param-channel-id": {
+              "type": "string",
+              "description": "The emulator does not follow, as for launch."
+            },
+            "param-params": {
+              "type": "string"
+            }
+          },
+          "description": "A channel that is not running is launched to take them."
+        }
+      },
+      "ecp-2.request-events": {
+        "name": "request-events",
+        "title": "Subscribe to notifications, +name or -name, comma separated.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            },
+            "param-events": {
+              "type": "string",
+              "examples": [
+                "+language-changed,+language-changing,+media-player-state-changed,+plugin-ui-run,+plugin-ui-run-script,+plugin-ui-exit,+screensaver-run,+screensaver-exit,+plugins-changed,+sync-completed,+power-mode-changed,+volume-changed,+textedit-opened,+textedit-closed,+textedit-changed,+device-name-changed,+device-location-changed,+audio-setting-changed,+audio-settings-invalidated,+user-profile-changed,+tv-power-volume-control-changed",
+                "+volume-changed,+no-such-event",
+                "+VOLUME-CHANGED"
+              ],
+              "description": "Comma-separated entries, each + or - and an event name; empty entries are skipped. Names are case sensitive and nothing is trimmed. A stick takes the television's tuner and input events too. The list the official Roku app for Android sends is the one captured.\nPart of the list is taken.\nNothing is taken."
+            }
+          },
+          "description": "The parameter is required."
+        }
+      },
+      "ecp-2.set-audio-output": {
+        "name": "set-audio-output",
+        "title": "Start prepared private-listening test audio.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            },
+            "param-audio-output": {
+              "type": "string"
+            },
+            "param-guid": {
+              "type": "string"
+            },
+            "param-sas-min-version": {
+              "type": "string"
+            },
+            "param-sas-max-version": {
+              "type": "string"
+            },
+            "param-sas-ip-address": {
+              "type": "string"
+            },
+            "param-sas-port": {
+              "type": "string"
+            },
+            "param-app-build": {
+              "type": "string"
+            },
+            "param-os-version": {
+              "type": "string"
+            },
+            "param-devname": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.mobile-sas-disconnect": {
+        "name": "mobile-sas-disconnect",
+        "title": "Stop this client's SAS stream.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            },
+            "param-devname": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.set-textedit-text": {
+        "name": "set-textedit-text",
+        "title": "A whole-field write; no native field captured yet.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "param-selection-end": {
+              "type": "string"
+            },
+            "param-selection-start": {
+              "type": "string"
+            },
+            "param-text": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            },
+            "param-textedit-id": {
+              "type": [
+                "integer",
+                "string"
+              ]
+            },
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          },
+          "description": "Measured unmasked full field only. Android String.length uses UTF-16, but this field counts Unicode codepoints.\nThe advertised full-field maximum was 75 characters."
+        }
+      },
+      "ecp-2.query-themes": {
+        "name": "query-themes",
+        "title": "Captured theme catalogue.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-screensavers": {
+        "name": "query-screensavers",
+        "title": "Captured screensaver catalogue.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-av-sync-offset": {
+        "name": "query-av-sync-offset",
+        "title": "Captured AV synchronization offsets.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-curr-audio-format": {
+        "name": "query-curr-audio-format",
+        "title": "Captured audio format.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-tv-active-channel": {
+        "name": "query-tv-active-channel",
+        "title": "The active tuner channel, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-tv-channels-ex": {
+        "name": "query-tv-channels-ex",
+        "title": "Extended tuner channels, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-tv-active-input": {
+        "name": "query-tv-active-input",
+        "title": "The active TV input, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-warm-standby": {
+        "name": "query-warm-standby",
+        "title": "Warm standby, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-pq-options": {
+        "name": "query-pq-options",
+        "title": "Picture options, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-pq-picture-modes": {
+        "name": "query-pq-picture-modes",
+        "title": "Picture modes, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-pq-picture-settings": {
+        "name": "query-pq-picture-settings",
+        "title": "Picture settings, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.query-audio-settings": {
+        "name": "query-audio-settings",
+        "title": "Audio settings, or a captured refusal.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ecp-2.check-link": {
+        "name": "check-link",
+        "title": "Captured device-link status.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "request": {
+              "type": "string"
+            },
+            "request-id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "roku.rtcp.reply": {
+        "name": "reply",
+        "title": "XDLY and NCLI replies sent to the client RTCP port.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "string",
+          "contentMediaType": "application/octet-stream"
+        }
+      },
+      "roku.rtcp.feedback": {
+        "name": "feedback",
+        "title": "Private-listening RTCP APP and receiver feedback.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "string",
+          "contentMediaType": "application/octet-stream"
+        }
+      },
+      "roku.sas.feedback": {
+        "name": "feedback",
+        "title": "Receiver timing status establishes a constant audio clock offset.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "string",
+          "contentMediaType": "application/octet-stream"
+        }
+      },
+      "roku.rtp.audio": {
+        "name": "audio",
+        "title": "A prepared 48 kHz Opus test tone in RTP packets.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "string",
+          "contentMediaType": "application/octet-stream"
+        }
+      },
+      "roku.sas.datagram": {
+        "name": "audio",
+        "title": "An experimental Opus test tone with SAS format-5 parity.",
+        "contentType": "application/octet-stream",
+        "payload": {
+          "type": "string",
+          "contentMediaType": "application/octet-stream"
         }
       }
     }

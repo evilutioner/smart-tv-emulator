@@ -11,7 +11,8 @@ per application instead.
 
 It also fills the blocks that state counts and lists across televisions — the README's
 badges and television table, and the detailed table in `docs/televisions.md` — from
-`catalogue.json`, so a number is written in one place. "In this build" means the build the
+`catalogue.json`, so a number is written in one place, and draws the README's generation
+timeline for every television with two or more generations into `docs/images/generations/`. "In this build" means the build the
 README describes: the platforms `PUBLIC.toml` names where that manifest exists, else the ones
 this tree runs.
 
@@ -25,6 +26,7 @@ import json
 import re
 import sys
 import tomllib
+from html import escape
 from urllib.parse import quote
 from pathlib import Path
 
@@ -92,8 +94,8 @@ def badges() -> str:
     listeners = sum(entry.protocols for entry in entries)
     clients = sum(len(entry.clients) for entry in entries)
     return "\n".join([
-        _badge("televisions", f"{included} included · {unavailable} N/A",
-               f"{included} included, {unavailable} N/A"),
+        _badge("platforms", f"{included} included · {unavailable} on request",
+               f"{included} included, {unavailable} on request"),
         _badge("captured devices", str(devices), f"{devices} captured devices"),
         _badge("validated with real apps", str(validated),
                f"{validated} devices validated with real apps"),
@@ -131,34 +133,207 @@ def _tested_with(entry, docs: str) -> str:
     return "<br>".join(tested) or "—"
 
 
+# How a catalogue kind reads in a table's Type column, and as a group of the README's table.
+KIND_NAMES = {"tv": "TV", "projector": "Projector", "console": "Console"}
+KIND_GROUPS = {"tv": "Televisions", "projector": "Projectors", "console": "Consoles"}
+
+# Where the README's generation timelines are written, one per platform with two or more.
+GENERATIONS = DOCS / "images" / "generations"
+# Fill colours by era, oldest first: two eras are the ends of the scale, three use all of it.
+# Each pairs a fill with a text colour for light and for dark pages.
+ERA_COLOURS = (("#EF9F27", "#BA7517", "#EF9F27"), ("#1D9E75", "#0F6E56", "#5DCAA5"),
+               ("#378ADD", "#185FA5", "#85B7EB"), ("#7F77DD", "#534AB7", "#AFA9EC"),
+               ("#D85A30", "#993C1D", "#F0997B"))
+TIMELINE_WIDTH = 240
+# A table cell shrinks an image to fit, so the column header holds the timeline's width open
+# with spaces a browser will not break.
+GENERATIONS_HEADER_PAD = "&nbsp;" * 34
+
+
+def _eras(entry) -> list[str]:
+    return list(dict.fromkeys(generation.family for generation in entry.generations))
+
+
+def _era_colours(count: int) -> list[tuple[str, str, str]]:
+    if count == 2:
+        return [ERA_COLOURS[0], ERA_COLOURS[2]]
+    return list(ERA_COLOURS[:count]) if count >= 3 else [ERA_COLOURS[2]]
+
+
+def _years(entry) -> tuple[int, int] | None:
+    spans = [generation.years for generation in entry.generations]
+    if not spans or None in spans:
+        return None
+    return min(span[0] for span in spans), max(span[1] for span in spans)
+
+
+def _era_labels(entry) -> list[str]:
+    """What the timeline says under its bar: eras counted, or each generation named."""
+    eras = _eras(entry)
+    if len(eras) == len(entry.generations):
+        return eras
+    return [f"{sum(g.family == era for g in entry.generations)} {era}" for era in eras]
+
+
+def _text_width(text: str) -> float:
+    return len(text) * 6.1
+
+
+def generation_timeline(entry) -> str:
+    """One platform's generations as a bar, oldest first, for a README table cell.
+
+    Segments are as wide as the model years they cover when every generation is dated, and
+    equal otherwise; the labels under the bar are coloured as their segments, so the cell
+    needs no legend.
+    """
+    eras = _eras(entry)
+    colours = dict(zip(eras, _era_colours(len(eras))))
+    dated = _years(entry) is not None
+    weights = [(g.years[1] - g.years[0] + 1) if dated else 1 for g in entry.generations]
+    gap = 2
+    usable = TIMELINE_WIDTH - gap * (len(weights) - 1)
+    parts, x, starts = [], 0.0, {}
+    for generation, weight in zip(entry.generations, weights):
+        width = usable * weight / sum(weights)
+        starts.setdefault(generation.family, (x, generation.years))
+        parts.append(f'<rect x="{x:.1f}" y="0" width="{width:.1f}" height="10" rx="2" '
+                     f'fill="{colours[generation.family][0]}"/>')
+        x += width + gap
+    y = 10
+    if dated:
+        y += 14
+        first, last = _years(entry)
+        ticks = [(start, years[0]) for start, years in starts.values()]
+        placed = []
+        for at, year in ticks:
+            if not placed or at - placed[-1] >= 34:
+                placed.append(at)
+                parts.append(f'<text class="year" x="{at:.1f}" y="{y}">{year}</text>')
+        if TIMELINE_WIDTH - placed[-1] >= 60:
+            parts.append(f'<text class="year" x="{TIMELINE_WIDTH}" y="{y}" '
+                         f'text-anchor="end">{last}</text>')
+    line, lines = [], []
+    for era, label in zip(eras, _era_labels(entry)):
+        candidate = line + [(era, label)]
+        if line and _text_width(" · ".join(text for _, text in candidate)) > TIMELINE_WIDTH:
+            lines.append(line)
+            candidate = [(era, label)]
+        line = candidate
+    lines.append(line)
+    styles = []
+    for index, era in enumerate(eras):
+        styles.append(f".e{index}{{fill:{colours[era][1]}}}")
+    dark = " ".join(f".e{index}{{fill:{colours[era][2]}}}" for index, era in enumerate(eras))
+    for row in lines:
+        y += 16
+        spans = []
+        for position, (era, label) in enumerate(row):
+            if position:
+                spans.append('<tspan class="dot"> · </tspan>')
+            spans.append(f'<tspan class="e{eras.index(era)}">{escape(label)}</tspan>')
+        parts.append(f'<text y="{y}">{"".join(spans)}</text>')
+    height = y + 4
+    title = escape(f"{entry.display_name}: " + ", ".join(_era_labels(entry)))
+    return "\n".join([
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{TIMELINE_WIDTH}" height="{height}" '
+        f'viewBox="0 0 {TIMELINE_WIDTH} {height}" role="img">',
+        f"  <title>{title}</title>",
+        "  <style>",
+        "    text { font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,"
+        " sans-serif; }",
+        "    .year { font-size: 11px; fill: #6e7781; } .dot { fill: #6e7781; }",
+        f"    {' '.join(styles)}",
+        f"    @media (prefers-color-scheme: dark) {{ .year, .dot {{ fill: #9198a1; }} {dark} }}",
+        "  </style>",
+        *(f"  {part}" for part in parts),
+        "</svg>",
+        "",
+    ])
+
+
+def generation_timelines() -> dict[Path, str]:
+    return {GENERATIONS / f"{entry.id}.svg": generation_timeline(entry)
+            for entry in catalogue_entries() if len(entry.generations) > 1}
+
+
+def _generations_cell(entry) -> str:
+    count = len(entry.generations)
+    if count == 0:
+        return "—"
+    if count == 1:
+        return entry.generations[0].name
+    years = _years(entry)
+    span = f" · {years[0]}&nbsp;→&nbsp;{years[1]}" if years and years[0] != years[1] else ""
+    image = (GENERATIONS / f"{entry.id}.svg").relative_to(ROOT).as_posix()
+    alt = escape(f"{entry.display_name} generations: " + ", ".join(_era_labels(entry)), quote=True)
+    return (f"**{count}**&nbsp;gens{span}<br>"
+            f'<img src="{image}" width="{TIMELINE_WIDTH}" alt="{alt}">')
+
+
+def _devices_cell(entry) -> str:
+    def count(test) -> int:
+        return sum(len(device.profiles) for device in entry.captured if test(device))
+    lines = [(count(lambda d: not d.modelled), "📡&nbsp;{}&nbsp;captured"),
+             (count(lambda d: d.modelled), "📱&nbsp;{}&nbsp;modelled"),
+             (count(lambda d: d.validated), "✅&nbsp;{}&nbsp;validated")]
+    return "<br>".join(text.format(number) for number, text in lines if number) or "—"
+
+
+def _tested_cell(entry) -> str:
+    lines = []
+    if entry.apps:
+        lines.append("✅ " + ", ".join(f"[{app.name}]({app.url})" for app in entry.apps))
+    if entry.clients:
+        lines.append("🧪 " + ", ".join(f"[{client.name}]({client.url})"
+                                      for client in entry.clients))
+    return "<br>".join(lines) or "—"
+
+
 def televisions() -> str:
-    """The README's table: one line per television, devices marked by how they are known."""
+    """The README's table: what this build includes first, then the rest by kind."""
     shipped = published()
-    lines = ["| Television | What it speaks | Devices | Tested with |",
-             "|---|---|---|---|"]
-    for entry in catalogue_entries():
-        devices = "<br>".join(f"{_evidence(device)} {_device_name(device)}"
-                              for device in entry.captured)
-        state = "**Included**" if entry.id in shipped else "N/A"
-        lines.append(f"| **[{entry.display_name}]({entry.docs})**<br>{state} | "
-                     f"{entry.summary} | {devices} | {_tested_with(entry, 'docs/')} |")
-    return "\n".join(lines)
+    entries = catalogue_entries()
+    included = [entry for entry in entries if entry.id in shipped]
+    others = [entry for entry in entries if entry.id not in shipped]
+    groups = [("In this repository", included),
+              ("Televisions on request", [e for e in others if e.kind == "tv"])]
+    rest = [entry for entry in others if entry.kind != "tv"]
+    kinds = [KIND_GROUPS.get(kind, kind) for kind in dict.fromkeys(e.kind for e in rest)]
+    if rest:
+        name = " and ".join([", ".join(kinds[:-1]), kinds[-1]] if len(kinds) > 1 else kinds)
+        groups.append((f"{name.capitalize()} on request", rest))
+    blocks = []
+    for title, members in groups:
+        if not members:
+            continue
+        lines = [f"**{title}**", "",
+                 f"| Television | Generations{GENERATIONS_HEADER_PAD} | Protocols | Devices | "
+                 "Tested with |",
+                 "|---|---|---|---|---|"]
+        for entry in members:
+            lines.append(f"| **[{entry.display_name}]({entry.docs})** | "
+                         f"{_generations_cell(entry)} | "
+                         f"**{entry.protocols}** protocols<br><sub>{entry.summary}</sub> | "
+                         f"{_devices_cell(entry)} | {_tested_cell(entry)} |")
+        blocks.append("\n".join(lines))
+    return "\n\n".join(blocks)
 
 
 def television_details() -> str:
     """The full table in docs/televisions.md: ports, discovery, pairing and firmware."""
     shipped = published()
-    lines = ["| Television | In this build | Remote control | Discovery | Pairing | Devices | "
-             "Tested with |",
-             "|---|---|---|---|---|---|---|"]
+    lines = ["| Platform | Type | In this build | Remote control | Discovery | Pairing | "
+             "Devices | Tested with |",
+             "|---|---|---|---|---|---|---|---|"]
     for entry in catalogue_entries():
         devices = "<br>".join(
             f"{_evidence(device)} {_device_name(device)}"
             + (f" — {device.detail}" if device.detail and len(device.profiles) < 2 else "")
             for device in entry.captured)
-        state = "**Included**" if entry.id in shipped else "N/A"
+        state = "**Included**" if entry.id in shipped else "On request"
         docs = entry.docs.removeprefix("docs/")
-        lines.append(f"| **[{entry.display_name}]({docs})** | {state} | {entry.remote} | "
+        lines.append(f"| **[{entry.display_name}]({docs})** | "
+                     f"{KIND_NAMES.get(entry.kind, entry.kind)} | {state} | {entry.remote} | "
                      f"{entry.discovery} | {entry.pairing} | {devices} | {_tested_with(entry, '')} |")
     return "\n".join(lines)
 
@@ -173,7 +348,13 @@ def shared() -> dict[Path, str]:
             out[path] = BLOCK.sub(
                 lambda m: (f"<!-- generated:{m.group(1)} -->\n{renderers[m.group(1)]()}\n"
                            "<!-- /generated -->"), path.read_text(encoding="utf-8"))
-    return out
+    return {**out, **generation_timelines()}
+
+
+def stale_timelines() -> list[Path]:
+    """Timelines left behind by a platform that no longer has two generations."""
+    wanted = set(generation_timelines())
+    return sorted(path for path in GENERATIONS.glob("*.svg") if path not in wanted)
 
 
 def _json(document: dict) -> str:
@@ -225,6 +406,14 @@ def main() -> int:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text, encoding="utf-8")
             print(f"rewrote {name}")
+    if not args.platforms:
+        for path in stale_timelines():
+            name = path.relative_to(ROOT).as_posix()
+            if args.check:
+                behind.append(name)
+            else:
+                path.unlink()
+                print(f"removed {name}")
     for name in behind:
         print(f"{name} is behind the code", file=sys.stderr)
     return 1 if behind else 0

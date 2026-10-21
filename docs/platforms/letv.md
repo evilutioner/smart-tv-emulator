@@ -4,31 +4,30 @@
 > request — [ask about LeTV / LeEco](https://marchik.dev).
 
 The LAN remote of a LeTV (LeEco) television: a TCP probe that tells a remote app it has found
-a LeTV set, and one JSON datagram per button over UDP. **No LeTV set was measured, and no
-packet was recorded off a wire** — the behaviour is modelled.
+a LeTV set, and one datagram per button over UDP. **No LeTV set was measured, and no packet
+was recorded off a wire** — the behaviour is modelled.
 
 ## Protocols
 
 | Protocol | Transport · port | What is emulated |
 |---|---|---|
 | LeTV control | UDP 9900 | every button the app sends; its helper-install request, logged |
-| Probe | TCP 13489 | the connect, and the `getDeviceInfo` line the app writes there |
+| Probe | TCP 13489 | the connect and the device information request |
 
 ## Modelled devices
 
 - **LeTV / LeEco set (modelled)** — no set measured
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-- There is **no discovery protocol**: the app connects to TCP 13489 on every address in the phone's ARP cache, or on its whole /24 only when that cache is empty.
-- Keys go over **UDP**, not over the TCP port the set was found on.
-- A key is an **action name** (`ok`, `return`, `volume_up`), not a keycode, and has **no release**.
-- Nothing answers a key, so a missing answer is **not** an error.
+- **No discovery protocol**: the app probes the addresses it already knows, or sweeps its subnet.
+- **Keys go over UDP**, not over the TCP port the set was found on.
+- **A key is a named action** with no release, and nothing answers it.
 
 ## What the emulator lets you test
 
 - [x] Discovery exactly as the remote app performs it
-- [x] Every key the remote app sends, by its action name
+- [x] Every key the remote app sends
 - [ ] Text, app launches, pointer (no client seen sending them)
 - [ ] Anything a real LeTV set answers (not measured)
 

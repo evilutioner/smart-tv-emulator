@@ -1,12 +1,13 @@
 """python -m tvemu.conformance: replay captured traffic through the real listeners.
 
 Exit 0 only when every selected case passes and every replay of the selected profiles is
-covered; 1 for a wire mismatch, a leak, a timeout or an uncovered replay; 2 when evidence or
+covered; 1 for a wire mismatch, a leak, a timeout or uncovered coverage; 2 when evidence or
 a profile cannot be turned into cases.
 
 `--gate` is the merge gate: a failed case still fails everywhere, but an uncovered replay
 fails only on a platform whose conformance package declares `COVERAGE = "complete"`.
-Elsewhere it is listed and left red in the report, not in the build.
+Evidence scenarios are counted separately and use EVIDENCE_COVERAGE for the same gate.
+Elsewhere a gap stays visible in the report without failing the build.
 """
 from __future__ import annotations
 
@@ -17,7 +18,8 @@ import sys
 from pathlib import Path
 
 from .model import CaseResult, Report
-from .runner import PlanError, Selection, build_plan, coverage_complete, run
+from .runner import (PlanError, Selection, build_plan, coverage_complete,
+                     evidence_coverage_complete, run)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -55,12 +57,15 @@ def _line(result: CaseResult, verbose: bool) -> str:
 
 
 def _print_gaps(plan) -> None:
-    if not plan.gaps:
-        return
-    print(f"\nUncovered replays ({len(plan.gaps)}):")
+    if plan.gaps:
+        print(f"\nUncovered replays ({len(plan.gaps)}):")
     for gap in plan.gaps:
         print(f"GAP   {gap.platform}/{gap.profile}/{gap.exchange}  [{gap.replay}]  "
               f"{gap.reason}")
+    if plan.evidence_gaps:
+        print(f"\nUncovered evidence scenarios ({len(plan.evidence_gaps)}):")
+    for gap in plan.evidence_gaps:
+        print(f"EVIDENCE GAP   {gap.platform}/{gap.profile}/{gap.replay}: {gap.reason}")
 
 
 def _print_summary(report: Report) -> None:
@@ -72,6 +77,10 @@ def _print_summary(report: Report) -> None:
     print(f"\n{totals['passed']}/{totals['cases']} cases passed; "
           f"{totals['passed_replays']}/{totals['replays']} replays verified, "
           f"{totals['uncovered_replays']} uncovered")
+    if totals["evidence_scenarios"]:
+        print(f"Evidence scenarios: {totals['passed_evidence_scenarios']}/"
+              f"{totals['evidence_scenarios']} passed; "
+              f"{totals['uncovered_evidence_scenarios']} uncovered")
 
 
 async def _main(args: argparse.Namespace) -> int:
@@ -83,17 +92,20 @@ async def _main(args: argparse.Namespace) -> int:
         if args.list:
             plan = await build_plan(selection)
             for case in plan.cases:
-                print(f"CASE  {case.id}  [{', '.join(case.replays)}]  {case.driver} "
-                      f"via {case.protocol}")
+                label = "EVIDENCE" if case.scope == "evidence" else "CASE"
+                source = (f"{case.capture}/{case.exchanges[0]} steps {case.evidence_steps}"
+                          if case.scope == "evidence" else ', '.join(case.replays))
+                print(f"{label}  {case.id}  [{source}]  {case.driver} via {case.protocol}")
             _print_gaps(plan)
             print(f"\n{len(plan.cases)} cases, {len(plan.gaps)} uncovered of "
-                  f"{plan.replays} replays")
-            return 0 if plan.cases or plan.gaps else 2
+                  f"{plan.replays} replays; {plan.evidence_scenarios} evidence scenarios, "
+                  f"{len(plan.evidence_gaps)} uncovered")
+            return 0 if plan.cases or plan.gaps or plan.evidence_gaps else 2
         report = await run(selection, lambda result: print(_line(result, args.verbose)))
     except PlanError as exc:
         print(f"conformance: {exc}", file=sys.stderr)
         return 2
-    if not report.plan.cases and not report.plan.gaps:
+    if not report.plan.cases and not report.plan.gaps and not report.plan.evidence_gaps:
         print("conformance: nothing matched the selection", file=sys.stderr)
         return 2
     _print_gaps(report.plan)
@@ -106,6 +118,8 @@ async def _main(args: argparse.Namespace) -> int:
     if args.gate:
         owed = sorted({gap.platform for gap in report.plan.gaps
                        if coverage_complete(gap.platform)})
+        owed += sorted({gap.platform for gap in report.plan.evidence_gaps
+                        if evidence_coverage_complete(gap.platform)})
         if owed:
             print(f"conformance: coverage is declared complete but replays are uncovered on "
                   f"{', '.join(owed)}", file=sys.stderr)

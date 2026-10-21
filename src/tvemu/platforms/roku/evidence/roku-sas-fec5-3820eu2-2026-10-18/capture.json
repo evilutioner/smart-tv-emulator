@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "roku-sas-fec5-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Partial ordered UDP startup from the physical stick on 2026-10-18, retained from the same session as the earlier surface probe. Ten consecutive original datagrams contain five silent Opus main frames and their format-5 parity. Only the three-byte comfort-silence payload is retained; programme audio and session setup are omitted. This evidence-only capture exposes the full five-term parity history; it is not a selectable profile."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "fec-start",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 0.0
+          },
+          "payload": "sas-00.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 0.016
+          },
+          "payload": "sas-01.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 10.726
+          },
+          "payload": "sas-02.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 10.739
+          },
+          "payload": "sas-03.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 21.419
+          },
+          "payload": "sas-04.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 21.429
+          },
+          "payload": "sas-05.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 34.179
+          },
+          "payload": "sas-06.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 34.188
+          },
+          "payload": "sas-07.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 46.744
+          },
+          "payload": "sas-08.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 46.759
+          },
+          "payload": "sas-09.bin"
+        }
+      ]
+    }
+  ]
+}

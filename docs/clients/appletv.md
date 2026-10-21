@@ -67,6 +67,7 @@ Python Apple TV client, the library behind Home Assistant's Apple TV integration
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 0.18.0 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.18.0 | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-13 | 0.18.0 | 1.1.0 | Python 3.13.11 | pass |
 

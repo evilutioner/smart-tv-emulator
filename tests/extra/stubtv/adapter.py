@@ -19,7 +19,6 @@ STUBTV = PlatformDescriptor(
     id="stubtv",
     display_name="Stub TV",
     # Last, always: a build under test must never find its default platform here.
-    order=9000,
     default_device_profile="stub-tv",
     protocol_label="Stub HTTP",
     default_port=0,          # an ephemeral port, so the stub never fights a real listener

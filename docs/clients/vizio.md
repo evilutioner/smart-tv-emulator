@@ -69,11 +69,11 @@ SmartCast REST client, the library behind Home Assistant's VIZIO SmartCast integ
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 0.1.64 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.1.64 | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-12 | 0.1.64 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-11 | 0.1.64 | 1.1.0 | Python 3.13.11 | pass |
 
-2 earlier runs are recorded beside this page.
+3 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

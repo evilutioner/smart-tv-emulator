@@ -65,11 +65,11 @@ Synchronous NRC, renderer and PAC client with PIN pairing, the library behind Ho
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 0.4.6 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.4.6 | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-12 | 0.4.6 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-11 | 0.4.6 | 1.1.0 | Python 3.13.11 | pass |
 
-1 earlier runs are recorded beside this page.
+2 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

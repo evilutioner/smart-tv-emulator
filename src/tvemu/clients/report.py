@@ -48,6 +48,8 @@ def read_records(root: Path, spec: ClientSpec) -> list[dict]:
 
 def _client_version(record: dict) -> str:
     client = record["client"]
+    if client.get("commit") and not client.get("version"):
+        return f"`{client['commit'][:7]}`"      # a checkout with no packaging has no version
     version = client.get("version") or client.get("requested") or ""
     return f"{version} (`{client['commit'][:7]}`)" if client.get("commit") else version
 

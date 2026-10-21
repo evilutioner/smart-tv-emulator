@@ -22,7 +22,7 @@ live, it stays as it was recorded whatever the app does.
 3. **Take the real television off the network,** if there is one, so its own discovery answers
    cannot race the emulator's.
 4. **Pick what the app should see.** In **Configuration**, choose the **TV platform** and the
-   **Captured device**: each one is a real model on a real firmware, and switching between
+   **Device**: each one is a real model on a real firmware, and switching between
    them is how one build is tested against several firmwares. Switching closes the app's
    open sessions, as unplugging a set would.
 5. **Clear the event log,** so the export you attach to a bug holds only this session.
@@ -58,7 +58,7 @@ These are the conditions a real set produces that are hard to stage with one in 
 | A port that is closed or a service that is off | Switch that one protocol off under **Protocols**; only its port closes and only its sessions drop |
 | The connection dropping mid-session | **Disconnect device clients**; the port stays open for the app to reconnect |
 | A set that was just switched on | **Reset device state** (counters, held keys, power and volume; settings stay) |
-| A different model or firmware | **Captured device** |
+| A different model or firmware | **Device** |
 
 Every one of them is also a call on the [management API](dashboard-and-api.md#management-api),
 so a case found by hand can later become an automated one ([CI](ci.md)).

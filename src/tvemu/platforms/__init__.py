@@ -2,8 +2,9 @@
 
 No platform is named here. A package under `platforms/` that exports `PLATFORM` (a
 `PlatformDescriptor`) and `ADAPTER` (its adapter class) is a platform, so the directory
-listing is the id list, and adding a television never touches this file. Display order is
-`PlatformDescriptor.order`, which also picks the default: the lowest comes first.
+listing is the id list, and adding a television never touches this file. Display order and
+the default come from the catalogue: platforms are grouped by kind and sorted by name, and the
+default is the entry marked so, or the first platform when a build does not ship that one.
 """
 from __future__ import annotations
 
@@ -15,7 +16,8 @@ from functools import lru_cache
 from tvemu.core import Core
 
 from .base import PlatformAdapter, PlatformDescriptor
-from .catalogue import CatalogueEntry, catalogue_entry, catalogue_ids, request_url
+from .catalogue import (CatalogueEntry, catalogue_entry, catalogue_ids, default_id, display_key,
+                        platform_kind, request_url)
 
 # Packages beside the platforms that are shared machinery rather than a television.
 _RESERVED = frozenset({"base", "catalogue", "common"})
@@ -61,8 +63,12 @@ def _registry() -> dict[str, tuple[PlatformDescriptor, type]]:
             _errors[info.name] = f"package declares id {descriptor.id!r}"
             continue
         found.append((descriptor, adapter))
-    found.sort(key=lambda item: (item[0].order, item[0].id))
+    found.sort(key=lambda item: _display_key(item[0]))
     return {descriptor.id: (descriptor, adapter) for descriptor, adapter in found}
+
+
+def _display_key(descriptor: PlatformDescriptor) -> tuple:
+    return display_key(descriptor.id, descriptor.display_name, platform_kind(descriptor.id))
 
 
 def restrict_to(platform_ids) -> None:
@@ -90,8 +96,9 @@ def platform_ids() -> tuple[str, ...]:
 def default_platform() -> str:
     ids = platform_ids()
     if not ids:
-        raise RuntimeError(f"No TV platform could be loaded: {platform_errors() or 'none found'}")
-    return ids[0]
+        raise RuntimeError(f"No platform could be loaded: {platform_errors() or 'none found'}")
+    preferred = default_id()
+    return preferred if preferred in ids else ids[0]
 
 
 def locked_ids() -> tuple[str, ...]:
@@ -107,19 +114,20 @@ def locked_ids() -> tuple[str, ...]:
 def platform_choices() -> tuple[dict[str, object], ...]:
     """Every platform this build presents to the dashboard, runnable or not."""
     live = _registry()
-    rows: list[tuple[int, dict[str, object]]] = [
-        (descriptor.order,
+    rows: list[tuple[tuple, dict[str, object]]] = [
+        (_display_key(descriptor),
          {"id": descriptor.id, "display_name": descriptor.display_name,
+          "kind": platform_kind(descriptor.id),
           "availability": "available", "summary": descriptor.protocol_label})
         for descriptor, _ in live.values()]
     for platform_id in locked_ids():
         entry = catalogue_entry(platform_id)
-        rows.append((entry.order,
-                     {"id": entry.id, "display_name": entry.display_name,
+        rows.append((display_key(entry.id, entry.display_name, entry.kind),
+                     {"id": entry.id, "display_name": entry.display_name, "kind": entry.kind,
                       "availability": "n/a", "summary": entry.summary,
                       "devices": entry.devices, "docs": entry.docs,
                       "contact": request_url()}))
-    rows.sort(key=lambda row: (row[0], row[1]["id"]))
+    rows.sort(key=lambda row: row[0])
     return tuple(row for _, row in rows)
 
 
@@ -130,7 +138,7 @@ def platform_descriptor(platform_id: str) -> PlatformDescriptor:
     locked = catalogue_entry(platform_id) if platform_id in locked_ids() else None
     if locked is not None:
         raise PlatformUnavailable(locked)
-    raise ValueError(f"Unknown TV platform: {platform_id}")
+    raise ValueError(f"Unknown platform: {platform_id}")
 
 
 def create_platform(platform_id: str, core: Core) -> PlatformAdapter:

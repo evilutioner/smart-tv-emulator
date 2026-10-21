@@ -18,7 +18,8 @@ one exchange under ``setup``.
 
 The hook runs against the case's own fresh adapter before the captured request is sent. It
 may send requests over the real listeners (`client.request`), read what the television shows
-(`client.screen()`, the pairing panel the dashboard renders, where a PIN appears) and reuse
+(`client.screen()`, the pairing panel the dashboard renders, where a PIN appears), answer
+an on-screen prompt as the viewer would (`client.press("authorize")`) and reuse
 the captured client requests (`client.capture`). It never calls a handler and never sets
 adapter state directly, so a hook that passes proves the pairing works as well.
 
@@ -97,6 +98,10 @@ class Client:
         payload = http.raw_request(method, path, self.authority, headers or {}, body)
         return await http.send(host, port, payload, tls=tls, timeout=self.timeout,
                                head=method == "HEAD")
+
+    async def press(self, action: str) -> None:
+        """What the viewer presses on the pairing panel: the action the dashboard sends."""
+        await self.adapter.action(action, {})
 
     def screen(self) -> dict[str, Any]:
         """The pairing panel, as the dashboard shows it: where a television's PIN appears."""

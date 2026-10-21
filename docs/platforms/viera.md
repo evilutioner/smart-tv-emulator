@@ -3,48 +3,45 @@
 > **N/A in this build.** The emulator, its session and the full driver guide are available on
 > request — [ask about Panasonic VIERA](https://marchik.dev).
 
-The network remote control VIERA sets expose to a phone remote: SSDP discovery, a UPnP
-description and a SOAP control URL that takes `NRC_*` key names. **No VIERA set was measured**;
-the behaviour follows the public protocol the community clients use and what the official apps send.
+The network remote control VIERA sets expose to a phone remote: SSDP discovery, UPnP
+descriptions and SOAP control services. **No VIERA set was measured**; the behaviour follows
+the public protocol the community clients use and what the official apps send.
 
 ## Protocols
 
 | Protocol | Transport · port | What is emulated |
 |---|---|---|
-| NRC SOAP | HTTP 55000 | description, SCPD, keys, text, app list and launch, state queries; plain commands, or a PIN pairing and encrypted sessions on the newer device |
-| Renderer control | HTTP 55000 | `/dmr` RenderingControl: volume and mute, with `LastChange` events |
-| PAC | HTTP 55000 | `/pac` inputs and picture modes |
-| Events | HTTP 55000 | UPnP eventing: screen, input mode, keyboard type, running app, volume |
-| Pointer socket | TCP 55010 | touchpad and gamepad frames, recorded |
-| SSDP | UDP 1900 | `p00NetworkControl`, `p00RemoteController`, `upnp:rootdevice`, and a search by UDN |
+| Network remote control (UPnP SOAP) | HTTP 55000 | keys, text, app list and launch, state queries, PIN pairing on the newer device |
+| Rendering control | HTTP 55000 | volume and mute, with events |
+| Inputs and picture | HTTP 55000 | inputs and picture modes |
+| UPnP eventing | HTTP 55000 | screen, input, keyboard, running app, volume |
+| Pointer socket | TCP 55010 | touchpad and gamepad, recorded |
+| SSDP | UDP 1900 | the searches the official apps send |
 
 ## Modelled devices
 
-- **Panasonic VIERA, no PIN (modelled)** — the older NRC-2 firmware: plain commands
-- **Panasonic VIERA, PIN (modelled)** — the NRC-4 firmware from about 2018: a four-digit PIN
-  pairs a remote, then every command is encrypted
+- **Panasonic VIERA, no PIN (modelled)** — older firmware: plain commands
+- **Panasonic VIERA, PIN (modelled)** — firmware from about 2018: a four-digit PIN pairs a
+  remote, then every command is encrypted
 
 Both come from the public protocol and the official apps' traffic; no set was measured. They are
 two entries of the device picker, because a set is one or the other.
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-- Keys are **`NRC_<name>-ONOFF` strings**, not numeric codes.
-- The official apps ask for a PIN **only when the description says `NRC-4.0` or newer**; the PIN
-  device refuses a plain command and wants a **three-step pairing**, then a session id and a
-  **strictly increasing sequence number** per command.
-- Volume and mute are **not NRC**: they are read and written on the renderer at `/dmr`.
-- The app list is **one string**: entries closed by `>`, fields by `'`.
-- `X_LaunchApp` answers an **`X_SessionId`** the official apps require.
+- **The official apps ask for a PIN only when the description says the set needs one.**
+- **The PIN device refuses a plain command** and wants every command in a paired session.
+- **Volume and mute are not remote-control commands**: they live on the renderer service.
+- **Launching an app answers a session value** the official apps require.
 
 ## What the emulator lets you test
 
 - [x] Discovery and the UPnP descriptions
-- [x] Every remote key by its `NRC_*` name
+- [x] Every remote key the official apps send
 - [x] PIN pairing, a wrong-PIN refusal and encrypted sessions (PIN device)
 - [x] Volume, mute and their events; inputs and picture modes
 - [x] App list, app launch and text entry
-- [x] Touchpad and gamepad frames
+- [x] Touchpad and gamepad
 - [ ] Cast photo and video (DLNA), VOD lists, the TV browser
 
 ## Support and validation

@@ -18,11 +18,13 @@ SCHEMA_VERSION = 2
 FIELDS: dict[str, tuple[str, str]] = {
     "schema_version": ("integer", "The shape of this document; bumped when it changes."),
     "revision": ("integer", "Increases on every publish, so a client can tell them apart."),
+    "version": ("string", "The emulator's release version."),
     "device": ("object", "Identity and address, the captured profile's summary merged with "
                          "the platform and the live address."),
     "device_profiles": ("array", "Every captured device this platform can become."),
-    "platforms": ("array", "Every television the product models, including those this build "
-                           "cannot run, which carry availability 'n/a'."),
+    "platforms": ("array", "Every device the product models, grouped by kind and sorted by "
+                           "name, including those this build cannot run, which carry "
+                           "availability 'n/a'."),
     "settings": ("object", "The only block that is ever persisted."),
     "keys": ("array", "The remote keys this platform's set has."),
     "access_modes": ("array", "The 'who may control this TV' values this firmware offers."),
@@ -55,10 +57,11 @@ FIELDS: dict[str, tuple[str, str]] = {
 ROW_FIELDS: dict[str, tuple[str, ...]] = {
     "protocols": ("id", "label", "kind", "summary", "control", "primary", "protocol_label",
                   "scheme", "port", "advertised_ports", "enabled", "listening", "armed",
-                  "error"),
+                  "booting", "error"),
     "access": ("id", "label", "summary", "status_label", "badge", "discoverable"),
-    "device": ("profile", "platform", "platform_name", "host", "port", "protocol",
-               "transports", "scheme", "discovery"),
+    "device": ("profile", "platform", "platform_name", "platform_kind", "host", "port",
+               "protocol", "transports", "scheme", "discovery"),
+    "platforms": ("id", "display_name", "kind", "availability", "summary"),
 }
 
 
@@ -107,7 +110,7 @@ def openapi() -> dict:
             "/api/v1/settings": {"patch": {"summary": "Change settings and re-reconcile.",
                                            "responses": ok}},
             "/api/v1/platform": {"post": {
-                "summary": "Switch the emulated television.",
+                "summary": "Switch the emulated device.",
                 "responses": {**ok, "501": {
                     "description": "A television this product models that this build does "
                                    "not include; the body carries reason 'n/a'."}}}},

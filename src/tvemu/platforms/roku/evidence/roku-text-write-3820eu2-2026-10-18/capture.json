@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "id": "roku-text-write-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Ordered ecp-2 probe of the set's own full text field, opened from the remote, masked false, max-length 75. Authentication and opening UI actions omitted. Input text is probe-owned; the initial empty text was restored. No account data or hidden text is retained. Responses and notifications are original frames. This is partial evidence only."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "text-writes",
+      "operation_id": "ecp-2.set-textedit-text",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.request-events",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "subscribe"
+          },
+          "payload": "02-subscribe-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.request-events",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "subscribe"
+          },
+          "payload": "03-subscribe-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "initial"
+          },
+          "payload": "04-initial-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "initial"
+          },
+          "payload": "05-initial-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "ascii"
+          },
+          "payload": "06-ascii-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "ascii"
+          },
+          "payload": "07-ascii-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "ascii-query"
+          },
+          "payload": "08-ascii-query-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-changed",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "ascii-query"
+          },
+          "payload": "09-ascii-query-out.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "ascii-query"
+          },
+          "payload": "10-ascii-query-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "unicode"
+          },
+          "payload": "11-unicode-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "unicode"
+          },
+          "payload": "12-unicode-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "unicode-query"
+          },
+          "payload": "13-unicode-query-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-changed",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "unicode-query"
+          },
+          "payload": "14-unicode-query-out.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "unicode-query"
+          },
+          "payload": "15-unicode-query-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "spaces"
+          },
+          "payload": "16-spaces-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "spaces"
+          },
+          "payload": "17-spaces-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "spaces-query"
+          },
+          "payload": "18-spaces-query-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-changed",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "spaces-query"
+          },
+          "payload": "19-spaces-query-out.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "spaces-query"
+          },
+          "payload": "20-spaces-query-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "wrong-id"
+          },
+          "payload": "21-wrong-id-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "wrong-id"
+          },
+          "payload": "22-wrong-id-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "wrong-id-query"
+          },
+          "payload": "23-wrong-id-query-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "wrong-id-query"
+          },
+          "payload": "24-wrong-id-query-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "bad-selection"
+          },
+          "payload": "25-bad-selection-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "bad-selection"
+          },
+          "payload": "26-bad-selection-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "bad-selection-query"
+          },
+          "payload": "27-bad-selection-query-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-changed",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "bad-selection-query"
+          },
+          "payload": "28-bad-selection-query-out.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "bad-selection-query"
+          },
+          "payload": "29-bad-selection-query-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "restore"
+          },
+          "payload": "30-restore-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "restore"
+          },
+          "payload": "31-restore-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "restored"
+          },
+          "payload": "32-restored-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-changed",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "restored"
+          },
+          "payload": "33-restored-out.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "restored"
+          },
+          "payload": "34-restored-out.json"
+        }
+      ]
+    }
+  ]
+}

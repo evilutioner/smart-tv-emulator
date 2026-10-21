@@ -5,10 +5,13 @@ emulated; the television itself answers on the LAN address.
 
 ## The dashboard
 
-![The Smart TV Emulator dashboard emulating a Roku Streaming Stick 4K](images/dashboard.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/dashboard-dark.png">
+  <img alt="The Smart TV Emulator dashboard emulating a TCL Roku TV 32S357" src="images/dashboard.png">
+</picture>
 
-- **Configuration** — the emulated television and the captured device it wears; the access
-  modes that firmware offers; one switch per protocol the captured device exposes, with its
+- **Configuration** — the emulated television and the device it wears; the access
+  modes that firmware offers; one switch per protocol the device exposes, with its
   wire family, port or multicast group, and live state (`listening`, `off`, `armed`, or the
   bind error that stopped it); forced disconnect and state reset.
 - **Device state** — advertised address, connections, last button, button indicators and
@@ -16,6 +19,8 @@ emulated; the television itself answers on the LAN address.
   the last observed launch.
 - **Event log** — requests, transports, responses, rejection reasons, forced disconnects,
   resets, and JSONL export.
+
+The dashboard follows the system's light or dark appearance.
 
 <img alt="One switch per protocol, each with its port and live state" src="images/protocols.png" width="342">
 
@@ -34,7 +39,7 @@ rejected.
 |---|---|---|
 | GET | `/api/v1/state` | Active television, device, settings and recent events |
 | PATCH | `/api/v1/settings` | Apply a validated partial settings update |
-| POST | `/api/v1/platform` | Switch the emulated television; body `{"platform": "<id>"}` |
+| POST | `/api/v1/platform` | Switch the emulated device; body `{"platform": "<id>"}` |
 | GET / WS | `/api/v1/events` | Initial and updated full snapshots |
 | GET | `/api/v1/events/export` | Latest 500 events as JSONL |
 | POST | `/api/v1/settings/save` | Persist current settings; body `{}` |

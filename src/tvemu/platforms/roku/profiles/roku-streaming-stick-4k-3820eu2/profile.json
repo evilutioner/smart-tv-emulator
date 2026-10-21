@@ -2,7 +2,162 @@
   "schema_version": 3,
   "id": "roku-streaming-stick-4k-3820eu2",
   "label": "Roku Streaming Stick 4K 3820EU2 · Roku OS 15.3.4",
-  "capture": "roku-streaming-stick-4k-3820eu2-15-3-4",
-  "replays": {"/":"http.device-description","/query/device-info":"http.device-info","/ecp_SCPD.xml":"http.ecp-scpd","/dial_SCPD.xml":"http.dial-scpd","/device-image.png":"http.device-image","/query/active-app":"http.active-app","/query/apps":"http.apps","/query/media-player":"http.media-player","/query/audio-device":"http.audio-device","/query/tv-channels":"http.tv-channels","/query/tv-active-channel":"http.tv-active-channel","query-device-info":"ws.query-device-info","query-active-app":"ws.query-active-app","query-apps":"ws.query-apps","query-media-player":"ws.query-media-player","query-textedit-state":"ws.query-textedit-state","query-audio-device":"ws.query-audio-device"},
-  "substitutions": {"/query/device-info": ["ecp-setting-mode"], "query-device-info": ["content-data::ecp-setting-mode"]}
+  "capture": "roku-streaming-stick-4k-3820eu2-native-2026-10-18",
+  "replays": {
+    "/": "http.device-description",
+    "/query/device-info": "http.device-info",
+    "/ecp_SCPD.xml": "http.ecp-scpd",
+    "/dial_SCPD.xml": "http.dial-scpd",
+    "/device-image.png": "http.device-image",
+    "/query/active-app": "http.active-app",
+    "/query/apps": "http.apps",
+    "/query/media-player": "http.media-player",
+    "/query/audio-device": "http.audio-device",
+    "/query/tv-channels": "http.tv-channels",
+    "/query/tv-active-channel": "http.tv-active-channel",
+    "query-device-info": "ws.query-device-info",
+    "query-active-app": "ws.query-active-app",
+    "query-apps": "ws.query-apps",
+    "query-media-player": "ws.query-media-player",
+    "query-textedit-state": "ws.query-textedit-state",
+    "query-audio-device": "ws.query-audio-device",
+    "query-tv-active-channel": "extended.ws.query-tv-active-channel",
+    "query-tv-channels-ex": "extended.ws.query-tv-channels-ex",
+    "query-tv-active-input": "extended.ws.query-tv-active-input",
+    "query-themes": "extended.ws.query-themes",
+    "query-screensavers": "extended.ws.query-screensavers",
+    "query-warm-standby": "extended.ws.query-warm-standby",
+    "query-pq-options": "extended.ws.query-pq-options",
+    "query-pq-picture-modes": "extended.ws.query-pq-picture-modes",
+    "query-pq-picture-settings": "extended.ws.query-pq-picture-settings",
+    "query-audio-settings": "extended.ws.query-audio-settings",
+    "query-av-sync-offset": "extended.ws.query-av-sync-offset",
+    "query-curr-audio-format": "extended.ws.query-curr-audio-format",
+    "check-link": "extended.ws.check-link",
+    "action.set-audio-output": "extended.ws.set-audio-output",
+    "notify.plugin-ui-run": "extended.notify-7",
+    "notify.plugin-ui-exit": "extended.notify-15"
+  },
+  "substitutions": {
+    "/query/device-info": [
+      "ecp-setting-mode"
+    ],
+    "query-device-info": [
+      "content-data::ecp-setting-mode"
+    ],
+    "notify.plugin-ui-run": [
+      "timestamp",
+      "param-channel-id",
+      "param-channel-title"
+    ],
+    "notify.plugin-ui-exit": [
+      "timestamp",
+      "param-channel-id",
+      "param-channel-title"
+    ],
+    "/query/audio-device": [
+      "global.destination-list",
+      "destinations.destination.@name",
+      "rtp-info.rtp-address"
+    ],
+    "query-audio-device": [
+      "content-data::global.destination-list",
+      "content-data::destinations.destination.@name",
+      "content-data::rtp-info.rtp-address"
+    ],
+    "query-textedit-state": [
+      "content-data::textedit-state"
+    ]
+  },
+  "runtime": {
+    "audio": {
+      "source": "Captured successful set-audio-output in roku-ecp2-surface-3820eu2-2026-10-18. RTP framing follows the client contract of the Roku mobile app for Android 14.1.2; SAS framing follows the audio header that app's receiver reads and the observed v45 silent datagrams. Format-5 parity follows the FEC header the receiver reads and matches its FEC coefficients; startup parity is checked against sas-01/03/05/07. Retransmission is not implemented. SAS v45 tone playback was checked against the Roku mobile app by playback after finite clock synchronization was added; receiver recovery under loss, adaptive delay, versions 43/44 and RTP app playback remain unvalidated. The emulator-owned startup buffer is 24000 samples (500 ms), guided by audible playback from the stick: its finite sync offset scheduled sample zero about 522 ms after the first receiver timing status. A constant offset is derived once from the receiver playhead; the receiver requires a finite sync before it decodes. Clock and receiver status provenance: roku-sas-clock-3820eu2-2026-10-18/clock-start. An RTP probe on 2026-10-18 using destination ip:6970:97:960 and RTCP sent from 6970 received XDLY/NCLI on 6971, SSRC 0 and 480-sample Opus packets. The observed RTP header timestamps advance approximately in milliseconds (about 10 ticks per packet), distinct from the 48 kHz decoded sample rate. Emulator timestamps use elapsed monotonic milliseconds. Five consecutive main/parity pairs are retained in roku-sas-fec5-3820eu2-2026-10-18/fec-start, including the full five-term equation. The Roku mobile app for Android 14.1.2 played the tone with format-5 parity enabled and finite clock feedback; turning Headphone Mode off removed the audio session. This establishes clean-LAN playback, not receiver recovery under loss.",
+      "fixture": "test-tone.json",
+      "sas_min_version": 43,
+      "sas_max_version": 45,
+      "sas_start_lead_samples": 24000,
+      "rtp_packet_samples": 480,
+      "rtp_ssrc": 0,
+      "rtp_timestamp_rate": 1000,
+      "wire_substitutions": {
+        "sas": [
+          "network_sequence",
+          "audio_sequence",
+          "sample_position",
+          "stream_id",
+          "payload_size",
+          "payload",
+          "sync_clock"
+        ],
+        "rtp": [
+          "timestamp",
+          "payload"
+        ],
+        "fec": [
+          "fec_size",
+          "fec_payload"
+        ],
+        "fec-start": [
+          "network_sequence",
+          "audio_sequence",
+          "sample_position",
+          "stream_id",
+          "payload_size",
+          "payload",
+          "sync_clock",
+          "fec_size",
+          "fec_payload"
+        ]
+      },
+      "query_state": {
+        "source": "roku-audio-state-3820eu2-2026-10-18/audio-states and http.before/sas-running/sas-stopped/rtp-running/rtp-bye. Global destination and destination name follow the active transport. RTP address uses this session endpoint. With multiple independent emulator sessions the query uses the last-started session; physical conflict arbitration remains unmeasured.",
+        "fields": [
+          "global.destination-list",
+          "destinations.destination.@name",
+          "rtp-info.rtp-address"
+        ],
+        "destinations": {
+          "idle": "hdmi",
+          "mobile-sas": "mobile-sas",
+          "datagram": "datagram"
+        }
+      }
+    },
+    "notifications": {
+      "source": "roku-ecp2-surface-3820eu2-2026-10-18 launch 837 and Home; only captured plugin lifecycle notifications are sent. Other event subscriptions remain accepted but silent until measured.",
+      "templates": {
+        "plugin-ui-run": "notify.plugin-ui-run",
+        "plugin-ui-exit": "notify.plugin-ui-exit"
+      }
+    },
+    "textedit": {
+      "source": "No-field set-textedit-text probes in roku-ecp2-surface-3820eu2-2026-10-18: string id and text accepted without opening or changing a native field; malformed parameter types refused. Focused full-field observations are declared separately in native.",
+      "no_field_write": true,
+      "native": {
+        "source": "roku-text-write-3820eu2-2026-10-18/text-writes; roku-text-limits-3820eu2-2026-10-18/text-limits; focus edges in roku-text-focus-3820eu2-2026-10-18/text-focus. Only an unmasked full field has been measured. Replay bytes for the native document and notification templates are retained in the profile complete capture; no field schema generates them.",
+        "type": "full",
+        "max_length": 75,
+        "selection_units": "unicode-codepoints",
+        "id_policy": "increment on open; scoped to emulator service lifetime",
+        "query_template": {
+          "exchange": "native.text-writes",
+          "step": 3
+        },
+        "notification_templates": {
+          "textedit-changed": {
+            "exchange": "native.text-writes",
+            "step": 7
+          },
+          "textedit-closed": {
+            "exchange": "native.text-focus",
+            "step": 4
+          },
+          "textedit-opened": {
+            "exchange": "native.text-focus",
+            "step": 5
+          }
+        }
+      }
+    }
+  }
 }

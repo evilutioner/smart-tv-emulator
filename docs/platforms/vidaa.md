@@ -36,7 +36,7 @@ detail. The full guide gives each one, tied to the capture it came from.
 - [x] Subscription refusals exactly as the set gives them
 - [x] Keys, volume, source changes and the state broadcast
 - [x] Live TV channel changes on the tuner source
-- [x] Application launches with their exact payloads
+- [x] Application launches, observed as the app sends them
 
 ## Get access
 

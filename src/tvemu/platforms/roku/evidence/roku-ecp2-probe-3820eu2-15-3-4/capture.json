@@ -1,0 +1,469 @@
+{
+  "schema_version": 1,
+  "id": "roku-ecp2-probe-3820eu2-15-3-4",
+  "device": {
+    "display_name": "Roku ecp-2 live probe",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-17",
+    "description": "Ordered ecp-2 WebSocket frames retained from a live probe of the Streaming Stick 4K of roku-streaming-stick-4k-3820eu2-15-3-4, ECP network access Enabled, taken to learn which authenticate frames the set accepts. Each exchange is its own session. The challenge is a fixed nonce with its answer recomputed, and the uptime is a same-shape value. Frames the set answered by dropping the connection without a reply (an authenticate whose request-id is a number or is missing) have no frame to keep and are stated as a claim instead. The request-events exchanges ran on an authenticated session; the subscription list is the one the Roku mobile app for Android sends. The launch and input exchanges ran on an authenticated session with YouTube (837) and Netflix (12) installed; ws.launch and the foreground exchanges were sent while 837 ran (with params it restarted, without them it was left alone); ws.input was sent from the home screen and launched 837. The params are the keys the Roku mobile app sends, with an all-zero session id."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "ws.authenticate-request-id-0",
+      "operation_id": "roku.ecp2.authenticate-session",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.param-challenge",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "challenge.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.authenticate",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-zero.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-zero-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.authenticate-request-id-text",
+      "operation_id": "roku.ecp2.authenticate-session",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.param-challenge",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "challenge.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.authenticate",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-text.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-text-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.authenticate-wrong-then-retry",
+      "operation_id": "roku.ecp2.authenticate-session",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.param-challenge",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "challenge.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.authenticate",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-wrong.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-wrong-response.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.authenticate",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-retry.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-retry-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-before-authenticate",
+      "operation_id": "roku.ecp2.authenticate-session",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.param-challenge",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "challenge.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-active-app",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "unauthenticated-query.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "unauthenticated-query-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.authenticate-twice",
+      "operation_id": "roku.ecp2.authenticate-session",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.param-challenge",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "challenge.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.authenticate",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-zero.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-zero-response.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.authenticate",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-again.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-again-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.request-events",
+      "operation_id": "ecp-2.request-events",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.request-events-partial",
+      "operation_id": "ecp-2.request-events",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events-partial.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events-partial-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.request-events-unknown",
+      "operation_id": "ecp-2.request-events",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events-unknown.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events-unknown-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.request-events-missing",
+      "operation_id": "ecp-2.request-events",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events-missing.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "request-events-missing-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.launch",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.launch-foreground",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-foreground.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-foreground-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.launch-foreground-empty-params",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-foreground-empty-params.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-foreground-empty-params-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.launch-not-installed",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-not-installed.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-not-installed-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.launch-no-channel",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-no-channel.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-no-channel-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.launch-params-not-json",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-params-not-json.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-params-not-json-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.input",
+      "operation_id": "ecp-2.input",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "input.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "input-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.input-not-installed",
+      "operation_id": "ecp-2.input",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "input-not-installed.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "input-not-installed-response.json"
+        }
+      ]
+    }
+  ]
+}

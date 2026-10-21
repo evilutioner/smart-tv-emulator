@@ -1,0 +1,1346 @@
+{
+  "schema_version": 1,
+  "id": "roku-streaming-stick-4k-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "serial_number": "X02500EM0030",
+    "udn": "uuid:28002140-0000-1000-8000-020000000030",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "captured",
+    "captured_at": "2026-10-18",
+    "description": "Composite evidence for this same Streaming Stick: unchanged baseline exchanges are retained from roku-streaming-stick-4k-3820eu2-15-3-4; additional ecp-2 query, text, launch and notification exchanges and silent SAS samples were measured live on 2026-10-18 in roku-ecp2-surface-3820eu2-2026-10-18. The retained baseline was not re-measured. This avoids changing immutable captures while giving a profile one local complete capture. Audio/RTCP UDP port 5150 is advertised by query-audio-device; the SAS sender uses an ephemeral source port. Complete notification scenarios (Home, subscribe to one event, launch 837, and Home for exit) were measured separately on 2026-10-18; notify may precede the triggering key reply on hardware."
+  },
+  "platform": {
+    "protocols": [
+      {
+        "id": "ecp",
+        "port": 8060,
+        "primary": true
+      },
+      {
+        "id": "ssdp"
+      },
+      {
+        "id": "private-listening",
+        "port": 5150,
+        "warm_up": "ecp"
+      }
+    ],
+    "observed_open_ports": [
+      {
+        "port": 8060,
+        "transport": "tcp",
+        "service": "roku-ecp",
+        "emulated": true
+      },
+      {
+        "port": 80,
+        "transport": "tcp",
+        "service": "roku-developer-installer",
+        "emulated": false
+      },
+      {
+        "port": 7000,
+        "transport": "tcp",
+        "service": "rtsp",
+        "detail": "AirTunes 377.40.00",
+        "emulated": false
+      },
+      {
+        "port": 8080,
+        "transport": "tcp",
+        "service": "roku-debug-console",
+        "emulated": false
+      },
+      {
+        "port": 8085,
+        "transport": "tcp",
+        "service": "brightscript-console",
+        "emulated": false
+      },
+      {
+        "port": 8086,
+        "transport": "tcp",
+        "service": "roku-developer-debug",
+        "emulated": false
+      },
+      {
+        "port": 8087,
+        "transport": "tcp",
+        "service": "roku-developer-debug",
+        "emulated": false
+      },
+      {
+        "port": 8088,
+        "transport": "tcp",
+        "service": "roku-developer-debug",
+        "emulated": false
+      },
+      {
+        "port": 8089,
+        "transport": "tcp",
+        "service": "roku-developer-debug",
+        "emulated": false
+      }
+    ],
+    "ssdp": {
+      "search_target": "roku:ecp",
+      "response_headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=3600"
+        },
+        {
+          "name": "ST",
+          "value": "roku:ecp"
+        },
+        {
+          "name": "USN",
+          "value": "uuid:roku:ecp:X02500EM0030"
+        },
+        {
+          "name": "BOOTID.UPNP.ORG",
+          "value": "91"
+        },
+        {
+          "name": "Ext",
+          "value": ""
+        },
+        {
+          "name": "Server",
+          "value": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+        },
+        {
+          "name": "LOCATION",
+          "value": "{location}"
+        },
+        {
+          "name": "device-group.roku.com",
+          "value": "00000000000000000030"
+        }
+      ]
+    }
+  },
+  "exchanges": [
+    {
+      "id": "http.device-description",
+      "operation_id": "roku.http.device-description",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "device-description.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.ecp-scpd",
+      "operation_id": "roku.http.ecp-scpd",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/ecp_SCPD.xml"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "ecp_SCPD.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.dial-scpd",
+      "operation_id": "roku.http.dial-scpd",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/dial_SCPD.xml"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "dial_SCPD.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.device-image",
+      "operation_id": "roku.http.device-image",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/device-image.png"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "image/png"
+            }
+          },
+          "payload": "device-image.png"
+        }
+      ]
+    },
+    {
+      "id": "http.device-info",
+      "operation_id": "roku.http.device-info",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/device-info"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "device-info.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.active-app",
+      "operation_id": "roku.http.active-app",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/active-app"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "active-app.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.apps",
+      "operation_id": "roku.http.apps",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/apps"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "apps.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.media-player",
+      "operation_id": "roku.http.media-player",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/media-player"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "media-player.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.audio-device",
+      "operation_id": "roku.http.audio-device",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/audio-device"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "audio-device.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.tv-channels",
+      "operation_id": "roku.http.tv-channels",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/tv-channels"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 404,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+            }
+          },
+          "payload": "empty"
+        }
+      ]
+    },
+    {
+      "id": "http.tv-active-channel",
+      "operation_id": "roku.http.tv-active-channel",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/tv-active-channel"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 404,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+            }
+          },
+          "payload": "empty"
+        }
+      ]
+    },
+    {
+      "id": "http.key-down",
+      "operation_id": "roku.http.key",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "POST",
+            "path": "/keydown/Lit_a"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+            }
+          },
+          "payload": "empty"
+        }
+      ]
+    },
+    {
+      "id": "http.key-up",
+      "operation_id": "roku.http.key",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "POST",
+            "path": "/keyup/Lit_a"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+            }
+          },
+          "payload": "empty"
+        }
+      ]
+    },
+    {
+      "id": "http.key-up-unheld",
+      "operation_id": "roku.http.key",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "POST",
+            "path": "/keyup/Lit_b"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 202,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+            }
+          },
+          "payload": "empty"
+        }
+      ]
+    },
+    {
+      "id": "http.keypress-unknown",
+      "operation_id": "roku.http.key",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "POST",
+            "path": "/keypress/TvemuProbe"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 400,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+            }
+          },
+          "payload": "empty"
+        }
+      ]
+    },
+    {
+      "id": "http.launch-unknown",
+      "operation_id": "roku.http.launch",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "method": "POST",
+            "path": "/launch/0"
+          }
+        },
+        {
+          "direction": "out",
+          "metadata": {
+            "status": 404,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+            }
+          },
+          "payload": "empty"
+        }
+      ]
+    },
+    {
+      "id": "ws.authenticate",
+      "operation_id": "roku.ecp2.authenticate-session",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.param-challenge",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "challenge.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.authenticate",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "authenticate-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-device-info",
+      "operation_id": "ecp-2.query-device-info",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-device-info.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-device-info-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-active-app",
+      "operation_id": "ecp-2.query-active-app",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-active-app.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-active-app-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-apps",
+      "operation_id": "ecp-2.query-apps",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-apps.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-apps-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-media-player",
+      "operation_id": "ecp-2.query-media-player",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-media-player.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-media-player-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-textedit-state",
+      "operation_id": "ecp-2.query-textedit-state",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-textedit-state.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-textedit-state-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-audio-device",
+      "operation_id": "ecp-2.query-audio-device",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-audio-device.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-audio-device-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-tv-channels",
+      "operation_id": "ecp-2.query-tv-channels",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-tv-channels.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-query-tv-channels-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.key-down",
+      "operation_id": "ecp-2.key-down",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-key-down.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-key-down-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.key-up",
+      "operation_id": "ecp-2.key-up",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-key-up.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-key-up-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.key-up-unheld",
+      "operation_id": "ecp-2.key-up",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-key-up-unheld.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "ws-key-up-unheld-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-tv-active-channel",
+      "operation_id": "ecp-2.query-tv-active-channel",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-tv-active-channel",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-channel-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-channel-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-tv-channels-ex",
+      "operation_id": "ecp-2.query-tv-channels-ex",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-tv-channels-ex",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-channels-ex-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-channels-ex-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-tv-active-input",
+      "operation_id": "ecp-2.query-tv-active-input",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-tv-active-input",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-input-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-input-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-themes",
+      "operation_id": "ecp-2.query-themes",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-themes",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-themes-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-themes-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-screensavers",
+      "operation_id": "ecp-2.query-screensavers",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-screensavers",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-screensavers-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-screensavers-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-warm-standby",
+      "operation_id": "ecp-2.query-warm-standby",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-warm-standby",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-warm-standby-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-warm-standby-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-pq-options",
+      "operation_id": "ecp-2.query-pq-options",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-pq-options",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-options-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-options-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-pq-picture-modes",
+      "operation_id": "ecp-2.query-pq-picture-modes",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-pq-picture-modes",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-modes-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-modes-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-pq-picture-settings",
+      "operation_id": "ecp-2.query-pq-picture-settings",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-pq-picture-settings",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-settings-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-settings-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-audio-settings",
+      "operation_id": "ecp-2.query-audio-settings",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-audio-settings",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-audio-settings-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-audio-settings-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-av-sync-offset",
+      "operation_id": "ecp-2.query-av-sync-offset",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-av-sync-offset",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-av-sync-offset-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-av-sync-offset-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.query-curr-audio-format",
+      "operation_id": "ecp-2.query-curr-audio-format",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-curr-audio-format",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-curr-audio-format-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-curr-audio-format-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.check-link",
+      "operation_id": "ecp-2.check-link",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.check-link",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "check-link-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "check-link-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.set-textedit-text",
+      "operation_id": "ecp-2.set-textedit-text",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.set-audio-output",
+      "operation_id": "ecp-2.set-audio-output",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-audio-output",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-audio-output-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-audio-output-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.mobile-sas-disconnect",
+      "operation_id": "ecp-2.mobile-sas-disconnect",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.mobile-sas-disconnect",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "mobile-sas-disconnect-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "mobile-sas-disconnect-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.ws.launch",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.launch",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-response.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.notify-7",
+      "operation_id": "ecp-2.plugin-ui-run",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.key-press",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-run-0.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-run-1.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.request-events",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-run-2.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-run-3.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.launch",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-run-4.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-run-5.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-run",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-run-6.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.notify-8",
+      "operation_id": "ecp-2.plugin-ui-run-script",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-run-script",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "notify-8.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.notify-15",
+      "operation_id": "ecp-2.plugin-ui-exit",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.key-press",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-0.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-1.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.request-events",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-2.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-3.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.launch",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-4.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-5.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.key-press",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-6.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-7.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-exit",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "scenario-plugin-ui-exit-8.json"
+        }
+      ]
+    },
+    {
+      "id": "extended.notify-16",
+      "operation_id": "ecp-2.plugin-ui-run-script",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-run-script",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "notify-16.json"
+        }
+      ]
+    }
+  ]
+}

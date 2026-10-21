@@ -47,7 +47,7 @@ SINCE = {"type": "integer", "minimum": 0,
          "description": "Only events whose id is greater than this."}
 
 TOOLS: dict[str, tuple[str, dict]] = {
-    "state": ("The emulated television right now: platform, captured device, address, "
+    "state": ("The emulated device right now: platform, captured device, address, "
               "protocols and their ports, pairing, keys, power, volume, keyboard and "
               "launches. The event log is left out; read it with `events`.", _object()),
     "events": ("The event log, oldest first: every request, response status and refusal "
@@ -85,7 +85,7 @@ TOOLS: dict[str, tuple[str, dict]] = {
     "configure": ("Apply a partial settings update: device_profile, access_mode, or "
                   "protocols as {id: true|false}.",
                   _object({"settings": {"type": "object"}}, required=("settings",))),
-    "switch_platform": ("Switch the emulated television without restarting.",
+    "switch_platform": ("Switch the emulated device without restarting.",
                         _object({"platform": PLATFORM}, required=("platform",))),
     "api_map": ("Everything a platform answers, from the route and message declarations "
                 "beside its handlers. format: text (default), openapi or asyncapi.",

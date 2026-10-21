@@ -11,10 +11,10 @@ import unittest
 from dataclasses import replace
 
 import support  # noqa: F401  (registers the stub platforms)
-from tvemu.conformance import compare, http, mqtt, setup, websocket
-from tvemu.conformance.model import ConformanceCase, Report
+from tvemu.conformance import compare, datagram, http, mqtt, setup, websocket
+from tvemu.conformance.model import CaseResult, ConformanceCase, Plan, Report
 from tvemu.conformance.runner import (ADVERTISED_HOST, build_plan, coverage_complete,
-                                      fresh_adapter, profiles, run_case)
+                                      fresh_adapter, profiles, run_case, evidence_coverage_complete)
 from tvemu.platforms import platform_ids
 from tvemu.platforms.common import adapter as common_adapter
 from tvemu.platforms.common.evidence import Exchange, Step
@@ -284,6 +284,25 @@ class RunTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(set(covered) | set(gaps)), plan.replays)
         self.assertTrue(all(gap.reason for gap in plan.gaps))
 
+    def test_every_evidence_scenario_is_a_case_or_a_named_gap_exactly_once(self):
+        plan = self.report.plan
+        covered = [case.id for case in plan.cases if case.scope == "evidence"]
+        gaps = [f"{gap.platform}/{gap.profile}/evidence.{gap.replay}"
+                for gap in plan.evidence_gaps]
+        self.assertEqual(len(covered) + len(gaps), plan.evidence_scenarios)
+        self.assertEqual(len(set(covered + gaps)), plan.evidence_scenarios)
+        self.assertTrue(all(gap.reason for gap in plan.evidence_gaps))
+        totals = self.report.totals()
+        self.assertEqual(totals["passed_evidence_scenarios"],
+                         sum(result.passed for result in self.report.results
+                             if result.case.scope == "evidence"))
+
+    def test_complete_evidence_coverage_leaves_no_evidence_gap(self):
+        owed = [f"{gap.platform}/{gap.profile}/{gap.replay}: {gap.reason}"
+                for gap in self.report.plan.evidence_gaps
+                if evidence_coverage_complete(gap.platform)]
+        self.assertEqual(owed, [])
+
     def test_every_case_that_needs_a_setup_names_one_its_platform_declares(self):
         for case in self.report.plan.cases:
             if case.setup:
@@ -311,7 +330,7 @@ class RunTest(unittest.IsolatedAsyncioTestCase):
         for result in self.report.results:
             case = result.case
             reference = references[(case.platform, case.profile)]
-            if result.passed and predicate(case, reference):
+            if result.passed and case.scope == "replay" and predicate(case, reference):
                 return case, reference
         self.skipTest("no passing case of that shape")
 
@@ -424,3 +443,33 @@ class LeakDetectionTest(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DatagramComparisonTest(unittest.TestCase):
+    def test_owned_payload_does_not_hide_a_changed_header(self):
+        from types import SimpleNamespace
+        scenario = datagram.Scenario("wire", "stub", "partial", "x", (0,), "control",
+                                     frozenset({"payload"}))
+        capture = SimpleNamespace(exchange=lambda _: SimpleNamespace(steps=(object(),)))
+        case = ConformanceCase("stub/p/evidence.wire", "stub", "p", ("x",),
+                               "control", "udp", (), scope="evidence", capture="partial",
+                               evidence_steps=(0,))
+        result = CaseResult(case, "pass")
+        client = datagram.Client(("127.0.0.1", 1), "example.invalid", capture, scenario,
+                                 1, result, None, {})
+        client.compare(0, {"header": b"A", "payload": b"recorded"},
+                       {"header": b"A", "payload": b"owned"})
+        client.finish()
+        self.assertEqual(result.problems, [])
+        client.compare(0, {"header": b"A", "payload": b"recorded"},
+                       {"header": b"B", "payload": b"owned"})
+        self.assertTrue(any("header" in problem for problem in result.problems))
+        report = Report(Plan(cases=[case], evidence_scenarios=1), [result])
+        self.assertEqual(report.totals()["covered_replays"], 0)
+        self.assertEqual(report.totals()["evidence_scenarios"], 1)
+
+    def test_evidence_cannot_take_credit_for_a_profile_replay(self):
+        with self.assertRaises(ValueError):
+            ConformanceCase("stub/p/evidence.wire", "stub", "p", ("x",), "control", "udp",
+                            ("profile-replay",), scope="evidence", capture="partial",
+                            evidence_steps=(0,))

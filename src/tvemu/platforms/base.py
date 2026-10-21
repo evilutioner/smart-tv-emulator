@@ -107,6 +107,9 @@ class ContentType:
     label: str
     hidden: bool = False
     summary: str = ""
+    # A measured field limit in Unicode characters. Zero leaves it unconstrained.
+    # An oversized replacement is discarded rather than partially replacing the field.
+    max_length: int = 0
 
 
 @dataclass(frozen=True)
@@ -310,8 +313,6 @@ class PlatformDescriptor:
     # What a remote key does to the simulated device. Data, so no shared `if key == …` exists.
     key_effects: tuple[tuple[str, KeyEffect], ...] = DEFAULT_KEY_EFFECTS
     volume: VolumeRange = VolumeRange()
-    # Position in the dashboard selector; the lowest present is the default platform.
-    order: int = 500
 
 
 class PlatformAdapter(Protocol):

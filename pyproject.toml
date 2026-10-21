@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "smart-tv-emulator"
-version = "1.2.0"
+version = "1.3.0"
 description = "Extensible Smart TV protocol emulator with a local tester dashboard"
 readme = "README.md"
 license = "Apache-2.0"
@@ -23,6 +23,8 @@ tvemu = [
   "web/platforms/*",
   "platforms/*.json",
   "platforms/*/profiles/*/*",
+    "platforms/*/fixtures/*",
+    "platforms/*/client-contract.json",
   "platforms/*/evidence/*/*",
   "platforms/*/tls/*",
   "platforms/*/conformance/*",

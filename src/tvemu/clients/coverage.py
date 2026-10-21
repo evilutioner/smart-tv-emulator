@@ -65,16 +65,21 @@ class Zone:
         return counts
 
 
-def step_kind(spec: ClientSpec, step: dict) -> str:
+def known_failure(spec: ClientSpec, step: dict, profile_id: str):
+    """The declaration a known failure was judged by: one step may be declared per profile."""
+    return next((entry for entry in spec.known_failures
+                 if entry.step == step.get("name") and entry.covers(profile_id)), None)
+
+
+def step_kind(spec: ClientSpec, step: dict, profile_id: str) -> str:
     status = step.get("status")
     if status == "ok":
         return "ok"
     if status == "known-gap":
         return "unsupported"
     if status == "known-failure":
-        side = next((entry.side for entry in spec.known_failures if entry.step == step.get("name")),
-                    "emulator")
-        return "wrong" if side == "emulator" else "client-bug"
+        entry = known_failure(spec, step, profile_id)
+        return "client-bug" if entry and entry.side == "client" else "wrong"
     return "failed"
 
 
@@ -100,7 +105,7 @@ def zones(spec: ClientSpec, profile: dict) -> list[Zone]:
         zone.blocked = bool(stopped) and not zone.steps and not zone.no_api
         if zone.by_steps:
             for step in zone.steps:
-                zone.items[step_kind(spec, step)].append(step["name"])
+                zone.items[step_kind(spec, step, profile["profile"])].append(step["name"])
         else:
             placed: set[str] = set()
             # An item shows its worst outcome: a problem one step met is not undone by another
@@ -108,7 +113,8 @@ def zones(spec: ClientSpec, profile: dict) -> list[Zone]:
             for kind in ("failed", "wrong", "client-bug", "unsupported", "ok"):
                 for item in zone.offered:
                     if item not in placed and any(
-                            item in (step.get("covers") or []) and step_kind(spec, step) == kind
+                            item in (step.get("covers") or [])
+                            and step_kind(spec, step, profile["profile"]) == kind
                             for step in zone.steps):
                         zone.items[kind].append(item)
                         placed.add(item)
@@ -231,10 +237,14 @@ def _first_sentence(text: str) -> str:
     return text if end < 0 else text[:end + 1]
 
 
-def _entries(entries: dict[str, dict], code: bool) -> list[str]:
-    """One line per entry, entries met on the same runs under one heading."""
+def _entries(entries: dict, code: bool) -> list[str]:
+    """One line per entry, entries met on the same runs under one heading.
+
+    A key is the entry's name, or a (name, reason) pair where one name may stand for steps
+    two clients declared for different reasons."""
     by_where: dict[str, list[tuple[str, dict]]] = {}
-    for name, entry in sorted(entries.items(), key=lambda pair: (-len(pair[1]["at"]), pair[0])):
+    for key, entry in sorted(entries.items(), key=lambda pair: (-len(pair[1]["at"]), pair[0])):
+        name = key if isinstance(key, str) else key[0]
         by_where.setdefault(_where(entry["at"]), []).append((name, entry))
     lines = []
     for where, group in by_where.items():
@@ -259,7 +269,8 @@ def _entries(entries: dict[str, dict], code: bool) -> list[str]:
 def backlog(columns: list[tuple[ClientSpec, dict]]) -> list[str]:
     """Everything that did not pass, as work: grouped by who moves, most runs first."""
     captures: dict[str, dict] = {}
-    failures: dict[str, dict[str, dict]] = {"wrong": {}, "client-bug": {}, "failed": {}}
+    failures: dict[str, dict[tuple[str, str], dict]] = {"wrong": {}, "client-bug": {},
+                                                        "failed": {}}
     blocked: dict[str, dict] = {}
     untested: dict[tuple[str, str], set[str]] = {}
     for spec, record in columns:
@@ -271,12 +282,12 @@ def backlog(columns: list[tuple[ClientSpec, dict]]) -> list[str]:
             for step in profile.get("steps") or []:
                 if step.get("status") == "not-offered":
                     continue      # a fact about the client, shown as "no API" in its zones
-                kind = step_kind(spec, step)
+                kind = step_kind(spec, step, profile["profile"])
                 if kind in failures:
-                    reason = next((entry.reason for entry in spec.known_failures
-                                   if entry.step == step["name"]), step.get("detail") or "")
-                    failures[kind].setdefault(step["name"], {"reason": reason, "at": []})[
-                        "at"].append(pair)
+                    entry = known_failure(spec, step, profile["profile"])
+                    reason = entry.reason if entry else step.get("detail") or ""
+                    failures[kind].setdefault((step["name"], reason),
+                                              {"reason": reason, "at": []})["at"].append(pair)
             stop = stopped_zone(profile)
             if stop:
                 entry = blocked.setdefault(profile["profile"], {"zones": [], "items": 0})
@@ -286,7 +297,7 @@ def backlog(columns: list[tuple[ClientSpec, dict]]) -> list[str]:
                 for item in zone.untested:
                     untested.setdefault((zone.name, item), set()).add(spec.name)
 
-    def ordered(entries: dict[str, dict]) -> list[tuple[str, dict]]:
+    def ordered(entries: dict) -> list[tuple]:
         return sorted(entries.items(), key=lambda pair: (-len(pair[1]["at"]), pair[0]))
 
     def section(title: str, intro: str, body: list[str]) -> list[str]:
@@ -314,7 +325,7 @@ def backlog(columns: list[tuple[ClientSpec, dict]]) -> list[str]:
             "Failed, not yet explained",
             "Failed for no declared reason: the run is red until someone says whose it is.",
             [f"- **{name}**, {_runs(entry['at'])} ({_where(entry['at'])}): `{entry['reason']}`"
-             for name, entry in ordered(failures["failed"])])
+             for (name, _), entry in ordered(failures["failed"])])
     tests = []
     for zone in ZONE_NAMES:
         items = sorted(((item, len(clients)) for (name, item), clients in untested.items()
@@ -355,7 +366,7 @@ def zone_lines(spec: ClientSpec, profile: dict) -> list[str]:
         if zone.unreached:
             lines.append(f"  - blocked, not reached: {_items(zone.unreached)}")
         for step in zone.steps:
-            kind = step_kind(spec, step)
+            kind = step_kind(spec, step, profile["profile"])
             if kind != "ok":
                 what = f" ({_items(step['covers'])})" if step.get("covers") else ""
                 lines.append(f"  - {LABELS[kind]}: {step['name']}{what}: "

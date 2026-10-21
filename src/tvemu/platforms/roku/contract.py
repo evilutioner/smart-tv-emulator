@@ -13,6 +13,8 @@ from tvemu.platforms.common.claims import (
     SerializationClaim, ValueSetClaim,
 )
 from tvemu.platforms.common.evidence import EvidenceRef
+import json
+from importlib.resources import files
 
 _STICK_12 = "roku-streaming-stick-4k-12-0-0"
 _STICK_15 = "roku-streaming-stick-4k-15-3-4"
@@ -23,6 +25,7 @@ _OFF = "tcl-roku-tv-32s357-disabled"
 _ON = "tcl-roku-tv-32s357-enabled"
 _STANDBY = "tcl-roku-tv-32s357-standby"
 _PROBE = "roku-ecp2-probe-15-2-4"
+_AUTH = "roku-ecp2-probe-3820eu2-15-3-4"
 
 
 def _at(exchange: str, *captures: str) -> tuple[EvidenceRef, ...]:
@@ -32,9 +35,11 @@ def _at(exchange: str, *captures: str) -> tuple[EvidenceRef, ...]:
 _DESCRIPTION = _at("http.device-description", _STICK_12, _TCL, _STICK_15, _STICK, _TCL_15,
                    _OFF, _ON)
 _DEVICE_INFO = _at("http.device-info", _TCL, _STICK_15, _STICK, _TCL_15, _ON)
-_CLIENT = (EvidenceRef("client-contract", detail="ECP client expectations"),)
+_CLIENT = (EvidenceRef("client-contract", detail="Roku mobile app for Android 14.1.2, ECP "
+                       "request list; client-contract.json records the parameters"),)
 _ECP_DOCS = (EvidenceRef("client-contract", detail="Roku ECP documentation"),)
 _LIVE = (EvidenceRef("probe", detail="Streaming Stick 4K on 15.2.4, probed live"),)
+_LIVE_15 = (EvidenceRef("probe", detail="Streaming Stick 4K on 15.3.4, probed live 2026-10-17"),)
 
 
 def _values(evidence, *literals: str) -> tuple[ClaimedValue, ...]:
@@ -67,11 +72,11 @@ STICK_ONLY = ("find-remote-is-possible", "is-powered-by-tv", "supports-cec-power
 # and answers an unknown one with 404, so the emulator's 404 for the uncaptured ones reads
 # the same as the set's.
 ECP2_REQUESTS = ("authenticate", "key-press", "key-down", "key-up", "query-device-info")
-ECP2_CLIENT_REQUESTS = (
-    "query-apps", "query-active-app", "query-icon", "query-textedit-state",
-    "set-textedit-text", "query-audio-device", "query-info-for-voice-service",
-    "send-voice-events", "request-events", "set-audio-output", "launch",
-)
+# Request names measured on the Streaming Stick 4K on 15.3.4 by the 2026-10-17 probe.
+ECP2_STICK_REQUESTS = ("request-events", "launch", "input")
+ECP2_CLIENT_REQUESTS = tuple(name for name, request in json.loads(
+    files(__package__).joinpath("client-contract.json").read_text())["requests"].items()
+    if request.get("wire", True))
 
 _PROBE_RESPONSES = _at("ws.authenticate", _PROBE) + tuple(
     EvidenceRef("capture", _PROBE, exchange)
@@ -86,6 +91,8 @@ _TCL_RESPONSES = _TCL_QUERIES + tuple(
     for exchange in ("ws.authenticate", "ws.query-device-info", "ws.key-down", "ws.key-up",
                      "ws.key-up-unheld"))
 _UNHELD = _at("ws.key-up-unheld", _TCL_15, _ON)
+_WRONG_ANSWER = _at("ws.authenticate-wrong-then-retry", _AUTH)
+_UNAUTHENTICATED = _at("ws.query-before-authenticate", _AUTH)
 
 
 def _disabled(exchange: str, what: str, consequence: str = "") -> BehaviorClaim:
@@ -118,7 +125,15 @@ def _key_press() -> OperationClaims:
             "a client that sends LIT_ works. Nothing is percent-decoded on this wire: Lit_%20 is "
             "400 while a literal space is 200, although over HTTP /keypress/%48ome presses "
             "Home. Anything else, or a field spelled key, is 400.",
-            evidence, _values(evidence, "Home", "home", "Lit_a", "LIT_a"), closed=False),
+            evidence + _LIVE_15,
+            (*_values(evidence, "Home", "home", "Lit_a", "LIT_a"),
+             *_values(_LIVE_15, "Stop", "Guide", "LiveTV", "Exit", "ClosedCaption", "Red",
+                      "Green", "Yellow", "Blue")), closed=False),
+        BehaviorClaim(
+            "param-key", "Names the official Roku app for Android has that the set does not "
+                         "take.", _LIVE_15,
+            condition="param-key is a digit, \".\", Keyboard, TextSearch or VoiceSearch",
+            outcome="status 400, status-msg Bad Request"),
         BehaviorClaim(
             "request-id",
             "Any string, echoed as response-id and never validated -- a reused \"1\" "
@@ -142,6 +157,11 @@ OPERATION_CLAIMS = {
     ),
     "roku.http.device-info": OperationClaims(
         "roku.http.device-info", "The ECP device inventory.", (
+            BehaviorClaim("serial-number", "The Roku mobile app requires this field in a "
+                          "successful document. A refused HTTP query has no document to "
+                          "decode.", _CLIENT,
+                          condition="a client decodes a successful device-info document",
+                          outcome="serial-number must be present for the Roku mobile app"),
             _disabled("http.device-info", "the query"),
             SerializationClaim(
                 "", "Every element is optional and names are case sensitive "
@@ -328,9 +348,119 @@ OPERATION_CLAIMS = {
     ),
     "ecp-2.authenticate": OperationClaims(
         "ecp-2.authenticate", "The answer to the challenge.", (
-            ValueSetClaim("request-id", "The one request id the set prescribes.",
-                          _at("ws.authenticate", _PROBE),
-                          _values(_at("ws.authenticate", _PROBE), "1")),
+            ValueSetClaim(
+                "request-id",
+                "Any string, echoed as response-id like every other request's: the set "
+                "prescribes no value. The official Roku app for Android numbers its requests "
+                "from 0, so its authenticate carries \"0\"; other clients start at 1.",
+                _at("ws.authenticate", _PROBE) + _at("ws.authenticate-request-id-0", _AUTH),
+                (ClaimedValue("1", _at("ws.authenticate", _PROBE)),
+                 ClaimedValue("0", _at("ws.authenticate-request-id-0", _AUTH)),
+                 ClaimedValue("abc", _at("ws.authenticate-request-id-text", _AUTH))),
+                closed=False),
+            BehaviorClaim(
+                "request-id", "The same framing rule as after authenticating.", _LIVE_15,
+                condition="request-id is a number or is missing",
+                outcome="the set drops the connection without a reply; the emulator sends "
+                        "close code 1002 first"),
+            BehaviorClaim(
+                "param-response", "A wrong answer does not end the session: the client may "
+                                  "answer the same challenge again, and a right answer then "
+                                  "authenticates it.", _WRONG_ANSWER,
+                condition="the answer is not the one the challenge asks for",
+                outcome="status 601, status-msg Invalid Credentials; the socket stays open"),
+            BehaviorClaim(
+                "", "The deadline runs from the open, whatever the client sent meanwhile; an "
+                    "authenticated session idle for 80 s stayed open.", _LIVE_15,
+                condition="the session has not authenticated 10.5 s after it opened",
+                outcome="the set drops the connection with no close frame"),
+            BehaviorClaim(
+                "", "Once authenticated, authenticate is no longer a request the session has.",
+                _at("ws.authenticate-twice", _AUTH),
+                condition="authenticate arrives on a session that has already authenticated",
+                outcome="status 404, status-msg Not Found"),
+        ),
+    ),
+    "ecp-2.request-events": OperationClaims(
+        "ecp-2.request-events", "Subscribe to notifications.", (
+            ValueSetClaim(
+                "param-events",
+                "Comma-separated entries, each + or - and an event name; empty entries are "
+                "skipped. Names are case sensitive and nothing is trimmed. A stick takes the "
+                "television's tuner and input events too. The list the official Roku app for "
+                "Android sends is the one captured.",
+                _at("ws.request-events", _AUTH),
+                (ClaimedValue(
+                    "+language-changed,+language-changing,+media-player-state-changed,"
+                    "+plugin-ui-run,+plugin-ui-run-script,+plugin-ui-exit,+screensaver-run,"
+                    "+screensaver-exit,+plugins-changed,+sync-completed,+power-mode-changed,"
+                    "+volume-changed,+textedit-opened,+textedit-closed,+textedit-changed,"
+                    "+device-name-changed,+device-location-changed,+audio-setting-changed,"
+                    "+audio-settings-invalidated,+user-profile-changed,"
+                    "+tv-power-volume-control-changed", _at("ws.request-events", _AUTH)),
+                 ClaimedValue("+volume-changed,+no-such-event",
+                              _at("ws.request-events-partial", _AUTH)),
+                 ClaimedValue("+VOLUME-CHANGED", _at("ws.request-events-unknown", _AUTH))),
+                closed=False),
+            BehaviorClaim(
+                "param-events", "Part of the list is taken.",
+                _at("ws.request-events-partial", _AUTH),
+                condition="some entries name a known event and some do not",
+                outcome="status 202, status-msg Accepted"),
+            BehaviorClaim(
+                "param-events", "Nothing is taken.", _at("ws.request-events-unknown", _AUTH),
+                condition="no entry names a known event with its sign, or the list is empty",
+                outcome="status 404, status-msg Not Found"),
+            BehaviorClaim(
+                "", "The parameter is required.", _at("ws.request-events-missing", _AUTH),
+                condition="param-events is missing",
+                outcome="status 400, status-msg Bad Request"),
+        ),
+    ),
+    "ecp-2.launch": OperationClaims(
+        "ecp-2.launch", "Launch a channel.", (
+            ValueSetClaim(
+                "param-params",
+                "One string holding a JSON object; the official Roku app for Android always "
+                "sends its gc_run_source keys. Missing, empty and {} are all no params.",
+                _at("ws.launch", _AUTH),
+                (ClaimedValue("{}", _at("ws.launch-foreground-empty-params", _AUTH)),
+                 ClaimedValue("not json", _at("ws.launch-params-not-json", _AUTH))),
+                closed=False),
+            BehaviorClaim(
+                "", "The set leaves a running channel alone; the official Roku app for Android "
+                    "reads 204 as already launched.", _at("ws.launch-foreground", _AUTH)
+                + _at("ws.launch-foreground-empty-params", _AUTH),
+                condition="the channel is in the foreground and there are no params",
+                outcome="status 204, status-msg No Content"),
+            BehaviorClaim(
+                "", "With params, a running channel is restarted.", _at("ws.launch", _AUTH),
+                condition="the channel is in the foreground and params are given",
+                outcome="status 200; the channel exits and runs again"),
+            BehaviorClaim(
+                "param-channel-id", "The emulator does not follow: like the HTTP launch, it "
+                                    "accepts any id.", _at("ws.launch-not-installed", _AUTH),
+                condition="the channel is not installed",
+                outcome="status 404 on the set; 200 from the emulator"),
+            BehaviorClaim(
+                "", "Both parameters are checked before anything runs.",
+                _at("ws.launch-no-channel", _AUTH) + _at("ws.launch-params-not-json", _AUTH),
+                condition="param-channel-id is missing or param-params is not JSON",
+                outcome="status 400, status-msg Bad Request"),
+        ),
+    ),
+    "ecp-2.input": OperationClaims(
+        "ecp-2.input", "Hand params to a channel.", (
+            BehaviorClaim(
+                "", "A channel that is not running is launched to take them.",
+                _at("ws.input", _AUTH),
+                condition="the channel is installed but not in the foreground",
+                outcome="status 200; the channel runs"),
+            BehaviorClaim(
+                "param-channel-id", "The emulator does not follow, as for launch.",
+                _at("ws.input-not-installed", _AUTH),
+                condition="the channel is not installed",
+                outcome="status 404 on the set; 200 from the emulator"),
         ),
     ),
     "ecp-2.key-press": _key_press(),
@@ -338,21 +468,35 @@ OPERATION_CLAIMS = {
         "ecp-2.response", "The envelope every ecp-2 reply arrives in.", (
             ValueSetClaim("response", "Echoes the request name.", _PROBE_RESPONSES,
                           (*_values(_PROBE_RESPONSES, *ECP2_REQUESTS),
+                           *(ClaimedValue(name, _at(f"ws.{name}", _AUTH))
+                             for name in ECP2_STICK_REQUESTS),
                            *_values(_TCL_QUERIES, *ECP2_QUERIES),
                            *_values(_CLIENT, *(name for name in ECP2_CLIENT_REQUESTS
                                                if name not in ECP2_QUERIES)))),
             ValueSetClaim("status",
                           "A decimal string about the request, not the transport: a refusal "
                           "arrives in a successful frame. 400 is an unusable parameter, 404 "
-                          "an unknown request name, 202 the release of a key not held.",
+                          "an unknown request name, 202 the release of a key not held, 401 a request "
+                          "before authenticating and 601 a wrong challenge answer.",
                           _PROBE_RESPONSES + _TCL_RESPONSES,
                           (ClaimedValue("200", _PROBE_RESPONSES + _TCL_RESPONSES),
                            ClaimedValue("202", _UNHELD),
+                           ClaimedValue("204", _at("ws.launch-foreground", _AUTH)),
+                           ClaimedValue("401", _UNAUTHENTICATED),
+                           ClaimedValue("601", _WRONG_ANSWER),
                            *_values(_LIVE, "400", "404"))),
+            BehaviorClaim(
+                "status", "Nothing but authenticate is served before it succeeds.",
+                _UNAUTHENTICATED,
+                condition="any other request arrives before a successful authenticate",
+                outcome="status 401, status-msg Unauthorized; the socket stays open"),
             ValueSetClaim("status-msg", "The status phrase only; the set never explains.",
                           _PROBE_RESPONSES + _TCL_RESPONSES,
                           (ClaimedValue("OK", _PROBE_RESPONSES + _TCL_RESPONSES),
                            ClaimedValue("Accepted", _UNHELD),
+                           ClaimedValue("No Content", _at("ws.launch-foreground", _AUTH)),
+                           ClaimedValue("Unauthorized", _UNAUTHENTICATED),
+                           ClaimedValue("Invalid Credentials", _WRONG_ANSWER),
                            *_values(_LIVE, "Bad Request", "Not Found"))),
             SerializationClaim(
                 "content-type",
@@ -370,3 +514,44 @@ OPERATION_CLAIMS = {
         ),
     ),
 }
+
+_AUDIO_STATE = _at('audio-states', 'roku-audio-state-3820eu2-2026-10-18')
+_TEXT_WRITE = _at('text-writes', 'roku-text-write-3820eu2-2026-10-18')
+_TEXT_LIMITS = _at('text-limits', 'roku-text-limits-3820eu2-2026-10-18')
+_TEXT_FOCUS = _at('text-focus', 'roku-text-focus-3820eu2-2026-10-18')
+for _operation, _prefix, _evidence in (
+    ('roku.http.audio-device', '', _at('http.rtp-running', 'roku-audio-state-3820eu2-2026-10-18')),
+    ('ecp-2.query-audio-device', 'content-data::', _AUDIO_STATE),
+):
+    OPERATION_CLAIMS[_operation] = OperationClaims(_operation, 'Current audio destinations.', (
+        *(PresenceClaim(_prefix + path,
+                        'Profile-declared live destination state. A single active transport follows the measured transitions; with multiple independent senders the last-started view is emulator-owned.',
+                        _evidence, scope='served') for path in
+          ('global.destination-list', 'destinations.destination.@name', 'rtp-info.rtp-address')),
+        BehaviorClaim('', 'Ordered Stick audio-state capture, separately measured over HTTP and ecp-2.',
+                      _evidence, condition='private listening starts or stops',
+                      outcome='hdmi changes to mobile-sas or datagram and returns to hdmi; RTP address names the datagram destination only'),
+    ))
+OPERATION_CLAIMS['ecp-2.query-textedit-state'] = OperationClaims(
+    'ecp-2.query-textedit-state', 'The native field backed by the shared text buffer.', (
+        *(PresenceClaim('content-data::textedit-state.' + name,
+                        'Live only on a profile with measured native full fields while the dashboard field is focused; textedit-id is none otherwise.',
+                        _TEXT_WRITE, scope='served') for name in
+          ('textedit-id', 'textedit-type', 'text', 'masked', 'max-length', 'selection-start', 'selection-end')),
+    ))
+OPERATION_CLAIMS['ecp-2.set-textedit-text'] = OperationClaims(
+    'ecp-2.set-textedit-text', 'Replace the focused native full field.', (
+        BehaviorClaim('', 'Measured unmasked full field only. Android String.length uses UTF-16, but this field counts Unicode codepoints.',
+                      _TEXT_LIMITS, condition='selection-end is supplied',
+                      outcome='cursor collapses to that position clamped to 0..text length; selection-start is ignored; missing end uses text length, invalid numeric text uses zero'),
+        BehaviorClaim('', 'The advertised full-field maximum was 75 characters.', _TEXT_WRITE + _TEXT_LIMITS,
+                      condition='id is unknown or replacement exceeds the character limit',
+                      outcome='200 with unchanged field and no textedit-changed notification'),
+    ))
+for _event in ('textedit-opened', 'textedit-changed', 'textedit-closed'):
+    _source = _TEXT_WRITE if _event == 'textedit-changed' else _TEXT_FOCUS
+    OPERATION_CLAIMS['ecp-2.' + _event] = OperationClaims('ecp-2.' + _event, 'Subscribed native textedit transition.', (
+        PresenceClaim('param-textedit-id', 'Live field identity increments on opening; closing names the former id.', _source, scope='served'),
+        BehaviorClaim('', 'Subscribed connections have independent notification queues.', _source,
+                      condition='a measured native field changes focus or text', outcome='send the corresponding captured textedit event to subscribed clients'),
+    ))

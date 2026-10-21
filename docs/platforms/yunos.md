@@ -3,27 +3,26 @@
 > **N/A in this build.** Modelled; the emulator and the full driver guide are available on
 > request — [ask about YunOS / AliTV](https://marchik.dev).
 
-The LAN remote of an Alibaba YunOS (AliTV) set-top box: an SSDP search for the YunOSTV device
-type, a TCP probe, and a binary session that logs in and then carries Android keycodes. **No
-YunOS box was measured, and no frame was recorded off a wire** — the behaviour is modelled.
+The LAN remote of an Alibaba YunOS (AliTV) set-top box: an SSDP search, and a binary TCP
+session that logs in and then carries Android keycodes. **No YunOS box was measured, and no
+frame was recorded off a wire** — the behaviour is modelled.
 
 ## Protocols
 
 | Protocol | Transport · port | What is emulated |
 |---|---|---|
-| AliTV helper | TCP 13510 | login, key frames, heartbeats |
-| SSDP | UDP 1900 | the answer to the app's YunOSTV search |
+| AliTV helper | TCP 13510 | login, keys, heartbeats |
+| SSDP | UDP 1900 | the answer to the app's search |
 
 ## Modelled devices
 
 - **YunOS / AliTV box (modelled)** — no box measured
 
-## What a driver gets wrong here
+## What the emulator reproduces
 
-- The search's lines end in a **bare LF**, not CR LF; a strict SSDP stack ignores it.
-- Every frame after the login carries a **session copied out of the login answer**.
-- The key code is an **Android keycode**, one frame per button, with **no release**.
-- Nothing is answered after the login, so a missing answer is **not** an error.
+- **The app's SSDP search is not strictly well-formed**; a strict SSDP stack ignores it.
+- **Every message after the login depends on the login answer.**
+- **One message per button**, with no release, and nothing answered after the login.
 
 ## What the emulator lets you test
 

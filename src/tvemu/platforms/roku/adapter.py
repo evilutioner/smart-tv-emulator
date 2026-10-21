@@ -4,12 +4,13 @@ from __future__ import annotations
 from tvemu.core import Core
 from tvemu.platforms.base import (
     AccessMode, ApplicationSpec, ApplicationSurface, KeyboardSpec, PlatformDescriptor,
-    ProtocolSpec,
+    ProtocolSpec, ContentType,
 )
 from tvemu.platforms.common import BaseAdapter, SSDPResponder
 
 from .ecp import ECP
 from .profile import RokuProfile, load_profiles
+from .listening import AudioOutput
 
 ROKU_KEYS = (
     "Home", "Back", "Up", "Down", "Left", "Right", "Select", "Info",
@@ -17,6 +18,10 @@ ROKU_KEYS = (
     "ChannelUp", "ChannelDown", "Rev", "Play", "Fwd", "InstantReplay",
     "Search", "Enter", "Backspace", "FindRemote", "InputTuner", "InputHDMI1",
     "InputHDMI2", "InputHDMI3", "InputHDMI4", "InputAV1",
+    # Keys the official Roku app for Android sends that the Streaming Stick 4K on 15.3.4
+    # knows too (a key-up of each, not held, answered 202 rather than 400). The same app's
+    # Keyboard, digit, ".", TextSearch and VoiceSearch keys are 400 on that stick as well.
+    "Stop", "Guide", "LiveTV", "Exit", "ClosedCaption", "Red", "Green", "Yellow", "Blue",
 )
 
 # Settings › System › Advanced system settings › Control by mobile apps › Network access.
@@ -73,12 +78,14 @@ ROKU_PROTOCOLS = (
                  control=True, scheme="http", protocol_label="ECP / ecp-2", transport="http"),
     ProtocolSpec("ssdp", "SSDP", "ssdp",
                  "Answers roku:ecp M-SEARCH probes on 239.255.255.250:1900."),
+    ProtocolSpec("private-listening", "Private listening", "udp",
+                 "Prepared Opus test audio over RTP or experimental SAS; RTCP feedback on 5150.",
+                 transport="udp"),
 )
 
 ROKU = PlatformDescriptor(
     id="roku",
     display_name="Roku",
-    order=10,
     default_device_profile="tcl-roku-tv-32s357",
     protocol_label="ECP / ecp-2",
     default_port=8060,
@@ -95,8 +102,7 @@ ROKU = PlatformDescriptor(
     discovery_label="SSDP roku:ecp",
     access_modes=ROKU_ACCESS_MODES,
     protocols=ROKU_PROTOCOLS,
-    # ECP sends text as one Lit_<char> keypress at a time and has no keyboard-status API, so
-    # the set never reports a field type and the dashboard offers no selector.
+    # HTTP uses literal keys. Native ecp-2 textedit state and types are profile evidence.
     keyboard=KeyboardSpec(label="On-screen keyboard", literal_prefix="Lit_",
                           delete_key="Backspace", enter_key="Enter"),
     # ECP ignores case in every key name: hardware answers `home`, `HOME`, `Lit_a` and
@@ -118,15 +124,39 @@ class RokuAdapter(BaseAdapter):
         super().__init__(core)
         self.profile: RokuProfile
         self.ecp = ECP(core, lambda: self.profile)
+        self.audio = AudioOutput(core, lambda: self.profile, self.warm_audio,
+                                 lambda: self.listener_binding.address(
+                                     "private-listening", core.host, 0)[0])
+        self.ecp.audio = self.audio
+        self.register_protocol("private-listening", datagram=lambda: self.audio,
+                               disconnect=self.audio.disconnect)
         self.register_protocol("ecp", app=self.ecp.app, disconnect=self.ecp.disconnect)
         self.register_protocol("ssdp", responder=SSDPResponder(core, lambda: self.profile,
                                                                event_prefix="ssdp"))
 
     def surface(self):
-        return self.ecp.surface()
+        from tvemu.platforms.common import routing
+        from tvemu.platforms.common.routing import Surface
+        surface = self.ecp.surface()
+        return Surface(surface.platform, surface.routes,
+                       surface.messages + tuple(spec for spec, _ in
+                                                routing.message_declarations(self.audio)))
+
+    async def warm_audio(self):
+        if not self.protocol_enabled("private-listening"):
+            raise ValueError("Private listening is disabled for this profile")
+        await self.warm_up("private-listening")
+        if "private-listening" not in self.active:
+            raise ValueError("Private-listening feedback listener could not start")
 
     def load_profiles(self) -> dict[str, RokuProfile]:
         return load_profiles()
+
+    def publish_profile(self):
+        super().publish_profile()
+        native = self.profile.runtime.get("textedit", {}).get("native")
+        self.core.set_content_types((ContentType(native["type"], "Text", max_length=native["max_length"]),) if native else (),
+                                    native["type"] if native else "")
 
     async def disconnect_clients(self, detail: str | None = None) -> None:
         await self.ecp.disconnect(detail)

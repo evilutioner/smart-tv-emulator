@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<player state="none" error="false">
+	<plugin id="native-ui" name="Native UI" />
+</player>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="30" viewBox="0 0 240 30" role="img">
+  <title>Xiaomi Mi TV: GiTV, TV Assistant, airkan</title>
+  <style>
+    text { font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+    .year { font-size: 11px; fill: #6e7781; } .dot { fill: #6e7781; }
+    .e0{fill:#BA7517} .e1{fill:#0F6E56} .e2{fill:#185FA5}
+    @media (prefers-color-scheme: dark) { .year, .dot { fill: #9198a1; } .e0{fill:#EF9F27} .e1{fill:#5DCAA5} .e2{fill:#85B7EB} }
+  </style>
+  <rect x="0.0" y="0" width="78.7" height="10" rx="2" fill="#EF9F27"/>
+  <rect x="80.7" y="0" width="78.7" height="10" rx="2" fill="#1D9E75"/>
+  <rect x="161.3" y="0" width="78.7" height="10" rx="2" fill="#378ADD"/>
+  <text y="26"><tspan class="e0">GiTV</tspan><tspan class="dot"> · </tspan><tspan class="e1">TV Assistant</tspan><tspan class="dot"> · </tspan><tspan class="e2">airkan</tspan></text>
+</svg>

@@ -62,7 +62,8 @@ NO_KEYBOARD = first_platform(lambda d: d.keyboard is None)
 # is out of scope rather than unknown.
 TEXT_KEY_PREFIXES = first_platform(lambda d: d.keyboard is None and d.text_key_prefixes)
 TEXT_API = first_platform(lambda d: d.keyboard is not None and d.keyboard.text_api)
-LITERAL_KEYS = first_platform(lambda d: d.keyboard is not None and d.keyboard.literal_prefix)
+LITERAL_KEYS = first_platform(lambda d: d.keyboard is not None and d.keyboard.literal_prefix
+                              and not d.keyboard.text_api)
 VOICE_STREAM = first_platform(lambda d: d.voice is not None and d.voice.mode == "stream")
 NO_VOICE = first_platform(lambda d: d.voice is None)
 MULTI_MODE = first_platform(lambda d: len(d.access_modes) > 1)

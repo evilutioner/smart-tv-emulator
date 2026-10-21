@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "id": "roku-audio-state-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Ordered ecp-2 audio destination transitions before/during/after mobile-sas and datagram, plus independent HTTP queries in each state. Authentication setup and UDP audio payloads omitted. Network locators are sanitized to 192.168.1.100; all other frame and body bytes are retained. The client guid is probe-owned. This partial capture is evidence only; it does not establish physical multi-client policy or a continuously synchronized audio delay."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "audio-states",
+      "operation_id": "ecp-2.query-audio-device",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "before"
+          },
+          "payload": "03-before-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "before"
+          },
+          "payload": "04-before-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-audio-output",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-start"
+          },
+          "payload": "06-sas-start-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-audio-output",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-start"
+          },
+          "payload": "07-sas-start-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-running"
+          },
+          "payload": "08-sas-running-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-running"
+          },
+          "payload": "09-sas-running-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.mobile-sas-disconnect",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-stop"
+          },
+          "payload": "11-sas-stop-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.mobile-sas-disconnect",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-stop"
+          },
+          "payload": "12-sas-stop-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-stopped"
+          },
+          "payload": "13-sas-stopped-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "sas-stopped"
+          },
+          "payload": "14-sas-stopped-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-audio-output",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "rtp-start"
+          },
+          "payload": "16-rtp-start-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.set-audio-output",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "rtp-start"
+          },
+          "payload": "17-rtp-start-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "rtp-running"
+          },
+          "payload": "18-rtp-running-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "rtp-running"
+          },
+          "payload": "19-rtp-running-out.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "rtp-bye"
+          },
+          "payload": "21-rtp-bye-in.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-audio-device",
+          "metadata": {
+            "channel": "ecp-2",
+            "phase": "rtp-bye"
+          },
+          "payload": "22-rtp-bye-out.json"
+        }
+      ]
+    },
+    {
+      "id": "http.before",
+      "operation_id": "roku.http.audio-device",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/audio-device"
+          }
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Content-Length": "676",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "before-http.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.sas-running",
+      "operation_id": "roku.http.audio-device",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/audio-device"
+          }
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Content-Length": "688",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "sas-running-http.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.sas-stopped",
+      "operation_id": "roku.http.audio-device",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/audio-device"
+          }
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Content-Length": "676",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "sas-stopped-http.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.rtp-running",
+      "operation_id": "roku.http.audio-device",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/audio-device"
+          }
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Content-Length": "714",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "rtp-running-http.xml"
+        }
+      ]
+    },
+    {
+      "id": "http.rtp-bye",
+      "operation_id": "roku.http.audio-device",
+      "transport": "http",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "method": "GET",
+            "path": "/query/audio-device"
+          }
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.http.audio-device",
+          "metadata": {
+            "status": 200,
+            "headers": {
+              "Server": "Roku/15.3.4 UPnP/1.0 Roku/15.3.4",
+              "Content-Length": "676",
+              "Cache-Control": "no-cache",
+              "Content-Type": "text/xml; charset=\"utf-8\""
+            }
+          },
+          "payload": "rtp-bye-http.xml"
+        }
+      ]
+    }
+  ]
+}

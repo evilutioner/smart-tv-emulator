@@ -201,6 +201,8 @@ track = "main"             # git only: the branch `--version latest` follows
 last_green = "1.2.3"       # a release, or a full commit for git
 prerequisites = []         # optional: installed first, then the client is built against them
                            # (for an upstream whose build imports its own dependencies)
+layout = "package"         # git only: "checkout" for an upstream with no packaging, whose
+                           # requirements.txt is installed and whose checkout goes on the path
 
 [run]
 profiles = ["<profile id>", "…"]

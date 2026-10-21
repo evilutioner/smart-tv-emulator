@@ -84,6 +84,7 @@ async def start_protocol(protocol_id: str) -> None: ...
 async def stop_protocol(protocol_id: str) -> None: ...
 async def reconcile_protocols() -> dict[str, str]: ...   # protocol id -> bind error
 async def warm_up(protocol_id: str) -> None: ...
+async def delay_protocol(protocol_id: str, seconds: float) -> None: ...  # closed while booting
 async def stop_all() -> None: ...
 async def disconnect() -> None: ...
 ```
@@ -147,7 +148,8 @@ python -m tvemu.conformance --all --json-report conformance.json
 A replay nothing verifies is never skipped: it is listed as uncovered with its reason — a
 transport with no driver yet, or a capture that kept no client frame. It fails the gate once
 the television declares complete coverage (below). HTTP, HTTPS, WebSocket and MQTT have
-drivers; raw TCP does not yet.
+drivers; explicit evidence scenarios use the network recipes described below. Raw
+TCP does not yet have a driver.
 
 A captured request rarely stands alone. It went to a paired route, or it carries a token or
 a PIN the capture wrote as `{token}`, because the value belonged to the client. A television
@@ -164,15 +166,51 @@ says how a fresh adapter reaches that state in `platforms/<id>/conformance/`:
   presented on a second connection.
 - **WebSocket channels** (`CHANNELS`, `materialise()`; `tvemu/conformance/websocket.py`) give
   the upgrade path, the opening exchanges and the values recomputed per session.
+- **raw TCP sessions** (`materialise_stream()`; `tvemu/conformance/stream.py`) replay a `tcp`
+  exchange on one connection on the port its first step names. An `out` step's `masks` name the
+  emulator-owned byte ranges, and an `in` step marked `materialise` is recomputed per session,
+  for a key the client draws.
 - **embedded** documents, which the set carried as a string inside another answer, are
   compared out of that field of their parent's answer.
 
 Every step on the way is compared as well, so a hook that passes proves the pairing too. A
-hook never calls a handler or sets adapter state directly.
+hook never calls a handler or sets adapter state directly. To answer an on-screen prompt it
+presses the button the dashboard would (`client.press("authorize")`).
 
 CI runs one conformance job per television with `--gate`: a failed case always fails the
 build, and an uncovered replay fails it only for a television whose conformance package
 declares `COVERAGE = "complete"`, so full coverage, once reached, cannot quietly erode.
+
+### Partial datagram evidence
+
+A partial capture can be tested without becoming a selectable device identity.
+`DATAGRAM_SCENARIOS` in a platform's conformance package names each scenario's `name`,
+`profile`, `capture`, `exchange`, selected `steps`, control `protocol` and `runtime` binary
+parts. A `gap` reason keeps an observed exchange visible when no recipe can run it.
+
+The platform's `datagram_scenario(name, client)` recipe uses the generic datagram client's
+real UDP endpoints and control WebSocket. The same recipes may select HTTP or WebSocket
+evidence steps for mixed state transitions. `client.action` reaches dashboard focus through
+a separate loopback management listener; it never sets adapter state directly. Selected
+HTTP response bodies are compared separately from the request metadata used as setup. The
+recipe sends captured input, parses every byte of the
+selected output into named parts and compares the parts. Only the explicitly named runtime
+parts may differ; the recipe must validate their replacement values, such as a prepared
+emulator-owned audio fixture or a session clock. A whole-packet mask proves nothing and is
+not a substitute for this comparison. Receivers and sender ports must be released: each UDP
+port observed during a case is rebound after the adapter stops.
+
+A filtered capture must state which intervening packets it omitted. Its recipe can perform
+a bounded search for the next selected transition and report how many packets were not
+compared. That establishes the selected transition, not continuous streaming or packet-loss
+recovery. It must not manufacture missing client inputs. A later measured capture may supply
+a stateful recipe for an earlier out-only answer; both sources remain explicit.
+
+Reports count profile replays and evidence scenarios separately. `COVERAGE = "complete"`
+protects the former. `EVIDENCE_COVERAGE = "complete"` protects every declared evidence
+scenario; without that declaration, uncovered evidence remains visible but does not alone
+fail `--gate`. A failing evidence case always fails the gate. Neither counter claims coverage
+of unmeasured device behaviour.
 
 ## Settings and captured profiles
 
@@ -218,7 +256,8 @@ hardware address.
    the television to `platforms/catalogue.json` — a device built from a vendor app rather than
    a set is `"modelled": true`, and one a real app has been driven against (a row in
    [Manual validation](manual-validation.md)) is `"validated": true`. Then run
-   `python tools/render_docs.py`, which writes the README's table and badges and
+   `python tools/render_docs.py`, which writes the README's table and badges, a timeline under
+   `docs/images/generations/` for a television with two or more `generations`, and
    [Televisions](televisions.md) from the catalogue.
 9. Validate discovery, pairing, commands, failures, disconnects and recovery against the
    target application, and against the physical set where there is one.

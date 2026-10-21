@@ -10,6 +10,7 @@ from __future__ import annotations
 import asyncio
 import json
 import time
+from pathlib import Path
 
 import aiohttp
 from dataclasses import dataclass, replace
@@ -19,10 +20,10 @@ from tvemu.core import Core, Settings
 from tvemu.platforms import create_platform, platform_descriptor, platform_ids
 from tvemu.platforms.base import DISCOVERY_KINDS
 from tvemu.platforms.common.adapter import LoopbackBinding
-from tvemu.platforms.common.evidence import Exchange, Step
+from tvemu.platforms.common.evidence import Exchange, Step, load_capture
 from tvemu.platforms.common.profile import ProfileReference, profile_capture
 
-from . import compare, http, mqtt, setup, websocket
+from . import compare, datagram, http, mqtt, setup, stream, websocket
 from .model import CaseResult, ConformanceCase, CoverageGap, Plan, Report
 
 # A documentation address (RFC 5737): what the emulated set advertises during a run. It is
@@ -116,6 +117,15 @@ def _choose(exchange: Exchange, candidates: list[_Route], adapter) -> _Route | N
     return rows[0] if rows else None
 
 
+def _stream_route(exchange: Exchange, adapter) -> _Route | None:
+    """The raw TCP listener a `tcp` exchange reached: the one bound on its captured port."""
+    port = exchange.steps[0].metadata.get("port")
+    rows = [binding.id for binding in adapter.profile.protocols
+            if binding.port == port and binding.id in adapter.listeners
+            and adapter.listeners[binding.id].connected is not None]
+    return _Route(rows[0], False, False) if len(rows) == 1 else None
+
+
 def coverage_complete(platform_id: str) -> bool:
     """Whether a platform declares every replay of every profile covered."""
     declared = getattr(websocket.platform_package(platform_id), "COVERAGE", "")
@@ -129,10 +139,22 @@ async def build_plan(selection: Selection = Selection()) -> Plan:
     for platform_id in platform_ids():
         if selection.platform and platform_id != selection.platform:
             continue
-        for profile_id, reference in profiles(platform_id).items():
+        available = profiles(platform_id)
+        try:
+            for scenario in datagram.scenarios(websocket.platform_package(platform_id), None):
+                if scenario.profile not in available:
+                    raise PlanError(f"{platform_id}: evidence scenario {scenario.name} "
+                                    f"names missing profile {scenario.profile}")
+        except ValueError as exc:
+            raise PlanError(str(exc)) from exc
+        for profile_id, reference in available.items():
             if selection.profile and profile_id != selection.profile:
                 continue
             await _plan_profile(plan, platform_id, reference, selection)
+            try:
+                _plan_evidence(plan, platform_id, reference, selection)
+            except ValueError as exc:
+                raise PlanError(str(exc)) from exc
     return plan
 
 
@@ -277,6 +299,12 @@ async def _plan_profile(plan: Plan, platform_id: str, reference: ProfileReferenc
                                 f"which the capture does not hold")
             exchanges = tuple(item for _, item in script)
             route = _Route(broker.protocol, False, broker.tls)
+        elif exchange.transport == "tcp":
+            route = _stream_route(exchange, adapter)
+            if route is None:
+                reason = "no raw TCP listener of this profile is bound on the captured port"
+            else:
+                hook = named.get(exchange_id, "")
         elif exchange.transport not in HTTP_TRANSPORTS:
             reason = f"no conformance driver for {exchange.transport} yet"
         elif [step.direction for step in exchange.steps] != ["in", "out"]:
@@ -298,6 +326,39 @@ async def _plan_profile(plan: Plan, platform_id: str, reference: ProfileReferenc
             exchanges=exchanges, protocol=route.protocol, driver=exchange.transport,
             replays=tuple(names), setup=hook))
     _attach_embedded(plan, first, platform_id, reference, inside, by_exchange, selection)
+
+
+
+def _plan_evidence(plan, platform_id, reference, selection):
+    module = websocket.platform_package(platform_id)
+    for scenario in datagram.scenarios(module, reference.id):
+        case_id = f"{platform_id}/{reference.id}/evidence.{scenario.name}"
+        if selection.case and selection.case != case_id:
+            continue
+        capture = load_capture(f"tvemu.platforms.{platform_id}", scenario.capture)
+        exchange = capture.exchange(scenario.exchange)
+        if exchange.transport not in ("udp", "websocket", "http") or scenario.steps[-1] >= len(exchange.steps):
+            raise PlanError(f"{case_id}: selected steps are not supported evidence capture steps")
+        if any(exchange.steps[index].payload is None for index in scenario.steps):
+            raise PlanError(f"{case_id}: selected step has no captured bytes")
+        plan.evidence_scenarios += 1
+        if scenario.gap:
+            plan.evidence_gaps.append(CoverageGap(
+                platform_id, reference.id, scenario.name,
+                f"{scenario.capture}/{scenario.exchange}", exchange.transport, scenario.gap))
+        else:
+            plan.cases.append(ConformanceCase(
+                id=case_id, platform=platform_id, profile=reference.id,
+                exchanges=(scenario.exchange,), protocol=scenario.protocol,
+                driver=exchange.transport, replays=(), scope="evidence", capture=scenario.capture,
+                evidence_steps=scenario.steps))
+
+
+def evidence_coverage_complete(platform_id):
+    declared = getattr(websocket.platform_package(platform_id), "EVIDENCE_COVERAGE", "")
+    if declared not in ("", "complete"):
+        raise PlanError(f"{platform_id}: EVIDENCE_COVERAGE must be 'complete' when set")
+    return declared == "complete"
 
 
 def _attach_embedded(plan: Plan, first: int, platform_id: str, reference: ProfileReference,
@@ -365,6 +426,7 @@ async def run_case(case: ConformanceCase, reference: ProfileReference) -> CaseRe
     before = set(asyncio.all_tasks())
     adapter = fresh_adapter(case.platform, case.profile)
     bound: tuple[str, int] | None = None
+    datagram_bindings = []
     try:
         await adapter.start_protocol(case.protocol)
         bound = adapter.bound[case.protocol]
@@ -379,8 +441,19 @@ async def run_case(case: ConformanceCase, reference: ProfileReference) -> CaseRe
                                   case.timeout)
             hook = websocket.platform_package(case.platform).setup
             prepared = setup.prepared(await hook(case.setup, client), case.setup)
-        if case.driver == "websocket":
+        if case.scope == "evidence":
+            datagram_bindings += await _datagram(case, reference, adapter, adapter.bound, bound,
+                                                 authority, result)
+        elif case.driver == "websocket":
             await _websocket(case, reference, adapter, bound, authority, substitutions, result)
+        elif case.driver == "tcp":
+            for exchange_id in case.exchanges:
+                problems, notes = await stream.run(
+                    bound[0], bound[1], reference.capture.exchange(exchange_id), case.timeout,
+                    getattr(websocket.platform_package(case.platform), "materialise_stream",
+                            None))
+                result.problems += problems
+                result.notes += notes
         elif case.driver == "mqtt":
             broker = mqtt.description(websocket.platform_package(case.platform))
             target = reference.replays[case.replays[0]]
@@ -408,12 +481,34 @@ async def run_case(case: ConformanceCase, reference: ProfileReference) -> CaseRe
             aiohttp.ClientError) as exc:
         result.problems.append(f"{type(exc).__name__}: {exc}")
     finally:
+        datagram_bindings += [address for name, address in adapter.bound.items()
+                              if adapter.specs[name].kind == "udp"]
         await adapter.stop_all()
         await adapter.disconnect()
-    result.problems += await _leaks(adapter, before, bound)
+    result.problems += await _leaks(adapter, before, bound, datagram_bindings)
     result.status = "fail" if result.problems else "pass"
     result.duration = time.monotonic() - started
     return result
+
+
+
+async def _datagram(case, reference, adapter, targets, bound, authority, result):
+    from aiohttp.test_utils import TestServer
+    from tvemu.control import control_app
+    from tvemu.runtime import Runtime
+    module = websocket.platform_package(case.platform)
+    name = case.id.rsplit("/", 1)[-1].removeprefix("evidence.")
+    scenario = next(row for row in datagram.scenarios(module, case.profile) if row.name == name)
+    capture = load_capture(f"tvemu.platforms.{case.platform}", case.capture)
+    # UI focus is reached through the same local control API as the dashboard.
+    # The settings path is unused: evidence clients expose actions, never settings writes.
+    app = control_app(Runtime(adapter.core, adapter), Path("unused-conformance-settings.json"))
+    async with TestServer(app, host="127.0.0.1") as control:
+        async with datagram.Client(bound, authority, capture, scenario, case.timeout, result, reference, targets) as client:
+            client.control_url = str(control.make_url("/"))
+            await asyncio.wait_for(module.datagram_scenario(name, client), case.timeout)
+            client.finish()
+            return [address for endpoint in client.endpoints for address in endpoint.peers]
 
 
 async def _websocket(case: ConformanceCase, reference: ProfileReference, adapter,
@@ -490,8 +585,8 @@ def _check_embedded(body: bytes, reference: ProfileReference, exchange_id: str, 
     result.notes += [f"{exchange_id}: {note}" for note in outcome.notes]
 
 
-async def _leaks(adapter, before: set[asyncio.Task], bound: tuple[str, int] | None
-                 ) -> list[str]:
+async def _leaks(adapter, before: set[asyncio.Task], bound: tuple[str, int] | None,
+                 datagram_bindings=()) -> list[str]:
     """Anything the case left behind: listeners, bookkeeping, sockets or tasks."""
     problems = []
     for name in ("active", "runners", "sites", "servers", "bound"):
@@ -507,6 +602,15 @@ async def _leaks(adapter, before: set[asyncio.Task], bound: tuple[str, int] | No
         await asyncio.sleep(0.01)
     problems += [f"leak: task {task.get_name()} ({task.get_coro()!r}) outlived the case"
                  for task in left]
+    await asyncio.sleep(0)
+    for address in set(datagram_bindings):
+        try:
+            transport, _ = await asyncio.get_running_loop().create_datagram_endpoint(
+                asyncio.DatagramProtocol, local_addr=address)
+        except OSError as error:
+            problems.append(f"leak: UDP {address[0]}:{address[1]} cannot be rebound ({error})")
+        else:
+            transport.close()
     if bound is not None:
         try:
             _, writer = await asyncio.wait_for(asyncio.open_connection(*bound), 1)

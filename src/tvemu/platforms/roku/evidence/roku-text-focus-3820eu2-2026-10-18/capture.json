@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "roku-text-focus-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Ordered subscription and query followed by closing and reopening the field from the remote on the physical Stick. The set's full text field id changed from 1 to 2. Text was empty; no account or hidden text retained. Authentication and remote-control gestures omitted. Partial evidence only."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "text-focus",
+      "operation_id": "ecp-2.query-textedit-state",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.request-events",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "02-request-events.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.request-events",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "03-request-events.json"
+        },
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "04-query-textedit-state.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "05-query-textedit-state.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-closed",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "06-textedit-closed.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-opened",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "07-textedit-opened.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.textedit-closed",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "08-textedit-closed.json"
+        }
+      ]
+    }
+  ]
+}

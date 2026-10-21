@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "roku-sas-clock-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Partial ordered UDP evidence recorded between the physical stick and the Roku mobile app for Android 14.1.2. Only a silent Opus packet before clock negotiation, receiver timing status, and a silent packet with finite clock offset are retained. Intervening UDP packets, programme audio, and session setup are omitted. Absolute clock counters are session values, not device identity. This capture is evidence only and is not a selectable profile."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "clock-start",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 0.0
+          },
+          "payload": "initial-silent-audio.bin"
+        },
+        {
+          "direction": "in",
+          "operation_id": "roku.sas.feedback",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 11.201
+          },
+          "payload": "receiver-timing.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "channel": "sas",
+            "elapsed_ms": 247.77
+          },
+          "payload": "finite-silent-audio.bin"
+        }
+      ]
+    }
+  ]
+}

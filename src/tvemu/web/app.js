@@ -25,15 +25,24 @@ function bindSetting(id, key, type = "string") {
   });
 }
 function syncSetting(el, value, force = false) { if (!force && (el === document.activeElement || el.disabled)) return; if (el.type === "checkbox") el.checked = value; else el.value = value; }
-function syncOptions(id, items, selected, describe) {
+// `group`, when given, names each item's <optgroup>; items arrive already ordered by group.
+function syncOptions(id, items, selected, describe, group) {
   const select = $(id);
-  const ids = items.map(item => `${item.id}:${item.availability || ""}`).join("\n");
+  const ids = items.map(item => `${item.id}:${item.availability || ""}:${group ? group(item) : ""}`)
+    .join("\n");
   if (select.dataset.ids !== ids) {
     const fragment = document.createDocumentFragment();
+    let parent = fragment, label = null;
     for (const item of items) {
+      if (group && group(item) !== label) {
+        label = group(item);
+        parent = element("optgroup");
+        parent.label = label;
+        fragment.append(parent);
+      }
       const option = element("option", "", describe(item));
       option.value = item.id;
-      fragment.append(option);
+      parent.append(option);
     }
     select.replaceChildren(fragment);
     select.dataset.ids = ids;
@@ -108,6 +117,7 @@ function protocolWhere(item) {
 function protocolStatus(item) {
   if (item.error) return `error: ${item.error}`;
   if (item.listening) return "listening";
+  if (item.booting) return "armed · the device is still starting it";
   if (item.armed) return "armed · opens on the first launch request";
   return item.enabled ? "starting…" : "off";
 }
@@ -204,6 +214,11 @@ function drawKeyboard(data) {
 
 // ── voice status tile ────────────────────────────────────────────────────────────────────
 // Protocol adapters publish transitions and counters only. Raw audio never reaches the UI.
+// The kinds of device a catalogue entry declares: the selector's group and, for anything
+// that is not a television, the word the page heading puts before its name.
+const KINDS = {tv: {group: "TVs"}, projector: {group: "Projectors", name: "Projector"},
+               console: {group: "Consoles", name: "Console"}};
+
 const VOICE_LABELS = {idle:"Idle", waiting:"Waiting", listening:"Listening",
   receiving:"Receiving", completed:"Completed", interrupted:"Interrupted"};
 
@@ -312,7 +327,12 @@ function draw(data) {
   state = data;
   const settings = data.settings;
   document.title = `Smart TV Emulator · ${data.device.platform_name}`;
-  $("platform-label").textContent = data.device.platform_name.toUpperCase();
+  // A television is the default, so only the other kinds say what they are.
+  const kind = KINDS[data.device.platform_kind];
+  $("platform-label").textContent =
+    (kind && kind.name ? `${kind.name} · ${data.device.platform_name}` : data.device.platform_name)
+      .toUpperCase();
+  $("footer-platform").textContent = `Smart TV Emulator · v${data.version}`;
   $("behaviour-title").textContent = `${data.device.platform_name} behaviour`;
   $("protocols-title").textContent = `${data.device.platform_name} protocols`;
   $("device-name").textContent = data.device.name;
@@ -320,13 +340,14 @@ function draw(data) {
   $("device-protocol").textContent = `${data.device.platform_name} · IPv4 · ${data.device.protocol}`;
   // `software_version` is whatever version string a set reports; on several it is an API or
   // a service version, so it is not called the OS here. The picker label says which OS.
-  $("device-profile-details").textContent = `${data.device.model_number} · software ${data.device.software_version} · S/N ${data.device.serial} · captured`;
+  $("device-profile-details").textContent = `${data.device.model_number} · software ${data.device.software_version} · S/N ${data.device.serial}`;
   $("profile-hint").textContent = `Switches the ${data.device.platform_name} identity and captured wire responses. Existing device sessions are disconnected.`;
   // A platform this build does not include is still listed, marked with the word the API
   // supplies. Disabling the option would hide the explanation behind an unclickable row.
   syncOptions("platform", data.platforms, data.device.platform,
               item => item.availability === "n/a" ? `${item.display_name} \u00b7 N/A`
-                                                  : item.display_name);
+                                                  : item.display_name,
+              item => (KINDS[item.kind] || KINDS.tv).group);
   drawLocked(data.platforms);
   syncOptions("device-profile", data.device_profiles, settings.device_profile,
               item => item.label);
@@ -354,7 +375,6 @@ function draw(data) {
   $("simulated-platform").textContent = `State is simulated; the ${data.device.platform_name} screen is not emulated`;
   $("limitations").textContent = data.limitations;
   $("empty-device").textContent = `Connect your remote app to the selected ${data.device.platform_name}.`;
-  $("footer-platform").textContent = `${data.device.platform_name} adapter · v0.1`;
   if (data.device.platform !== platformId) usePlatform(data.device.platform).then(applyPlatform);
   else applyPlatform();
   drawKeyboard(data);
@@ -397,7 +417,7 @@ function drawLocked(platforms) {
   link.target = "_blank"; link.rel = "noopener";
   note.replaceChildren(
     document.createTextNode(
-      `${pending.length} more ${pending.length === 1 ? "television is" : "televisions are"} ` +
+      `${pending.length} more ${pending.length === 1 ? "device is" : "devices are"} ` +
       `emulated but not available in this build (N/A): ` +
       `${pending.map(item => item.display_name).join(", ")}. `),
     link);

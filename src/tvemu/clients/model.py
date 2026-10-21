@@ -56,6 +56,7 @@ ZONE_NAMES = tuple(zone for zone, _ in ZONES)
 ZONE_OF = {action: zone for zone, actions in ZONES for action in actions}
 STEP_STATUSES = ("ok", "fail", "not-offered", "known-gap", "known-failure")
 INSTALL_KINDS = ("pypi", "git", "npm", "none")
+LAYOUTS = ("package", "checkout")
 # The language a binding is written in follows from where its client comes from.
 BINDING_FILES = {"pypi": "binding.py", "git": "binding.py", "none": "binding.py",
                  "npm": "binding.mjs"}
@@ -119,6 +120,10 @@ class ClientSpec:
     # Installed before the client, which is then built against them rather than in isolation:
     # for an upstream whose build imports its own dependencies.
     prerequisites: tuple[str, ...] = ()
+    # "package": the upstream builds with pip. "checkout": a git upstream that ships plain
+    # modules and no packaging; its requirements.txt is installed and the checkout itself is
+    # put on the binding's path.
+    layout: str = "package"
 
     @property
     def key(self) -> str:
@@ -167,6 +172,10 @@ def load_spec(root: Path, platform_id: str) -> ClientSpec:
     prerequisites = tuple(install.get("prerequisites") or ())
     if not all(isinstance(item, str) and item for item in prerequisites):
         raise ValueError(f"{where}: install.prerequisites lists package requirements")
+    layout = str(install.get("layout") or "package")
+    if layout not in LAYOUTS or (layout == "checkout" and kind != "git"):
+        raise ValueError(f"{where}: install.layout is \"package\", or \"checkout\" for a git "
+                         "upstream with no packaging")
     not_offered = document.get("not_offered") or {}
     if not isinstance(not_offered, dict) or not all(
             zone in ZONE_NAMES and isinstance(reason, str) and reason
@@ -200,6 +209,7 @@ def load_spec(root: Path, platform_id: str) -> ClientSpec:
         root=root,
         not_offered=dict(not_offered),
         prerequisites=prerequisites,
+        layout=layout,
     )
 
 

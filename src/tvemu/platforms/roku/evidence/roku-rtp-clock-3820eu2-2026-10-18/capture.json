@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "roku-rtp-clock-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Partial ordered UDP responses from a physical-stick RTP probe. Request destination declared payload97 and capacity960, client RTP6970/RTCP6971, VDLY1200000 and CVER2 sent from6970 to5150. This retains only the first three silent RTP datagrams and first XDLY/NCLI answers; programme audio and other datagrams are omitted. Opus packets decode to480samples at48kHz, SSRC0. Header timestamps across the full probe advance about1000ticks per second. Source addresses and full ECP setup are not included; this evidence-only capture is not selectable."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "rtp-start",
+      "operation_id": "roku.rtp.audio",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.rtp.audio",
+          "metadata": {
+            "channel": "rtp",
+            "elapsed_ms": 0.0
+          },
+          "payload": "rtp-00.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.rtp.audio",
+          "metadata": {
+            "channel": "rtp",
+            "elapsed_ms": 17.001
+          },
+          "payload": "rtp-01.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.rtp.audio",
+          "metadata": {
+            "channel": "rtp",
+            "elapsed_ms": 23.744
+          },
+          "payload": "rtp-02.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.rtcp.reply",
+          "metadata": {
+            "channel": "rtcp",
+            "elapsed_ms": 249.514
+          },
+          "payload": "rtcp-03.bin"
+        },
+        {
+          "direction": "out",
+          "operation_id": "roku.rtcp.reply",
+          "metadata": {
+            "channel": "rtcp",
+            "elapsed_ms": 249.523
+          },
+          "payload": "rtcp-04.bin"
+        }
+      ]
+    }
+  ]
+}

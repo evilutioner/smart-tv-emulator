@@ -28,8 +28,17 @@ src/tvemu/
 Anything specific to one television lives in `platforms/<id>/` or `web/platforms/<id>.js`.
 Shared code reads what a television declares in its `PlatformDescriptor` (protocols, access
 modes, keyboard, key effects) and does not branch on a platform id or a profile id. The
-differences between two devices of the same brand are capture and profile data.
+differences between two devices of the same brand are capture and profile data; when one
+takes text and its sibling does not, the adapter says so per device with
+`Core.set_text_input`.
 `catalogue.json` is the one shared file that names televisions, because it is data.
+
+A platform is what a person picks in the dashboard's selector: a vendor's product line or an
+operating system, named "Vendor Product" (`LG webOS`, `Samsung`, `XGIMI`). Firmware
+generations and the protocol stacks one vendor ships side by side are devices of that
+platform, not platforms of their own. The catalogue's `kind` (`tv`, `projector` or
+`console`) groups the selector, which sorts each group by name, and one entry carries
+`"default": true` to say which platform starts first.
 
 Device state follows the same rule. Power, volume and mute change only through the key-effect
 table a platform declares, applied by `Core.apply`.
@@ -51,9 +60,12 @@ oddities are declared and reproduced rather than normalised.
 
 ## Generated files
 
-`docs/spec/`, the television tables in `README.md` and `docs/televisions.md`, the test reports
-in `docs/tests/` and the client pages in `docs/clients/` are generated. To change them, edit
-`catalogue.json`, `contract.py` or the code, then run the generator:
+`docs/spec/`, the television tables in `README.md` and `docs/televisions.md`, the generation
+timelines in `docs/images/generations/`, the test reports in `docs/tests/` and the client pages
+in `docs/clients/` are generated. A platform's `generations` in the catalogue lists its
+remote-control stacks oldest first, each with a `name` and, optionally, the `era` a reader knows
+it by and the model `years` it covers; a platform with two or more gets a timeline. To change
+them, edit `catalogue.json`, `contract.py` or the code, then run the generator:
 
 ```sh
 python tools/render_docs.py
@@ -72,6 +84,11 @@ python -m build
 Run `node --check` on any JavaScript you changed, saved with a `.mjs` suffix. A new capture
 should also pass `tvemu --contract <id> --check`. If you changed a television that has
 declared clients, run `python -m tvemu.clients run <id>/<client>`; this downloads the client.
+
+Partial UDP, HTTP and WebSocket captures can be exercised through `DATAGRAM_SCENARIOS` and a platform-owned
+network recipe. Their selected steps and runtime binary parts are explicit. The conformance
+report counts these evidence scenarios separately from selectable-profile replays and lists
+missing cases with their reason. See [Partial datagram evidence](docs/architecture.md#partial-datagram-evidence).
 
 ## Pull requests
 

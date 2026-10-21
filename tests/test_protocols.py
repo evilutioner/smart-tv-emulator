@@ -161,3 +161,19 @@ class ReplyStyleTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class KeyReleaseTests(unittest.IsolatedAsyncioTestCase):
+    async def test_a_release_clears_a_hold_without_repeating_its_effect(self):
+        from tvemu.platforms.base import POWER_TOGGLE, VOLUME_UP
+        descriptor = replace(platform_descriptor(default_platform()), keys=("Toggle", "Raise"),
+                             key_effects=(("Toggle", POWER_TOGGLE), ("Raise", VOLUME_UP)))
+        core = Core(descriptor)
+        core.service_listening = True
+        for key in descriptor.keys:
+            await core.key(key, "keydown", "tcp", "127.0.0.1", "owner")
+            after_down = (core.power, core.volume)
+            self.assertIn(key, core.held["owner"])
+            await core.key(key, "keyup", "tcp", "127.0.0.1", "owner")
+            self.assertEqual((core.power, core.volume), after_down)
+            self.assertNotIn(key, core.held["owner"])

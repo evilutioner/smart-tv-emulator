@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import ipaddress
 import random
 import socket
 import sys
@@ -82,6 +83,8 @@ class SSDPResponder(asyncio.DatagramProtocol):
         self.replies: set[asyncio.TimerHandle] = set()
         self.active = False
         self.name = event_prefix
+        self.loopback = False
+        self.own_addresses: dict[str, bool] = {}
 
     def packet(self, advertisement: SSDPAdvertisement) -> bytes:
         headers = ["HTTP/1.1 200 OK"]
@@ -99,7 +102,24 @@ class SSDPResponder(asyncio.DatagramProtocol):
                 headers.append(f"{name}: {resolved}" if resolved else f"{name}:")
         return ("\r\n".join(headers) + "\r\n\r\n").encode()
 
+    def is_own_address(self, address: str) -> bool:
+        """Whether a search came from this machine: only such an address can be bound here."""
+        if address not in self.own_addresses:
+            if len(self.own_addresses) >= 64:
+                self.own_addresses.clear()
+            probe = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            try:
+                probe.bind((address, 0))
+                self.own_addresses[address] = True
+            except OSError:
+                self.own_addresses[address] = False
+            finally:
+                probe.close()
+        return self.own_addresses[address]
+
     async def start(self) -> None:
+        self.loopback = ipaddress.ip_address(self.core.host).is_loopback
+        self.own_addresses.clear()
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         try:
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -110,6 +130,15 @@ class SSDPResponder(asyncio.DatagramProtocol):
             interface = socket.inet_aton(self.core.host)
             sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP,
                             socket.inet_aton(GROUP) + interface)
+            if self.loopback:
+                # A client on this machine searches by the default multicast route, which leaves
+                # through the LAN interface whenever there is one and loops back there, never
+                # on lo0. Join there too; `datagram_received` still answers this machine only.
+                try:
+                    sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP,
+                                    socket.inet_aton(GROUP) + socket.inet_aton("0.0.0.0"))
+                except OSError:
+                    pass  # no route but lo0, or the default route is lo0 itself
             sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF, interface)
             sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
             sock.setblocking(False)
@@ -133,6 +162,8 @@ class SSDPResponder(asyncio.DatagramProtocol):
         profile = self.current_profile()
         if not self.active:
             return
+        if self.loopback and not self.is_own_address(address[0]):
+            return  # a loopback-bound set stays invisible to the LAN it also hears
         loop = asyncio.get_running_loop()
         # A stack answers only its own search target, so one probe may match more than one.
         for advertisement in profile.ssdp_advertisements(self.core.host, self.core.service_port):

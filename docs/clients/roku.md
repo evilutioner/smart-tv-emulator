@@ -6,9 +6,9 @@ Upstream clients for Roku, installed in isolation and run against the emulator. 
 
 | Client | Installed from | Last green | Latest recorded run |
 |---|---|---|---|
-| [python-roku](#python-roku) | pypi | `4.1.0` | 2026-10-15, pass |
-| [roku-client](#roku-client) | npm | `6.0.0` | 2026-10-15, pass |
-| [rokuecp](#rokuecp) | pypi | `0.19.5` | 2026-10-15, pass |
+| [python-roku](#python-roku) | pypi | `4.1.0` | 2026-10-21, pass |
+| [roku-client](#roku-client) | npm | `6.0.0` | 2026-10-21, pass |
+| [rokuecp](#rokuecp) | pypi | `0.19.5` | 2026-10-21, pass |
 
 ## Heatmap
 
@@ -79,11 +79,11 @@ Synchronous ECP client built on requests, one of the oldest Roku libraries · [u
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 4.1.0 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 4.1.0 | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-14 | 4.1.0 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-11 | 4.1.0 | 1.1.0 | Python 3.13.11 | pass |
 
-4 earlier runs are recorded beside this page.
+5 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -147,11 +147,11 @@ Node.js ECP client with key holds, a chained command builder and SSDP discovery 
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 6.0.0 | 1.3.0 | Node 25.8.0 | pass |
 | 2026-10-15 | 6.0.0 | 1.2.0 | Node 25.8.0 | pass |
 | 2026-10-14 | 6.0.0 | 1.1.0 | Node 25.8.0 | pass |
-| 2026-10-11 | 6.0.0 | 1.1.0 | Node 25.8.0 | pass |
 
-4 earlier runs are recorded beside this page.
+5 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -172,7 +172,7 @@ Node.js ECP client with key holds, a chained command builder and SSDP discovery 
 - **voice**: no API. roku-client has no voice API.
 - **state**: passed 2/4.
   - wrong answer from emulator: standby reported by device-info (`powerMode`): `AssertionError: powerMode PowerOn`
-  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:55794/query/icon/12: Not Implemented`
+  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:60609/query/icon/12: Not Implemented`
 - **volume**: passed 3/3.
 - **power**: passed 2/3.
   - untested: `Power`
@@ -197,7 +197,7 @@ Error statuses the emulator sent: 501 ×1.
 - **pointer**: no API. roku-client has no touch or sensor input.
 - **voice**: no API. roku-client has no voice API.
 - **state**: passed 3/4.
-  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:55805/query/icon/12: Not Implemented`
+  - unsupported by emulator: an application's icon (`icon`): `Error: Failed to GET http://127.0.0.1:60621/query/icon/12: Not Implemented`
 - **volume**: passed 3/3.
 - **power**: passed 2/3.
   - untested: `Power`
@@ -211,11 +211,11 @@ Asynchronous ECP client, the library behind Home Assistant's Roku integration ·
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-10-21 | 0.19.5 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.19.5 | 1.2.0 | Python 3.13.11 | pass |
 | 2026-10-14 | 0.19.5 | 1.1.0 | Python 3.13.11 | pass |
-| 2026-10-11 | 0.19.5 | 1.1.0 | Python 3.13.11 | pass |
 
-4 earlier runs are recorded beside this page.
+5 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

@@ -1,0 +1,911 @@
+{
+  "schema_version": 1,
+  "id": "roku-ecp2-surface-3820eu2-2026-10-18",
+  "device": {
+    "display_name": "Roku Streaming Stick 4K",
+    "model_name": "3820EU2",
+    "model_number": "3820EU2",
+    "software_version": "15.3.4"
+  },
+  "source": {
+    "kind": "probed",
+    "captured_at": "2026-10-18",
+    "description": "Live ecp-2 queries and commands on the Streaming Stick 4K, with ordered request/response frames. Each request follows successful client-id authentication. Launch and Home notification frames are retained separately; timestamps are observed device uptime. SAS v45 datagrams were received after a successful mobile-sas set-audio-output request while the home screen was silent. No receiver acknowledged the UDP stream during this probe. The probe stopped it with mobile-sas-disconnect. Identifiers and LAN addresses are scrubbed. No response is retained for timed-out requests. No physical TCL was available. Voice service data and channel artwork were deliberately not published."
+  },
+  "platform": {},
+  "exchanges": [
+    {
+      "id": "ws.query-apps",
+      "operation_id": "ecp-2.query-apps",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-apps",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-apps-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-apps-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-active-app",
+      "operation_id": "ecp-2.query-active-app",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-active-app",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-active-app-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-active-app-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-media-player",
+      "operation_id": "ecp-2.query-media-player",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-media-player",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-media-player-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-media-player-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-textedit-state",
+      "operation_id": "ecp-2.query-textedit-state",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-textedit-state-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-textedit-state-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-tv-active-channel",
+      "operation_id": "ecp-2.query-tv-active-channel",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-tv-active-channel",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-channel-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-channel-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-tv-channels-ex",
+      "operation_id": "ecp-2.query-tv-channels-ex",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-tv-channels-ex",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-channels-ex-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-channels-ex-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-tv-active-input",
+      "operation_id": "ecp-2.query-tv-active-input",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-tv-active-input",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-input-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-tv-active-input-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-themes",
+      "operation_id": "ecp-2.query-themes",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-themes",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-themes-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-themes-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-screensavers",
+      "operation_id": "ecp-2.query-screensavers",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-screensavers",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-screensavers-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-screensavers-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-warm-standby",
+      "operation_id": "ecp-2.query-warm-standby",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-warm-standby",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-warm-standby-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-warm-standby-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-pq-options",
+      "operation_id": "ecp-2.query-pq-options",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-pq-options",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-options-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-options-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-pq-picture-modes",
+      "operation_id": "ecp-2.query-pq-picture-modes",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-pq-picture-modes",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-modes-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-modes-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-pq-picture-settings",
+      "operation_id": "ecp-2.query-pq-picture-settings",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-pq-picture-settings",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-settings-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-pq-picture-settings-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-audio-settings",
+      "operation_id": "ecp-2.query-audio-settings",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-audio-settings",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-audio-settings-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-audio-settings-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-av-sync-offset",
+      "operation_id": "ecp-2.query-av-sync-offset",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-av-sync-offset",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-av-sync-offset-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-av-sync-offset-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-curr-audio-format",
+      "operation_id": "ecp-2.query-curr-audio-format",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-curr-audio-format",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-curr-audio-format-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-curr-audio-format-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.check-link",
+      "operation_id": "ecp-2.check-link",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.check-link",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "check-link-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "check-link-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.set-textedit-text",
+      "operation_id": "ecp-2.set-textedit-text",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.set-audio-output",
+      "operation_id": "ecp-2.set-audio-output",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-audio-output",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-audio-output-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-audio-output-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.mobile-sas-disconnect",
+      "operation_id": "ecp-2.mobile-sas-disconnect",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.mobile-sas-disconnect",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "mobile-sas-disconnect-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "mobile-sas-disconnect-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.key-press",
+      "operation_id": "ecp-2.key-press",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.key-press",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.launch",
+      "operation_id": "ecp-2.launch",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.launch",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "launch-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-active-app-1",
+      "operation_id": "ecp-2.query-active-app",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-active-app",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-active-app-1-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-active-app-1-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.key-press-1",
+      "operation_id": "ecp-2.key-press",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.key-press",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-1-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-1-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.key-press-2",
+      "operation_id": "ecp-2.key-press",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.key-press",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-2-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-2-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-textedit-state-1",
+      "operation_id": "ecp-2.query-textedit-state",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-textedit-state",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-textedit-state-1-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-textedit-state-1-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.query-active-app-2",
+      "operation_id": "ecp-2.query-active-app",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.query-active-app",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-active-app-2-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "query-active-app-2-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.set-textedit-text-1",
+      "operation_id": "ecp-2.set-textedit-text",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-1-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-1-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.set-textedit-text-2",
+      "operation_id": "ecp-2.set-textedit-text",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-2-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-2-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.set-textedit-text-3",
+      "operation_id": "ecp-2.set-textedit-text",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.set-textedit-text",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-3-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "set-textedit-text-3-response.json"
+        }
+      ]
+    },
+    {
+      "id": "ws.key-press-3",
+      "operation_id": "ecp-2.key-press",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "in",
+          "operation_id": "ecp-2.key-press",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-3-request.json"
+        },
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.response",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "key-press-3-response.json"
+        }
+      ]
+    },
+    {
+      "id": "notify-7",
+      "operation_id": "ecp-2.plugin-ui-run",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-run",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "notify-7.json"
+        }
+      ]
+    },
+    {
+      "id": "notify-8",
+      "operation_id": "ecp-2.plugin-ui-run-script",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-run-script",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "notify-8.json"
+        }
+      ]
+    },
+    {
+      "id": "notify-15",
+      "operation_id": "ecp-2.plugin-ui-exit",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-exit",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "notify-15.json"
+        }
+      ]
+    },
+    {
+      "id": "notify-16",
+      "operation_id": "ecp-2.plugin-ui-run-script",
+      "transport": "websocket",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "ecp-2.plugin-ui-run-script",
+          "metadata": {
+            "channel": "ecp-2"
+          },
+          "payload": "notify-16.json"
+        }
+      ]
+    },
+    {
+      "id": "sas-00",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 0.0
+          },
+          "payload": "sas-00.bin"
+        }
+      ]
+    },
+    {
+      "id": "sas-01",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 5.949998740106821e-05
+          },
+          "payload": "sas-01.bin"
+        }
+      ]
+    },
+    {
+      "id": "sas-02",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 0.009947166021447629
+          },
+          "payload": "sas-02.bin"
+        }
+      ]
+    },
+    {
+      "id": "sas-03",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 0.009974708023946732
+          },
+          "payload": "sas-03.bin"
+        }
+      ]
+    },
+    {
+      "id": "sas-04",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 0.020313416025601327
+          },
+          "payload": "sas-04.bin"
+        }
+      ]
+    },
+    {
+      "id": "sas-05",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 0.020338250033091754
+          },
+          "payload": "sas-05.bin"
+        }
+      ]
+    },
+    {
+      "id": "sas-06",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 0.033680291031487286
+          },
+          "payload": "sas-06.bin"
+        }
+      ]
+    },
+    {
+      "id": "sas-07",
+      "operation_id": "roku.sas.datagram",
+      "transport": "udp",
+      "steps": [
+        {
+          "direction": "out",
+          "operation_id": "roku.sas.datagram",
+          "metadata": {
+            "relative_seconds": 0.0337132079876028
+          },
+          "payload": "sas-07.bin"
+        }
+      ]
+    }
+  ]
+}

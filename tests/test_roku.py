@@ -10,6 +10,7 @@ import base64
 import json
 import tempfile
 import unittest
+import unittest.mock
 from pathlib import Path
 
 from aiohttp.test_utils import TestClient, TestServer
@@ -164,6 +165,146 @@ class Ecp2Tests(RokuCase):
             for request_id in ("", "1", "abc", "abc", "x" * 200):
                 reply = await self.press(websocket, request_id, "Home")
                 self.assertEqual((reply["status"], reply["response-id"]), ("200", request_id))
+        finally:
+            await websocket.close()
+
+    async def opened(self):
+        websocket = await self.client.ws_connect("/ecp-session", protocols=("ecp-2",))
+        challenge = await websocket.receive_json()
+        return websocket, auth_response(challenge["param-challenge"])
+
+    async def test_authenticate_echoes_any_request_id_the_android_app_sends_0(self):
+        # The official Roku app for Android, 14.1.2, numbers its requests from 0, so its
+        # authenticate carries "0". The emulator answered it 401 until 2026-10-17; the
+        # Streaming Stick 4K on 15.3.4 accepts any string and echoes it.
+        for request_id in ("0", "abc", "1"):
+            websocket, answer = await self.opened()
+            try:
+                reply = await self.ask(websocket, request_id, request="authenticate",
+                                       **{"param-response": answer})
+                self.assertEqual((reply["status"], reply["response-id"]), ("200", request_id))
+                reply = await self.press(websocket, "1", "Home")
+                self.assertEqual(reply["status"], "200")
+            finally:
+                await websocket.close()
+
+    async def test_a_wrong_answer_is_601_and_the_client_may_answer_again(self):
+        websocket, answer = await self.opened()
+        try:
+            reply = await self.ask(websocket, "0", request="authenticate",
+                                   **{"param-response": "AAAA"})
+            self.assertEqual((reply["response-id"], reply["status"], reply["status-msg"]),
+                             ("0", "601", "Invalid Credentials"))
+            reply = await self.ask(websocket, "1", request="authenticate",
+                                   **{"param-response": answer})
+            self.assertEqual(reply["status"], "200")
+            reply = await self.ask(websocket, "2", request="authenticate",
+                                   **{"param-response": answer})
+            self.assertEqual(reply["status"], "404", "authenticated sessions have no authenticate")
+        finally:
+            await websocket.close()
+
+    async def test_a_request_before_authenticating_is_401_and_the_session_stays(self):
+        websocket, answer = await self.opened()
+        try:
+            reply = await self.ask(websocket, "5", request="query-active-app")
+            self.assertEqual((reply["response-id"], reply["status"], reply["status-msg"]),
+                             ("5", "401", "Unauthorized"))
+            self.assertEqual(self.core.counts.get("Home", 0), 0)
+            reply = await self.ask(websocket, "6", request="authenticate",
+                                   **{"param-response": answer})
+            self.assertEqual(reply["status"], "200")
+        finally:
+            await websocket.close()
+
+    async def test_a_session_that_never_authenticates_is_dropped(self):
+        with unittest.mock.patch("tvemu.platforms.roku.ecp.AUTH_DEADLINE", 0.2):
+            websocket, _ = await self.opened()
+            try:
+                await self.ask(websocket, "0", request="authenticate",
+                               **{"param-response": "AAAA"})
+                message = await websocket.receive(timeout=2)
+                self.assertIn(message.type.name, CLOSED)
+                self.assertNotEqual(websocket.close_code, 1000)
+            finally:
+                await websocket.close()
+
+    async def test_request_events_takes_the_android_app_subscription(self):
+        # The official Roku app for Android, 14.1.2, subscribes as soon as it authenticates;
+        # the emulator answered 404 until 2026-10-17. Statuses measured on the stick.
+        subscription = ("+media-player-state-changed,+volume-changed,+textedit-opened,"
+                        "+tv-channel-changed")
+        websocket, _ = await self.session()
+        try:
+            for request_id, events, status in (
+                    ("2", subscription, "200"), ("3", "+volume-changed,+no-such-event", "202"),
+                    ("4", "+VOLUME-CHANGED", "404"), ("5", "", "404"),
+                    ("6", "volume-changed", "404"), ("7", "-volume-changed", "200"),
+                    ("8", None, "400")):
+                payload = {} if events is None else {"param-events": events}
+                reply = await self.ask(websocket, request_id, request="request-events", **payload)
+                self.assertEqual((reply["response-id"], reply["status"]), (request_id, status),
+                                 events)
+            (chosen,) = self.adapter.ecp.subscriptions.values()
+            self.assertEqual(chosen, {"media-player-state-changed", "textedit-opened",
+                                      "tv-channel-changed"})
+        finally:
+            await websocket.close()
+
+    async def test_the_android_app_keys_the_stick_knows_are_keys(self):
+        # Guide was 400 when the official Roku app for Android, 14.1.2, pressed it on
+        # 2026-10-17; the stick knows it and eight more of the app's keys.
+        websocket, _ = await self.session()
+        try:
+            for number, key in enumerate(("Stop", "Guide", "LiveTV", "Exit", "ClosedCaption",
+                                          "Red", "Green", "Yellow", "Blue"), start=2):
+                self.assertEqual((await self.press(websocket, str(number), key))["status"],
+                                 "200", key)
+            for number, key in enumerate(("0", "9", ".", "Keyboard", "TextSearch",
+                                          "VoiceSearch"), start=20):
+                self.assertEqual((await self.press(websocket, str(number), key))["status"],
+                                 "400", key)
+        finally:
+            await websocket.close()
+
+    async def test_a_tester_disconnect_drops_the_socket_without_a_close_code(self):
+        # The official Roku app for Android, 14.1.2, did not reconnect after the emulator
+        # closed its session with 1001 on 2026-10-17: it reconnects after a lost connection
+        # or 1008 only. A disconnect is a network loss, so no close frame is sent.
+        websocket, _ = await self.session()
+        try:
+            await self.adapter.ecp.disconnect()
+            message = await websocket.receive(timeout=2)
+            self.assertIn(message.type.name, CLOSED + ("ERROR",))
+            self.assertNotIn(websocket.close_code, (1000, 1001))
+        finally:
+            await websocket.close()
+
+    async def test_ecp2_launch_and_input_as_the_android_app_sends_them(self):
+        # The official Roku app for Android, 14.1.2, launches channels over ecp-2 only and
+        # got 404 for each until 2026-10-17. It reads 204 as "already running".
+        params = json.dumps({"gc_run_source": "mobile", "gc_run_source_id": "home"})
+        websocket, _ = await self.session()
+        try:
+            for request_id, request, payload, status in (
+                    ("2", "launch", {"param-channel-id": "837", "param-params": params}, "200"),
+                    ("3", "launch", {"param-channel-id": "837"}, "204"),
+                    ("4", "launch", {"param-channel-id": "837", "param-params": "{}"}, "204"),
+                    ("5", "launch", {"param-channel-id": "837", "param-params": params}, "200"),
+                    ("6", "launch", {"param-params": params}, "400"),
+                    ("7", "launch", {"param-channel-id": "837", "param-params": "not json"},
+                     "400"),
+                    ("8", "input", {"param-channel-id": "12", "param-params": params}, "200"),
+                    ("9", "launch", {"param-channel-id": "12"}, "204")):
+                reply = await self.ask(websocket, request_id, request=request, **payload)
+                self.assertEqual((reply["response-id"], reply["status"]), (request_id, status),
+                                 payload)
+            self.assertEqual((await self.press(websocket, "10", "Home"))["status"], "200")
+            reply = await self.ask(websocket, "11", request="launch",
+                                   **{"param-channel-id": "12"})
+            self.assertEqual(reply["status"], "200", "Home leaves the channel")
+            launch = self.core.snapshot()["applications"]["last_launch"]
+            self.assertEqual(launch["id"], "12")
         finally:
             await websocket.close()
 

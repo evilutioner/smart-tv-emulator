@@ -29,7 +29,7 @@ from tvemu.platforms.common.jsonbytes import (
     Node as _Node, Scanner as _Scanner, json_path, locate as _locate, replace_json_value,
     value_node as _value_node,
 )
-from tvemu.platforms.common.xmlbytes import text_span as _xml_text_span
+from tvemu.platforms.common.xmlbytes import value_span as _xml_text_span, expand_empty_leaf
 
 PLACEHOLDER = re.compile(r"\{[A-Za-z_][A-Za-z0-9_]*\}")
 # What a placeholder may stand for: one token of an address, id or path, never markup.
@@ -164,6 +164,14 @@ def _is_xml(data: bytes) -> bool:
 
 def _mask_xml(expected: bytes, observed: bytes, paths: list[str], outcome: Outcome
               ) -> tuple[bytes, bytes]:
+    # Empty-element and populated spellings are both measured representations of a leaf.
+    # Normalize only explicitly declared leaves; attributes and neighbouring bytes stay exact.
+    for path in paths:
+        try:
+            expected = expand_empty_leaf(expected, path)
+            observed = expand_empty_leaf(observed, path)
+        except ValueError as exc:
+            outcome.problems.append(f"XML substitution {path!r}: {exc}")
     cuts: dict[str, list[tuple[int, int, bytes]]] = {"expected": [], "observed": []}
     for path in paths:
         try:

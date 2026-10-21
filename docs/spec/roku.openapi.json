@@ -624,7 +624,8 @@
                       "type": "string",
                       "xml": {
                         "name": "serial-number"
-                      }
+                      },
+                      "description": "The Roku mobile app requires this field in a successful document. A refused HTTP query has no document to decode."
                     },
                     "device-id": {
                       "type": "string",
@@ -2167,7 +2168,8 @@
                           "type": "string",
                           "xml": {
                             "name": "destination-list"
-                          }
+                          },
+                          "description": "Profile-declared live destination state. A single active transport follows the measured transitions; with multiple independent senders the last-started view is emulator-owned."
                         }
                       },
                       "xml": {
@@ -2243,7 +2245,8 @@
                           "type": "string",
                           "xml": {
                             "name": "rtp-address"
-                          }
+                          },
+                          "description": "Profile-declared live destination state. A single active transport follows the measured transitions; with multiple independent senders the last-started view is emulator-owned."
                         },
                         "rtcp-port": {
                           "type": "string",
@@ -2271,7 +2274,8 @@
                   },
                   "xml": {
                     "name": "audio-device"
-                  }
+                  },
+                  "description": "Ordered Stick audio-state capture, separately measured over HTTP and ecp-2."
                 }
               }
             },
@@ -2282,6 +2286,16 @@
                 },
                 "examples": [
                   "Roku/15.3.4 UPnP/1.0 Roku/15.3.4"
+                ]
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": [
+                  "676",
+                  "688",
+                  "714"
                 ]
               },
               "Cache-Control": {

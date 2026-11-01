@@ -20,7 +20,9 @@ A set can run both side by side. Each emulated device runs the remote its eviden
 |---|---|---|
 | nScreen remote | TCP 4123 | keys, commands, keep-alive; no pairing |
 | T-Cast remote | TCP 6553 | session set-up, heartbeat, keys, text, pointer, app list and launch |
-| T-Cast discovery | UDP 6537 | the answer to the app's broadcast |
+| T-Cast discovery | UDP 6537 | the answer to the app's broadcast; an optional self-announcement |
+| T-Cast voice | TCP 4332 | the app's raw audio, counted and timed |
+| Wake-on-LAN | UDP 7778 (and 9, off by default) | the app's magic packet switches the set on |
 | UPnP MediaRenderer | HTTP 49152 | description, service descriptions and the read-only calls captured |
 | UPnP device description | HTTP 56790 | the description that points at DIAL |
 | DIAL | HTTP 56789 | application state; a launch is refused |
@@ -39,6 +41,8 @@ A set can run both side by side. Each emulated device runs the remote its eviden
 - **Discovery is two unrelated SSDP stacks**, and one ignores the catch-all search.
 - **The DLNA renderer's volume is not the level the remote keys move.**
 - **A silent T-Cast link must keep a heartbeat**, or the app drops it.
+- **T-Cast text replaces the whole field** on every change.
+- **The T-Cast Home key depends on the set**: 45 or 19, chosen from its function code.
 
 ## What the emulator lets you test
 
@@ -48,9 +52,15 @@ A set can run both side by side. Each emulated device runs the remote its eviden
 - [x] DIAL application state and its refusals
 - [x] T-Cast discovery exactly as TCL's phone SDK performs it
 - [x] Both the plaintext and the encrypted T-Cast session
-- [x] Every T-Cast button TCL's apps send, text, pointer moves, the app list and launches
+- [x] Every T-Cast button in TCL's key table, text, the keyboard request, pointer moves, the
+      app list and launches
+- [x] A client that sends the wrong Home code for the set, caught in the event log
+- [x] T-Cast voice start, audio and stop
+- [x] Wake-on-LAN, optionally with the set's ports closed while it is off
+- [x] A set that stops answering, drops an idle link or announces itself, on request
+- [x] One set seen on both remotes, by running two emulators with one MAC
 - [ ] nScreen power and the rest of its key table, and DIAL launch (not exercised on the set)
-- [ ] T-Cast voice, screenshots, casting and app install (not modelled)
+- [ ] T-Cast screenshots, casting and app install (not modelled)
 - [ ] Anything a real set answers over T-Cast (not measured)
 
 ## Get access

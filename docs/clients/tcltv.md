@@ -4,6 +4,12 @@
 
 Upstream clients for TCL, installed in isolation and run against the emulator. What a run establishes, and what it does not: [Open-source clients](../open-source-clients.md).
 
+| Client | Installed from | Last green | Latest recorded run |
+|---|---|---|---|
+| [node-tcl-remote](#node-tcl-remote) | npm | `0.1.0` | 2026-11-01, pass |
+| [tcl-magiconnect](#tcl-magiconnect) | git | `a3ebe34e85d5` | 2026-11-01, pass |
+| [tcl-remote](#tcl-remote) | git | `a14274dd1b8b` | 2026-11-01, pass |
+
 ## Heatmap
 
 What real clients have confirmed of each emulated television, zone by zone, from each client's latest run.
@@ -12,18 +18,18 @@ A cell is one zone of one emulated television, over every client that drove it: 
 
 | Zone | `tcl-h32s5916` | `tcl-tcast-v14-modelled` | `tcl-tcast-v8-modelled` |
 |---|---|---|---|
-| discovery | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| identity | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| auth | not run | not written | not written |
-| session | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| keys | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| text | not run | ⬜ no API | ⬜ no API |
-| pointer | not run | ⬜ no API | ⬜ no API |
-| voice | not run | ⬜ no API | ⬜ no API |
-| state | not run | ⬜ no API | ⬜ no API |
-| volume | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| power | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| apps | not run | ⬜ no API | ⬜ no API |
+| discovery | 🟥 0 % · 0/1 | 🟩 100 % · 2/2 | 🟩 100 % · 2/2 |
+| identity | 🟩 100 % · 1/1 | 🟩 100 % · 2/2 | 🟩 100 % · 2/2 |
+| auth | not written | not written | not written |
+| session | 🟩 100 % · 1/1 | 🟩 100 % · 2/2 | 🟩 100 % · 2/2 |
+| keys | 🟩 100 % · 1/1 | 🟩 100 % · 2/2 | 🟩 98 % · 2/2 |
+| text | ⬜ no API | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
+| pointer | ⬜ no API | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
+| voice | ⬜ no API | ⬜ no API | ⬜ no API |
+| state | ⬜ no API | ⬜ no API | ⬜ no API |
+| volume | 🟩 100 % · 1/1 | 🟩 100 % · 2/2 | 🟩 100 % · 2/2 |
+| power | 🟩 100 % · 1/1 | 🟩 100 % · 2/2 | 🟩 100 % · 2/2 |
+| apps | ⬜ no API | 🟨 40 % · 1/1 · ⚠ 3 | 🟨 40 % · 1/1 · ⚠ 3 |
 
 ## Backlog
 
@@ -33,7 +39,12 @@ Who moves next, and on what. Each item says how many client × television runs i
 
 Requests a client sent that no capture answers (unsupported by emulator).
 
-None.
+- 5 items, 2 runs each (tcl-magiconnect on `tcl-tcast-v8-modelled`, `tcl-tcast-v14-modelled`):
+  - **`tcast/command/129`**: 129>> (stop the set's player) is the first frame of cast_video() and player_command('stop').
+  - **`tcast/command/133`**: 133>>Video prepares the set's player in cast_video().
+  - **`tcast/command/134`**: 134>><url>-><title>->… plays a video in cast_video(), and a bare 134>> resumes it in player_command('play').
+  - **`tcast/command/135`**: 135>> pauses the set's player in player_command('pause').
+  - **`tcast/command/225`**: get_screenshot_url() sends 225>> and waits for 225>>0>><url>.
 
 ### Emulator: wrong answers
 
@@ -51,7 +62,9 @@ None.
 
 The client parses a correct answer wrongly.
 
-None.
+- **Finder.find() resolves a LOCATION**, 1 run (node-tcl-remote on `tcl-h32s5916`). Finder keeps only an SSDP answer whose LOCATION ends in /mstar, the description path of the MStar-chassis set it was written for.
+- **send_key('home')**, 1 run (tcl-remote on `tcl-tcast-v8-modelled`). tcl-remote always sends Home as 149>>19.
+- **send_keys(['home'])**, 1 run (tcl-magiconnect on `tcl-tcast-v8-modelled`). tcl-magiconnect's key table maps home to 19 whatever the set.
 
 ### Tests to write
 
@@ -59,18 +72,120 @@ Offered by a client and exercised by no step (untested), by zone; ×N is how man
 
 None.
 
+## node-tcl-remote
+
+Node.js remote for TCL's MStar-chassis Linux sets on the nScreen protocol: an SSDP finder, a description reader, and setKey XML on TCP 4123 with a noop keep-alive; its TR_KEY_* table is the largest public one · [upstream](https://github.com/NickCis/node-tcl-remote) · licence MIT · last green `0.1.0`
+
+| Run | Client | Emulator | Runtime | Verdict |
+|---|---|---|---|---|
+| 2026-11-01 | 0.1.0 | 1.4.0 | Node 25.8.0 | pass |
+
+### Coverage by television
+
+#### `tcl-h32s5916`
+
+- **discovery**: passed 0/1.
+  - client bug: Finder.find() resolves a LOCATION (`Finder.find`): `AssertionError: no LOCATION ending in /mstar within 4 s; the emulator logged 1 SSDP events: tcltv-ssdp.reply`
+- **identity**: passed 3/3.
+- **auth**: not written.
+- **session**: passed 3/3.
+- **keys**: passed 77/77.
+- **text**: no API. tcl-remote sends setKey only; nScreen carries no text.
+- **pointer**: no API. tcl-remote has no pointer.
+- **voice**: no API. tcl-remote has no voice.
+- **state**: no API. tcl-remote never reads what the set writes back.
+- **volume**: passed 3/3.
+- **power**: passed 1/1.
+- **apps**: no API. tcl-remote has no app launch beyond the TR_KEY_YOUTUBE and TR_KEY_APP keys.
+
+The emulator sent no error status.
+
+## tcl-magiconnect
+
+Home Assistant integration for TCL sets on the T-Cast (MagiConnect) protocol, written by its author from the MagiConnect 2.0.199 phone app (UDP 6537 discovery, a short 159-handshake session per call on TCP 6553, keys, text, pointer, the app list, screenshots and video cast); its author says it was never run against a set · [upstream](https://github.com/Micpi/tcl-magiconnect) · licence MIT · last green `a3ebe34e85d5b6f1b73b9d2d4a20bf2012bb919f`
+
+| Run | Client | Emulator | Runtime | Verdict |
+|---|---|---|---|---|
+| 2026-11-01 | `a3ebe34` | 1.4.0 | Python 3.13.11 | pass |
+
+### Coverage by television
+
+#### `tcl-tcast-v8-modelled`
+
+- **discovery**: passed 1/1.
+- **identity**: passed 8/8.
+- **auth**: not written.
+- **session**: passed 2/2.
+- **keys**: passed 39/40.
+  - client bug: send_keys(['home']) (`home`): `AssertionError: timed out waiting for Home counted`
+- **text**: passed 1/1.
+- **pointer**: passed 1/1.
+- **voice**: no API. tcl-magiconnect has no voice call (157 and PCM on TCP 4332).
+- **state**: no API. tcl-magiconnect reads only the 159 answer: no volume, mute or power query.
+- **volume**: passed 3/3.
+- **power**: passed 1/1.
+- **apps**: passed 2/5.
+  - unsupported by emulator: get_screenshot_url() reads a URL (`get_screenshot_url`): `RequestTimeout: TV response timed out`
+  - unsupported by emulator: player_command('play') (`player_command`): `AssertionError: `
+  - unsupported by emulator: player_command('pause') (`player_command`): `AssertionError: `
+  - unsupported by emulator: player_command('stop') (`player_command`): `AssertionError: `
+  - unsupported by emulator: cast_video() starts a video (`cast_video`): `AssertionError: `
+
+Error statuses the emulator sent: 409 ×1.
+
+#### `tcl-tcast-v14-modelled`
+
+- **discovery**: passed 1/1.
+- **identity**: passed 8/8.
+- **auth**: not written.
+- **session**: passed 2/2.
+- **keys**: passed 40/40.
+- **text**: passed 1/1.
+- **pointer**: passed 1/1.
+- **voice**: no API. tcl-magiconnect has no voice call (157 and PCM on TCP 4332).
+- **state**: no API. tcl-magiconnect reads only the 159 answer: no volume, mute or power query.
+- **volume**: passed 3/3.
+- **power**: passed 1/1.
+- **apps**: passed 2/5.
+  - unsupported by emulator: get_screenshot_url() reads a URL (`get_screenshot_url`): `RequestTimeout: TV response timed out`
+  - unsupported by emulator: player_command('play') (`player_command`): `AssertionError: `
+  - unsupported by emulator: player_command('pause') (`player_command`): `AssertionError: `
+  - unsupported by emulator: player_command('stop') (`player_command`): `AssertionError: `
+  - unsupported by emulator: cast_video() starts a video (`cast_video`): `AssertionError: `
+
+The emulator sent no error status.
+
 ## tcl-remote
 
 Python LAN remote for TCL sets on the T-Cast protocol (UDP 6537 discovery, the 159 handshake and 149 keys on TCP 6553, AES-128-CBC when the set asks), tested by its author on a TCL 65Q10L Pro at protocol v14; the v14 device's field layout follows the set this client was tested on · [upstream](https://github.com/jarvis2f/tcl-remote) · licence MIT · last green `a14274dd1b8bd7ef5bc1effb740a8cddf352d126`
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | `a14274d` | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | `a14274d` | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-16 | `a14274d` | 1.2.0 | Python 3.13.11 | pass |
 
 ### Coverage by television
 
-#### `tcl-tcast-v8-modelled`, `tcl-tcast-v14-modelled`
+#### `tcl-tcast-v8-modelled`
+
+- **discovery**: passed 1/1.
+- **identity**: passed 4/4.
+- **auth**: not written.
+- **session**: passed 2/2.
+- **keys**: passed 12/13.
+  - client bug: send_key('home') (`home`): `AssertionError: timed out waiting for Home counted`
+- **text**: no API. tcl-remote sends only 149 key frames; it has no text (155) call.
+- **pointer**: no API. tcl-remote has no pointer (151) call; mouse_left and mouse_right are keys 39 and 40.
+- **voice**: no API. tcl-remote has no voice call.
+- **state**: no API. tcl-remote reads nothing back after the handshake: no volume, mute or power query.
+- **volume**: passed 4/4.
+- **power**: passed 1/1.
+- **apps**: no API. tcl-remote has no app list or launch call (223).
+
+Error statuses the emulator sent: 409 ×1.
+
+#### `tcl-tcast-v14-modelled`
 
 - **discovery**: passed 1/1.
 - **identity**: passed 4/4.

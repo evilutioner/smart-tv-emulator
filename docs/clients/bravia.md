@@ -10,20 +10,20 @@ What real clients have confirmed of each emulated television, zone by zone, from
 
 A cell is one zone of one emulated television, over every client that drove it: the best share any client passed of what it offers there, how many clients passed anything there, and ⚠ how many times they met the emulator's gap or wrong answer. 🟩 80 % or more, 🟨 40 % or more, 🟥 less, ⬛ every client was blocked before it, ⬜ no client has an API for it, *not written* no binding says anything about it, *not run* no client drives that television.
 
-| Zone | `sony-bravia-kdl-32wd600` | `sony-bravia-kdl-55w807c` |
-|---|---|---|
-| discovery | not run | ⬜ no API |
-| identity | not run | 🟨 67 % · 1/1 |
-| auth | not run | 🟨 60 % · 1/1 · ⚠ 2 |
-| session | not run | 🟩 100 % · 1/1 |
-| keys | not run | 🟩 100 % · 1/1 |
-| text | not run | 🟥 0 % · 0/1 · ⚠ 1 |
-| pointer | not run | ⬜ no API |
-| voice | not run | ⬜ no API |
-| state | not run | 🟩 84 % · 1/1 |
-| volume | not run | 🟩 100 % · 1/1 |
-| power | not run | 🟨 57 % · 1/1 · ⚠ 2 |
-| apps | not run | 🟨 67 % · 1/1 · ⚠ 1 |
+| Zone | `sony-bravia-kdl-32wd600` | `sony-bravia-kdl-55w807c` | `sony-bravia-xr-65a80l` |
+|---|---|---|---|
+| discovery | not run | ⬜ no API | not run |
+| identity | not run | 🟨 67 % · 1/1 | not run |
+| auth | not run | 🟨 60 % · 1/1 · ⚠ 2 | not run |
+| session | not run | 🟩 100 % · 1/1 | not run |
+| keys | not run | 🟩 100 % · 1/1 | not run |
+| text | not run | 🟥 0 % · 0/1 · ⚠ 1 | not run |
+| pointer | not run | ⬜ no API | not run |
+| voice | not run | ⬜ no API | not run |
+| state | not run | 🟩 84 % · 1/1 | not run |
+| volume | not run | 🟩 100 % · 1/1 | not run |
+| power | not run | 🟨 57 % · 1/1 · ⚠ 2 | not run |
+| apps | not run | 🟨 67 % · 1/1 · ⚠ 1 | not run |
 
 ## Backlog
 
@@ -73,11 +73,11 @@ Asynchronous ScalarWebAPI and IRCC client, the library behind Home Assistant's S
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 0.5.3 | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 0.5.3 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.5.3 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-12 | 0.5.3 | 1.1.0 | Python 3.13.11 | pass |
 
-2 earlier runs are recorded beside this page.
+3 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -105,4 +105,4 @@ Asynchronous ScalarWebAPI and IRCC client, the library behind Home Assistant's S
 - **apps**: passed 2/3.
   - unsupported by emulator: terminate applications (`terminate_apps`): `AssertionError: terminateApps refused`
 
-Error statuses the emulator sent: 401 ×3, 403 ×2, 404 ×1, 501 ×4.
+Error statuses the emulator sent: 401 ×3, 403 ×2, 404 ×2, 501 ×4.

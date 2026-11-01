@@ -25,6 +25,13 @@ class ListenerBinding:
         return host, port
 
 
+def _loopback(host: str) -> bool:
+    try:
+        return ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        return host == "localhost"
+
+
 class LoopbackBinding(ListenerBinding):
     """Bind every listener to an ephemeral loopback port, whatever the profile advertises."""
 
@@ -246,7 +253,7 @@ class BaseAdapter:
             site = self.sites.get(protocol_id)
             datagram = self.datagrams.pop(protocol_id, None)
             if datagram is not None:
-                datagram.close()
+                await self._close_datagram(datagram)
             if server is not None:
                 server.close()
             if site is not None:
@@ -367,7 +374,15 @@ class BaseAdapter:
     async def _start_server(self, name: str, client_connected, host: str, port: int,
                             ssl_context: ssl.SSLContext | None = None) -> None:
         host, port = self.listener_binding.address(name, host, port)
-        server = await asyncio.start_server(client_connected, host, port, ssl=ssl_context)
+        try:
+            server = await asyncio.start_server(client_connected, host, port, ssl=ssl_context)
+        except PermissionError:
+            # macOS lets an unprivileged process take a port below 1024 only on the wildcard
+            # address. A LAN address is retried there; a loopback one stays loopback.
+            if port >= 1024 or _loopback(host):
+                raise
+            server = await asyncio.start_server(client_connected, "0.0.0.0", port,
+                                                ssl=ssl_context)
         self.servers[name] = server
         self.bound[name] = tuple(server.sockets[0].getsockname()[:2])
 
@@ -375,16 +390,27 @@ class BaseAdapter:
         host, port = self.listener_binding.address(name, host, port)
         # A UDP service is found by broadcast, and only a wildcard socket hears a broadcast;
         # a loopback address stays loopback, so a harness never takes the LAN port.
-        try:
-            loopback = ipaddress.ip_address(host).is_loopback
-        except ValueError:
-            loopback = host == "localhost"
-        if not loopback:
+        if not _loopback(host):
             host = "0.0.0.0"
         transport, _ = await asyncio.get_running_loop().create_datagram_endpoint(
             factory, local_addr=(host, port))
         self.datagrams[name] = transport
         self.bound[name] = tuple(transport.get_extra_info("sockname")[:2])
+
+    @staticmethod
+    async def _close_datagram(transport: asyncio.DatagramTransport) -> None:
+        """Close a UDP endpoint and return once its port is free to bind again.
+
+        `close()` only schedules the socket's release for a later loop iteration, so a
+        profile switch that stops and restarts a UDP protocol on the same port would
+        otherwise meet its own socket still bound.
+        """
+        sock = transport.get_extra_info("socket")
+        transport.close()
+        for attempt in range(200):
+            if sock is None or sock.fileno() == -1:
+                return
+            await asyncio.sleep(0 if attempt < 10 else 0.01)
 
     # ── clients ────────────────────────────────────────────────────────────────────────
 

@@ -65,9 +65,11 @@ Python remote for the Xiaomi Mi TV 3 series over the GiTV HTTP API on 6095, the 
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 1.5.0 | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 1.5.0 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 1.5.0 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-13 | 1.5.0 | 1.1.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

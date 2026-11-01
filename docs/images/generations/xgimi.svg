@@ -1,13 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="46" viewBox="0 0 240 46" role="img">
-  <title>XGIMI: UDP, older firmware, TCP, newer firmware</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="62" viewBox="0 0 240 62" role="img">
+  <title>XGIMI: UDP without a code, 2018, UDP, older firmware, TCP, newer firmware</title>
   <style>
     text { font: 12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
     .year { font-size: 11px; fill: #6e7781; } .dot { fill: #6e7781; }
-    .e0{fill:#BA7517} .e1{fill:#185FA5}
-    @media (prefers-color-scheme: dark) { .year, .dot { fill: #9198a1; } .e0{fill:#EF9F27} .e1{fill:#85B7EB} }
+    .e0{fill:#BA7517} .e1{fill:#0F6E56} .e2{fill:#185FA5}
+    @media (prefers-color-scheme: dark) { .year, .dot { fill: #9198a1; } .e0{fill:#EF9F27} .e1{fill:#5DCAA5} .e2{fill:#85B7EB} }
   </style>
-  <rect x="0.0" y="0" width="119.0" height="10" rx="2" fill="#EF9F27"/>
-  <rect x="121.0" y="0" width="119.0" height="10" rx="2" fill="#378ADD"/>
-  <text y="26"><tspan class="e0">UDP, older firmware</tspan></text>
-  <text y="42"><tspan class="e1">TCP, newer firmware</tspan></text>
+  <rect x="0.0" y="0" width="78.7" height="10" rx="2" fill="#EF9F27"/>
+  <rect x="80.7" y="0" width="78.7" height="10" rx="2" fill="#1D9E75"/>
+  <rect x="161.3" y="0" width="78.7" height="10" rx="2" fill="#378ADD"/>
+  <text y="26"><tspan class="e0">UDP without a code, 2018</tspan></text>
+  <text y="42"><tspan class="e1">UDP, older firmware</tspan></text>
+  <text y="58"><tspan class="e2">TCP, newer firmware</tspan></text>
 </svg>

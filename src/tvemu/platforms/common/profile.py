@@ -471,3 +471,12 @@ def load_profiles(package: str, loader: Callable[[Any], P], label: str) -> dict[
     if not profiles:
         raise ValueError(f"No captured {label} device profiles are installed")
     return profiles
+
+
+def measured_or_inherited(name: str, reference: ProfileReference) -> dict[str, Any]:
+    """A block captured off this set, or one inherited from a sibling; never both."""
+    measured = optional_dict(reference.capture.platform, name, reference.id)
+    inherited = optional_dict(reference.runtime, name, reference.id)
+    if measured and inherited:
+        raise ValueError(f"Profile {reference.id}: {name} is both captured and inherited")
+    return dict(measured or inherited or {})

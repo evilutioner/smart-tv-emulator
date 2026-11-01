@@ -6,8 +6,8 @@ Upstream clients for Amazon Fire TV, installed in isolation and run against the 
 
 | Client | Installed from | Last green | Latest recorded run |
 |---|---|---|---|
-| [androidtv](#androidtv) | pypi | `0.0.75` | 2026-10-21, pass |
-| [uc-intg-firetv](#uc-intg-firetv) | git | `e3ca17e56d6f` | 2026-10-21, pass |
+| [androidtv](#androidtv) | pypi | `0.0.75` | 2026-11-01, pass |
+| [uc-intg-firetv](#uc-intg-firetv) | git | `e3ca17e56d6f` | 2026-11-01, pass |
 
 ## Heatmap
 
@@ -118,9 +118,11 @@ Synchronous ADB client, the library behind Home Assistant's Android TV / Fire TV
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 0.0.75 | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 0.0.75 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.0.75 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-11 | 0.0.75 | 1.1.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -207,9 +209,11 @@ Turnstile client of the Unfolded Circle Fire TV integration: DIAL wake-up, PIN p
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 1.2.6 (`e3ca17e`) | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 1.2.6 (`e3ca17e`) | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 1.2.6 (`e3ca17e`) | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-11 | 1.2.6 (`e3ca17e`) | 1.1.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

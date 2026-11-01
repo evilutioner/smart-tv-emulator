@@ -6,6 +6,72 @@ All notable changes to the public build are recorded here. The format follows
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-01
+
+### Added
+
+- **Sony BRAVIA** serves Android TV Remote v2 beside Remote v1, each with its own switch and
+  paired-certificate store, and the **XR-65A80L**, read off the set in standby, is a
+  selectable device. What its capture cannot prove is inherited from other sets and labelled
+  as such.
+
+- **Samsung**: the whole read-only surface of the UE65U8072F, its discovery included, recorded
+  again in place; the firmware and Tizen version of each set, and the AirPlay identity the
+  UE43CU7172U answers on port 7000; the browser launch and the renderer's read-only SOAP
+  answers of the UE43CU7172U; the SPC refusals, `GetDUID` and the bare Socket.IO handshake of
+  the UE48H6200; and the UE43KU6400, modelled as a PIN-paired set whose companion channel
+  runs in the clear.
+
+- **Samsung**, 2011–13: Smart View 2012's remote type and its 55001 channel, and a keyboard
+  that replaces the whole field when the client sends the full string.
+
+- **XGIMI**: a 2018 projector for XGIMI Assistant International 1.0.0, validated with both
+  older phone apps, and two open-source clients, **homebridge-xgimi-tv** and Home Assistant's
+  XGIMI integration. Power, the motor and focus codes, and the installed-app list on HTTP
+  16741 answer as those clients expect.
+
+- **TCL**: T-Cast follows TCL's own SDK, with voice, Wake-on-LAN, the keyboard and the full
+  key table, and two more open-source clients, **node-tcl-remote** and **tcl-magiconnect**,
+  pass against it. No set measured.
+
+- **LeTV**: Wukong-family remotes find the set, read its device information, list and launch
+  apps and send touchpad moves; LeEco's own action names press their keys. No set measured.
+
+- **YunOS / AliTV** answers a login, heartbeats and held keys as Alibaba's TV helper reads
+  the box; validated with ZaZa Remote for Android 5.4.5.
+
+- **Android TV**: Google TV for Android 4.39 is validated on the Chromecast HD profile,
+  keyboard and voice included, and Google's Android TV Remote Control 1.1.0 partially on the
+  Sony KDL-55W807C.
+
+### Changed
+
+- Paired client certificates are kept across restarts in `.tvemu/pairings/<platform>.json`,
+  as a television keeps them over a reboot. The dashboard's disconnect action forgets them.
+
+- **KIVI** sets answer DIAL as the MediaTek stack does, and the **SENCOR SLE65Q871B** answers
+  an unregistered SSAP client as the set does, both read again off the sets.
+
+- **Android TV**: the Google TV app's keyboard opens on a focused field and its edits are
+  applied as ranges; an app link keeps its package; state goes only to a client that asked
+  for it.
+
+- Android TV Remote v1 and v2, their pairing and the wake port are shared by every platform
+  that runs them, as are Android's key codes. No behaviour changes.
+
+- The Samsung HTTP remote of 2011–13 is deprecated: no real set is known to serve it.
+
+### Fixed
+
+- A profile switch that restarts a UDP protocol on the same port no longer fails with
+  "Address already in use".
+
+- On macOS a TCP listener on a port below 1024 bound to a LAN address falls back to the
+  wildcard address instead of failing with a permission error.
+
+- **BRAVIA**: Google's Remote v1 app stays connected; its key releases, PONG and interactive
+  frames are read correctly and an idle client is pinged.
+
 ## [1.3.0] - 2026-10-21
 
 ### Added
@@ -280,7 +346,8 @@ First public build, under the [Apache License 2.0](LICENSE); see [`NOTICE`](NOTI
   the README and the dashboard selector; the management API lists them with
   `"availability": "n/a"` and answers a switch to one with 501 and `"reason": "n/a"`.
 
-[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/evilutioner/smart-tv-emulator/compare/v1.0.0...v1.1.0

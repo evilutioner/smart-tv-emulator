@@ -67,11 +67,11 @@ Asynchronous JointSpace client, the library behind Home Assistant's Philips TV i
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 3.2.5 | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 3.2.5 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 3.2.5 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-12 | 3.2.5 | 1.1.0 | Python 3.13.11 | pass |
 
-4 earlier runs are recorded beside this page.
+5 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

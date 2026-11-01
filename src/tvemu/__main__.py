@@ -62,6 +62,7 @@ async def serve(args):
     core.host = args.bind or detect_address()
     core.service_port = args.service_port or descriptor.default_port
     core.service_port_pinned = args.service_port is not None
+    core.state_dir = args.config.parent
     runtime = Runtime(core, create_platform(platform_id, core))
     panel = web.AppRunner(control_app(runtime, args.config, args.ui_port), shutdown_timeout=1)
     stopped = asyncio.Event()

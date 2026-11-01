@@ -5,11 +5,13 @@ replays, and what it does when the capture lacks one. `attach` builds the aiohtt
 those declarations, and the contract exports read the same ones.
 
 A WebSocket envelope or a discovery target is declared with `Message`, so the surface map
-covers what a television sends outside HTTP too.
+covers what a television sends outside HTTP too. A protocol several televisions speak is
+declared once in `common/`, with `{prefix}` where the platform's own namespace goes; each
+platform supplies it when it collects the declarations, so its operation ids stay its own.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any, Callable, Iterator
 
 from aiohttp import web
@@ -17,6 +19,8 @@ from aiohttp import web
 from .reply import ReplyStyle
 
 METHODS = ("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "*")
+# Where a shared handler's operation id takes the namespace of the platform that runs it.
+PREFIX = "{prefix}"
 
 
 @dataclass(frozen=True)
@@ -110,14 +114,7 @@ def message(channel: str, name: str, direction: str, **spec: Any) -> Callable:
     return decorate
 
 
-def declarations(surface: type | object, group: str | None = None
-                 ) -> Iterator[tuple[RouteSpec, str]]:
-    """Every route a surface declares, in the order its class body declares them.
-
-    Order is the contract: a catch-all route must stay last, and the class body is where that
-    is visible. Python keeps class attributes in definition order, so nothing has to say it
-    twice.
-    """
+def _routes(surface: type | object, group: str | None) -> Iterator[tuple[RouteSpec, str]]:
     owner = surface if isinstance(surface, type) else type(surface)
     for klass in reversed(owner.__mro__):
         for name, attribute in vars(klass).items():
@@ -126,11 +123,35 @@ def declarations(surface: type | object, group: str | None = None
                     yield spec, name
 
 
-def message_declarations(surface: type | object) -> Iterator[tuple[Message, str]]:
+def declarations(surface: type | object, group: str | None = None, prefix: str = ""
+                 ) -> Iterator[tuple[RouteSpec, str]]:
+    """Every route a surface declares, in the order its class body declares them.
+
+    Order is the contract: a catch-all route must stay last, and the class body is where that
+    is visible. Python keeps class attributes in definition order, so nothing has to say it
+    twice. `prefix` is written into a shared route's id, as for messages.
+    """
+    for spec, name in _routes(surface, group):
+        if PREFIX in spec.operation_id:
+            if not prefix:
+                raise ValueError(f"{spec.operation_id}: {type(surface).__name__} is shared; "
+                                 f"the platform that runs it supplies the prefix")
+            spec = replace(spec, operation_id=spec.operation_id.replace(PREFIX, prefix))
+        yield spec, name
+
+
+def message_declarations(surface: type | object, prefix: str = ""
+                         ) -> Iterator[tuple[Message, str]]:
+    """Every message a surface declares, with `prefix` written into a shared one's id."""
     owner = surface if isinstance(surface, type) else type(surface)
     for klass in reversed(owner.__mro__):
         for name, attribute in vars(klass).items():
             for spec in getattr(attribute, "wire_messages", ()):
+                if PREFIX in spec.operation_id:
+                    if not prefix:
+                        raise ValueError(f"{spec.operation_id}: {owner.__name__} is shared; "
+                                         f"the platform that runs it supplies the prefix")
+                    spec = replace(spec, operation_id=spec.operation_id.replace(PREFIX, prefix))
                 yield spec, name
 
 
@@ -139,7 +160,7 @@ def attach(app: web.Application, surface: object, group: str = "") -> web.Applic
     app.add_routes([web.route(spec.method, spec.path, getattr(surface, name),
                               **({} if spec.head or spec.method != "GET"
                                  else {"allow_head": False}))
-                    for spec, name in declarations(surface, group)])
+                    for spec, name in _routes(surface, group)])
     return app
 
 

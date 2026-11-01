@@ -6,13 +6,13 @@ Upstream clients for Samsung, installed in isolation and run against the emulato
 
 | Client | Installed from | Last green | Latest recorded run |
 |---|---|---|---|
-| [samsung-remote](#samsung-remote) | npm | `2.0.1` | 2026-10-21, pass |
-| [samsung-tv-control](#samsung-tv-control) | npm | `1.14.0` | 2026-10-21, pass |
-| [samsung-tv-remote](#samsung-tv-remote) | npm | `3.0.12` | 2026-10-21, pass |
-| [samsungctl](#samsungctl) | pypi | `0.7.1` | 2026-10-21, pass |
-| [samsungtvws](#samsungtvws) | pypi | `3.0.6` | 2026-10-21, pass |
-| [samsungtvws-async](#samsungtvws-async) | pypi | `3.0.6` | 2026-10-21, pass |
-| [samsungtvws-encrypted](#samsungtvws-encrypted) | pypi | `3.0.6` | 2026-10-21, pass |
+| [samsung-remote](#samsung-remote) | npm | `2.0.1` | 2026-11-01, pass |
+| [samsung-tv-control](#samsung-tv-control) | npm | `1.14.0` | 2026-11-01, pass |
+| [samsung-tv-remote](#samsung-tv-remote) | npm | `3.0.12` | 2026-11-01, pass |
+| [samsungctl](#samsungctl) | pypi | `0.7.1` | 2026-11-01, pass |
+| [samsungtvws](#samsungtvws) | pypi | `3.0.6` | 2026-11-01, pass |
+| [samsungtvws-async](#samsungtvws-async) | pypi | `3.0.6` | 2026-11-01, pass |
+| [samsungtvws-encrypted](#samsungtvws-encrypted) | pypi | `3.0.6` | 2026-11-01, pass |
 
 ## Heatmap
 
@@ -20,20 +20,20 @@ What real clients have confirmed of each emulated television, zone by zone, from
 
 A cell is one zone of one emulated television, over every client that drove it: the best share any client passed of what it offers there, how many clients passed anything there, and ⚠ how many times they met the emulator's gap or wrong answer. 🟩 80 % or more, 🟨 40 % or more, 🟥 less, ⬛ every client was blocked before it, ⬜ no client has an API for it, *not written* no binding says anything about it, *not run* no client drives that television.
 
-| Zone | `samsung-iapp-aes-tv-modelled` | `samsung-iapp-improved-tv-modelled` | `samsung-iapp-tv-modelled` | `samsung-iapp-web-tv-modelled` | `samsung-orsay-tv-ue46f8000-sek2000-modelled` | `samsung-orsay-tv-ue48h6200` | `samsung-orsay-tv-un40h5203-modelled` | `samsung-tizen-pin-tv-ue48ju6400-modelled` | `samsung-tizen-pin-tv-un55ku6290-modelled` | `samsung-tizen-tv-ue43cu7172u` | `samsung-tizen-tv-ue43ku6079-modelled` | `samsung-tizen-tv-ue55du7172u` | `samsung-tizen-tv-ue65u8072f` |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| discovery | not run | not run | 🟥 0 % · 0/1 | not run | ⬜ no API | ⬜ no API | not run | not run | ⬜ no API | 🟨 50 % · 1/2 | not run | 🟥 0 % · 0/2 · ⚠ 3 | 🟥 0 % · 0/2 · ⚠ 3 |
-| identity | not run | not run | 🟨 50 % · 1/1 | not run | not written | not written | not run | not run | not written | 🟩 100 % · 3/3 · ⚠ 2 | not run | 🟩 100 % · 3/3 · ⚠ 2 | 🟩 100 % · 3/3 · ⚠ 2 |
-| auth | not run | not run | 🟩 100 % · 2/2 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
-| session | not run | not run | 🟩 100 % · 2/2 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
-| keys | not run | not run | 🟩 100 % · 3/3 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
-| text | not run | not run | not written | not run | ⬜ no API | ⬜ no API | not run | not run | ⬜ no API | 🟩 100 % · 3/3 · ⚠ 1 | not run | 🟩 100 % · 3/3 · ⚠ 1 | 🟩 100 % · 3/3 · ⚠ 1 |
-| pointer | not run | not run | ⬜ no API | not run | not written | not written | not run | not run | not written | 🟩 100 % · 1/1 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
-| voice | not run | not run | ⬜ no API | not run | ⬜ no API | ⬜ no API | not run | not run | ⬜ no API | ⬜ no API | not run | ⬜ no API | ⬜ no API |
-| state | not run | not run | not written | not run | not written | not written | not run | not run | not written | 🟨 67 % · 2/3 · ⚠ 1 | not run | 🟨 50 % · 3/3 · ⚠ 3 | 🟨 50 % · 3/3 · ⚠ 3 |
-| volume | not run | not run | 🟩 100 % · 3/3 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
-| power | not run | not run | 🟩 100 % · 3/3 | not run | not written | not written | not run | not run | not written | 🟩 100 % · 4/4 · ⚠ 2 | not run | 🟩 100 % · 4/4 · ⚠ 2 | 🟩 100 % · 4/4 · ⚠ 2 |
-| apps | not run | not run | not written | not run | ⬜ no API | ⬜ no API | not run | not run | ⬜ no API | 🟨 60 % · 3/3 · ⚠ 1 | not run | 🟨 67 % · 3/3 · ⚠ 1 | 🟨 67 % · 3/3 · ⚠ 1 |
+| Zone | `samsung-iapp-aes-tv-modelled` | `samsung-iapp-improved-tv-modelled` | `samsung-iapp-tv-modelled` | `samsung-iapp-web-tv-modelled` | `samsung-orsay-tv-ue46f8000-sek2000-modelled` | `samsung-orsay-tv-ue48h6200` | `samsung-orsay-tv-un40h5203-modelled` | `samsung-tizen-pin-plain-tv-ue43ku6400-modelled` | `samsung-tizen-pin-tv-ue48ju6400-modelled` | `samsung-tizen-pin-tv-un55ku6290-modelled` | `samsung-tizen-tv-ue43cu7172u` | `samsung-tizen-tv-ue43ku6079-modelled` | `samsung-tizen-tv-ue55du7172u` | `samsung-tizen-tv-ue65u8072f` |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| discovery | not run | not run | 🟥 0 % · 0/1 | not run | ⬜ no API | ⬜ no API | not run | not run | not run | ⬜ no API | 🟨 50 % · 1/2 | not run | 🟥 0 % · 0/2 · ⚠ 3 | 🟨 50 % · 1/2 |
+| identity | not run | not run | 🟨 50 % · 1/1 | not run | not written | not written | not run | not run | not run | not written | 🟩 100 % · 3/3 · ⚠ 2 | not run | 🟩 100 % · 3/3 · ⚠ 2 | 🟩 100 % · 3/3 · ⚠ 2 |
+| auth | not run | not run | 🟩 100 % · 2/2 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
+| session | not run | not run | 🟩 100 % · 2/2 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
+| keys | not run | not run | 🟩 100 % · 3/3 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
+| text | not run | not run | not written | not run | ⬜ no API | ⬜ no API | not run | not run | not run | ⬜ no API | 🟩 100 % · 3/3 · ⚠ 1 | not run | 🟩 100 % · 3/3 · ⚠ 1 | 🟩 100 % · 3/3 · ⚠ 1 |
+| pointer | not run | not run | ⬜ no API | not run | not written | not written | not run | not run | not run | not written | 🟩 100 % · 1/1 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 |
+| voice | not run | not run | ⬜ no API | not run | ⬜ no API | ⬜ no API | not run | not run | not run | ⬜ no API | ⬜ no API | not run | ⬜ no API | ⬜ no API |
+| state | not run | not run | not written | not run | not written | not written | not run | not run | not run | not written | 🟨 67 % · 2/3 · ⚠ 1 | not run | 🟨 50 % · 3/3 · ⚠ 3 | 🟩 100 % · 3/3 · ⚠ 1 |
+| volume | not run | not run | 🟩 100 % · 3/3 | not run | 🟩 100 % · 1/1 | 🟩 100 % · 1/1 | not run | not run | not run | 🟩 100 % · 1/1 | 🟩 100 % · 4/4 | not run | 🟩 100 % · 4/4 | 🟩 100 % · 4/4 |
+| power | not run | not run | 🟩 100 % · 3/3 | not run | not written | not written | not run | not run | not run | not written | 🟩 100 % · 4/4 · ⚠ 2 | not run | 🟩 100 % · 4/4 · ⚠ 2 | 🟩 100 % · 4/4 · ⚠ 2 |
+| apps | not run | not run | not written | not run | ⬜ no API | ⬜ no API | not run | not run | not run | ⬜ no API | 🟨 60 % · 3/3 · ⚠ 1 | not run | 🟨 67 % · 3/3 · ⚠ 1 | 🟨 67 % · 3/3 · ⚠ 1 |
 
 ## Backlog
 
@@ -44,13 +44,13 @@ Who moves next, and on what. Each item says how many client × television runs i
 Requests a client sent that no capture answers (unsupported by emulator).
 
 - **`GET /api/v2/`**, 6 runs (samsungtvws, samsungtvws-async on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`). Home Assistant reads /api/v2/ on the port its remote uses, which is https on 8002.
-- **`GET /api/v2/applications/111299001912`**, 4 runs (samsungtvws, samsungtvws-async on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`). `rest_app_status()` asks for one application's status document.
 - **`ms.channel.emit/custom.remote.textReceived`**, 3 runs (samsungtvws on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`). After text entry the client emits custom.remote.textReceived on the channel.
 - **`ms.channel.emit/ed.apps.icon`**, 3 runs (samsung-tv-control on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`). `getAppIcon()` emits ed.apps.icon with an icon path on the channel and waits for the same event back with the image.
+- **`GET /api/v2/applications/111299001912`**, 2 runs (samsungtvws, samsungtvws-async on `samsung-tizen-tv-ue55du7172u`). `rest_app_status()` asks for one application's status document.
+- **`POST /ws/apps/YouTube`**, 2 runs (samsung-tv-control on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue43cu7172u`). `openYouTubeLink()` posts the video id to the DIAL application URL on 8080.
 - **`POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=43000003`**, 1 run (samsungtvws on `samsung-tizen-tv-ue43cu7172u`). `send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port.
 - **`POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=55000002`**, 1 run (samsungtvws on `samsung-tizen-tv-ue55du7172u`). `send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port.
 - **`POST /api/v2/remoteControl/imeInput/c2VjcmV0?token=65000001`**, 1 run (samsungtvws on `samsung-tizen-tv-ue65u8072f`). `send_password()` posts the text to /api/v2/remoteControl/imeInput/<base64>?token=… on the REST port.
-- **`POST /ws/apps/YouTube`**, 1 run (samsung-tv-control on `samsung-tizen-tv-ue43cu7172u`). `openYouTubeLink()` posts the video id to the DIAL application URL on 8080.
 
 ### Emulator: wrong answers
 
@@ -58,12 +58,12 @@ The emulator answers, but not as the set does (wrong answer from emulator).
 
 - **Wake-on-LAN powers the set on**, 3 runs (samsung-tv-control on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`). `turnOn()` broadcasts a plain magic packet to UDP port 9.
 - **Wake-on-LAN powers the set on**, 3 runs (samsung-tv-remote on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`). `wakeTV()` pings the set first and sends nothing when it answers.
-- 2 items, 2 runs each (samsung-tv-control on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`):
-  - **AutoSearch finds the set over SSDP and reads 8001**: The SSDP answers of these two sets were never recorded (their captures say discovery is pending), so the emulator answers no search for them.
-  - **a YouTube link over DIAL on 8080**: The DIAL application service on 8080 was never recorded off these two sets, so the emulator does not open the port for them.
-- 2 items, 2 runs each (samsung-tv-remote on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`):
-  - **an SSDP search for DIAL finds the set**: The SSDP answers of these two sets were never recorded (their captures say discovery is pending), so the emulator answers no search for them.
-  - **the friendly name its description gives**: The name comes from the device description the SSDP answer points to, and these two sets answer no search in the emulator; see the search step.
+- 2 items, 1 run each (samsung-tv-control on `samsung-tizen-tv-ue55du7172u`):
+  - **AutoSearch finds the set over SSDP and reads 8001**: The SSDP answers of this set were never recorded (its capture says discovery is pending), so the emulator answers no search for it.
+  - **a YouTube link over DIAL on 8080**: The DIAL application service on 8080 was never recorded off this set, so the emulator does not open the port for it.
+- 2 items, 1 run each (samsung-tv-remote on `samsung-tizen-tv-ue55du7172u`):
+  - **an SSDP search for DIAL finds the set**: The SSDP answers of this set were never recorded (its capture says discovery is pending), so the emulator answers no search for it.
+  - **the friendly name its description gives**: The name comes from the device description the SSDP answer points to, and this set answers no search in the emulator; see the search step.
 
 ### Blocked televisions
 
@@ -79,17 +79,17 @@ The client parses a correct answer wrongly.
   - **a forced disconnect revokes the token**: A revoked token is one the set no longer knows, so it too gets thirty seconds of silence before ms.channel.timeOut, and samsungtvws times out first, as it would against the UE43CU7172U.
   - **an unknown token is refused**: A token the set never issued gets thirty seconds of silence and then ms.channel.timeOut, measured twice on the UE43CU7172U on 2026-10-20; ms.channel.unauthorized never came.
 - **the cache remembers the set, and its token reconnects with no prompt**, 3 runs (samsung-tv-remote on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`, `samsung-tizen-tv-ue43cu7172u`). On connect the client starts two writes to its cache file, the token and then the last connected device, and awaits neither.
+- **AutoSearch finds the set over SSDP and reads 8001**, 2 runs (samsung-tv-control on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue43cu7172u`). AutoSearch keeps only answers whose ST names urn:samsung.com:device.
 - **installed applications**, 2 runs (samsungtvws on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`). The text step before it opens a field, and the set reports that keyboard on the channel: imeStart, imeDone and imeUpdate on opening, imeDone twice for the client's string, imeEnd for its end, as the UE43CU7172U did on 2026-10-20.
+- **the friendly name its description gives**, 2 runs (samsung-tv-remote on `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue43cu7172u`). The client cuts friendlyName out of the description with a regular expression and never decodes XML entities.
 - 2 items, 1 run each (samsung-tv-control on `samsung-iapp-tv-modelled`):
   - **AutoSearch finds the set over SSDP and reads 8001**: AutoSearch confirms each answer with GET :8001/api/v2/, the identity document of the sets from 2016 on.
   - **the set answers on 8001**: In legacy mode `isAvailable()` reads :8001/ms/1.0/, the MultiScreen document of the 2014 sets.
-- 3 items, 1 run each (samsung-tv-control on `samsung-tizen-tv-ue43cu7172u`):
-  - **AutoSearch finds the set over SSDP and reads 8001**: AutoSearch keeps only answers whose ST names urn:samsung.com:device.
+- **installed applications**, 1 run (samsungtvws on `samsung-tizen-tv-ue43cu7172u`). `app_list()` waits for an ed.installedApp.get answer this set was measured not to send: on 2026-09-22 it stayed silent for fifteen seconds with the channel admitted, so the emulator stays silent on this profile and the client times out.
+- 2 items, 1 run each (samsung-tv-control on `samsung-tizen-tv-ue43cu7172u`):
   - **installed applications**: `getAppsFromTV()` waits for an ed.installedApp.get answer this set was measured not to send: on 2026-09-22 it stayed silent for fifteen seconds with the channel admitted, so the emulator stays silent on this profile.
   - **launch an application the set lists**: `openApp()` launches only an application it finds in the ed.installedApp.get answer, which this set does not send; see the installed applications step.
-- **installed applications**, 1 run (samsungtvws on `samsung-tizen-tv-ue43cu7172u`). `app_list()` waits for an ed.installedApp.get answer this set was measured not to send: on 2026-09-22 it stayed silent for fifteen seconds with the channel admitted, so the emulator stays silent on this profile and the client times out.
 - **installed applications, read while listening**, 1 run (samsungtvws-async on `samsung-tizen-tv-ue43cu7172u`). `app_list()` waits for an ed.installedApp.get answer this set was measured not to send: on 2026-09-22 it stayed silent for fifteen seconds with the channel admitted, so the emulator stays silent on this profile and the client returns None.
-- **the friendly name its description gives**, 1 run (samsung-tv-remote on `samsung-tizen-tv-ue43cu7172u`). The client cuts friendlyName out of the description with a regular expression and never decodes XML entities.
 
 ### Tests to write
 
@@ -106,8 +106,11 @@ Node.js remote for the 55000 remote of the Samsung sets before 2014 · [upstream
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 2.0.1 | 1.4.0 | Node 25.8.0 | pass |
+| 2026-10-29 | 2.0.1 | 1.3.0 | Node 25.8.0 | pass |
 | 2026-10-21 | 2.0.1 | 1.3.0 | Node 25.8.0 | pass |
-| 2026-10-21 | 2.0.1 | 1.2.0 | Node 25.8.0 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -136,12 +139,39 @@ Node.js Samsung remote behind node-red-contrib-samsung-tv-control; Tizen WebSock
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 1.14.0 | 1.4.0 | Node 25.8.0 | pass |
+| 2026-10-29 | 1.14.0 | 1.3.0 | Node 25.8.0 | pass |
 | 2026-10-21 | 1.14.0 | 1.3.0 | Node 25.8.0 | pass |
-| 2026-10-21 | 1.14.0 | 1.2.0 | Node 25.8.0 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
-#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`
+#### `samsung-tizen-tv-ue65u8072f`
+
+- **discovery**: passed 0/1.
+  - client bug: AutoSearch finds the set over SSDP and reads 8001 (`AutoSearch`): `AssertionError: models `
+- **identity**: passed 2/2.
+- **auth**: passed 2/2.
+- **session**: passed 1/2.
+  - untested: `saveToken`
+- **keys**: passed 12/239.
+  - untested: `KEY_0`, `KEY_11`, `KEY_12`, `KEY_16_9`, `KEY_2`, `KEY_3`, `KEY_3SPEED`, `KEY_4`, `KEY_4_3`, `KEY_5` and 217 more
+- **text**: passed 1/1.
+- **pointer**: no API. samsung-tv-control has no touch or pointer input.
+- **voice**: no API. samsung-tv-control has no voice input.
+- **state**: passed 1/2.
+  - unsupported by emulator: an application icon (`getAppIcon`): `AssertionError: no icon: undefined`
+- **volume**: passed 3/3.
+- **power**: passed 1/4.
+  - untested: `KEY_POWEROFF`, `KEY_POWERON`
+  - wrong answer from emulator: Wake-on-LAN powers the set on (`turnOn`): `Error: timed out waiting for power on`
+- **apps**: passed 2/3.
+  - unsupported by emulator: a YouTube link over DIAL on 8080 (`openYouTubeLink`): `AssertionError: []`
+
+Error statuses the emulator sent: 501 ×1.
+
+#### `samsung-tizen-tv-ue55du7172u`
 
 - **discovery**: passed 0/1.
   - wrong answer from emulator: AutoSearch finds the set over SSDP and reads 8001 (`AutoSearch`): `AssertionError: models `
@@ -218,19 +248,18 @@ Node.js remote and CLI for Samsung sets from 2016, with SSDP discovery and a tok
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
-| 2026-10-21 | 3.0.12 | 1.3.0 | Node 25.8.0 | pass |
-| 2026-10-21 | 3.0.12 | 1.3.0 | Node 25.8.0 | **fail** |
-| 2026-10-21 | 3.0.12 | 1.3.0 | Node 25.8.0 | **fail** |
+| 2026-11-01 | 3.0.12 | 1.4.0 | Node 25.8.0 | pass |
+| 2026-11-01 | 3.0.12 | 1.4.0 | Node 25.8.0 | **fail** |
+| 2026-11-01 | 3.0.12 | 1.4.0 | Node 25.8.0 | **fail** |
 
-1 earlier runs are recorded beside this page.
+5 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
-#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`
+#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue43cu7172u`
 
-- **discovery**: passed 0/2.
-  - wrong answer from emulator: an SSDP search for DIAL finds the set (`getAwakeSamsungDevices`): `AssertionError: 0 answers from this machine`
-  - wrong answer from emulator: the friendly name its description gives (`friendlyName`): `AssertionError: friendlyName undefined`
+- **discovery**: passed 1/2.
+  - client bug: the friendly name its description gives (`friendlyName`): `AssertionError: friendlyName 65&quot; Crystal UHD`
 - **identity**: no API. samsung-tv-remote reads nothing about the set beyond the friendly name its discovery fetches.
 - **auth**: passed 2/2.
 - **session**: passed 1/3.
@@ -249,10 +278,11 @@ Node.js remote and CLI for Samsung sets from 2016, with SSDP discovery and a tok
 
 The emulator sent no error status.
 
-#### `samsung-tizen-tv-ue43cu7172u`
+#### `samsung-tizen-tv-ue55du7172u`
 
-- **discovery**: passed 1/2.
-  - client bug: the friendly name its description gives (`friendlyName`): `AssertionError: friendlyName 43&quot; Crystal UHD`
+- **discovery**: passed 0/2.
+  - wrong answer from emulator: an SSDP search for DIAL finds the set (`getAwakeSamsungDevices`): `AssertionError: 0 answers from this machine`
+  - wrong answer from emulator: the friendly name its description gives (`friendlyName`): `AssertionError: friendlyName undefined`
 - **identity**: no API. samsung-tv-remote reads nothing about the set beyond the friendly name its discovery fetches.
 - **auth**: passed 2/2.
 - **session**: passed 1/3.
@@ -277,8 +307,11 @@ Samsung remote control library and CLI; its legacy method drives the iApp remote
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 0.7.1 | 1.4.0 | Python 3.13.11 | pass |
+| 2026-10-29 | 0.7.1 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 0.7.1 | 1.3.0 | Python 3.13.11 | pass |
-| 2026-10-21 | 0.7.1 | 1.2.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -305,15 +338,38 @@ Samsung Tizen WebSocket and REST client, the library behind Home Assistant's Sam
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 3.0.6 | 1.4.0 | Python 3.13.11 | pass |
+| 2026-10-29 | 3.0.6 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 3.0.6 | 1.3.0 | Python 3.13.11 | pass |
-| 2026-10-20 | 3.0.6 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-15 | 3.0.6 | 1.2.0 | Python 3.13.11 | pass |
 
-3 earlier runs are recorded beside this page.
+5 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
-#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`
+#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue43cu7172u`
+
+- **discovery**: no API. samsungtvws connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 1/2.
+  - unsupported by emulator: REST device info over TLS on 8002, as Home Assistant reads it (`rest_device_info over https`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
+- **auth**: passed 2/3.
+  - client bug: an unknown token is refused (`an unknown token refused`): `WebSocketTimeoutException: Connection timed out`
+- **session**: passed 4/5.
+  - client bug: a forced disconnect revokes the token (`token revoked`): `AssertionError: timed out waiting for tokens cleared`
+- **keys**: passed 30/30.
+- **text**: passed 2/3.
+  - unsupported by emulator: text through the REST IME on 8001 (`send_password`): `AssertionError: the set refused it`
+- **pointer**: passed 1/1.
+- **voice**: no API. samsungtvws has no voice input.
+- **state**: passed 2/3.
+  - client bug: installed applications (`app_list`): `AssertionError: no application list parsed`
+- **volume**: passed 3/3.
+- **power**: passed 1/1.
+- **apps**: passed 3/5.
+  - untested: `rest_app_close`, `rest_app_install`
+
+Error statuses the emulator sent: 404 ×2.
+
+#### `samsung-tizen-tv-ue55du7172u`
 
 - **discovery**: no API. samsungtvws connects to a host it is given and does no SSDP or mDNS discovery.
 - **identity**: passed 1/2.
@@ -337,41 +393,41 @@ Samsung Tizen WebSocket and REST client, the library behind Home Assistant's Sam
 
 Error statuses the emulator sent: 404 ×3.
 
-#### `samsung-tizen-tv-ue43cu7172u`
-
-- **discovery**: no API. samsungtvws connects to a host it is given and does no SSDP or mDNS discovery.
-- **identity**: passed 1/2.
-  - unsupported by emulator: REST device info over TLS on 8002, as Home Assistant reads it (`rest_device_info over https`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
-- **auth**: passed 2/3.
-  - client bug: an unknown token is refused (`an unknown token refused`): `WebSocketTimeoutException: Connection timed out`
-- **session**: passed 4/5.
-  - client bug: a forced disconnect revokes the token (`token revoked`): `TimeoutError: timed out`
-- **keys**: passed 30/30.
-- **text**: passed 2/3.
-  - unsupported by emulator: text through the REST IME on 8001 (`send_password`): `AssertionError: the set refused it`
-- **pointer**: passed 1/1.
-- **voice**: no API. samsungtvws has no voice input.
-- **state**: passed 2/3.
-  - client bug: installed applications (`app_list`): `AssertionError: no application list parsed`
-- **volume**: passed 3/3.
-- **power**: passed 1/1.
-- **apps**: passed 3/5.
-  - untested: `rest_app_close`, `rest_app_install`
-
-Error statuses the emulator sent: 404 ×2.
-
 ## samsungtvws-async
 
 The asyncio API of samsungtvws, as Home Assistant's Samsung TV integration drives it: a listening channel and REST over aiohttp · [upstream](https://github.com/xchwarze/samsung-tv-ws-api) · licence LGPL-3.0 · last green `3.0.6`
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 3.0.6 | 1.4.0 | Python 3.13.11 | pass |
+| 2026-10-29 | 3.0.6 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 3.0.6 | 1.3.0 | Python 3.13.11 | pass |
-| 2026-10-21 | 3.0.6 | 1.2.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
-#### `samsung-tizen-tv-ue65u8072f`, `samsung-tizen-tv-ue55du7172u`
+#### `samsung-tizen-tv-ue65u8072f`
+
+- **discovery**: no API. samsungtvws connects to a host it is given and does no SSDP or mDNS discovery.
+- **identity**: passed 1/2.
+  - unsupported by emulator: REST device info over TLS on 8002, as Home Assistant reads it (`rest_device_info over https`): `ResponseError: Failed to parse response from TV. Maybe feature not supported on this model`
+- **auth**: passed 3/3.
+- **session**: passed 5/5.
+- **keys**: passed 30/31.
+  - untested: `KEY_FACTORY`
+- **text**: passed 2/2.
+- **pointer**: no API. The async remote has no pointer command; move_cursor exists only on the synchronous one.
+- **voice**: no API. samsungtvws has no voice input.
+- **state**: passed 2/2.
+- **volume**: passed 3/3.
+- **power**: passed 1/1.
+- **apps**: passed 2/4.
+  - untested: `rest_app_close`, `rest_app_install`
+
+Error statuses the emulator sent: 401 ×2, 404 ×1.
+
+#### `samsung-tizen-tv-ue55du7172u`
 
 - **discovery**: no API. samsungtvws connects to a host it is given and does no SSDP or mDNS discovery.
 - **identity**: passed 1/2.
@@ -419,9 +475,11 @@ Samsung PIN/SPC authenticator and encrypted companion client, used by early Tize
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 3.0.6 | 1.4.0 | Python 3.13.11 | pass |
+| 2026-10-29 | 3.0.6 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 3.0.6 | 1.3.0 | Python 3.13.11 | pass |
-| 2026-10-21 | 3.0.6 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-21 | 3.0.6 | 1.2.0 | Python 3.13.11 | **fail** |
+
+2 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

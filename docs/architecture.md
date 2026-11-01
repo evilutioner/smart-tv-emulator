@@ -219,6 +219,13 @@ apply immediately in memory; **Save settings** writes them atomically for the ne
 tagged with the television that was active. Files are `schema_version: 2`; an older file is
 refused rather than migrated silently.
 
+Paired client certificates are the set's own memory, not a setting: a television keeps them
+over a reboot, so they are written to `.tvemu/pairings/<platform>.json` beside the settings
+file as soon as a client pairs (`platforms/common/paired.py`). An emulator that forgot them on
+restart left a phone holding a pairing it no longer honoured; the refusal it then gets is the
+one a set sends a stranger, and Android clients answer it by reconnecting, never by pairing
+again. The dashboard's disconnect action forgets them and rewrites the file.
+
 Selecting a captured device disconnects sessions tied to the previous identity, changes
 subsequent protocol and SSDP responses, and restarts discovery. Neither the captured device
 nor the access mode survives a television change — the arriving adapter resolves both to its

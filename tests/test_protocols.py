@@ -1,6 +1,7 @@
 """Each protocol switches on its own, and one that will not bind never takes down the rest."""
 from __future__ import annotations
 
+import asyncio
 import json
 import socket
 import tempfile
@@ -16,6 +17,7 @@ from tvemu.core import Core, Settings, parse_settings_document
 from tests.support import control_protocol, quiet_protocols
 from tvemu.platforms import create_platform, default_platform, platform_descriptor
 from tvemu.platforms.common import profile as common
+from tvemu.platforms.common.adapter import BaseAdapter
 from tvemu.runtime import Runtime
 
 # A protocol id no platform declares, for the cases about refusing one.
@@ -135,6 +137,20 @@ class ProtocolAPITests(unittest.IsolatedAsyncioTestCase):
         saved = json.loads(self.path.read_text())
         self.assertEqual(saved["schema_version"], 2)
         self.assertEqual(saved["settings"]["protocols"][self.control], False)
+
+
+class DatagramReleaseTests(unittest.IsolatedAsyncioTestCase):
+    async def test_a_stopped_udp_port_can_be_bound_again_at_once(self):
+        # A profile switch stops a UDP listener and starts it again on the same port in
+        # one go; the old socket must be gone by then, not merely scheduled to close.
+        loop = asyncio.get_running_loop()
+        address = ("127.0.0.1", free_port())
+        first, _ = await loop.create_datagram_endpoint(asyncio.DatagramProtocol,
+                                                       local_addr=address)
+        await BaseAdapter._close_datagram(first)
+        second, _ = await loop.create_datagram_endpoint(asyncio.DatagramProtocol,
+                                                        local_addr=address)
+        second.close()
 
 
 class ReplyStyleTest(unittest.TestCase):

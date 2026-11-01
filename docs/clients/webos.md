@@ -6,10 +6,10 @@ Upstream clients for LG webOS, installed in isolation and run against the emulat
 
 | Client | Installed from | Last green | Latest recorded run |
 |---|---|---|---|
-| [aiowebostv](#aiowebostv) | pypi | `0.10.0` | 2026-10-21, pass |
-| [bscpylgtv](#bscpylgtv) | pypi | `0.5.5` | 2026-10-21, pass |
-| [lgtv2](#lgtv2) | npm | `2.0.2` | 2026-10-21, pass |
-| [pywebostv](#pywebostv) | pypi | `0.8.9` | 2026-10-21, pass |
+| [aiowebostv](#aiowebostv) | pypi | `0.10.0` | 2026-11-01, pass |
+| [bscpylgtv](#bscpylgtv) | pypi | `0.5.5` | 2026-11-01, pass |
+| [lgtv2](#lgtv2) | npm | `2.0.2` | 2026-11-01, pass |
+| [pywebostv](#pywebostv) | pypi | `0.8.9` | 2026-11-01, pass |
 
 ## Heatmap
 
@@ -86,11 +86,11 @@ Asynchronous SSAP client, the library behind Home Assistant's LG webOS integrati
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 0.10.0 | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 0.10.0 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.10.0 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-13 | 0.10.0 | 1.1.0 | Python 3.13.11 | pass |
 
-4 earlier runs are recorded beside this page.
+5 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -143,9 +143,11 @@ Asyncio SSAP client with the calibration and luna:// extensions LG tools use · 
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 0.5.5 | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 0.5.5 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.5.5 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-13 | 0.5.5 | 1.1.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -193,9 +195,11 @@ Node.js SSAP client behind node-red-contrib-lgtv, homebridge-webos-tv and ioBrok
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 2.0.2 | 1.4.0 | Node 25.8.0 | pass |
 | 2026-10-21 | 2.0.2 | 1.3.0 | Node 25.8.0 | pass |
 | 2026-10-15 | 2.0.2 | 1.2.0 | Node 25.8.0 | pass |
-| 2026-10-13 | 2.0.2 | 1.1.0 | Node 25.8.0 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 
@@ -243,9 +247,11 @@ Synchronous SSAP client with typed controls for media, TV, system, apps, input a
 
 | Run | Client | Emulator | Runtime | Verdict |
 |---|---|---|---|---|
+| 2026-11-01 | 0.8.9 | 1.4.0 | Python 3.13.11 | pass |
 | 2026-10-21 | 0.8.9 | 1.3.0 | Python 3.13.11 | pass |
 | 2026-10-15 | 0.8.9 | 1.2.0 | Python 3.13.11 | pass |
-| 2026-10-13 | 0.8.9 | 1.1.0 | Python 3.13.11 | pass |
+
+1 earlier runs are recorded beside this page.
 
 ### Coverage by television
 

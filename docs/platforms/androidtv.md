@@ -50,10 +50,16 @@ detail. The full guide gives each one, tied to the capture it came from.
 
 ## Support and validation
 
-Android TV is **supported for the official Google TV app** (iOS **3.33.00001**) on the
-Chromecast HD and Xiaomi profiles: pairing, the remote buttons and the microphone, validated by
-hand on **2026-09-30**. Text entry and application links were not exercised. The
-[manual validation ledger](../manual-validation.md) has the row; the full guide lists each
+Android TV is **supported for the official Google TV app**, on Android and on iOS.
+
+- **Android, 4.39**, on the Chromecast HD profile, validated by hand on **2026-10-21**: pairing,
+  the remote buttons, the keyboard (it opens when the set focuses a text field, and typing and
+  Backspace edit that field), the microphone, "Watch on TV" application links, and
+  reconnecting by itself after the emulator restarts. Power was not pressed.
+- **iOS, 3.33.00001**, on the Chromecast HD and Xiaomi profiles, validated on **2026-09-30**:
+  pairing, the remote buttons and the microphone.
+
+The [manual validation ledger](../manual-validation.md) has the rows; the full guide lists each
 behaviour.
 
 ## Get access

@@ -166,6 +166,9 @@ class Core:
         self.host = "127.0.0.1"
         self.service_port = platform.default_port
         self.service_port_pinned = False
+        # Where a set's own memory is kept across restarts (its paired clients); None keeps it
+        # in memory only.
+        self.state_dir: Path | None = None
         # Derived from `protocols`; kept as plain attributes so a test can drive one directly.
         self.service_listening = False
         self.discovery_active = False

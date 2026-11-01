@@ -213,6 +213,10 @@
         {
           "name": "Google TV for iOS",
           "url": "https://apps.apple.com/app/id746894884"
+        },
+        {
+          "name": "Google TV for Android",
+          "url": "https://play.google.com/store/apps/details?id=com.google.android.videos"
         }
       ],
       "clients": [
@@ -369,7 +373,7 @@
       "remote": "Tizen: `samsung.remote.control` over WSS **8002**, base64 text input, voice input; device API **8001**. 2014\u201316 PIN/SPC sets: encrypted Socket.IO 0.9 companion channel **8000**; multiscreen API **8001**, and on Tizen J and K a token channel that issues no token. Pre-2014: iApp remote on TCP **55000**, in the clear or under RSA with AES-ECB or AES-CTR, or over HTTP **8080**",
       "discovery": "SSDP. Tizen: two captured stacks on the UE43CU7172U, the DIAL receiver on **7678** and the MediaRenderer on **9197**; the other two sets are reached by address. 2014\u201315: four captured stacks, descriptions on **7676**. Pre-2014: RemoteControlReceiver and MediaRenderer, descriptions on **7676**",
       "pairing": "Tizen: on-screen Allow prompt, then an eight-digit token; a 2016 set allows without issuing one. 2014\u201316 PIN/SPC sets (H, J and some K): four-digit on-screen PIN, then SPC key exchange on **8080**. Pre-2014: on-screen Allow prompt, remembered per remote",
-      "protocols": 16,
+      "protocols": 17,
       "generations": [
         {
           "name": "iApp on 55000 in the clear",
@@ -491,21 +495,21 @@
       "captured": [
         {
           "name": "Samsung UE65U8072F",
-          "detail": "Tizen, 25_KSUE_UB",
+          "detail": "Tizen 9.0 as shipped, 25_KSUE_UB",
           "profiles": [
             "samsung-tizen-tv-ue65u8072f"
           ]
         },
         {
           "name": "Samsung UE55DU7172U",
-          "detail": "Tizen, 24_KANTSU2E_UB",
+          "detail": "Tizen 8.0 as shipped, 24_KANTSU2E_UB",
           "profiles": [
             "samsung-tizen-tv-ue55du7172u"
           ]
         },
         {
           "name": "Samsung UE43CU7172U",
-          "detail": "Tizen, 23_KSUE_UB_T09",
+          "detail": "Tizen 9.0, 23_KSUE_UB_T09, firmware 0090-2243.1",
           "profiles": [
             "samsung-tizen-tv-ue43cu7172u"
           ]
@@ -564,7 +568,7 @@
         },
         {
           "name": "Samsung H series (2014), HTTP remote",
-          "detail": "Experimental: iApp remote over HTTP on 8080, which Smart View assigns to 2014-15 discovery data; original WatchON native routines exercised, no live app session or set measured",
+          "detail": "Deprecated: iApp remote over HTTP on 8080. No real set is known to serve it: 2013 F sets keep 8080 closed, and a real UE48H6200 answers /ws/remote/ with a 404; only WatchON drives it",
           "profiles": [
             "samsung-iapp-web-tv-modelled"
           ],
@@ -594,6 +598,14 @@
             "samsung-tizen-tv-ue43ku6079-modelled"
           ],
           "modelled": true
+        },
+        {
+          "name": "Samsung UE43KU6400 (2016), Tizen PIN/SPC, plaintext companion",
+          "detail": "Identity from a real UE43KU6400, on which PIN/SPC completed and AES companion keys did nothing. Hypothesis: SPC answers Secure-Mode false, so the companion channel takes plaintext frames and ignores AES ones. Smart View sends plaintext under that header; no frame was recorded off the set",
+          "profiles": [
+            "samsung-tizen-pin-plain-tv-ue43ku6400-modelled"
+          ],
+          "modelled": true
         }
       ]
     },
@@ -601,15 +613,21 @@
       "id": "bravia",
       "display_name": "Sony BRAVIA",
       "kind": "tv",
-      "summary": "ScalarWebAPI JSON-RPC \u00b7 IRCC \u00b7 Simple IP Control \u00b7 PIN registration \u00b7 Android TV Remote v1 \u00b7 SSDP \u00b7 Bonjour",
+      "summary": "ScalarWebAPI JSON-RPC \u00b7 IRCC \u00b7 Simple IP Control \u00b7 PIN registration \u00b7 Android TV Remote v1 or v2 \u00b7 SSDP \u00b7 Bonjour",
       "docs": "docs/platforms/bravia.md",
-      "remote": "ScalarWebAPI JSON-RPC and IRCC over HTTP **80**; Simple IP Control **20060**; Android TV Remote **v1 only** over TLS **6466**",
-      "discovery": "SSDP: four captured stacks; Bonjour `_androidtvremote._tcp` (no `_androidtvremote2`)",
-      "pairing": "Four-digit PIN for an `auth` cookie; Polo v1 on **6467** \u2014 four hex symbols and a client certificate",
-      "protocols": 10,
+      "remote": "ScalarWebAPI JSON-RPC and IRCC over HTTP **80**; Simple IP Control **20060**; Android TV Remote **v1** over TLS **6466** on the captured set, **v2** on the XR-65A80L, whose Remote Service answers are inherited and not measured",
+      "discovery": "SSDP: captured stacks; Bonjour `_androidtvremote._tcp` on a Remote v1 set, `_androidtvremote2._tcp` on a Remote v2 set",
+      "pairing": "Four-digit PIN for an `auth` cookie; Polo v1 on **6467** \u2014 four hex symbols and a client certificate; Polo v2 on **6467** \u2014 six hex symbols \u2014 on a Remote v2 set",
+      "protocols": 13,
       "generations": [
         {
-          "name": "ScalarWebAPI, IRCC and Remote v1"
+          "name": "ScalarWebAPI and IRCC, with Android TV Remote v1 or v2"
+        }
+      ],
+      "apps": [
+        {
+          "name": "Android TV Remote Control for Android",
+          "url": "https://play.google.com/store/apps/details?id=com.google.android.tv.remote"
         }
       ],
       "clients": [
@@ -624,13 +642,21 @@
           "detail": "BRAVIA 2015, Android 7.0",
           "profiles": [
             "sony-bravia-kdl-55w807c"
-          ]
+          ],
+          "validated": true
         },
         {
           "name": "Sony KDL-32WD600",
           "detail": "BRAVIA 2016, Linux; discoverable, no remote protocol",
           "profiles": [
             "sony-bravia-kdl-32wd600"
+          ]
+        },
+        {
+          "name": "Sony XR-65A80L",
+          "detail": "BRAVIA 2023, Google TV; read in standby as an unregistered client, the rest inherited",
+          "profiles": [
+            "sony-bravia-xr-65a80l"
           ]
         }
       ]
@@ -670,7 +696,7 @@
       "remote": "nScreen XML actions over TCP **4123**, or T-Cast `>>` frames over TCP **6553**; by device",
       "discovery": "SSDP, two captured stacks, for nScreen; T-Cast's own broadcast on UDP **6537**",
       "pairing": "None: nScreen has none, T-Cast a plaintext `159` handshake",
-      "protocols": 7,
+      "protocols": 10,
       "generations": [
         {
           "name": "nScreen"
@@ -683,6 +709,14 @@
         }
       ],
       "clients": [
+        {
+          "name": "node-tcl-remote",
+          "url": "https://github.com/NickCis/node-tcl-remote"
+        },
+        {
+          "name": "tcl-magiconnect",
+          "url": "https://github.com/Micpi/tcl-magiconnect"
+        },
         {
           "name": "tcl-remote",
           "url": "https://github.com/jarvis2f/tcl-remote"
@@ -803,14 +837,21 @@
           "name": "Binary remote on 13510"
         }
       ],
+      "apps": [
+        {
+          "name": "ZaZa Remote for Android",
+          "url": "https://play.google.com/store/apps/details?id=com.tiqiaa.remote"
+        }
+      ],
       "captured": [
         {
           "name": "YunOS / AliTV box",
-          "detail": "Modelled, no box measured",
+          "detail": "ZaZa Remote for Android (5.4.5), no box measured",
           "profiles": [
             "yunos-box-modelled"
           ],
-          "modelled": true
+          "modelled": true,
+          "validated": true
         }
       ]
     },
@@ -843,12 +884,12 @@
       "id": "letv",
       "display_name": "LeEco (LeTV)",
       "kind": "tv",
-      "summary": "JSON key datagrams over UDP 9900 \u00b7 TCP probe on 13489 \u00b7 modelled",
+      "summary": "JSON key datagrams over UDP 9900 \u00b7 search on UDP 8008 \u00b7 app launch on 4004 \u00b7 modelled",
       "docs": "docs/platforms/letv.md",
       "remote": "`{\"CONTROL_ACTION\":\"<action>\"}` datagrams over UDP **9900**, one per button",
-      "discovery": "None advertised: the app connects to TCP **13489** across the subnet",
+      "discovery": "Wukong's M-SEARCH to UDP **8008**; Tiqiaa connects to TCP **13489** across the subnet",
       "pairing": "None",
-      "protocols": 2,
+      "protocols": 4,
       "generations": [
         {
           "name": "JSON over UDP 9900"
@@ -962,13 +1003,16 @@
       "id": "xgimi",
       "display_name": "XGIMI",
       "kind": "projector",
-      "summary": "JSON over UDP 16750 or framed TCP 13145 \u00b7 UDP broadcast discovery \u00b7 modelled",
+      "summary": "JSON over UDP 16750 or framed TCP 13145 \u00b7 UDP broadcast discovery \u00b7 power read on 554 \u00b7 modelled",
       "docs": "docs/platforms/xgimi.md",
       "remote": "ASCII `KEYPRESSES:<code>` datagrams on UDP **16735**, or JSON `action 50036` over TCP **13145**",
       "discovery": "`{\"action\":9998}` broadcast to UDP **16752**, answered to the phone's UDP **16751**",
-      "pairing": "A code shown on the projector, sent back as `action 50001`",
-      "protocols": 4,
+      "pairing": "A code shown on the projector, sent back as `action 50001`; none on the 2018 device",
+      "protocols": 6,
       "generations": [
+        {
+          "name": "UDP without a code, 2018"
+        },
         {
           "name": "UDP, older firmware"
         },
@@ -976,7 +1020,32 @@
           "name": "TCP, newer firmware"
         }
       ],
+      "clients": [
+        {
+          "name": "homebridge-xgimi-tv",
+          "url": "https://github.com/fantasytu/homebridge-xgimi-tv"
+        }
+      ],
+      "apps": [
+        {
+          "name": "XGIMI Assistant International for Android",
+          "url": "https://play.google.com/store/apps/details?id=com.xgimi.zhushou.google"
+        },
+        {
+          "name": "XGIMI 无屏助手 for Android",
+          "url": "https://app.xgimi.com/app"
+        }
+      ],
       "captured": [
+        {
+          "name": "XGIMI projector, 2018 firmware",
+          "detail": "JSON over UDP, no code; XGIMI Assistant International 1.0.0 and 无屏助手 4.0.7 validated, no projector measured",
+          "profiles": [
+            "xgimi-projector-2018-modelled"
+          ],
+          "modelled": true,
+          "validated": true
+        },
         {
           "name": "XGIMI projector, older firmware",
           "detail": "JSON over UDP; modelled, no projector measured",
